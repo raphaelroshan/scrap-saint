@@ -6,7 +6,7 @@ A playable Godot prototype now spans the First Shift loop. See [runtime status](
 
 **Current user decisions (P12) supersede conflicting earlier requirements below:** free movement with optional repairs is the main game; relay defence remains a development comparison. Manual Foreman interruption was removed. The workshop now has four times its original area, a following camera and minimap, seven base weapons and six ordinary enemy families. Mercy Rail is not required and encounters must support other builds. Runtime cadence is eight 70-second waves with seven shops. The detailed milestone plan below is retained as the original design baseline, not a claim that every planned mechanic is implemented.
 
-This roadmap turns the canonical systems design in [`docs/progression_map_weapons_metagame.md`](docs/progression_map_weapons_metagame.md) into an implementation sequence. It is the operating plan for Astra and other development agents. The target is not a collection of isolated mechanics. The target is a compact, understandable, replayable vertical slice called **The First Shift**.
+This roadmap turns the canonical systems design in [`docs/progression_map_weapons_metagame.md`](docs/progression_map_weapons_metagame.md) into an implementation sequence. The current audit and system-resolution plan is in [`docs/improvement_plan_2026-09-15.md`](docs/improvement_plan_2026-09-15.md). It is the operating plan for Astra and other development agents. The target is not a collection of isolated mechanics. The target is a compact, understandable, replayable vertical slice called **The First Shift**.
 
 > **First-slice promise:** the player chooses a Blessing, enters a compact industrial workshop, moves and auto-attacks with optional repair rewards, makes meaningful workshop decisions, reaches the visible Mercy Rail evolution, defeats a rule-changing elite and boss, and understands how the Saint’s identity changed.
 
@@ -603,5 +603,4 @@ Every future implementation request should begin with a packet in this shape:
 ```
 
 ## 17. Immediate next task
-
 The next task is **playtest roaming density and weapon/enemy balance at 1x**. The Godot shell and playable loop exist; do not restart SC-01. Use [implementation packets](docs/implementation_packets.md) and [runtime status](docs/runtime_status.md) to distinguish implemented subsets from the original milestone specifications.
