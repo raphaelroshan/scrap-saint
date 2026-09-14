@@ -1,729 +1,692 @@
 # Scrap Saint — Improvement Plan and Design Resolution Backlog
 
-**Date:** 2026-09-15  
-**Status:** design and execution plan; runtime implementation has not started.  
+**Date:** 2026-09-15
+**Status:** P12 runtime audit and prioritized game-quality plan.
+**Current build:** Godot 4.5.1 desktop prototype, version 0.1.0.
 **Audience:** Astra, gameplay programmers, content designers, technical artists, QA agents, and future collaborators.
 
-## Executive summary
+## Executive conclusion
 
-Scrap Saint has a strong product identity and a well-developed design foundation. The repository now explains the intended fantasy, shop structure, Blessings, deterministic simulation boundary, first arena, weapon evolution, metagame, and evidence standard. The main risk is no longer a lack of ideas. The main risk is **design drift during implementation**.
+Scrap Saint has crossed the most important early threshold: it is now a runnable prototype rather than only a design foundation. The current build implements an eight-wave roaming arena, optional repair machines, seven automatic weapons, six ordinary enemy families, three Blessings, a six-position shop, rank combining, catalysts, optional Mercy Rail, Memory Crane, Foreman Engine, save/resume, controller navigation, synthesized audio, and rendered fixture captures.
 
-The repository is currently a private documentation and content-contract project. It contains no `project.godot`, no Godot runtime, no executable simulation, no real gameplay captures, and no deterministic runtime tests. The content validator passes, but it validates only a narrow structural contract. It does not establish that combat, shops, maps, evolution, or presentation work in a real build.
+The main problem has changed. The project no longer primarily needs more systems. It needs **game-quality proof and balance discipline**.
 
-The correct next step is therefore not to add more lore or a large content catalogue. The correct next step is to **resolve the remaining system decisions, reconcile the data with the first-slice scope, and then implement the smallest complete playable loop**.
+The current evidence is encouraging but incomplete:
 
-The recommended product direction is:
+| Evidence | Current result | Interpretation |
+|---|---:|---|
+| Content validation | Pass: 11 items, 2 evolutions, 3 Blessings, 7 enemies, 3 bosses | Data references are structurally valid. This is not a game-quality pass. |
+| Automated Godot assertions | 129 pass in the current variety build | Simulation, arena, shop, relay, optional repair, UI, and variety regressions execute. |
+| Main optional-repair policy runs | 11 of 12 wins | The prototype is broadly executable, but the Mourner run on seed 104729 fails on wave five. |
+| Relay comparison runs | 9 of 12 wins after roster expansion | The legacy mode is a useful diagnostic comparison, not the current product direction. |
+| Rendered captures | Real Godot renders with provenance | Fixtures prove presentation states can render; configured fixtures are not natural playthrough evidence. |
+| Human playtesting | Not performed | Responsiveness, pacing, pressure, audio density, and preference remain unproven. |
+| Performance | No sustained benchmark | Hardware targets and peak-density performance remain unverified. |
 
-> **Scrap Saint is a short, authored repair pilgrimage in which the player moves through a compact industrial arena, automatically operates a small set of strange relic weapons, chooses between immediate survival and future transformation in a deterministic workshop, and visibly becomes a different kind of machine.**
+The accepted direction is now:
 
-The improvement plan has four priorities:
+> **Free movement through a larger industrial workshop, automatic weapons, optional repair machines that reward exploration, seven meaningful weapons, and a Foreman encounter that is solved through movement, targeting, and build quality rather than a mandatory manual interrupt.**
 
-1. **P0 — Reconcile contracts and freeze the runtime vocabulary.** Resolve scope mismatches, normalize tags and statuses, define the runtime schema, and remove ambiguity between the nine-minute first slice and the longer release target.
-2. **P1 — Build the first playable loop.** Implement deterministic shell, movement, one relay arena, three weapons, three enemy questions, one shop, three Blessings, and Mercy Rail.
-3. **P2 — Make the loop strategically deep.** Add traits, clearer shop decisions, enemy composition, route selection, additional evolutions, and objective variants only after the first loop is playable and captured.
-4. **P3 — Make it commercially legible.** Add authored arenas, presentation quality, onboarding, narrative consequences, accessibility, progression breadth, and replayable challenge structure.
+Relay defence remains a development comparison mode. It is not the main product direction. Mercy Rail is an optional build transformation. It must be valuable without becoming a hidden victory requirement.
 
-The immediate implementation packet should be a short **P0 contract-reconciliation task**, followed by **SC-01 — Godot shell and deterministic harness**. The repository should not add broad runtime content before those two gates pass.
+The next improvement should therefore be **1× roaming-density, weapon-role, enemy-composition, and economy tuning**, not a new campaign, new permanent progression tree, or a new inventory system.
 
-## 1. Repository audit: current truth
+## 1. Current runtime audit
 
-### 1.1 What is already strong
+### 1.1 What is now implemented
 
-The project has several durable advantages.
-
-| Strength | Why it matters |
-|---|---|
-| Distinctive product identity | The Saint is a maintenance automaton with a repair, memory, and self-determination fantasy rather than a generic combat robot [1]. |
-| Clear run-level doctrine | Blessings give the player a broad direction while preserving shop agency [2]. |
-| Strong transformation hook | Named evolutions are required to change geometry, targeting, objective interaction, or resource behaviour [1] [3]. |
-| Deterministic architecture | The simulation is explicitly authoritative over movement, combat, currencies, shop rolls, objectives, saves, and replays [4]. |
-| Good evidence discipline | The repository distinguishes content validation from real gameplay evidence and prohibits fabricated captures [1] [5]. |
-| Compact first slice | The nine-minute First Shift is small enough to implement and inspect before campaign breadth [3]. |
-| Narrative fit | Repairs, relics, Blessings, and memories all support the Saint Built Wrong arc [6]. |
-| Strong art direction | The chunky repaired-industrial diorama, restrained palette, and silhouette rules provide a coherent temporary and final visual target [7]. |
-
-### 1.2 Current implementation truth
-
-The updated repository is still a design and contract foundation.
-
-| Finding | Evidence | Consequence |
+| System | Current implementation | Current limitation |
 |---|---|---|
-| No Godot runtime exists | No `project.godot` or runtime source is present in the repository tree. | No gameplay claim can be made. SC-01 is still the first runtime task. |
-| No autonomous runtime loop exists in this repository | `README.md` references `scripts/agent_iteration.sh` and `tools/validate_iteration_report.py`, but those files are not present in the repository tree. | The standard agent loop must be added or the README must be corrected before runtime QA. |
-| No deterministic runtime tests exist yet | `tests/README.md` describes the intended suite, but there are no executable Godot tests or golden traces. | Acceptance tests are specifications, not passes. |
-| Content validation is structural | `scripts/validate_content.py` checks IDs, references, basic fields, and counts. | It does not validate damage semantics, timing, tag vocabulary, economy, map topology, or evolution behaviour. |
-| Content is broader than the first runtime slice | The item file contains seven weapons and four catalysts; the enemy file contains five normal enemies plus Memory Crane; the boss file contains three bosses. | The design pool is useful, but implementation scope must be explicitly separated from the authored catalogue. |
-| No arena data file exists | The Collapsed Workshop is specified in prose, but no stable-ID map schema or map content file exists. | Map implementation would otherwise bury topology and balance in scene code. |
-| No traits or buff catalogue exists | The gameplay contract mentions companions, terrain tools, rituals, and passive traits, but no stable-ID content schema defines them. | The trait layer must be resolved before adding content or it will become ad hoc stat inflation. |
+| Engine and shell | Godot 4.5.1, fixed-tick simulation, title screen, Blessing selection, pause, save/resume, controller navigation, 1× and 5× development launchers. | Cross-platform certification and save migration are not implemented. |
+| Main mode | Optional repairs are the default. The player roams freely, fights automatically, and repairs three distributed machines for Scrap, healing, or a stagger pulse. Repairs are never required to win. | Reward motivation, travel density, and repair risk still need player-quality tuning. |
+| Comparison mode | Relay defence remains available in development mode and old saves preserve their mode. | It is a diagnostic mode, not the main launch foundation. |
+| Arena | Collapsed Workshop expanded to 1600×1120 world pixels with a following camera, minimap, four solid obstacles, outer yard zones, and three named entry regions. | The larger space may have low-pressure travel intervals and needs 1× density review. |
+| Run cadence | Eight 70-second maximum waves, seven shop boundaries, wave-six Memory Crane, wave-eight Foreman Engine, and early termination when the boss dies. | The exact time-to-decision rhythm and late-run density are not yet human-validated. |
+| Weapons | Nailer, Bell, Procession Gear, Candle-Nailer, Cable, Hymn Coil, and Altar Mortar. All are automatic and participate in the same shop/rank system. | Secondary effects are uneven. Hymn Coil and Altar Mortar currently provide geometry and damage but limited doctrine interaction. |
+| Builds | Four active weapon slots, one reserve, duplicate combining through Rank III, catalysts, sell/dismantle, lock, refresh, and equip/store. | Gifts or a separate trait layer does not yet exist. Catalysts currently carry most support behaviour. |
+| Blessings | Workshop Gospel, Bell Ward, and Mourner. Their services and fulfilment are implemented in a smaller prototype form. | Bell’s forecast flag currently gives no meaningful informational advantage beyond its Shard reward. |
+| Optional repairs | Three machines: Scrap reward, Saint healing, and enemy stagger pulse. Progress persists and rewards are one-time. | Healing at full structure or a warning pulse with no nearby enemies can waste a reward. |
+| Enemy roster | Rivet Hound, Scrap Mite, Choir Drone, Rust Pilgrim, Forklift Brute, and Cinder Spitter. | Current wave selection is still more random pool than authored encounter composition. |
+| Elite and boss | Memory Crane copies rail geometry when an evolution exists. Foreman uses hazards and worker waves. Manual interrupt was removed from the accepted direction. | Boss phases and worker priority need stronger movement and targeting questions in the large arena. |
+| Evidence | Runtime status, implementation packets, verification history, provenance, 129 assertions, and real rendered fixtures. | Fixtures use supplied positions/budgets, and no natural 1× human session has been captured. |
 
-### 1.3 Internal inconsistencies that must be resolved before runtime work
+### 1.2 What is strong enough to preserve
 
-These inconsistencies are not fatal. They are normal for a design foundation. They become expensive if they remain unresolved while agents begin coding.
+The following should not be redesigned while balance work is still incomplete.
 
-| Inconsistency | Current sources | Recommended resolution |
-|---|---|---|
-| First-slice run length | The game bible targets 15–25 minutes for the eventual run, while the first slice targets 8–10 minutes and the progression document specifies nine minutes [1] [3]. | Keep **nine minutes** as the SC-01–SC-10 acceptance target. Treat 15–25 minutes as a later release target achieved through more route beats, not by slowing the first slice. |
-| First-slice weapon count | The first-slice document says five base weapons, while the item catalogue contains seven weapons [3] [8]. | Keep seven as the authored catalogue, implement five in the first playable, and reserve Hymn Coil and Altar Mortar for the creative vertical unless a deterministic test requires them earlier. |
-| First-slice enemy count | The first-slice document says three enemy families, while content already defines five normal families plus one elite [3] [9]. | Implement Scrap Mite, Rivet Hound, and Choir Drone in SC-03. Add Rust Pilgrim and Forklift Brute only after the first combat loop is readable. |
-| First-slice boss count | The content file defines three bosses, while the first slice requires only Foreman Engine [3] [10]. | Keep Factory Heart and Saint of No Repairs as Act II/III design records. Do not implement them before Foreman Engine is verified. |
-| Catalyst cost | The item data prices Saint’s Rivet at two Relic Shards, while the progression recommendation uses one Shard plus eight Scrap [3] [8]. | Adopt **one Relic Shard plus eight Scrap** for the first slice. Add a schema field for mixed costs and update the data. |
-| Tag vocabulary | Content uses `control`, `conversion`, `spirit`, `silence`, `beam`, `wrath`, and `ground`; the progression design proposes `LABOUR`, `WITNESS`, `ORBIT`, `QUIET`, `MOURN`, `TETHER`, `PULSE`, `SALVAGE`, `PIERCE`, and `REPAIR` [3] [8]. | Freeze eight player-facing tags for the first runtime: `LABOUR`, `WITNESS`, `ORBIT`, `QUIET`, `MOURN`, `TETHER`, `PULSE`, and `REPAIR`. Treat `PIERCE` as a weapon property rather than a doctrine tag. Map legacy terms explicitly or remove them. |
-| Blessing fulfilment | Content uses `required_tags` and `required_count`, while the design requires causal actions such as repairs, witnessing, or remnants [2] [8]. | Replace generic tag counts with three authored action milestones per Blessing. Tags may influence offers, but fulfilment must describe player behaviour. |
-| Nailer identity | The base Nailer already has `repair_on_marked_hit`, while Mercy Rail is supposed to introduce a meaningful repair interaction [8]. | Base Nailer should mark and pierce ordinary targets with a small conditional repair effect. Mercy Rail must add lane geometry, objective-attacker priority, and a stronger repair-on-resolution rule. The transformation must remain mechanically obvious. |
-| README runtime command | The README references autonomous scripts that are not present in this repository [1]. | Either add the shared runtime QA tools or mark those commands as inherited tooling and link the actual source. Do not leave commands that fail by default. |
-| First-slice Blessings | The design names Workshop Gospel, Bell Ward, and Mourner as the first three, while the broader contract lists eight [2]. | Keep three runtime Blessings. Keep the other five as authored expansion records and do not expose them in the first slice UI. |
+1. **Warm industrial devotional identity.** The Saint is a repair machine, not a conventional soldier or generic survivor character.
+2. **Free movement and automatic attacks.** Do not add manual aiming or an ability-bar stack to solve current balance problems.
+3. **Optional repairs as the main mode.** Repair machines should become better rewards and movement anchors rather than mandatory relay chores.
+4. **Two run currencies.** Keep Scrap and Relic Shards. Do not add a third currency to compensate for weak shop choices.
+5. **Four active weapons plus one reserve.** This is enough capacity to create build decisions without introducing a backpack grid.
+6. **Blessings as doctrines.** A Blessing should bias the shop and alter the run, but it must not prescribe one exact weapon path.
+7. **Visible transformations.** Mercy Rail and future evolutions must alter geometry, targeting, status behaviour, or objective interaction.
+8. **Deterministic simulation authority.** Presentation, fixtures, and UI commands must continue to consume state and events rather than award outcomes.
+9. **Original procedural placeholder art and synthesized audio.** These are valid for tuning. They should be replaced selectively after the main frame is fun and readable.
+10. **Automated evidence before expansion.** The current 129 assertions and policy runners are valuable. They should become stricter and more informative before new content is added.
 
-## 2. Decisions that still need to be figured out
+## 2. What still needs to be figured out
 
-The following questions should be answered before the implementation expands. Each row includes the recommended default so agents have a direction instead of repeatedly reopening the same discussion.
+The remaining questions are now product-quality questions rather than premise questions. Each includes a recommended default and a proof method.
 
-| Decision | Why it matters | Recommended default | Proof required |
+| Priority | Question | Why it matters | Recommended default | Proof method |
+|---:|---|---|---|---|
+| P0 | Is the larger arena too empty at 1×? | Four times the earlier area can create dead travel and weaken automatic-combat tension. | Use authored pressure zones, machine landmarks, and measured spawn windows. Do not simply multiply enemy count. | 1× captures plus travel-time, enemy-contact, and decision-gap metrics. |
+| P0 | Why should the player repair an optional machine now? | Current policies skip all optional repairs, showing that rewards do not yet justify the detour. | Make each machine a distinct risk/reward contract with a visible reward preview and a short, interruptible work window. | Three policy profiles plus real 1× capture of each reward. |
+| P0 | Why does Mourner fail on wave five? | The only current main-mode loss indicates a doctrine or encounter-specific viability issue. | Diagnose whether the failure is crowd clear, healing cadence, shop affordability, or Cinder/Rust pressure before buffing Mourner globally. | Seed 104729 event trace, purchase log, weapon ranks, damage sources, and controlled reruns. |
+| P0 | Are seven weapons actually distinct? | More weapons can hide role overlap and make shop choice noisy. | Keep seven, but assign each a primary question, counter family, and failure case. | Weapon-role matrix and 1× comparison fixtures. |
+| P1 | Does the shop create real choices? | Current offers can be unaffordable or redundant, especially calibration. | Preserve six roles, but guarantee one affordable actionable choice and one future path without making every card free. | Affordability traces across three player profiles and shop replay tests. |
+| P1 | Are the three Blessings meaningfully different? | Workshop, Bell, and Mourner can otherwise be starting weapon skins. | Give each a distinct service, fulfilment behaviour, shop bias, and weakness. | Same seed, same movement policy, three doctrine runs. |
+| P1 | What should traits or Gifts be? | A new trait layer can duplicate catalysts and inflate stat complexity. | Do not add Gifts until weapons, catalysts, and shop decisions are stable. Later add two support slots with behaviour-changing Gifts, not generic stat piles. | Schema and interaction tests after the first balance gate. |
+| P1 | How should the Foreman test the player now that interrupt is removed? | The old interrupt plan is obsolete, but the boss still needs a distinct question. | Use moving hazard placement, worker priority, safe-lane pressure, and phase-specific target rules. | Boss traces and captures with non-evolved and evolved builds. |
+| P1 | Is the eight-wave cadence satisfying? | Seven shops and 70-second waves may create either repetition or insufficient transformation time. | Keep eight waves for now. Tune the wave composition and shop contents before changing the count. | Track first purchase, first rank-up, first catalyst, elite pressure, and boss arrival. |
+| P2 | What is the permanent progression hook? | Local save/resume exists, but campaign persistence and route choice are not yet runtime systems. | Add Memory Fragments and authored route unlocks only after the current run loop has a stable replay rate. | Fresh-save and unlocked-save comparisons. |
+| P2 | Which map should follow the Workshop? | More maps will not help if they only change art. | Add Rootworks Pump next, with a new spatial question around moving repair fronts. | Topology test plus route-choice and reward capture. |
+| P3 | What is the commercial art/audio replacement order? | Placeholder assets are useful but can become permanent by inertia. | Replace hero Saint, three core enemies, Foreman, shop, and Mercy Rail before background breadth. | Before/after visual rubric and store-frame review. |
+
+### 2.1 Highest-risk unresolved design decision: optional repairs
+
+The accepted main mode is correct for the desired freer movement, but the current implementation treats repairs as optional proximity interactions with automatic progress. The evidence that all twelve automated optional policies skip repairs is not a failure of the premise. It shows that the reward is currently underpriced relative to travel, combat, or attention cost.
+
+The recommended repair contract is:
+
+1. The player approaches a named machine.
+2. A visible three-second work ring begins when the Saint remains within the work radius.
+3. Movement outside the radius, severe knockback, or a direct hit pauses progress rather than deleting it.
+4. Enemies continue to spawn and can make the work unsafe, but the machine is not itself a health bar or kill target.
+5. The player sees the reward before starting: `+8 Scrap`, `+30 structure`, or `stagger living enemies`.
+6. Completion grants a one-time reward and a strong local cue.
+7. The three machines are distributed so that the player can choose one or two, not sweep all three by default.
+
+Do not make repair mandatory. Do not make repair free healing with no opportunity cost. Do not make the reward a silent stat increase. The player should be able to say, “I am going there because this reward solves my current problem.”
+
+Recommended machine placement:
+
+| Machine | Position role | Reward | Best use |
 |---|---|---|---|
-| What is the exact first-run rhythm? | The player must understand the relationship between combat, repair, shop, and transformation. | Nine minutes, six pressure beats, five shop windows, one elite, one boss. | Replay trace with exact phase transitions and a real capture. |
-| What does the player actively control? | Pure auto-attack can become passive; too many active abilities break the compact scope. | Direct movement, one repair command, shop commands, one contextual ritual slot later. Weapons remain automatic. | Combat capture showing meaningful positioning without manual aiming. |
-| What occupies inventory slots? | Weapons, catalysts, traits, rituals, and reserve rules can create hidden complexity. | Four active weapon slots plus one reserve in the first slice. Catalysts are consumed and do not occupy slots. Traits wait until the first combat loop works. | Buy/combine/reserve tests and a readable loadout panel. |
-| What is a trait? | The contract mentions passive traits but does not define their source, slot, or stacking. | A Gift is a run-local support item that changes one rule or adds one interaction. Use two support slots after SC-08. | Data schema, UI preview, stacking tests, and one visible interaction per Gift. |
-| How much repair is safe? | If repair is automatic and abundant, the objective loses tension. If it is too scarce, the player feels railroaded. | Repair requires location, time, and exposure. Scrap repairs are limited; weapon-based repair is conditional and forecastable. | Relay structure traces across normal, partial, and failed runs. |
-| How does the shop create agency? | Random offers are a major source of frustration in this genre. | Six role-guaranteed offers, one free refresh, one lock, visible recipe path, and two valid threat counters. | Same-state shop replay and affordability traces. |
-| What makes Blessings different? | Three Blessings can otherwise become cosmetic starting weapons. | Each changes starting guarantee, shop weighting, unique service, fulfilment actions, and one weakness. | Three complete runs with different offers and viable outcomes. |
-| What makes a weapon memorable? | A large catalogue can become shallow numerical variety. | Each weapon must answer one enemy/objective question through geometry and one non-damage verb. | Weapon test matrix and visual capture at gameplay zoom. |
-| When is an evolution allowed? | Random mid-combat transformations are hard to understand and test. | Elite reward, boss reward, or altar window only. First Mercy Rail path is guaranteed by Shops 2–4. | Recipe-state and transformation-event tests. |
-| How much map variety is needed? | A single repeated arena risks feeling like a prototype; procedural maps add scope too early. | One authored arena for the first slice. Add four authored topology families after the first loop. | Map schema, reachability tests, and route-choice capture. |
-| What does permanent progression buy? | Permanent power inflation can hide weak run design and create grind. | Memory Fragments unlock frames, Blessings, catalysts, arenas, memories, and transparent modifiers. No early permanent damage tree. | Unlock tests and a fresh-save comparison. |
-| How does narrative affect play? | Long dialogue would interrupt the run; flavour without consequence becomes decoration. | Short objective, shop, boss, memory, and Results beats. Choices alter routes, rewards, and later doctrine availability. | State-aware Results and route replay. |
-| What is the commercial visual target? | Temporary art can become permanent if there is no replacement gate. | Chunky industrial diorama with a small curated set of hero assets, readable silhouettes, restrained effects, and tactile audio. | Visual rubric scores and screenshot comparison across milestones. |
+| Salvage Sorter | West detour with moderate travel time | +8 Scrap or a shop discount token later | Evolution and shop economy. |
+| Coolant Pump | North route near elite pressure | +30 Saint structure, capped | Recovery before late waves. |
+| Warning Bell | East route near ranged pressure | Stagger living enemies for 180 ticks | Space creation before a dangerous wave. |
 
-These defaults should remain in force unless a playable trace demonstrates a specific failure. The project should not revisit the core premise merely because the runtime is incomplete. The design decision record already establishes that the premise should be reviewed only after a complete captured 8–10 minute run with three Blessings [11].
+The immediate prototype should keep automatic repair by proximity. A button-held work command is not required yet. The first improvement is **risk, visibility, and reward timing**, not input complexity.
 
-## 3. Recommended player loop
+## 3. Run structure and pacing plan
 
-### 3.1 First Shift loop
+### 3.1 Current run contract
 
-The first playable should be organized around six questions rather than six arbitrary waves.
+The current run is eight combat waves of up to 70 seconds with a paused shop between waves. Memory Crane arrives on wave six. Foreman Engine arrives on wave eight and ends the run early when defeated. The target is approximately nine minutes of combat plus shop decisions.
 
-| Beat | Player question | Primary system | Required response |
-|---|---|---|---|
-| Arrival | What am I repairing and what does my Blessing favour? | Blessing selection, relay state, forecast | Choose doctrine and move toward the first pressure lane. |
-| Loose parts | Can I move and collect without abandoning the relay? | Movement, automatic attack, Scrap pickups | Clear Scrap Mites and choose whether to detour for salvage. |
-| Chargers | Can I protect the relay while building toward an evolution? | Objective attackers, repair zone, Shop 1–2 | Intercept Rivet Hounds and spend on immediate coverage or Rank-up progress. |
-| Suppression | Which tool answers the next threat? | Choir Drones, forecast, Shop 3 | Choose control, precision, displacement, or a Blessing service. |
-| Elite and transformation | Can I fight a copy of my own build and change it before the final test? | Memory Crane, catalyst, Rank 3, Mercy Rail | Survive the elite, trigger the evolution at the altar, and read the before/after result. |
-| Boss and Results | Did I repair, fight, and choose coherently? | Foreman Engine, interrupts, Results, route | Interrupt demolition, preserve the relay, understand the outcome, and choose the next route. |
+Keep this cadence while tuning. Do not redesign the run into a 20-minute mode until the following moments are consistently readable:
 
-### 3.2 Pacing recommendation
+- First threat.
+- First shop purchase.
+- First optional repair decision.
+- First meaningful rank combine.
+- First elite pressure.
+- First catalyst or evolution decision.
+- First boss hazard.
+- Results explanation.
 
-Use a **short combat window followed by a clear decision window**. The shop should pause combat completely. The player should never be making a purchase while enemy damage continues in the background during the first slice.
+### 3.2 Recommended wave composition
 
-The first slice should target the following rhythm:
+The current runtime should move from a mostly random enemy pool toward authored composition bands. Randomness should select positions and small variations inside a defined pressure family.
 
-| Time | State | Intent |
-|---:|---|---|
-| 00:00–00:30 | Arrival | Establish relay, Saint, Blessing, and first forecast. |
-| 00:30–01:30 | Wave A | Teach movement, automatic attack, and collection. |
-| 01:30–01:45 | Shop 1 | Offer immediate coverage and first evolution clue. |
-| 01:45–02:45 | Wave B | Introduce objective attackers and repair exposure. |
-| 02:45–03:00 | Shop 2 | Make the first real survival-versus-evolution decision. |
-| 03:00–04:00 | Wave C | Introduce suppression and lane choice. |
-| 04:00–04:15 | Shop 3 | Guarantee a viable Rank-up or Mercy ingredient route. |
-| 04:15–05:30 | Memory Crane | Test the player’s build and positioning. |
-| 05:30–06:20 | Shop and altar | Trigger Mercy Rail in a controlled transformation window. |
-| 06:20–07:20 | Final pressure | Test the evolved geometry against mixed threats. |
-| 07:20–07:35 | Final shop | Offer one boss-counter option and repair decision. |
-| 07:35–08:45 | Foreman Engine | Test movement, interrupts, and relay preservation. |
-| 08:45–09:15 | Results | Explain causality, commit rewards, and show two route choices. |
+| Wave | Primary pressure | Supporting pressure | Player question |
+|---:|---|---|---|
+| 1 | Scrap Mites | Light Rivet Hounds | Can I move, collect, and recognize danger? |
+| 2 | Rivet Hounds | Scrap Mites | Can I protect structure without standing still? |
+| 3 | Choir Drones | Hounds | Can I reach support threats before their field dominates? |
+| 4 | Cinder Spitters | Mites | Can I read delayed danger and keep moving? |
+| 5 | Rust Pilgrim | Hounds or Mites | Do I focus the repairer or clear the immediate threat? |
+| 6 | Memory Crane | One support family | Can I answer a build-shaped elite? |
+| 7 | Forklift Brute | Cinder Spitters or Hounds | Can I preserve space after displacement? |
+| 8 | Foreman Engine | Worker Hounds plus hazards | Can I route through a shrinking pressure pattern and finish? |
 
-The eventual 15–25 minute run should be achieved by adding a second site or additional authored route beats, not by simply multiplying enemy health or extending empty combat time.
+Do not make each wave a strict single-enemy tutorial. Use a clear primary pressure and one support family. The first encounter with a new family should have lower density and longer telegraphs. The second encounter should test a combination.
 
-## 4. Weapon system plan
+### 3.3 Metrics for 1× tuning
 
-### 4.1 Weapon design rules
+The agent should record these metrics for seeds 147, 104729, and 104730 under all three Blessings:
 
-Every weapon must satisfy five requirements before it is added to runtime content.
-
-1. It has a distinct attack geometry that reads at gameplay zoom.
-2. It answers one enemy or objective question.
-3. It has one non-damage verb such as mark, stagger, tether, reveal, repair, consecrate, silence, convert, or redirect.
-4. It creates a meaningful rank-up change rather than three copies of the same damage number.
-5. Its evolution changes at least two of geometry, target rule, objective interaction, status logic, or resource behaviour.
-
-The first runtime should avoid general-purpose weapons that solve every problem. A good weapon creates a useful gap that another weapon or trait can cover.
-
-### 4.2 First weapon roles
-
-| Weapon | Geometry | Main question | Non-damage verb | Main weakness | Recommended evolution |
-|---|---|---|---|---|---|
-| **Nailer of Small Mercies** | Short targeted line | Can I focus the correct attacker? | Mark and conditional repair | Weak against swarms and side pressure | **Mercy Rail** |
-| **Bell of the Last Shift** | Forward cone or short pulse | Can I interrupt and create space? | Rung/stagger and witness | Weak single-target finish | **The Great Toll** |
-| **Procession Gear** | Orbit | Can I survive close pressure while repairing? | Consecrated orbit near the objective | Weak at long range | **The Maintenance Parade** |
-| **Candle-Nailer** | Long priority shot | Can I finish a chosen target and preserve its memory? | Mourned remnant | Slow cadence and poor crowd clear | **Candle for the Unreturned** |
-| **Cable of Contrition** | Sweep and tether | Can I redirect or delay a charger? | Bound/pull and lane control | Low immediate burst | **Contrition Lattice** |
-| **Hymn Coil** | Sustained beam | Can I suppress armour and support actions? | Scoured and Quieted | Requires line discipline | **Quiet Sermon** |
-| **Altar Mortar** | Delayed ground seal | Can I deny a route before pressure arrives? | Consecrated zone | Delayed response and weak close defence | **Workshop Benediction** |
-
-The first playable should implement the first three weapons. The first creative vertical should implement the first five. Hymn Coil and Altar Mortar should be introduced only when support, armour, ground denial, and threat forecasts have real runtime consumers.
-
-### 4.3 Rank structure
-
-Ranks should change reliability and interaction in a predictable way.
-
-| Rank | What changes | Example: Nailer |
-|---|---|---|
-| Rank 1 | Establishes geometry and identity. | Fires at the nearest eligible target and marks it. |
-| Rank 2 | Adds a new interaction or improves reliability. | Marked relay attackers receive priority and produce a small repair pulse on defeat. |
-| Rank 3 | Enables an evolution and gives a readable pre-evolution peak. | Pierces two targets in a line and exposes the Mercy Rail recipe. |
-| Evolved | Changes the combat verb and silhouette. | Mercy Rail becomes a charged lane rail that prioritises objective attackers and repairs the relay when its marked resolution succeeds. |
-
-Combining must remain atomic. A failed combine must not consume items, alter the RNG cursor, or change shop state.
-
-### 4.4 Evolution catalogue
-
-The following recipes are recommended for the first authored content pool. Only Mercy Rail is required for the first playable.
-
-| Base | Catalyst | Evolution | Behavioural transformation | Release stage |
-|---|---|---|---|---|
-| Nailer Rank 3 | Saint’s Rivet | **Mercy Rail** | Charged piercing lane; objective-attacker priority; repair on marked resolution. | First playable. |
-| Bell Rank 3 | Cracked Bell Clapper | **The Great Toll** | Forward cone becomes radial pulse ring; staggers and marks enemies around the Saint. | Creative vertical. |
-| Procession Gear Rank 3 | Pilgrim Spindle | **The Maintenance Parade** | Orbit becomes a moving procession that leaves short Consecrated repair stations. | Creative vertical or Act I. |
-| Candle-Nailer Rank 3 | Black Candle | **Candle for the Unreturned** | Priority shot becomes a soul-thread that leaves a controllable Mourned remnant. | Act I. |
-| Cable Rank 3 | Blue Wire from the Pump | **Contrition Lattice** | One tether becomes a multi-node lane lattice that redirects chargers. | Act I. |
-| Hymn Coil Rank 3 | Quiet Gear | **Quiet Sermon** | Beam creates a moving silence corridor that disables support actions and reveals hidden targets. | Act II. |
-| Altar Mortar Rank 3 | Saint’s Rivet or Foundry Seal | **Workshop Benediction** | Ground seal becomes a delayed repair-and-denial altar that trades Scrap for stronger objective protection. | Act II. |
-| Any Rank 3 Salvage item | Maintenance Blueprint | **Rebuilt Instrument** | Converts one flexible item into a new role and reveals a route-specific recipe. | Act II; avoid wildcard implementation before recipe UI is stable. |
-
-The first ten recipes should be visible through the Ledger, but the first playable should expose only the first two in the data-driven recipe UI. A broad recipe catalogue without runtime discovery and preview is not useful content.
-
-### 4.5 Weapon test matrix
-
-Before adding a weapon, QA must answer:
-
-| Test | Required result |
+| Metric | Initial target or diagnostic |
 |---|---|
-| Geometry | Attack shape is visible and distinct at gameplay zoom. |
-| Targeting | Target rule is deterministic and explainable. |
-| Counter | At least two enemy situations make the weapon useful. |
-| Weakness | At least one situation makes another weapon preferable. |
-| Objective | Weapon either interacts with the relay or explicitly does not. |
-| Rank | Rank 2 adds a new decision or interaction. |
-| Evolution | Evolution changes at least two observable behaviours. |
-| Economy | The player can pursue it without perfect shop luck. |
-| Presentation | Hit, status, and transformation feedback are readable without dense text. |
+| Time to first enemy contact | Short enough that the arena does not feel empty; record rather than hard-code before capture review. |
+| Longest no-threat travel gap | No unexplained empty interval during an active wave. |
+| Enemy-contact density | Enough to create movement decisions without permanent body-blocking. |
+| First shop arrival | After the player has seen one complete pressure question. |
+| First affordable purchase | Available without requiring perfect Scrap collection. |
+| First rank combine | Achievable for at least two of three starting doctrines on representative seeds. |
+| Optional repair completion | At least one machine is attractive in a normal run without being mandatory. |
+| Wave-five Mourner survivability | Must be explained and either corrected or deliberately accepted as a documented challenge. |
+| Boss arrival | Enough time to understand the final shop and threat forecast. |
+| Run failure cause | Must classify as positioning, threat response, economy, or build geometry rather than unexplained attrition. |
 
-## 5. Traits, Gifts, buffs, and status design
+## 4. Weapon and evolution plan
 
-### 5.1 Resolve the vocabulary first
+### 4.1 Weapon role matrix
 
-The repository currently uses several overlapping terms: passive traits, relics, catalysts, Blessings, services, statuses, and effects. The following vocabulary is recommended.
+The seven weapons should remain, but each must have one dominant purpose and one clear weakness.
 
-| Term | Meaning | Persists after run? | Slot or location |
-|---|---|---:|---|
-| **Weapon** | Automatic attack source with geometry and target rule. | No | One of four active weapon slots. |
-| **Gift** | Run-local support item that changes one rule or creates one interaction. | No | One of two support slots after the first playable. |
-| **Catalyst** | Evolution ingredient or transformation modifier. | No, unless discovered as content | Consumed or attached during evolution; never occupies an active slot. |
-| **Blessing** | Run-level doctrine that biases offers and grants one unique service. | The definition persists; the chosen instance is run-local | Chosen before the run. |
-| **Status** | Temporary authoritative state on a Saint, enemy, zone, or objective. | No | No inventory slot. |
-| **Service** | Shop or altar command that changes state through an explicit transaction. | No | Shop action. |
-| **Memory** | Persistent story and progression record. | Yes | Campaign ledger. |
-
-Do not call every passive effect a trait. A player should know whether they are buying a weapon, Gift, catalyst, service, or Blessing.
-
-### 5.2 First Gift families
-
-Gifts should be added only after SC-08 proves weapons and Mercy Rail. The initial Gift set should be small and behaviour-oriented.
-
-| Gift | Family | Effect | Trade-off | Best interaction |
+| Weapon | Current runtime geometry | Primary role | Secondary role to add or clarify | Weakness to preserve |
 |---|---|---|---|---|
-| **Inspection Lens** | Witness | Reveals one hidden elite property and increases target certainty. | Lower Scrap from ordinary pickups. | Bell, Candle-Nailer, Memory Crane. |
-| **Spare Hand** | Labour | Repair pulses have a shorter exposure window. | Slower movement while repairing. | Workshop Gospel, relay objectives. |
-| **Loose Spring** | Movement | After a repair pulse, gain a short movement burst. | Reduced armour during the burst. | Threshold and Procession builds. |
-| **Black Ledger** | Salvage | Dismantling returns one component tag. | Lower direct sell value. | Salvage Rite and recipe pursuit. |
-| **Choir Filter** | Quiet | Quieted targets cannot create support fields for a short duration after recovery. | Lower crowd damage. | Hymn Coil and Bell Ward. |
-| **Mourner’s Thread** | Mourn | One Mourned remnant lasts longer and can intercept a single hit. | Requires a recent defeat to function. | Candle-Nailer and Mourner. |
-| **Brass Fuse** | Pulse | The next staggered target becomes Marked. | Stagger cooldown is slightly longer. | Bell and Mercy Rail. |
-| **Tether Spool** | Tether | Bound enemies leave a brief slow line when released. | Reduced pull distance. | Cable and route control. |
+| Nailer of Small Mercies | Two-target line | Precision and priority damage | Mark objective-relevant or elite targets. | Weak swarm coverage. |
+| Bell of the Last Shift | Forward cone | Stagger, push, and space creation | Make Witness state visible and useful to shop/fulfilment. | Weak sustained single-target damage. |
+| Procession Gear | Orbit | Close defence while roaming or repairing | Stronger near restored machines or Consecrated zones later. | Weak at long range. |
+| Candle-Nailer | Weakest-target shot | Execute damaged enemies and create healing motes | Make Mourned or mote economy legible. | Low crowd clear and dependent on kills. |
+| Cable of Contrition | Sweep/tether cone | Delay, pull, and route control | Make Bound enemies leave a short slow or redirect line later. | Low burst. |
+| Hymn Coil | Rapid piercing beam | Line clear and ranged pressure response | Add a controlled Quieted interaction after base balance. | Narrow line and low per-hit damage. |
+| Altar Mortar | Cluster burst | Area denial and clustered enemy clear | Add delayed ground warning and a later Consecrated interaction. | Slow cadence and poor emergency defence. |
 
-Each Gift must modify one rule, not add a large collection of small percentage bonuses. Gifts should be presented as **“what decision does this enable?”** rather than as a rarity ladder.
+The first balance pass must not make every weapon equally good at every task. The goal is that a player can explain why they purchased a weapon.
+
+### 4.2 Weapon damage and cadence audit
+
+The current data has large differences in damage and cooldown. That is acceptable only if the geometry and target access justify them. The agent should calculate and log effective damage per second against representative targets, but balance by **time-to-solve the intended question**, not raw DPS alone.
+
+| Test target | Weapons that should excel | Weapons that should struggle |
+|---|---|---|
+| Scrap Mite cluster | Procession Gear, Hymn Coil, Altar Mortar | Nailer, Cable. |
+| Relay charger or Hound | Nailer, Bell, Cable | Slow Mortar if caught late. |
+| Support drone | Nailer, Candle-Nailer, Hymn Coil | Orbit-only Gear at distance. |
+| Armoured Rust Pilgrim | Hymn Coil after Scour is implemented, Nailer focus | Mite-oriented orbit builds. |
+| Forklift Brute | Cable, Bell, Mortar | Candle-Nailer without support. |
+| Cinder Spitter | Nailer, Candle, Bell movement control | Short-range Gear without route support. |
+| Foreman workers | Bell, Mortar, Gear, Hymn | Single-target Candle without crowd support. |
+
+A weapon should not be buffed globally because it loses a matchup it was not designed to solve. If the shop cannot provide a valid counter to the next wave, fix offer generation or encounter composition first.
+
+### 4.3 Evolution sequence
+
+Mercy Rail is now optional and should remain optional. It must be a satisfying transformation, not a hidden completion condition.
+
+| Stage | Evolution | Recommended work |
+|---|---|---|
+| Current | Nailer Rank III + Saint’s Rivet → Mercy Rail | Audit visual readability, target priority, damage, repair interaction, and catalyst opportunity cost. |
+| Next | Bell Rank III + Cracked Bell Clapper → The Great Toll | Add only after Bell’s base role and service are viable; change cone into radial pulse and create a meaningful crowd-control reset. |
+| Following | Procession Gear Rank III + Pilgrim Spindle → The Maintenance Parade | Add moving Consecrated repair stations or a roaming orbit route. |
+| Later | Cable, Candle, Hymn, and Mortar evolutions | Add one at a time when a new objective or enemy question requires it. |
+
+The first evolution audit should answer:
+
+- Can a non-evolution run win without relying on perfect damage?
+- Does the player understand what Mercy Rail changed within one combat beat?
+- Is the Saint’s Rivet worth buying instead of immediate Scrap or another catalyst?
+- Does the Memory Crane copy create a new question rather than a punishment for trying the evolution?
+- Does the shop show a credible alternative when the player does not want Mercy Rail?
+
+## 5. Traits, catalysts, buffs, and status plan
+
+### 5.1 Do not add a separate Gift inventory yet
+
+The runtime already has catalysts, active weapon slots, reserve, Blessing services, and optional repairs. Adding a separate trait inventory immediately would make build state harder to read and would obscure why the Mourner run fails.
+
+For the next balance milestone, treat catalysts as the support layer:
+
+- Saint’s Rivet: repair-rate bonus and Mercy Rail eligibility.
+- Cracked Bell Clapper: control-duration bonus and future Great Toll eligibility.
+- Black Candle: additional mote cadence.
+- Quiet Gear: cooldown reduction.
+
+The next content task should add a proper Gift schema only after the following conditions pass:
+
+1. All three Blessings have viable main-mode runs across representative seeds.
+2. All seven weapons have a clear role.
+3. The shop has no frequent redundant or unaffordable dead visits.
+4. Optional repairs create at least one attractive decision.
+
+When Gifts are added, use two support slots and behaviour-changing effects rather than generic `+10% damage` items.
+
+### 5.2 Recommended future Gifts
+
+| Gift | Behaviour change | Trade-off |
+|---|---|---|
+| Inspection Lens | Reveals one elite property and improves target certainty. | Lower ordinary Scrap yield. |
+| Spare Hand | Shortens repair exposure time. | Slower movement while working. |
+| Loose Spring | Repair completion grants a brief movement burst. | Reduced structure during the burst. |
+| Black Ledger | Dismantling returns a defined component tag. | Lower direct sell value. |
+| Choir Filter | Quieted enemies cannot immediately recreate support fields. | Lower crowd damage. |
+| Mourner’s Thread | One healing mote can intercept one hit. | Requires recent defeats to activate. |
+| Brass Fuse | The next staggered target becomes Marked. | Longer Bell cooldown. |
+| Tether Spool | Bound enemies leave a temporary slow line. | Reduced pull distance. |
+
+Do not introduce these as a rarity ladder. Each Gift should be a small rule that changes a decision.
 
 ### 5.3 Buff and status rules
 
-The first status system should be intentionally constrained.
+The runtime should standardize visible status behaviour before adding many new statuses.
 
-- Every status has a stable ID, duration, stack limit, refresh rule, source event, removal rule, and visible presentation.
-- Most statuses should have a maximum of two stacks or no stacking at all.
-- A status should either create a decision, explain a counter, or support a transformation. It should not exist only to display a number.
-- Buffs on the Saint should be short, named, and causal. Examples include `CONSECRATED`, `INSPECTING`, `OVERLOADED`, and `REPAIRED`.
-- Debuffs on enemies should describe behaviour changes. Examples include `MARKED`, `BOUND`, `QUIETED`, `SCOURED`, `RUNG`, and `MOURNED`.
-- Do not add critical-hit chance, rarity, luck, cooldown, attack speed, range, armour, dodge, harvesting, and five other generic stats before the first slice has proven the more important verbs.
-
-Recommended first runtime status interactions:
-
-| Source | Status | Resolution |
+| Status | Current or planned role | Required presentation |
 |---|---|---|
-| Nailer | `MARKED` | The next compatible hit gains objective priority or a defined repair effect. |
-| Bell | `RUNG` | Target loses its next movement action or charge window. |
-| Cable | `BOUND` | Target is delayed or redirected along a visible line. |
-| Hymn later | `QUIETED` | Target cannot create a support field for a defined duration. |
-| Mercy Rail | `SCOURED` plus repair resolution | Armour is reduced and a marked objective attacker can restore relay progress. |
-| Candle later | `MOURNED` | Defeat leaves a temporary remnant with one defined support action. |
+| `MARKED` | Target priority and compatible damage interaction. | Clear seal or target reticle. |
+| `RUNG` | Stagger and cancelled windup. | Resonance rings and interrupted pose. |
+| `BOUND` | Slowed or redirected movement. | Visible cable line. |
+| `QUIETED` | Later support-action suppression. | Cold cyan field and muted support icon. |
+| `SCOURED` | Later armour reduction. | Exposed plates or pale fracture mark. |
+| `MOURNED` | Remnant or mote-producing defeat. | Candle or spirit remnant. |
+| `CONSECRATED` | Later machine or objective zone benefit. | Cream repair ring. |
 
-## 6. Blessings and doctrine progression
+Every status needs a deterministic duration, stack limit, refresh rule, removal rule, source event, and failure explanation. Do not add a new status when an existing one can express the intended question.
 
-### 6.1 First three Blessings
+## 6. Blessing and shop plan
 
-The first three Blessings should be mechanically distinct enough that a player can identify the chosen doctrine from the shop and combat behaviour.
+### 6.1 Blessing differentiation
 
-| Blessing | Starting direction | Unique service | Three fulfilment actions | Weakness |
-|---|---|---|---|---|
-| **Workshop Gospel** | Nailer or repair support. | Rebuild one item for a component refund. | Repair two relay segments; complete two repair pulses while contested; buy or combine two Labour items. | Lower burst. |
-| **Bell Ward** | Bell or Witness support. | Preview the next elite pressure. | Witness five support machines; stagger three chargers before contact; keep one forecast counter unused until the relevant wave. | Weak single target. |
-| **The Mourner** | Candle-Nailer or remnant support. | Preserve one defeated elite remnant. | Create three Mourned remnants; keep one remnant alive through a pressure beat; choose a memory or remnant reward. | Needs defeats to compound. |
+The three current Blessings are the correct first set. Their current runtime services are small, but Bell’s service needs a stronger identity.
 
-The fulfilment reward should change the next decision. It should not be a generic percentage bonus. Examples include an improved service, one temporary support unit, an additional forecast detail, or a protected catalyst offer.
-
-### 6.2 Future Blessings
-
-After the first playable, add Blessings only when they create a new doctrine question.
-
-| Blessing | New question | Signature weapon family |
+| Blessing | Current identity | Required improvement |
 |---|---|---|
-| Quiet Order | Can suppression and precision beat crowd density? | Hymn Coil, Quiet Sermon. |
-| Salvage Rite | Is flexibility worth lower immediate defence? | Dismantling, calibration, Rebuilt Instrument. |
-| Procession | Can a moving defensive formation protect the relay? | Procession Gear, Maintenance Parade. |
-| Red Litany | How much self-risk is acceptable for burst and hazard denial? | Altar Mortar, Fevered effects. |
-| Threshold Rite | Can routing and displacement replace raw damage? | Cable, Door, Tether. |
+| Workshop Gospel | Repair-rate and restoration support. | Make the player choose between faster repairs and immediate combat purchases; show the effect on optional-machine progress. |
+| Bell Ward | Control, stagger, and warning service. | Replace the current mostly redundant forecast flag with a concrete next-wave preview: primary family, first pressure timing, or boss hazard count. |
+| Mourner | Candle-Nailer, healing motes, recovery. | Diagnose wave-five failure before buffing. Improve the conversion between kills, motes, and survivability only if the trace shows recovery is too delayed. |
 
-Do not release all eight Blessings at once. Three good doctrines are better than eight shallow starting screens.
+Blessing fulfilment should remain easy to understand. The current prototype uses two distinct weapon IDs carrying the doctrine’s principal tag. That is acceptable as an interim rule, but the UI should show the two qualifying weapons and the resulting reward.
 
-## 7. Shop and economy improvement plan
+### 6.2 Six-role shop contract
 
-### 7.1 Shop decision structure
+The current six positions are a good foundation:
 
-The shop should feel like a small workshop with a readable set of jobs, not a slot machine. Every visit should answer three questions:
+1. Build improvement.
+2. New direction.
+3. Evolution path.
+4. Threat support.
+5. Field repair.
+6. Blessing service.
 
-1. What keeps me alive in the next pressure beat?
-2. What advances my current evolution or doctrine?
-3. What flexible option protects me if the forecast is wrong?
+The next shop pass should enforce **decision quality**, not universal affordability.
 
-The six offer roles should remain fixed:
+| Shop requirement | Recommended rule |
+|---|---|
+| Build improvement | At least one offer must be an affordable upgrade, combine, or valid capacity-preserving purchase for a normal run. |
+| New direction | Show a weapon outside the current owned IDs, but do not fill the slot with a weapon that cannot fit after combining. |
+| Evolution path | Show Mercy Rail support when relevant, but show a valid non-evolution alternative in the same visit. |
+| Threat support | Select from the next wave’s actual pressure family rather than a broad generic catalyst list. |
+| Field repair | Show the field option only when there is a meaningful structure or optional-machine opportunity. Otherwise use another flexible support. |
+| Blessing service | Explain the mechanical effect in plain language and show whether it is already used. |
 
-| Role | Purpose | Guarantee |
+Current limitations to fix:
+
+- Some offers are not affordable.
+- Fully exhausted builds can receive redundant calibration cards.
+- Locked flexible offers can subordinate the intended role.
+- The Bell service does not yet give a meaningful informational advantage.
+- The current shop is still largely item text plus buttons rather than a build diagnosis tool.
+
+The next UI pass should show, for each offer: `role`, `cost`, `what changes now`, `next-wave relevance`, `evolution contribution`, and `why unavailable` when rejected.
+
+### 6.3 Economy recommendations
+
+Keep the current two-currency economy. Tune the distribution around optional repairs and the seven-wave shop rhythm.
+
+| Player profile | Desired viable outcome |
+|---|---|
+| Survival player | Buys immediate coverage, completes at least one useful repair, and reaches Foreman with a coherent build. |
+| Evolution player | Can buy or earn the Saint’s Rivet, reach Rank III, and trigger Mercy Rail without perfect collection. |
+| Explorer player | Can repair one or two machines, buy a new-direction weapon, and still afford a later defensive choice. |
+| Mourner player | Can turn kills into enough recovery or control to survive wave five without requiring a special fixture budget. |
+
+A failed shop decision should be attributable to the player’s choice or a documented scarcity trade-off. It should not be caused by the generator presenting six irrelevant or impossible cards.
+
+## 7. Map and roaming plan
+
+### 7.1 Current arena strengths
+
+The expanded Collapsed Workshop now has meaningful named regions, obstacles, a following camera, minimap, and multiple entry edges. The geometry is connected and has passed topology and route tests. This is a strong base for the free-roaming direction.
+
+### 7.2 Current map risk: empty travel and threat detachment
+
+The larger arena creates two new risks:
+
+1. The player may spend too long travelling without a decision.
+2. Enemies may spawn around the Saint without giving the player a readable relationship between location, machine, and pressure.
+
+The answer is not to fill every metre with enemies. The answer is to create **pressure geography**.
+
+Recommended additions:
+
+| Map element | Function |
+|---|---|
+| Machine approach marker | Shows reward, estimated work time, and current risk before the player commits. |
+| Pressure lane | A region where the next wave’s primary family is more likely to arrive. |
+| Salvage pocket | Contains Scrap pickups or a repair machine but costs travel time. |
+| Recovery pocket | Provides line-of-sight or space, not free invulnerability. |
+| Boss route | Gives Foreman hazards visible destinations and prevents random arena-wide noise. |
+| Landmark minimap icon | Makes route choices legible without forcing constant minimap reading. |
+
+### 7.3 Optional repair routing
+
+Keep three machines, but tune their positions and rewards so a normal run wants one or two rather than zero or all three. A machine should be close enough to reach within one pressure beat and far enough to create a decision.
+
+Use deterministic metrics:
+
+- Distance from current likely path.
+- Time to reach at current movement speed.
+- Time to complete the work ring.
+- Enemies spawned during the work window.
+- Reward value relative to the next shop cost.
+- Whether the reward is wasted at full structure or with no nearby enemies.
+
+A reward should never be silently wasted. If the Coolant Pump would heal zero structure, show a warning and allow the player to leave it for later. If the Warning Bell has no active enemies, it may still grant a short next-wave forecast benefit instead of a wasted stagger.
+
+### 7.4 Future maps
+
+Do not add a second map until the Workshop has a stable density and repair decision profile. The first follow-up should be **Rootworks Pump**, which introduces moving repair fronts and cable-shaped routes. Brass Choir Relay and Red Foundry should follow only when timing and hazard composition are ready.
+
+## 8. Enemy and boss plan
+
+### 8.1 Current enemy roles
+
+| Enemy | Current role | Required tuning question |
 |---|---|---|
-| Current-build improvement | Supports the strongest current plan. | Always actionable. |
-| Evolution path | Shows a missing rank, catalyst, or transformation service. | Mercy Rail path is guaranteed by Shops 2–4. |
-| New direction | Offers a weapon or Gift outside the current dominant tags. | Prevents one-dimensional runs. |
-| Flexible support | Repair, reserve, dismantle, or broad defence. | Supports recovery and experimentation. |
-| Forecast counter A | Answers one valid threat family. | Never the only possible answer. |
-| Forecast counter B | Answers a second threat family or Blessing-specific angle. | Preserves agency. |
+| Scrap Mite | Pickup denial and swarm | Does it create collection risk without stealing too much economy? |
+| Rivet Hound | Charger and direct pressure | Can the player read, avoid, and punish the charge? |
+| Choir Drone | Support and slow field | Does it create a meaningful priority target at roaming distance? |
+| Rust Pilgrim | Nearby ally healer | Is Scour, focused damage, or silence actually available when it appears? |
+| Forklift Brute | Heavy charge and shove | Does displacement create route decisions rather than random frustration? |
+| Cinder Spitter | Delayed ranged blast | Is the earlier-position telegraph visible and avoidable at 1×? |
+| Memory Crane | Elite copy | Does copying rail geometry test build identity without invalidating non-evolved runs? |
 
-### 7.2 First implementation versus later shop features
+### 8.2 Spawn composition
 
-The shop contract currently lists many actions. They should not all be implemented at once.
+The runtime currently selects from a growing type pool by wave. Convert this to authored wave bands with deterministic weighted variation. Each wave should have one primary question and one support family. The player should not meet Rust Pilgrim, Forklift Brute, and Cinder Spitter simultaneously for the first time during a high-density spike.
 
-| Shop action | First playable | Creative vertical | Later |
-|---|---:|---:|---:|
-| Buy | Yes | Yes | Yes |
-| Combine | Yes | Yes | Yes |
-| One reserve slot | Yes | Yes | Yes |
-| One free refresh | Yes | Yes | Yes |
-| Paid reroll | Yes, capped at 2/4/7 Scrap | Yes | Tuned by evidence |
-| Repair service | Yes | Yes | Yes |
-| Sell | Minimal version | Yes | Yes |
-| Dismantle | Minimal version | Yes | Yes |
-| Read the Ledger | Recipe preview only | Yes | Expanded discoveries |
-| Recast Relic | No | Optional | After catalyst variety exists |
-| Blessing deepening | One authored service | Yes | Expanded doctrine system |
-
-### 7.3 Economy targets
-
-Use the following as initial targets, not promises:
-
-- 80–120 Scrap across a normal nine-minute run.
-- 3–5 Relic Shards across objective, elite, and boss rewards.
-- One Rank 1 improvement, one repair/service, and one catalyst component before the elite for a player who collects roughly 70% of pickups.
-- Mercy Rail achievable without perfect collection or repeated rerolling.
-- At least five meaningful spending decisions.
-- No shop visit in which every offer is unaffordable or irrelevant.
-
-The first economy test should simulate three player profiles:
-
-| Profile | Behaviour | Expected outcome |
-|---|---|---|
-| Survival player | Buys immediate coverage and repairs early. | Can reach the boss with a coherent non-evolved build and a recoverable relay. |
-| Evolution player | Saves for Rank 3 and Saint’s Rivet. | Can reach Mercy Rail through the protected offer path. |
-| Explorer player | Buys one off-doctrine item and uses reserve/dismantle. | Can form a viable hybrid build without being punished by dead offers. |
-
-### 7.4 Economy failures to avoid
-
-Do not use a hidden pity timer. Do not make the first evolution require a rare random drop. Do not add multiple shard types. Do not make rerolling the dominant skill. Do not let permanent progression determine whether the first objective is survivable. Do not hide the price or transaction consequence behind flavour text.
-
-## 8. Map and route design
-
-### 8.1 First arena: Collapsed Workshop
-
-The first arena should be authored as a small route-bearing diorama rather than a featureless square.
-
-| Area | Function | Risk | Visual anchor |
-|---|---|---|---|
-| Relay bowl | Primary repair and defence space. | Enemies can contest repair. | Tall relay mast with visible structure bands. |
-| West salvage lane | Optional Scrap detour. | Time away from relay. | Bins, loose bolts, and a broken sorting arm. |
-| North crane lane | Elite and support pressure route. | Narrow line and copied attack risk. | Hanging crane and marked floor track. |
-| East furnace lane | Hazard and burst route. | Warning strip and temporary heat. | Red furnace doors and steam vents. |
-| South workshop alcove | Shop and Blessing decision space. | No hidden combat shortcut. | Altar, ledger, and sorting bench. |
-
-Map rules:
-
-- Every traversable pocket has at least two exits.
-- All three enemy entry edges are reachable without passing through the shop.
-- The relay zone is safer but not invulnerable.
-- Hazard markers use yellow telegraph, red warning, then effect.
-- Salvage is five to eight seconds from the relay by the outer loop.
-- The camera keeps the Saint, relay, and immediate threat direction readable.
-- Obstacles provide route choices but never create a dead-end trap.
-
-### 8.2 Map data schema
-
-Create a stable-ID map file before implementing scenes. A first map record should contain:
+Add a content field such as:
 
 ```text
-ArenaDefinition {
-  id,
-  logical_size,
-  pockets,
-  exits,
-  entry_edges,
-  objective_id,
-  repair_zone,
-  salvage_nodes,
-  hazard_strips,
-  shop_alcove,
-  camera_bounds,
-  route_reward_profile,
-  topology_rules
+wave_profile {
+  primary_family,
+  support_families,
+  spawn_budget,
+  spawn_interval,
+  elite_or_boss_flag,
+  threat_description,
+  valid_counter_families
 }
 ```
 
-The topology validator should test reachability, two-exit pockets, entry-edge access, relay access, and shop independence. Scene layout should render this data rather than becoming the hidden source of truth.
+The simulation should select positions and small variations from the profile but not invent a new encounter question through uncontrolled random composition.
 
-### 8.3 Future authored map families
+### 8.3 Foreman design after removing manual interrupt
 
-Add one map family at a time. Each map must introduce a new spatial question.
+Manual Foreman interruption and exposure bonuses were correctly removed from the accepted direction. The boss now needs a replacement decision structure:
 
-| Map | New spatial question | New objective or pressure |
+| Phase | Rule | Player response |
 |---|---|---|
-| Collapsed Workshop | Can I route between relay, salvage, and shop? | Repair relay. |
-| Rootworks Pump | Can I defend a moving repair front? | Repair several pump nodes. |
-| Brass Choir Relay | Can I choose between signal timing and safe movement? | Hold signal windows. |
-| Red Foundry | Can I cross hazard lanes without losing economy? | Protect a cooling sequence. |
-| Pale Archive | Can I identify the correct copy and preserve memory? | Recover an archive record. |
-| Null Assembly | Can I fight while Blessing services are temporarily suppressed? | Destroy an erasure engine. |
+| Demolition | Telegraph circles with distinct safe corridors. | Move early and preserve a route. |
+| Workers | Worker machines create a secondary target priority. | Decide between boss damage, worker removal, and optional-machine detours. |
+| Final orders | Increase hazard density or remove one route temporarily. | Use the build’s geometry and keep moving; do not rely on one evolution. |
 
-Do not generate procedural layouts until these authored families prove that topology changes decisions rather than merely changing decoration.
+The boss should not be parked outside contact range with hazards as the only meaningful interaction. It should move enough to create target and routing decisions while remaining readable. It should not become a health sponge.
 
-## 9. Enemy and encounter plan
+The boss acceptance gate should require successful wins with:
 
-### 9.1 Enemy design rule
+- A non-evolved Workshop build.
+- A non-evolved Bell build.
+- A non-evolved Mourner build after the wave-five issue is resolved or explicitly tuned.
+- An evolved build.
 
-An enemy is a question, not a bag of health. Every enemy must define:
+## 9. Progression, Results, and metagame
 
-- Role.
-- Target preference.
-- Telegraph.
-- Movement or attack rule.
-- Counter families.
-- Failure explanation.
-- Loot or objective consequence.
-- Visual silhouette and sound cue.
+The current prototype has local save/resume and a strong Results foundation, but it does not yet provide the full campaign route and persistent Memory Fragment layer described by the long-term design.
 
-### 9.2 First encounter roster
+### 9.1 Immediate progression work
 
-| Enemy | Role | What it asks | Counter families | Priority |
-|---|---|---|---|---:|
-| **Scrap Mite** | Pickup-denial swarm | Will the player collect safely or clear space first? | Area, orbit, burst. | SC-03. |
-| **Rivet Hound** | Relay charger | Can the player intercept an objective attacker? | Control, pulse, precision. | SC-03. |
-| **Choir Drone** | Support and suppression | Can the player interrupt a field before it changes the fight? | Witness, precision, displacement. | SC-03. |
-| **Rust Pilgrim** | Armoured repair support | Can the player break a protected support chain? | Scour, silence, focused damage. | Creative vertical. |
-| **Forklift Brute** | Displacer and obstacle threat | Can the player preserve route geometry under pressure? | Tether, ground, movement. | Creative vertical. |
-| **Memory Crane** | Elite copy | Can the player fight its own chosen geometry? | Hybrid, witness, mobility. | SC-09. |
+Before adding campaign breadth, improve Results so it explains:
 
-### 9.3 Encounter composition
+- Which optional machines were repaired.
+- Which rewards were received or declined.
+- Where Scrap and Relic Shards came from.
+- Which weapon contributed most to kills or boss damage.
+- Which wave caused the largest structure loss.
+- Why the run failed, if it failed.
+- Whether Mercy Rail was pursued, ignored, or unavailable.
+- Which Blessing fulfilment milestones were completed.
 
-Do not introduce all enemies as isolated tutorials. Use authored combinations that create a single readable question.
+The Results screen should make the next attempt obvious without prescribing one build.
 
-| Encounter | Composition | Intended question |
+### 9.2 Early Access progression target
+
+The current early-access plan is appropriately larger than the prototype: three authored sites, three objective patterns, three frames, four complete Blessings, eight weapons, four evolutions, ten to twelve catalysts/support relics, six enemy families, two elites, and three bosses.
+
+Do not implement that breadth immediately. Use this release order:
+
+1. Stable Workshop run with all three current Blessings.
+2. Strong non-evolution and evolution routes.
+3. One additional Gift/support layer if the shop needs it.
+4. Rootworks Pump as the second authored site.
+5. Brass Choir Relay or Red Foundry as the third site.
+6. Three frames and fourth Blessing.
+7. Additional evolutions and bosses.
+8. Memory Fragment route consequences and Act I conclusion.
+
+### 9.3 Permanent progression
+
+Use Memory Fragments to unlock options, not permanent raw damage. Recommended unlock classes are frames, Blessings, catalysts, site routes, memories, and transparent challenge modifiers. Every unlock should explain its play pattern and reason for being locked.
+
+Do not add a permanent stat treadmill while the current Mourner loss and optional-repair motivation are unresolved. A stat tree would make it harder to tell whether the core loop or the meta power is carrying the run.
+
+## 10. Game feel, visual, and audio plan
+
+### 10.1 Current presentation status
+
+The renderer already provides a coherent temporary palette, named arena zones, minimap, shop panels, enemy telegraphs, procedural silhouettes, and synthesized sounds. This is sufficient for tuning. It is not yet a final commercial visual pass.
+
+The runtime status identifies these presentation limitations:
+
+- Rail effects can extend over the HUD.
+- Boss bars can cover the north entry label.
+- Purpose labels in the shop are small.
+- Visual fixtures do not certify all effects in motion.
+- ObjectDB cleanup warnings remain in some capture exits.
+- System fonts are installed fallbacks rather than redistributed art assets.
+
+Fix readability problems before adding more effects.
+
+### 10.2 Hero asset replacement order
+
+When the core loop passes 1× balance gates, replace assets in this order:
+
+1. Saint silhouette and movement states.
+2. Nailer, Bell, Procession Gear, and Mercy Rail.
+3. Scrap Mite, Rivet Hound, Choir Drone, and Foreman.
+4. Optional repair machines and shop UI.
+5. Rust Pilgrim, Forklift Brute, Cinder Spitter, and Memory Crane.
+6. Background workshop machinery, route landmarks, and memory scenes.
+
+Every replacement asset must record source/generation method, license, date, temporary/final status, scene usage, and known mismatch.
+
+### 10.3 Audio priorities
+
+The next audio pass should be about weight and causal readability:
+
+- Make each weapon’s onset and cadence distinct.
+- Give optional repairs a clear start, progress, interruption, and completion sound.
+- Give each enemy family a distinct warning language.
+- Keep the boss hazard warning audible over ordinary weapon noise.
+- Reduce continuous sound density during shop and Results.
+- Test audio at 1× and 5× separately; 5× is for development throughput, not final feel.
+
+## 11. QA and automated improvement plan
+
+### 11.1 Preserve the current test layers
+
+The current repository has a valuable test suite covering variety, optional repairs, shop, relay, arena, simulation, UI, development speed, and scripted playthroughs. Keep these layers separate:
+
+| Layer | Current role | Next improvement |
 |---|---|---|
-| Loose parts | Scrap Mites only | Can I move and collect? |
-| First charger | Scrap Mites plus one Rivet Hound | What do I abandon to intercept the relay threat? |
-| Suppression lane | Rivet Hounds plus one Choir Drone | Can I reach the support unit before the charge lands? |
-| Repair escort | Rust Pilgrim plus Scrap Mites | Do I focus the healer or clear the swarm? |
-| Route collapse | Forklift Brute plus Hounds | Can I preserve exits and protect the relay? |
-| Elite pressure | Memory Crane plus one support pair | Can I counter the copy without losing the objective? |
+| Content validation | IDs, references, counts, enabled slice | Validate wave profiles, repair machines, scope flags, and counter families. |
+| Simulation tests | Deterministic state, damage, repair, shop, save/replay | Add build-role and optional-repair reward invariants. |
+| Arena tests | Connectivity, route access, body collision | Add travel-time and machine-reachability metrics. |
+| Shop tests | Six roles, rerolls, services, save stability | Add affordable-actionable-offer checks and no-wasted-service checks. |
+| Playthrough policies | Automated build viability across seeds | Add survival, evolution, explorer, and repair-seeking policies. |
+| UI tests | Title, shop pause, save roundtrip, navigation | Add 1× HUD overlap, minimap legibility, repair reward clarity, and boss-phase label checks. |
+| Capture fixtures | Real rendered states with provenance | Add a natural-policy capture distinct from configured state fixtures. |
+| Visual review | Ten-row rubric and explicit limitations | Score 1× density, weapon readability, and repair feedback separately. |
 
-Every new enemy should be introduced first in a controlled composition, then in a mixed composition. Spawn density should not be the primary difficulty slider until individual questions are readable.
+### 11.2 New automated policies
 
-### 9.4 Boss plan
+Add these policies before new weapons:
 
-The first boss is the Foreman Engine. It should have three readable phases:
+1. **Survival policy:** prioritizes structure and boss completion, with no optional repair requirement.
+2. **Evolution policy:** buys ranks and Saint’s Rivet when affordable.
+3. **Repair policy:** attempts one machine per two waves when the reward is not wasted.
+4. **Explorer policy:** buys a new-direction weapon and completes one west or east detour.
+5. **Mourner diagnostic policy:** records whether the wave-five loss follows a failure to acquire crowd clear, failure to collect motes, shop affordability, or excessive Cinder/Rust pressure.
 
-1. **Schedule:** telegraph three demolition zones and make the player choose where to stand.
-2. **Workers:** summon worker drones that target the relay and create a priority conflict.
-3. **Collapse:** shrink safe floor while opening a repair or interrupt window.
+The automated runner should report wins, loss wave, time to first damage, repair completions, weapon ranks, shop decisions, and primary failure cause. A process exit of zero must not mean “all policies won” unless the script explicitly checks that condition.
 
-The boss should be defeatable through a combination of damage and two successful interrupts. The player should be able to recover from the first missed schedule. Three missed schedules should create a severe relay state or failure according to a visible rule.
+### 11.3 Current 1× balance gate
 
-Factory Heart and Saint of No Repairs should remain future bosses until the first boss has proven that rule-changing encounters are readable.
+The next balance gate should require:
 
-## 10. Progression and metagame plan
+- 12/12 main-mode policy runs across seeds 147, 104729, and 104730, or a documented deliberate difficulty exception.
+- No unexplained Mourner wave-five loss.
+- At least one repair-seeking policy completes one useful repair in a normal run.
+- All three Blessings can reach Foreman without a fixture-only budget.
+- At least one non-evolution win for each Blessing.
+- At least one Mercy Rail win.
+- No frequent dead shop visits across the same seeds.
+- No known HUD overlap in the primary 1280×800 capture.
+- A natural-policy capture in addition to configured visual fixtures.
 
-### 10.1 Run-local progression
+This is still not a human-fun gate. It is the automated prerequisite for focused human playtest.
 
-Run-local decisions should remain the main source of power and expression.
+## 12. Prioritized execution roadmap
 
-| Layer | Function |
-|---|---|
-| Starting Blessing | Establishes doctrine and first direction. |
-| Weapons | Determine attack geometry and combat verbs. |
-| Ranks | Improve reliability and unlock evolution. |
-| Gifts | Add a small support rule or interaction. |
-| Catalysts | Enable a named transformation. |
-| Shop services | Repair, reserve, reveal, dismantle, or deepen the current plan. |
-| Objective state | Creates the cost of ignoring or pursuing the repair goal. |
-| Route result | Determines the next authored pressure and reward. |
+### P12.1 — 1× roaming density and optional-repair motivation
 
-### 10.2 Permanent progression
+**Player-facing objective:** the player can roam the enlarged Workshop, understand where pressure is coming from, and choose at least one optional repair because its reward is worth the travel risk.
 
-Use Memory Fragments as the first persistent currency or record. Memory Fragments should unlock content rather than buy raw power.
-
-Recommended order:
-
-1. Additional Saint frames with movement or structure trade-offs.
-2. Additional Blessings with new shop verbs.
-3. Catalysts and visible recipes.
-4. Arenas and objective types.
-5. Memory scenes and route branches.
-6. Transparent difficulty modifiers.
-
-The first permanent systems should include refunds or safe experimentation where appropriate. Do not add a permanent damage, health, or reroll tree before the creative vertical demonstrates that run-local assembly is satisfying.
-
-### 10.3 Unlock conditions
-
-Use three clear condition families:
-
-| Condition | Example | Reward |
-|---|---|---|
-| Mastery | Defeat Foreman Engine with at least 60% relay structure. | Repair-oriented Gift or service. |
-| Discovery | Complete a hybrid-tag run and read the Ledger. | Catalyst or recipe. |
-| Choice | Choose Brass Choir over Rootworks. | Blessing, route, or memory branch. |
-
-Every locked item should explain why it is locked and preview its play pattern. Do not require a permanent unlock to make the first Mercy Rail run viable.
-
-## 11. Narrative and flavour improvement plan
-
-The story foundation is strong, but implementation should make the narrative affect decisions without turning combat into a dialogue game.
-
-### First vertical narrative beats
-
-| Moment | Content | Mechanical consequence |
-|---|---|---|
-| Boot | Damaged instruction: `RESTORE THE FIRST ENGINE`. | Establishes objective and mystery. |
-| Blessing choice | Three short doctrine statements. | Starting item, shop bias, and service. |
-| Shop flavour | One item history line and one practical description. | Helps explain why the offer matters. |
-| Memory Crane | It copies the Saint because it has recorded the Saint’s pattern. | Elite mechanic reinforces identity theme. |
-| Foreman introduction | The machine treats demolition as proper maintenance. | Boss rule reinforces industrial absurdity. |
-| Results memory | One fragment reveals the Saint’s mixed construction. | Unlocks memory or route information. |
-
-Each event should be data-driven with stable ID, condition, choice, consequence, and short presentation payload. No branching dialogue system is required for the first slice.
-
-## 12. Presentation and commercial-quality plan
-
-### 12.1 Visual hierarchy
-
-The most important frame in the game should show, in this order:
-
-1. Saint silhouette and current weapon geometry.
-2. Immediate enemy direction and telegraph.
-3. Relay structure and repair progress.
-4. Active status and objective consequence.
-5. Scrap, Relic Shards, Blessing, and current forecast.
-6. Atmospheric machinery and story detail.
-
-The background should remain subordinate to the combat layer. The art direction already specifies a warm-cool industrial palette, repaired materials, restrained brightness, and physical weapon cues [7].
-
-### 12.2 Asset priority
-
-Do not commission the whole world first. Invest in the assets visible in the most important gameplay and store-facing frames.
-
-| Priority | Asset group | Why |
-|---:|---|---|
-| P0 | Saint base silhouette, relay, Scrap Mite, Rivet Hound, Choir Drone | Defines whether the game reads at all. |
-| P0 | Nailer, Bell, Procession Gear, Mercy Rail effects | Defines the transformation hook. |
-| P0 | Shop panel, Blessing icons, forecast panel, objective HUD | Defines decision clarity. |
-| P1 | Memory Crane and Foreman Engine | Defines boss quality and investment value. |
-| P1 | Workshop floor, salvage lane, furnace lane, crane lane | Defines map identity. |
-| P2 | Additional enemies, route landmarks, memory scenes | Adds breadth after the core frame works. |
-| P3 | Background world, faction props, campaign decoration | Adds polish after the slice is credible. |
-
-Every asset needs provenance, license status, temporary/final classification, scene usage, and known mismatch as required by the repository rules [7] [12].
-
-### 12.3 Audio and game feel
-
-The first audio pass should prioritize causal feedback:
-
-- Nailer: dry metal snap and short recoil.
-- Bell: physical strike and resonance tail.
-- Cable: tension groan and whip release.
-- Repair: welding crackle, click, and upward confirmation tone.
-- Objective damage: low warning tone and visible structure change.
-- Evolution: a short mechanical reconfiguration cue with a distinct signature tone.
-- Boss phase: concise title hit and warning pulse.
-
-Audio should not become a decorative layer that masks event causality. Every important simulation event should have a corresponding visual or audio cue.
-
-## 13. QA and telemetry plan
-
-### 13.1 Expand the validator before adding broad content
-
-The current validator should be extended in stages.
-
-| Validator stage | New checks |
-|---|---|
-| P0 | Tag vocabulary, first-slice scope flags, mixed cost fields, Blessing action milestones, map ID references, and required counter families. |
-| P1 | Weapon geometry IDs, target rules, status definitions, evolution deltas, and enemy telegraph data. |
-| P2 | Shop role guarantees, price bands, fallback offers, route previews, and economy source budgets. |
-| P3 | Objective state transitions, boss phase contracts, narrative event references, and asset provenance records. |
-
-The validator must remain a content check. It must not report gameplay pass when only JSON is valid.
-
-### 13.2 Runtime test layers
-
-When the Godot project exists, implement four test layers.
-
-| Layer | Purpose | Examples |
-|---|---|---|
-| Pure simulation tests | Verify state transitions without rendering. | Movement clamp, damage, repair, status expiry, combine, shop purchase. |
-| Golden replay tests | Verify deterministic seed and command behaviour. | Checkpoint hashes and first divergent event. |
-| Content integration tests | Verify data-driven composition. | Forecast counter availability, evolution route, boss reward. |
-| Capture smoke tests | Verify real presentation states. | Blessing select, relay pressure, shop, Mercy Rail, boss phase, Results. |
-
-### 13.3 Required metrics
-
-For each representative seed and player profile, record:
-
-- Time to first threat.
-- Relay structure at each shop boundary.
-- Scrap and Relic Shard sources and spends.
-- Shop purchase, reroll, lock, sell, dismantle, and rejection events.
-- Time spent away from the relay.
-- Weapon ranks and evolution timing.
-- Enemy defeat duration and attack frequency.
-- Elite and boss interrupt success.
-- Failure classification.
-- First divergent replay event if a test fails.
-
-Use these metrics to tune readability and causality before damage numbers.
-
-## 14. Prioritized execution roadmap
-
-### P0 — Contract reconciliation packet
-
-**Player-facing objective:** none; make the implementation contracts internally consistent before runtime work starts.
+**Authoritative owner:** arena data, spawn profiles, machine progress/reward state, movement timing, and simulation event trace.
 
 **Required work:**
 
-- Add explicit `scope_stage` fields to content records: `first_playable`, `creative_vertical`, or `future`.
-- Normalize first-slice tags and counter families.
-- Add mixed Scrap plus Relic Shard cost support.
-- Convert Blessing fulfilment to authored action milestones.
-- Add map data schema and Collapsed Workshop content record.
-- Add Gift schema without exposing Gifts in the first playable UI.
-- Define the authoritative loadout schema: four weapon slots, one reserve, and future two Gift slots.
-- Reconcile the README runtime QA commands with actual repository files.
-- Extend the validator to detect the current scope and vocabulary mismatches.
+- Measure and tune travel gaps at 1× across three seeds.
+- Add authored wave profiles rather than selecting from an uncontrolled growing pool.
+- Keep three optional machines but show reward, work time, and local risk before commitment.
+- Pause repair progress on severe hit, knockback, or leaving the work radius while preserving accumulated progress.
+- Prevent wasted rewards where a machine can offer a useful alternative or a clear defer state.
+- Add repair start, progress, interruption, and completion events.
+- Add repair-seeking automated policy and metrics.
 
-**Acceptance:** content validator passes; all first-slice counts match the runtime scope; no runtime task needs to infer terms from prose.
+**Acceptance:** 1× captures show readable roaming, at least one attractive repair decision, no unexplained empty wave interval, and no state mutation from presentation. The repair policy completes one useful machine on representative seeds.
 
-**Evidence:** validator output and a contract-diff report. No gameplay capture is expected.
+**Non-goals:** new weapons, new maps, permanent progression, manual boss interruption, or a new trait inventory.
 
-### P1 — SC-01: deterministic shell and harness
+### P12.2 — Mourner viability and weapon-role balance
 
-Build the Godot 4.4.1 shell, fixed 60 Hz simulation, seed, command queue, pause/restart, save/load, state hashes, and a real boot capture. Do not add combat or final art.
+**Player-facing objective:** all three Blessings support a coherent main-mode run, and every weapon has a clear reason to be purchased.
 
-### P2 — SC-02: movement and Collapsed Workshop
+**Required work:**
 
-Implement the arena data, topology validation, camera framing, Saint movement, relay marker, repair zone, entry edges, and a real movement capture.
+- Trace the Mourner seed-104729 wave-five loss.
+- Compare kill sources, mote generation, shop affordability, weapon ranks, and incoming enemy composition.
+- Tune only the failing cause; do not globally inflate Mourner or healing.
+- Validate all seven weapons against the role matrix.
+- Add coverage for Rust Pilgrim, Forklift Brute, and Cinder Spitter in controlled compositions.
+- Add non-evolution and evolution policy variants.
 
-### P3 — SC-03: three weapons and three enemy questions
+**Acceptance:** 12/12 main-mode policies win or the remaining failure is a deliberate documented challenge. Each Blessing has a non-evolution success route. Each weapon has a tested primary matchup and weakness.
 
-Implement Nailer, Bell, Procession Gear, Scrap Mites, Rivet Hounds, Choir Drones, target rules, statuses, telegraphs, and golden traces.
+### P12.3 — Purposeful shop and distinct Blessing services
 
-### P4 — SC-04: repair objective
+**Player-facing objective:** every shop visit presents one affordable current-build decision, one future-build decision, and one meaningful response to the next pressure.
 
-Implement relay structure, repair progress, objective damage, partial success, failure conditions, and objective HUD. Add the first complete combat/repair capture.
+**Required work:**
 
-### P5 — SC-05: Scrap and Relic Shards
+- Keep the six role layout.
+- Guarantee one affordable actionable offer for a normal run.
+- Prevent redundant calibration when no other service is useful.
+- Make Bell’s Advance warning reveal a concrete forecast advantage.
+- Make Workshop restoration and Mourner recovery visibly different.
+- Show why an offer is relevant and what it will change.
+- Add economy traces for survival, evolution, explorer, and repair policies.
 
-Implement deterministic pickups, rewards, sources, collection, transaction history, and economy telemetry. Validate survival, evolution, and explorer economy profiles.
+**Acceptance:** shop replay is deterministic; no role is permanently dead; all services are distinct; the player can form a meaningful build without repeated rerolls.
 
-### P6 — SC-06: minimum complete shop
+### P12.4 — Foreman and elite encounter quality
 
-Implement six role-guaranteed offers, buy, combine, reserve, repair, one free refresh, capped rerolls, rejection reasons, and save-stable offers. Defer Recast Relic and complex dismantling until the basic loop is clear.
+**Player-facing objective:** the elite and boss create readable movement and targeting questions that do not depend on Mercy Rail or manual interrupts.
 
-### P7 — SC-07: three Blessings
+**Required work:**
 
-Implement Workshop Gospel, Bell Ward, and Mourner with distinct services and authored action fulfilment. Capture three doctrine-biased shop states.
+- Rework hazard placement around visible routes and machine landmarks.
+- Give workers a clear priority relationship to the Saint and optional machines.
+- Add a movement rule or safe-lane change in each boss phase.
+- Keep the boss mobile enough to be a target, but never a health sponge.
+- Test evolved and non-evolved builds.
 
-### P8 — SC-08: ranks and Mercy Rail
+**Acceptance:** each phase has a distinct question, telegraphs precede effects, and four build policies can win without presentation-only damage.
 
-Implement Rank 1–3, atomic combines, recipe states, Saint’s Rivet, transformation window, Mercy Rail, and before/after evidence. This is the first major quality gate.
+### P12.5 — Results and replay motivation
 
-### P9 — SC-09: Memory Crane and Foreman Engine
+**Player-facing objective:** the Results screen explains what happened and gives the player a clear reason to try a different build or route.
 
-Implement the copy elite, demolition boss, worker drones, interrupts, phase telegraphs, objective pressure, and exact rewards.
+**Required work:**
 
-### P10 — SC-10: Results and route choice
+- Show machine rewards and repair choices.
+- Show weapon contribution, damage source, and wave of failure.
+- Show Blessing fulfilment and evolution status.
+- Show a primary failure classification.
+- Add a short memory fragment and route-preview stub without expanding into dialogue trees.
+- Preserve immediate same-seed restart.
 
-Implement causal Results, failure classification, memory fragment, route cards, reward commitment, and restart. The First Shift is now a complete playable loop.
+**Acceptance:** Results differ causally across survival, repair, evolution, and failure policies. The player can identify one next experiment.
 
-### P11 — Creative vertical
+### P12.6 — Gifts and support relics
 
-Add temporary/final art kit, UI polish, audio pass, accessibility, onboarding, five weapons, four evolutions, five normal enemies, two elites, two bosses, and three objective variants only after the nine-minute loop is stable.
+**Player-facing objective:** a support item changes one meaningful rule without becoming generic stat inflation.
 
-### P12 — Act I breadth
+**Prerequisites:** P12.1 through P12.3 pass.
 
-Add Brass Choir, Rootworks, Red Foundry, Pale Archive, one rival Saint, route consequences, additional Blessings, and authored side events. Each addition must create a new player question.
+**Required work:**
 
-## 15. Definition of done for each improvement
+- Add a stable Gift schema and two support slots.
+- Add four to six behaviour-changing Gifts.
+- Add stacking, replacement, sell/dismantle, and save/replay rules.
+- Keep catalysts distinct as evolution ingredients or specific modifiers.
 
-An improvement is not complete because its data file exists or its code compiles. It is complete when:
+**Acceptance:** Gifts create different decisions from weapons and catalysts; the UI remains readable at 1280×800; no Gift is required for first-slice viability.
+
+### P13 — Creative vertical and early-access breadth
+
+Only after the current Workshop loop passes the automated gate should the project add Rootworks Pump, additional frames, the fourth Blessing, new evolutions, authored route consequences, and hero art/audio replacements. The early-access target remains three sites, three objective patterns, three frames, four Blessings, eight weapons, four evolutions, ten to twelve catalysts/support relics, six enemy families, two elites, and three bosses.
+
+## 13. Definition of done
+
+An improvement is complete only when:
 
 1. The player-facing objective is stated in one sentence.
 2. The authoritative owner and command boundary are explicit.
-3. The content has stable IDs and references.
-4. Valid and invalid commands are tested.
-5. Same seed and command stream reproduce the same state where relevant.
-6. Save/load and replay behaviour are covered where relevant.
-7. The real runtime state is captured with commit, build, Godot version, viewport, scaling, seed, and state name.
-8. The visual result is critiqued for hierarchy, readability, contrast, density, feedback, and polish.
-9. One limitation is recorded honestly.
-10. Exactly one next task is named.
+3. The current accepted direction is preserved: optional repairs, free movement, automatic attacks, no manual Foreman interrupt.
+4. Content has stable IDs and references.
+5. Valid and invalid commands are tested.
+6. Same seed and command stream reproduce the same state where relevant.
+7. Save/load and replay behaviour are covered where relevant.
+8. The real runtime state is captured with commit, build, Godot version, viewport, scaling, seed, and state name.
+9. The capture is identified as natural or fixture-configured.
+10. The visual result is critiqued for hierarchy, readability, density, feedback, and polish.
+11. One limitation is recorded honestly.
+12. Exactly one next task is named.
 
-## 16. Immediate next task
+## 14. Immediate next task
 
-The next task is **P0 — reconcile the content and runtime contracts**. It should not create a playable scene. It should make the first-slice scope, tag vocabulary, Blessing fulfilment, mixed currency costs, map schema, Gift schema, and runtime QA commands internally consistent.
+The next task is **P12.1 — 1× roaming density and optional-repair motivation**. Do not add a new map, Gift inventory, permanent stat tree, or broad narrative system first. Use the existing enlarged Collapsed Workshop, seven weapons, six enemy families, three optional machines, and current shop. Measure the current experience, fix the largest density or repair-motivation problem, rerun the automated policies, and capture one natural-policy 1× state with exact provenance.
 
-Once P0 passes, the next task is **SC-01 — create the Godot shell and deterministic harness**. The first runtime task must produce a real bootable build and honest capture before combat, shop, or campaign content is expanded.
+The current evidence does not justify claiming game-quality completion. It does justify continuing runtime iteration from a real, testable foundation.
 
 ## References
 
-[1]: https://github.com/raphaelroshan/scrap-saint/blob/main/docs/astra_game_bible.md "Scrap Saint Astra game bible"
-[2]: https://github.com/raphaelroshan/scrap-saint/blob/main/design/shop_and_blessings.md "Scrap Saint shop and Blessings contract"
-[3]: https://github.com/raphaelroshan/scrap-saint/blob/main/docs/progression_map_weapons_metagame.md "Scrap Saint progression, map, weapons, and metagame design"
-[4]: https://github.com/raphaelroshan/scrap-saint/blob/main/design/gameplay_contract.md "Scrap Saint gameplay contract"
-[5]: https://github.com/raphaelroshan/scrap-saint/blob/main/tests/README.md "Scrap Saint tests and evidence plan"
-[6]: https://github.com/raphaelroshan/scrap-saint/blob/main/docs/story_and_acts.md "Scrap Saint story and acts"
-[7]: https://github.com/raphaelroshan/scrap-saint/blob/main/docs/art_direction.md "Scrap Saint art and feel direction"
-[8]: https://github.com/raphaelroshan/scrap-saint/blob/main/content/items/first_slice.json "Scrap Saint first-slice item catalogue"
-[9]: https://github.com/raphaelroshan/scrap-saint/blob/main/content/enemies/first_slice.json "Scrap Saint first-slice enemy catalogue"
-[10]: https://github.com/raphaelroshan/scrap-saint/blob/main/content/bosses/first_slice.json "Scrap Saint first-slice boss catalogue"
-[11]: https://github.com/raphaelroshan/scrap-saint/blob/main/docs/design_decision.md "Scrap Saint design decision record"
-[12]: https://github.com/raphaelroshan/scrap-saint/blob/main/docs/agent_task_template.md "Scrap Saint agent task template"
+[1]: https://github.com/raphaelroshan/scrap-saint/blob/main/docs/runtime_status.md "Scrap Saint current runtime status"
+[2]: https://github.com/raphaelroshan/scrap-saint/blob/main/docs/implementation_packets.md "Scrap Saint implementation packets"
+[3]: https://github.com/raphaelroshan/scrap-saint/blob/main/content/slices/first_shift.json "Scrap Saint enabled First Shift slice"
+[4]: https://github.com/raphaelroshan/scrap-saint/blob/main/content/arenas/collapsed_workshop.json "Scrap Saint Collapsed Workshop arena data"
+[5]: https://github.com/raphaelroshan/scrap-saint/blob/main/content/items/first_slice.json "Scrap Saint item catalogue"
+[6]: https://github.com/raphaelroshan/scrap-saint/blob/main/content/enemies/first_slice.json "Scrap Saint enemy catalogue"
+[7]: https://github.com/raphaelroshan/scrap-saint/blob/main/docs/early_access_plan.md "Scrap Saint early-access delivery plan"
+[8]: https://github.com/raphaelroshan/scrap-saint/blob/main/docs/verification_0_1.md "Scrap Saint verification history"
+[9]: https://github.com/raphaelroshan/scrap-saint/blob/main/game/simulation.gd "Scrap Saint authoritative simulation"
+[10]: https://github.com/raphaelroshan/scrap-saint/blob/main/game/main.gd "Scrap Saint runtime renderer and UI"
+[11]: https://github.com/raphaelroshan/scrap-saint/blob/main/docs/art_direction.md "Scrap Saint art and feel direction"
+[12]: https://github.com/raphaelroshan/scrap-saint/blob/main/tests/README.md "Scrap Saint tests and evidence plan"
 
-*Prepared by Manus AI from the current private repository state and its existing design contracts. No runtime gameplay was claimed in this plan.*
+*Prepared by Manus AI from the current private repository state. Automated evidence is reported as evidence of execution and regression coverage, not as proof of human enjoyment or final game quality.*
