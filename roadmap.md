@@ -12,6 +12,12 @@ Complete the Astra game bible, story/acts, art direction, gameplay contract, sho
 
 **Gate:** all content IDs, commands, recipes, Blessings, objectives, enemy questions, and evidence requirements are explicit.
 
+### Canonical systems design lock
+
+The implementation-ready systems direction is documented in [`docs/progression_map_weapons_metagame.md`](docs/progression_map_weapons_metagame.md). Treat it as the canonical extension of the gameplay and shop contracts. The first slice is a nine-minute authored run with six pressure beats, five shop windows, the Collapsed Workshop route topology, a live repair relay, Memory Crane, Foreman Engine, and a guaranteed Mercy Rail path. The document also defines the first 15-item catalogue, the six-role deterministic offer generator, economy targets, permanent-versus-run-local boundaries, and anti-friction invariants.
+
+These values are implementation targets rather than final balance. Agents must validate them with deterministic traces and real captures, and must not copy reference-game timings or map rules without evidence.
+
 ## Phase 1 — Deterministic workshop/combat proof
 
 Implement SC-01 through SC-04: Godot shell, deterministic seed harness, movement, one arena, three base weapons, three enemy families, repair relay, and fixed update trace.
