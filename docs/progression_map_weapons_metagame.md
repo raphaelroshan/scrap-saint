@@ -1,5 +1,8 @@
 # Scrap Saint — Progression, Map, Weapons, and Metagame Design
 
+> Current implementation note: this document preserves the original design recommendation. Later user decisions select free movement with optional repairs, remove manual Foreman interruption, and expand the map and combat roster. Those decisions take precedence over the relay-defence requirements below. See [runtime status](runtime_status.md), [implementation packets](implementation_packets.md), and [Early Access plan](early_access_plan.md).
+
+
 **Status:** implementation-ready recommendation grounded in the current repository canon and the supplied reference research.  
 **Audience:** systems, content, UI, narrative, and QA implementation teams.  
 **Primary slice:** *The First Shift*, an 8–10 minute deterministic run.

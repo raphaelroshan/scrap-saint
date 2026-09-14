@@ -1,0 +1,336 @@
+{
+  "schema_version": 1,
+  "id": "slice.first_shift",
+  "version": "0.1.0",
+  "tick_rate": 60,
+  "wave_ticks": 4200,
+  "wave_count": 8,
+  "arena_id": "arena.collapsed_workshop",
+  "saint": {
+    "speed": 225,
+    "structure": 100,
+    "radius": 16,
+    "invulnerability_ticks": 36
+  },
+  "relay": {
+    "structure": 180,
+    "starting_fraction": 0.7,
+    "backup_floor": 18,
+    "critical_fraction": 0.3,
+    "strike_warning_ticks": 60,
+    "strike_recovery_ticks": 90,
+    "required_ticks": 5400,
+    "repair_per_tick": 0.018
+  },
+  "economy": {
+    "starting_scrap": 12,
+    "wave_scrap": 9,
+    "reroll_costs": [
+      0,
+      2,
+      4
+    ],
+    "active_slots": 4,
+    "reserve_slots": 1,
+    "sell_fraction": 0.6,
+    "repair_cost": 5,
+    "repair_amount": 30
+  },
+  "weapons": {
+    "weapon.nailer_small_mercies": {
+      "short": "Nailer",
+      "shape": "line",
+      "damage": 16,
+      "cooldown": 30,
+      "range": 330,
+      "width": 10,
+      "color": "efb966",
+      "description": "Piercing nails. Two targets in a straight line."
+    },
+    "weapon.bell_last_shift": {
+      "short": "Last Shift Bell",
+      "shape": "cone",
+      "damage": 12,
+      "cooldown": 65,
+      "range": 155,
+      "width": 0.85,
+      "color": "efcf83",
+      "description": "A broad cone. Staggers and pushes threats away."
+    },
+    "weapon.procession_gear": {
+      "short": "Procession Gear",
+      "shape": "orbit",
+      "damage": 17,
+      "cooldown": 19,
+      "range": 80,
+      "width": 30,
+      "color": "91c9b0",
+      "description": "An orbiting relic. Damages enemies on contact."
+    },
+    "weapon.candle_nailer": {
+      "short": "Candle-Nailer",
+      "shape": "shot",
+      "damage": 29,
+      "cooldown": 48,
+      "range": 390,
+      "width": 8,
+      "color": "cbb8ed",
+      "description": "Targets the weakest machine. Kills leave healing motes."
+    },
+    "weapon.cable_contrition": {
+      "short": "Contrition Cable",
+      "shape": "tether",
+      "damage": 10,
+      "cooldown": 55,
+      "range": 195,
+      "width": 0.95,
+      "color": "81b8d0",
+      "description": "Sweeps a wide arc. Binds enemies and draws them inward."
+    },
+    "weapon.hymn_coil": {
+      "short": "Hymn Coil",
+      "shape": "beam",
+      "damage": 4,
+      "cooldown": 8,
+      "range": 420,
+      "width": 6,
+      "color": "8edce0",
+      "description": "Rapid beam pulses pierce every machine in a narrow line."
+    },
+    "weapon.altar_mortar": {
+      "short": "Altar Mortar",
+      "shape": "blast",
+      "damage": 38,
+      "cooldown": 100,
+      "range": 330,
+      "width": 72,
+      "color": "e89765",
+      "description": "Burst shells hit a cluster around the nearest enemy."
+    }
+  },
+  "catalysts": {
+    "catalyst.saints_rivet": {
+      "short": "Saint's Rivet",
+      "description": "Repair 25% faster. Rank III Nailer can become Mercy Rail.",
+      "repair_multiplier": 1.25
+    },
+    "catalyst.cracked_bell_clapper": {
+      "short": "Cracked Clapper",
+      "description": "Staggers and binds last 50% longer.",
+      "control_multiplier": 1.5
+    },
+    "catalyst.black_candle": {
+      "short": "Black Candle",
+      "description": "Every sixth defeat leaves a healing mote.",
+      "mote_every": 6
+    },
+    "catalyst.quiet_gear": {
+      "short": "Quiet Gear",
+      "description": "Weapon mechanisms cycle 10% faster.",
+      "cooldown_multiplier": 0.9
+    }
+  },
+  "blessings": [
+    "blessing.workshop_gospel",
+    "blessing.bell_ward",
+    "blessing.mourner"
+  ],
+  "enemies": {
+    "enemy.rivet_hound": {
+      "short": "Rivet Hound",
+      "hp": 34,
+      "speed": 64,
+      "damage": 7,
+      "radius": 14,
+      "color": "cd775c"
+    },
+    "enemy.scrap_mite": {
+      "short": "Scrap Mite",
+      "hp": 19,
+      "speed": 84,
+      "damage": 4,
+      "radius": 10,
+      "color": "bea35f"
+    },
+    "enemy.choir_drone": {
+      "short": "Choir Drone",
+      "hp": 58,
+      "speed": 38,
+      "damage": 6,
+      "radius": 18,
+      "color": "a499c7"
+    },
+    "enemy.rust_pilgrim": {
+      "short": "Rust Pilgrim",
+      "hp": 68,
+      "speed": 35,
+      "damage": 5,
+      "radius": 18,
+      "color": "8db58c",
+      "heal_radius": 150,
+      "heal_amount": 12,
+      "heal_interval": 180
+    },
+    "enemy.forklift_brute": {
+      "short": "Forklift Brute",
+      "hp": 110,
+      "speed": 38,
+      "damage": 12,
+      "radius": 26,
+      "color": "cfad68",
+      "push_distance": 48,
+      "charge_warning": 72,
+      "charge_speed": 180
+    },
+    "enemy.cinder_spitter": {
+      "short": "Cinder Spitter",
+      "hp": 42,
+      "speed": 42,
+      "damage": 8,
+      "radius": 15,
+      "color": "df8e65",
+      "attack_interval": 180,
+      "warning_ticks": 72,
+      "blast_radius": 38,
+      "stand_off": 230
+    }
+  },
+  "elite": "elite.memory_crane",
+  "boss": "boss.foreman_engine",
+  "evolutions": [
+    "evolution.mercy_rail"
+  ],
+  "rail": {
+    "damage": 70,
+    "cooldown": 95,
+    "range": 620,
+    "width": 19,
+    "charge_ticks": 18,
+    "repair_on_elite_hit": 6
+  },
+  "combat": {
+    "spawn_interval": 110,
+    "spawn_minimum": 30,
+    "enemy_limit": 65,
+    "control_ticks": 48,
+    "push_distance": 28,
+    "bind_ticks": 90,
+    "mote_healing": 4,
+    "pickup_radius": 34,
+    "scrap_drop_every": 5,
+    "hound_charge_ticks": 36,
+    "hound_charge_speed": 240,
+    "roaming_spawn_radius": 460
+  },
+  "doctrine_rules": {
+    "workshop_rate": 1.25,
+    "fulfilled_workshop_rate": 1.6,
+    "bell_mark_multiplier": 1.2,
+    "mourn_every": 5,
+    "fulfilled_mourn_every": 3,
+    "workshop_service_hp": 20,
+    "workshop_service_relay": 45,
+    "mourner_service_hp": 35
+  },
+  "enemy_rules": {
+    "wave_hp_scale": 0.14,
+    "major_speed": 26,
+    "drone_distance": 170,
+    "drone_retreat_speed": 18,
+    "drone_field_radius": 105,
+    "drone_cooldown_multiplier": 1.25,
+    "hound_range": 240,
+    "hound_cycle": 170,
+    "hound_dash_ticks": 25,
+    "relay_contact_interval": 60
+  },
+  "boss_rules": {
+    "elite_hp": 420,
+    "boss_hp": 1600,
+    "hazard_interval": 210,
+    "hazard_warning_ticks": 100,
+    "hazard_radius": 62,
+    "hazard_damage": 17,
+    "worker_interval": 300,
+    "relay_damage_multiplier": 0.5
+  },
+  "shop_rules": {
+    "roles": [
+      "BUILD IMPROVEMENT",
+      "NEW DIRECTION",
+      "EVOLUTION PATH",
+      "THREAT SUPPORT",
+      "FIELD REPAIR",
+      "BLESSING SERVICE"
+    ],
+    "doctrine_tags": [
+      "labour",
+      "witness",
+      "mourn"
+    ],
+    "threat_support": [
+      "catalyst.cracked_bell_clapper",
+      "catalyst.black_candle",
+      "catalyst.quiet_gear"
+    ],
+    "calibration_multiplier": 0.9,
+    "bell_warning_multiplier": 1.5,
+    "mourner_motes": 6,
+    "services": [
+      {
+        "name": "Workshop restoration",
+        "description": "Restore 20 Saint and 45 relay integrity.",
+        "cost": 5
+      },
+      {
+        "name": "Advance warning",
+        "description": "Next wave: relay strikes and demolition warn 50% longer.",
+        "cost": 5
+      },
+      {
+        "name": "Remember the fallen",
+        "description": "Next wave: the first six defeats leave healing motes.",
+        "cost": 5
+      }
+    ]
+  },
+  "optional_repairs": {
+    "radius": 56,
+    "required_ticks": 180,
+    "machines": [
+      {
+        "id": "repair.salvage",
+        "name": "SALVAGE SORTER",
+        "position": [
+          -70,
+          450
+        ],
+        "reward": "scrap",
+        "amount": 8,
+        "description": "+8 Scrap"
+      },
+      {
+        "id": "repair.pump",
+        "name": "COOLANT PUMP",
+        "position": [
+          550,
+          70
+        ],
+        "reward": "heal",
+        "amount": 30,
+        "description": "+30 Saint integrity"
+      },
+      {
+        "id": "repair.signal",
+        "name": "WARNING BELL",
+        "position": [
+          1150,
+          560
+        ],
+        "reward": "stun",
+        "amount": 180,
+        "description": "Stagger present enemies for 3s"
+      }
+    ]
+  }
+}

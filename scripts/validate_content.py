@@ -31,6 +31,34 @@ def unique_ids(entries: list[dict], label: str) -> set[str]:
     return set(ids)
 
 
+def validate_slice(manifest: dict, data: dict) -> None:
+    items = {entry['id']: entry for entry in data['items']['items']}
+    enemies = {entry['id'] for entry in data['enemies']['enemies']}
+    bosses = {entry['id'] for entry in data['bosses']['bosses']}
+    blessings = {entry['id'] for entry in data['blessings']['blessings']}
+    evolutions = {entry['id']: entry for entry in data['items']['evolutions']}
+    assert len(manifest['weapons']) == 7, 'slice must enable seven weapons'
+    assert len(manifest['catalysts']) == 4, 'slice must enable four useful catalysts'
+    assert len(manifest['enemies']) == 6, 'slice must enable six ordinary enemies'
+    assert len(manifest['blessings']) == 3 and len(set(manifest['blessings'])) == 3
+    assert set(manifest['blessings']) <= blessings
+    assert manifest['elite'] in enemies and manifest['boss'] in bosses
+    assert set(manifest['enemies']) <= enemies
+    assert len(manifest['evolutions']) == 1
+    for kind in ('weapons', 'catalysts'):
+        for item_id, settings in manifest[kind].items():
+            assert item_id in items, f'unknown enabled item {item_id}'
+            assert items[item_id]['kind'] == kind[:-1]
+            assert settings.get('description'), f'missing playable description {item_id}'
+    for recipe_id in manifest['evolutions']:
+        assert recipe_id in evolutions
+        recipe = evolutions[recipe_id]
+        assert recipe['base_item_id'] in manifest['weapons']
+        assert recipe['required_catalyst_id'] in manifest['catalysts']
+    assert manifest['economy']['reroll_costs'] == [0, 2, 4]
+    assert manifest['wave_ticks'] > 0 and manifest['tick_rate'] == 60
+
+
 def main() -> int:
     data = {key: load(path) for key, path in FILES.items()}
     items = data["items"].get("items", [])
@@ -44,6 +72,7 @@ def main() -> int:
     enemy_ids = unique_ids(enemies, "enemies")
     boss_ids = unique_ids(bosses, "bosses")
     evolution_ids = unique_ids(evolutions, "evolutions")
+    validate_slice(load(ROOT / 'content/slices/first_shift.json'), data)
 
     if len(blessings) < 3:
         raise AssertionError("first slice needs at least three Blessings")

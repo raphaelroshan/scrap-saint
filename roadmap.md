@@ -2,13 +2,15 @@
 
 ## 1. Roadmap purpose and current truth
 
-Scrap Saint begins as a design, content, and deterministic-contract foundation. The repository does not yet contain a Godot runtime. No gameplay screenshot, playable run, combat result, or visual-quality claim may be made until a real build exists and its provenance is recorded.
+A playable Godot prototype now spans the First Shift loop. See [runtime status](docs/runtime_status.md) for implemented subsets, verification results and deferred mechanics. The accepted launch scope is in the [Early Access delivery plan](docs/early_access_plan.md). Human playtesting and creative-vertical approval remain outstanding.
+
+**Current user decisions (P12) supersede conflicting earlier requirements below:** free movement with optional repairs is the main game; relay defence remains a development comparison. Manual Foreman interruption was removed. The workshop now has four times its original area, a following camera and minimap, seven base weapons and six ordinary enemy families. Mercy Rail is not required and encounters must support other builds. Runtime cadence is eight 70-second waves with seven shops. The detailed milestone plan below is retained as the original design baseline, not a claim that every planned mechanic is implemented.
 
 This roadmap turns the canonical systems design in [`docs/progression_map_weapons_metagame.md`](docs/progression_map_weapons_metagame.md) into an implementation sequence. It is the operating plan for Astra and other development agents. The target is not a collection of isolated mechanics. The target is a compact, understandable, replayable vertical slice called **The First Shift**.
 
-> **First-slice promise:** the player chooses a Blessing, enters a compact industrial workshop, moves and auto-attacks while protecting a live relay, makes meaningful workshop decisions, reaches the visible Mercy Rail evolution, defeats a rule-changing elite and boss, and understands how the Saint’s identity changed.
+> **First-slice promise:** the player chooses a Blessing, enters a compact industrial workshop, moves and auto-attacks with optional repair rewards, makes meaningful workshop decisions, reaches the visible Mercy Rail evolution, defeats a rule-changing elite and boss, and understands how the Saint’s identity changed.
 
-The current status is **PLANNED_ONLY** for runtime work. Content-contract validation passes, but that is not gameplay evidence.
+Current evidence: 129 Godot assertions pass; main-mode automated full runs record 11/12 wins. One Mourner run fails on wave five, so the all-win balance gate remains failed. See runtime status for evidence and limitations.
 
 ## 2. Canonical product and systems lock
 
@@ -17,7 +19,7 @@ The first implementation must preserve the following decisions.
 | Area | Canonical decision | Boundary |
 |---|---|---|
 | Run shape | Nine-minute authored run with six pressure beats, five shop windows, one elite, one boss, and one visible evolution. | Do not begin with an endless or fully procedural mode. |
-| Objective | Repair and protect a live relay while surviving industrial machines. | Survival-only combat is insufficient. |
+| Objective | Survive industrial machines and defeat the Foreman; repairs offer optional rewards. | Do not restore mandatory relay defence or manual boss interruption. |
 | Arena | The Collapsed Workshop, a compact route-bearing arena with three entry edges, a relay bowl, salvage lane, hazard lane, and workshop alcove. | Every traversable pocket must have two exits. |
 | Currency | Scrap and Relic Shards only. | Do not add a third run currency. |
 | Doctrine | Blessings define broad run direction and shop bias. | A Blessing must not hard-lock a build. |
@@ -602,4 +604,4 @@ Every future implementation request should begin with a packet in this shape:
 
 ## 17. Immediate next task
 
-The next task is **SC-01 — create the Godot shell and deterministic harness**. It must not implement combat, shop, Blessings, broad content, or final art. It must produce a real bootable build, fixed-timestep state, seed handling, command stream, pause/restart, hash checkpoints, and one honest runtime capture. Once SC-01 passes its evidence gate, the next task is SC-02 and nothing broader.
+The next task is **playtest roaming density and weapon/enemy balance at 1x**. The Godot shell and playable loop exist; do not restart SC-01. Use [implementation packets](docs/implementation_packets.md) and [runtime status](docs/runtime_status.md) to distinguish implemented subsets from the original milestone specifications.

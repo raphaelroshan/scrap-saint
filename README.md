@@ -6,6 +6,20 @@
 
 The project combines short survivor-like runs, a Slime 3K-style relic shop, visible weapon evolutions, and a warm industrial story about repair, purpose, and self-determination. It is not a conventional military mech game. The Saint is a maintenance automaton that treats bells, rivets, cables, manuals, and ruined machines as sacred because they once helped people.
 
+## Play the prototype
+
+Open `project.godot` in **Godot 4.5.1** and run the project. In this workspace, double-click **Play Scrap Saint.cmd** to launch using the downloaded portable runtime.
+
+For faster development, use **Play Scrap Saint 5x Dev.cmd**. Combat runs at 5× speed, including movement, weapons, enemies, repair and wave timers. Shops and pause remain stopped. **F6** toggles 1×/5× in this development version; the on-screen badge shows the active speed. An 8½-minute combat run takes about 1 minute 42 seconds at 5×, excluding shops. The normal launcher remains 1×. CLI equivalent: `godot --path . -- --dev-speed=5`.
+
+- **Optional repairs is the main game.** The 5x development launcher retains the relay-defence comparison toggle. New runs use the displayed seed; change it on the title screen. Existing saves retain their mode.
+- WASD or arrows: move; weapons attack automatically. In Optional repairs, short repairs reward Scrap, healing or a stagger pulse. Machines cannot be destroyed and repairs are never required to win. In Relay defence, stay near the relay to repair it and keep it alive.
+- Escape: pause; F5: save; F9: load; M: mute; F3: diagnostic overlay.
+- Between waves: buy/combine, sell, store, equip, lock and refresh. Mercy Rail is optional.
+- Controller: left stick movement, standard UI navigation/accept, Start to pause.
+
+See [runtime status](docs/runtime_status.md) for implemented rules, prototype substitutions, and limitations. The enabled slice and balance values live in `content/slices/first_shift.json`.
+
 ## Current canonical direction
 
 The project uses a hybrid of two story variants:
@@ -64,7 +78,7 @@ The transformation must change attack geometry, target rules, area control, obje
 
 ## Scope and quality bar
 
-The first playable is intentionally small: one arena, one Saint frame, five base weapons, four catalysts, three Blessings, three enemy families, one elite, one boss, one repair objective, one shop, one visible evolution, and a deterministic eight-to-ten-minute run.
+The first playable is intentionally small: one arena, one Saint frame, seven base weapons, four catalysts, three Blessings, six enemy families, one elite, one boss, one repair objective, one shop, one visible evolution, and a deterministic eight-to-ten-minute run.
 
 The project is not complete when the content validator passes. Game quality requires a running build, readable combat, visible build transformation, causal Results, exact screenshot provenance, and evidence-led iteration. Technical tests establish simulation correctness; screenshots establish presentation evidence; neither is a substitute for the other.
 
@@ -99,4 +113,4 @@ If the Godot project is not yet present, the agent must not claim gameplay execu
 
 ## Current status
 
-This repository begins as a design-and-contract foundation. The first implementation task is to create the Godot shell, deterministic seed harness, and Workshop/Combat proof described in [`docs/first_vertical_slice.md`](docs/first_vertical_slice.md). Until that exists, reports must distinguish **contract validation** from **playable game evidence**.
+The first Godot prototype is implemented. See [runtime status](docs/runtime_status.md) and [implementation packets](docs/implementation_packets.md). Automated simulation outcomes, rendered visual fixtures, and human playtesting are separate evidence categories. Human playtesting remains outstanding.

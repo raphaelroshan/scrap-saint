@@ -1,0 +1,162 @@
+{
+  "id": "arena.collapsed_workshop",
+  "name": "The Collapsed Workshop",
+  "pixels_per_metre": 40,
+  "bounds": [
+    -250,
+    -110,
+    1600,
+    1120
+  ],
+  "start": [
+    550,
+    530
+  ],
+  "relay": [
+    550,
+    450
+  ],
+  "repair_radius": 100,
+  "obstacles": [
+    {
+      "id": "machine.salvage_press",
+      "name": "SALVAGE PRESS",
+      "rect": [
+        350,
+        300,
+        80,
+        200
+      ]
+    },
+    {
+      "id": "machine.furnace",
+      "name": "COLD FURNACE",
+      "rect": [
+        670,
+        350,
+        80,
+        200
+      ]
+    },
+    {
+      "id": "machine.west_piston",
+      "name": "WEST PISTON",
+      "rect": [
+        -80,
+        50,
+        100,
+        160
+      ]
+    },
+    {
+      "id": "machine.east_racks",
+      "name": "EAST RACKS",
+      "rect": [
+        1020,
+        700,
+        100,
+        160
+      ]
+    }
+  ],
+  "entries": [
+    {
+      "id": "entry.west_conveyor",
+      "name": "WEST CONVEYOR",
+      "from": [
+        190,
+        360
+      ],
+      "to": [
+        190,
+        510
+      ]
+    },
+    {
+      "id": "entry.north_crane",
+      "name": "NORTH CRANE",
+      "from": [
+        480,
+        210
+      ],
+      "to": [
+        620,
+        210
+      ]
+    },
+    {
+      "id": "entry.east_furnace",
+      "name": "EAST FURNACE",
+      "from": [
+        910,
+        380
+      ],
+      "to": [
+        910,
+        530
+      ]
+    }
+  ],
+  "zones": [
+    {
+      "id": "zone.salvage",
+      "name": "SALVAGE LANE",
+      "rect": [
+        210,
+        280,
+        100,
+        320
+      ]
+    },
+    {
+      "id": "zone.crane",
+      "name": "CRANE LANE",
+      "rect": [
+        320,
+        225,
+        460,
+        50
+      ]
+    },
+    {
+      "id": "zone.furnace",
+      "name": "FURNACE LANE",
+      "rect": [
+        790,
+        300,
+        100,
+        310
+      ]
+    },
+    {
+      "id": "zone.workshop",
+      "name": "WORKSHOP ALCOVE",
+      "rect": [
+        445,
+        610,
+        210,
+        75
+      ]
+    },
+    {
+      "id": "zone.receiving",
+      "name": "RECEIVING YARD",
+      "rect": [
+        -180,
+        700,
+        430,
+        200
+      ]
+    },
+    {
+      "id": "zone.assembly",
+      "name": "ASSEMBLY FLOOR",
+      "rect": [
+        830,
+        40,
+        420,
+        220
+      ]
+    }
+  ]
+}

@@ -2,6 +2,15 @@
 
 ## Content checks
 
+The runtime tests now exist. Run the complete Windows loop with `scripts/agent_iteration.ps1 -GodotBin <path> -PythonBin <path>`, then inspect the captures and score the report. On other platforms use `GODOT_BIN=godot bash scripts/agent_iteration.sh`.
+
+- `python tests/test_slice_manifest.py`: four manifest acceptance/rejection tests.
+- `godot --headless --path . --script res://tests/test_simulation.gd`: 31 deterministic simulation checks.
+- `godot --headless --path . --script res://tests/test_ui.gd`: seven UI flow/save checks using actual button signals and a temporary save file.
+- `godot --headless --path . --script res://tests/run_playthroughs.gd`: four shared-seed normal-economy policies, including no-evolution Workshop. Results are saved separately from visual fixtures.
+
+Rendered fixtures use explicit setup budgets/states, including a Results fixture. They are not screenshots of the full-run policies. The earlier list below remains a broader target, not a claim all planned mechanics are implemented. See `docs/runtime_status.md` for scope differences.
+
 Run:
 
 ```bash
@@ -58,3 +67,5 @@ The first runtime should capture these named states:
 - `RESULTS_MEMORY_FRAGMENT`.
 
 The visual rubric should check Saint silhouette, enemy direction, objective state, attack geometry, status readability, shop clarity, evolution transformation, effect density, palette consistency, and provenance.
+
+P12: `test_variety.gd` covers beam/cluster damage, cooldowns, ally healing, bombardment timing/evasion, brute displacement and save replay. `capture_variety.gd` renders three explicit optional-mode fixtures in `artifacts/variety`. The PowerShell loop now selects the main optional mode for full-run policies; a loss still fails its all-win gate.

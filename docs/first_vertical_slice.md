@@ -6,6 +6,8 @@ Create a complete 8–10 minute playable called **The First Shift**. The player 
 
 This slice is successful only when a new player can explain what the Saint is repairing, what the next threat wants, why a shop item matters, and how the evolution changed the build.
 
+The implemented prototype and explicit substitutions are recorded in [runtime_status.md](runtime_status.md). The manifest is the enabled content source of truth. This document also retains longer-term acceptance intentions that are not all satisfied yet.
+
 ## Dependency order
 
 ### SC-01 — Godot shell and deterministic harness
@@ -30,7 +32,7 @@ Implement Nailer of Small Mercies, Bell of the Last Shift, and Procession Gear. 
 
 Implement `REPAIR_RELAY`, repair zones, objective damage, objective progress, and the `repair` command. Add a failure condition if the relay is destroyed.
 
-**Acceptance:** the player can win by repairing the relay and survive a costly partial state if the relay is damaged but not destroyed.
+**Acceptance:** proximity work retains progress. Final victory requires completed repair, a living relay and Saint, and Foreman defeat before the final wave expires.
 
 ### SC-05 — Scrap and Relic Shards
 
@@ -64,7 +66,7 @@ Implement Memory Crane and Foreman Engine. Memory Crane copies the player’s la
 
 ### SC-10 — Memory and Results
 
-Add one post-boss memory fragment, result summary, state hash, build summary, objective result, evolution reached, limitation, and exactly one next task.
+Add one post-boss memory fragment, causal result summary, build summary, objective result and evolution reached. State hash, limitations, and the developer next task belong in the separate evidence report.
 
 **Acceptance:** Results explain what worked, what failed, and why the player’s chosen Blessing mattered.
 
@@ -76,8 +78,8 @@ Add one post-boss memory fragment, result summary, state hash, build summary, ob
 | Saint frames | 1 |
 | Blessings | 3 |
 | Base weapons | 5 |
-| Catalysts | 2 |
-| Evolutions | 2 |
+| Catalysts | 4 |
+| Evolutions | 1 |
 | Enemy families | 3 |
 | Elite | 1 |
 | Boss | 1 |
@@ -85,7 +87,7 @@ Add one post-boss memory fragment, result summary, state hash, build summary, ob
 | Shop services | 6 |
 | Memory scenes | 1 |
 
-The additional first-slice weapons are Candle-Nailer and Cable of Contrition. The second visible recipe is Bell Rank 3 + Cracked Bell Clapper → The Great Toll, but Mercy Rail must be the guaranteed implementation path before The Great Toll is added.
+The additional first-slice weapons are Candle-Nailer and Cable of Contrition. The Great Toll is deferred beyond this slice. Mercy Rail is the first optional evolution; completing a run must not require it.
 
 ## Evidence requirements
 

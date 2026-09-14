@@ -1,5 +1,7 @@
 # Scrap Saint — Shop and Blessings contract
 
+Current executable rules and simplified services are detailed in [runtime status](../docs/runtime_status.md). The slice manifest determines enabled offers; future recipes are excluded from runtime promises.
+
 ## Design decision
 
 Scrap Saint uses a two-layer run-building model:
@@ -68,7 +70,7 @@ Every visit should contain one current-build improvement, one visible evolution-
 | **Combine** | Two identical same-rank weapons become one next-rank weapon. |
 | **Reserve** | Stores one item outside the active loadout. |
 | **Repair** | Restores Saint or objective structure for Scrap. |
-| **Reroll** | First refresh free, later refreshes cost 2/4/7 Scrap. |
+| **Reroll** | First refresh free, then two paid refreshes costing 2/4 Scrap per visit. |
 | **Read the Ledger** | Costs one Relic Shard and reveals a recipe or threat interaction. |
 | **Recast Relic** | Costs one Relic Shard and changes one catalyst secondary tag. |
 
@@ -98,7 +100,7 @@ The first recipe is:
 Nailer of Small Mercies Rank 3 + Saint’s Rivet → Mercy Rail
 ```
 
-The first shop implementation should also support:
+After the first slice, the shop may additionally support:
 
 ```text
 Bell of the Last Shift Rank 3 + Cracked Bell Clapper → The Great Toll

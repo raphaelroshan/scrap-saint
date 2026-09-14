@@ -1,5 +1,7 @@
 # Scrap Saint — Gameplay contract
 
+The current executable subset, exact repair/victory rules, and deferred secondary effects are listed in [runtime status](../docs/runtime_status.md).
+
 ## Authority
 
 The simulation is the single source of truth. It advances from a deterministic seed, command stream, and fixed update policy. Presentation renders simulation events and never decides outcomes.
