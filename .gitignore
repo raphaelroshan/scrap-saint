@@ -1,0 +1,15 @@
+.godot/
+.godot-editor/
+.import/
+export.cfg
+export_presets.cfg
+*.tmp
+*.bak
+artifacts/
+user://
+*.save
+*.replay
+*.log
+.DS_Store
+__pycache__/
+.pytest_cache/

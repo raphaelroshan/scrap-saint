@@ -1,0 +1,100 @@
+# Scrap Saint
+
+**Scrap Saint** is a single-player evolution-driven arena roguelite about a small devotional machine crossing a ruined industrial world. It repairs broken systems, assembles relic weapons, receives competing blessings, and discovers what kind of machine it has chosen to become.
+
+> **Restore the First Engine—or decide that the world is better without it.**
+
+The project combines short survivor-like runs, a Slime 3K-style relic shop, visible weapon evolutions, and a warm industrial story about repair, purpose, and self-determination. It is not a conventional military mech game. The Saint is a maintenance automaton that treats bells, rivets, cables, manuals, and ruined machines as sacred because they once helped people.
+
+## Current canonical direction
+
+The project uses a hybrid of two story variants:
+
+- **The Pilgrimage of Repairs** provides the external structure: the Saint travels from ruined site to ruined site repairing relays, pumps, workshops, and settlements while searching for the First Engine.
+- **The Saint Built Wrong** provides the emotional arc: the Saint was assembled from incompatible machines and gradually discovers that identity is something it can build rather than recover.
+
+The player moves through compact arenas, fights automatic waves of hostile machines, collects Scrap and Relic Shards, visits the relic shop, chooses or deepens Blessings, completes repairs or protection objectives, evolves weapons and skills, and defeats a rule-changing elite or boss.
+
+## Recommended Astra onboarding sequence
+
+Astra should read the repository in this order before editing:
+
+1. [`docs/astra_game_bible.md`](docs/astra_game_bible.md) for the product promise, plot, tone, non-goals, design vocabulary, and permanent boundaries.
+2. [`AGENTS.md`](AGENTS.md) for implementation rules, authoritative simulation ownership, task-packet requirements, and evidence standards.
+3. [`docs/story_and_acts.md`](docs/story_and_acts.md) for the campaign arc, act structure, factions, characters, objectives, and bosses.
+4. [`design/gameplay_contract.md`](design/gameplay_contract.md) for deterministic combat, movement, objectives, statuses, shop, Blessings, evolutions, saves, and presentation boundaries.
+5. [`design/shop_and_blessings.md`](design/shop_and_blessings.md) for the run economy, shop offers, controlled randomness, Blessing roles, and evolution support.
+6. [`docs/art_direction.md`](docs/art_direction.md) for silhouettes, materials, palette, effects, audio, asset sourcing, and visual quality constraints.
+7. [`docs/first_vertical_slice.md`](docs/first_vertical_slice.md) and [`roadmap.md`](roadmap.md) for the dependency-ordered implementation sequence.
+8. Read only the smallest relevant source, content, and test files after stating the one player-facing objective.
+
+Every implementation request should be converted into one bounded task packet containing the player promise, authoritative owner, exact files, deterministic acceptance tests, non-goals, screenshot/build provenance, remaining limitation, and exactly one next task.
+
+## The player-facing loop
+
+```text
+Choose a Saint frame and Blessing
+→ enter a compact industrial zone
+→ move and auto-attack
+→ protect or repair a local objective
+→ collect Scrap and Relic Shards
+→ visit the relic shop
+→ buy, sell, combine, reserve, repair, or reroll
+→ deepen a Blessing or pursue an evolution
+→ survive an elite or boss
+→ reveal a memory and choose the next route
+```
+
+A Blessing is a broad run doctrine. The shop provides specific weapons, catalysts, passives, and services. A Blessing should bias the shop and guarantee a starting direction, but it must never hard-lock the run.
+
+The first Blessings are **The Workshop Gospel** for repair and repeated mechanisms, **The Bell Ward** for witness and control, **The Procession** for orbiting relics and escort defence, **The Quiet Order** for silence and precision, **The Salvage Rite** for Scrap and dismantling, and **The Mourner** for spirits and conversion.
+
+## Weapon evolution
+
+Weapons use relic + mechanism + doctrine identity. Examples include the **Nailer of Small Mercies**, **Bell of the Last Shift**, **Procession Gear**, **Candle-Nailer**, **Cable of Contrition**, **Hymn Coil**, and **Altar Mortar**.
+
+The first visible evolution is:
+
+```text
+Nailer of Small Mercies Rank 3 + Saint’s Rivet → Mercy Rail
+```
+
+The transformation must change attack geometry, target rules, area control, objective interaction, or resource behaviour—not only increase damage. The shop shows missing ingredients and previews the result. The first ten recipes are discoverable in-game and do not require an external wiki.
+
+## Scope and quality bar
+
+The first playable is intentionally small: one arena, one Saint frame, five base weapons, four catalysts, three Blessings, three enemy families, one elite, one boss, one repair objective, one shop, one visible evolution, and a deterministic eight-to-ten-minute run.
+
+The project is not complete when the content validator passes. Game quality requires a running build, readable combat, visible build transformation, causal Results, exact screenshot provenance, and evidence-led iteration. Technical tests establish simulation correctness; screenshots establish presentation evidence; neither is a substitute for the other.
+
+## Standard agent loop
+
+For every meaningful runtime, UI, audio, or presentation task:
+
+```bash
+python3 scripts/validate_content.py
+GODOT_BIN=godot bash scripts/agent_iteration.sh
+python3 tools/validate_iteration_report.py \
+  --bundle artifacts/agent-iteration \
+  --require-scored
+```
+
+If the Godot project is not yet present, the agent must not claim gameplay execution or fabricate screenshots. It should record the blocked runtime honestly, implement the smallest next slice, and state exactly one next task.
+
+## Repository map
+
+| Path | Purpose |
+|---|---|
+| [`docs/astra_game_bible.md`](docs/astra_game_bible.md) | Durable product context and Astra handoff. |
+| [`docs/story_and_acts.md`](docs/story_and_acts.md) | Plot, acts, factions, characters, objectives, and bosses. |
+| [`docs/art_direction.md`](docs/art_direction.md) | Visual, audio, animation, material, and asset direction. |
+| [`design/gameplay_contract.md`](design/gameplay_contract.md) | Authoritative simulation and presentation contract. |
+| [`design/shop_and_blessings.md`](design/shop_and_blessings.md) | Blessings, shop, currencies, offers, and evolution rules. |
+| [`docs/first_vertical_slice.md`](docs/first_vertical_slice.md) | Executable first-slice sequence and acceptance evidence. |
+| [`roadmap.md`](roadmap.md) | Milestones from contracts to creative vertical and breadth. |
+| [`content/`](content/) | Data-driven first-slice catalogues. |
+| [`tests/README.md`](tests/README.md) | Deterministic test and evidence plan. |
+
+## Current status
+
+This repository begins as a design-and-contract foundation. The first implementation task is to create the Godot shell, deterministic seed harness, and Workshop/Combat proof described in [`docs/first_vertical_slice.md`](docs/first_vertical_slice.md). Until that exists, reports must distinguish **contract validation** from **playable game evidence**.

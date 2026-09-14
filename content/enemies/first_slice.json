@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "enemies": [
+    {
+      "id": "enemy.rivet_hound",
+      "name": "Rivet Hound",
+      "role": "charger",
+      "tags": ["machine", "fast"],
+      "target_preference": "nearest_objective_or_saint",
+      "telegraph": "red_line_before_charge",
+      "effects": ["damage_objective_on_contact"],
+      "counter_families": ["control", "pulse", "precision"],
+      "description": "A repair dog that has forgotten the difference between work and pursuit."
+    },
+    {
+      "id": "enemy.scrap_mite",
+      "name": "Scrap Mite",
+      "role": "swarm",
+      "tags": ["machine", "small"],
+      "target_preference": "nearest_scrap_pickup",
+      "telegraph": "bright_eye_cluster",
+      "effects": ["consume_uncollected_scrap"],
+      "counter_families": ["area", "orbit", "burst"],
+      "description": "Tiny maintenance creatures that consider every loose bolt a meal."
+    },
+    {
+      "id": "enemy.choir_drone",
+      "name": "Choir Drone",
+      "role": "support",
+      "tags": ["machine", "summoner"],
+      "target_preference": "safe_distance_from_saint",
+      "telegraph": "expanding_silence_field",
+      "effects": ["quiet_saint_skills_in_field", "buff_nearby_enemies"],
+      "counter_families": ["witness", "precision", "displacement"],
+      "description": "A speaker drone that has learned to call silence a blessing."
+    },
+    {
+      "id": "enemy.rust_pilgrim",
+      "name": "Rust Pilgrim",
+      "role": "armoured_support",
+      "tags": ["machine", "armoured", "repairer"],
+      "target_preference": "lowest_health_ally",
+      "telegraph": "repair_beam_tether",
+      "effects": ["repair_nearby_enemies", "armour_reduction_resistance"],
+      "counter_families": ["scour", "silence", "focused_damage"],
+      "description": "A pilgrim carrying a repair kit for a god that no longer answers."
+    },
+    {
+      "id": "enemy.forklift_brute",
+      "name": "Forklift Brute",
+      "role": "displacer",
+      "tags": ["machine", "heavy"],
+      "target_preference": "repair_objective_or_blocked_lane",
+      "telegraph": "fork_lower_and_warning_beep",
+      "effects": ["push_obstacles", "break_consecrated_zones"],
+      "counter_families": ["tether", "ground", "movement"],
+      "description": "A cargo machine that solves every problem by moving it somewhere else."
+    },
+    {
+      "id": "elite.memory_crane",
+      "name": "Memory Crane",
+      "role": "elite_copy",
+      "tags": ["memory", "elite"],
+      "target_preference": "saint_last_evolution",
+      "telegraph": "copied_silhouette_before_attack",
+      "effects": ["copy_last_evolution_for_one_attack", "drop_relic_shard"],
+      "counter_families": ["hybrid", "witness", "mobility"],
+      "description": "A factory crane that remembers the Saint better than the Saint remembers itself."
+    }
+  ]
+}

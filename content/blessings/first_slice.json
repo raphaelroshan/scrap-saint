@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "blessings": [
+    {
+      "id": "blessing.workshop_gospel",
+      "name": "The Workshop Gospel",
+      "starting_guarantees": ["weapon.nailer_small_mercies"],
+      "shop_bias_tags": ["labour", "mercy", "repair"],
+      "unique_service_id": "service.rebuild",
+      "fulfilment": {"required_tags": ["labour", "mercy"], "required_count": 3},
+      "fulfilment_reward": "repair_effects_restore_objective_progress",
+      "weakness": "lower_burst",
+      "description": "Repair is a form of prayer, and repetition is its rhythm."
+    },
+    {
+      "id": "blessing.bell_ward",
+      "name": "The Bell Ward",
+      "starting_guarantees": ["weapon.bell_last_shift"],
+      "shop_bias_tags": ["witness", "pulse", "control"],
+      "unique_service_id": "service.attune_forecast",
+      "fulfilment": {"required_tags": ["witness", "pulse"], "required_count": 3},
+      "fulfilment_reward": "rung_targets_marked_on_stagger",
+      "weakness": "weak_single_target",
+      "description": "Every threat announces itself, if the Saint is willing to listen."
+    },
+    {
+      "id": "blessing.mourner",
+      "name": "The Mourner",
+      "starting_guarantees": ["weapon.candle_nailer"],
+      "shop_bias_tags": ["mourn", "conversion", "spirit"],
+      "unique_service_id": "service.preserve_remnant",
+      "fulfilment": {"required_tags": ["mourn"], "required_count": 2},
+      "fulfilment_reward": "elite_defeat_leaves_temporary_spirit",
+      "weakness": "needs_kills_to_compound",
+      "description": "Not every broken thing should be restarted. Some should be remembered."
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "items": [
+    {
+      "id": "weapon.nailer_small_mercies",
+      "kind": "weapon",
+      "name": "Nailer of Small Mercies",
+      "rank": 1,
+      "geometry": "targeted_nail_line",
+      "tags": ["labour", "mercy", "shot"],
+      "cost_scrap": 12,
+      "base_effect": "pierce_one_minor_target",
+      "secondary_effect": "repair_on_marked_hit",
+      "evolution_ids": ["evolution.mercy_rail"],
+      "description": "A worker-housing rivet gun that repairs what it can reach."
+    },
+    {
+      "id": "weapon.bell_last_shift",
+      "kind": "weapon",
+      "name": "Bell of the Last Shift",
+      "rank": 1,
+      "geometry": "forward_bell_cone",
+      "tags": ["witness", "pulse", "control"],
+      "cost_scrap": 14,
+      "base_effect": "stagger_and_push",
+      "secondary_effect": "rung_targets_enable_procession_bonus",
+      "evolution_ids": ["evolution.great_toll"],
+      "description": "A cracked factory bell mounted to a piston frame."
+    },
+    {
+      "id": "weapon.procession_gear",
+      "kind": "weapon",
+      "name": "Procession Gear",
+      "rank": 1,
+      "geometry": "orbit",
+      "tags": ["procession", "labour", "orbit"],
+      "cost_scrap": 16,
+      "base_effect": "contact_damage_and_minor_knockback",
+      "secondary_effect": "consecrate_after_elite_hit",
+      "evolution_ids": [],
+      "description": "A salvaged gear that follows the Saint like a solemn acolyte."
+    },
+    {
+      "id": "weapon.candle_nailer",
+      "kind": "weapon",
+      "name": "Candle-Nailer",
+      "rank": 1,
+      "geometry": "long_targeted_shot",
+      "tags": ["witness", "mourn", "shot"],
+      "cost_scrap": 15,
+      "base_effect": "witness_priority_target",
+      "secondary_effect": "mourned_mote_on_kill",
+      "evolution_ids": [],
+      "description": "A flare pistol that treats every target as evidence."
+    },
+    {
+      "id": "weapon.cable_contrition",
+      "kind": "weapon",
+      "name": "Cable of Contrition",
+      "rank": 1,
+      "geometry": "sweep_and_tether",
+      "tags": ["labour", "mourn", "control"],
+      "cost_scrap": 17,
+      "base_effect": "bind_and_pull",
+      "secondary_effect": "share_scoured_damage_along_line",
+      "evolution_ids": [],
+      "description": "A maintenance cable with a hooked sacramental plate."
+    },
+    {
+      "id": "weapon.hymn_coil",
+      "kind": "weapon",
+      "name": "Hymn Coil",
+      "rank": 1,
+      "geometry": "sustained_beam",
+      "tags": ["witness", "silence", "beam"],
+      "cost_scrap": 19,
+      "base_effect": "scour_armour",
+      "secondary_effect": "quiet_fully_scoured_target",
+      "evolution_ids": [],
+      "description": "A copper coil that sings directly into hostile machinery."
+    },
+    {
+      "id": "weapon.altar_mortar",
+      "kind": "weapon",
+      "name": "Altar Mortar",
+      "rank": 1,
+      "geometry": "delayed_ground_seal",
+      "tags": ["wrath", "mercy", "ground"],
+      "cost_scrap": 21,
+      "base_effect": "delayed_area_burst",
+      "secondary_effect": "consecrated_zone_on_rung_hit",
+      "evolution_ids": [],
+      "description": "A chapel font rebuilt as a mining pressure mortar."
+    },
+    {
+      "id": "catalyst.saints_rivet",
+      "kind": "catalyst",
+      "name": "Saint's Rivet",
+      "tags": ["labour", "mercy", "catalyst"],
+      "cost_relic_shards": 2,
+      "compatible_evolution_ids": ["evolution.mercy_rail"],
+      "description": "A rivet that remembers every structure it ever held together."
+    },
+    {
+      "id": "catalyst.cracked_bell_clapper",
+      "kind": "catalyst",
+      "name": "Cracked Bell Clapper",
+      "tags": ["witness", "pulse", "catalyst"],
+      "cost_relic_shards": 2,
+      "compatible_evolution_ids": ["evolution.great_toll"],
+      "description": "The piece that makes a broken bell worth hearing."
+    },
+    {
+      "id": "catalyst.black_candle",
+      "kind": "catalyst",
+      "name": "Black Candle",
+      "tags": ["mourn", "catalyst"],
+      "cost_relic_shards": 2,
+      "compatible_evolution_ids": [],
+      "description": "A candle reserved for machines that cannot be repaired."
+    },
+    {
+      "id": "catalyst.quiet_gear",
+      "kind": "catalyst",
+      "name": "Quiet Gear",
+      "tags": ["silence", "catalyst"],
+      "cost_relic_shards": 2,
+      "compatible_evolution_ids": [],
+      "description": "A gear whose teeth move without permitting a sound."
+    }
+  ],
+  "evolutions": [
+    {
+      "id": "evolution.mercy_rail",
+      "name": "Mercy Rail",
+      "base_item_id": "weapon.nailer_small_mercies",
+      "required_rank": 3,
+      "required_catalyst_id": "catalyst.saints_rivet",
+      "result_geometry": "charged_precision_rail",
+      "result_effects": ["scoured", "repaired_on_elite_hit", "pierce_line"],
+      "transformation_event": "evolution.mercy_rail_triggered"
+    },
+    {
+      "id": "evolution.great_toll",
+      "name": "The Great Toll",
+      "base_item_id": "weapon.bell_last_shift",
+      "required_rank": 3,
+      "required_catalyst_id": "catalyst.cracked_bell_clapper",
+      "result_geometry": "radial_pulse_ring",
+      "result_effects": ["rung", "marked", "displace"],
+      "transformation_event": "evolution.great_toll_triggered"
+    }
+  ]
+}

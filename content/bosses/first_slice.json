@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "bosses": [
+    {
+      "id": "boss.foreman_engine",
+      "name": "The Foreman Engine",
+      "role": "demolition_controller",
+      "phases": [
+        {"id": "schedule", "rule": "telegraph_three_demolition_zones"},
+        {"id": "workers", "rule": "summon_worker_drones_that_target_relay"},
+        {"id": "collapse", "rule": "shrink_safe_floor_but_open_repair_window"}
+      ],
+      "telegraph": "yellow_zone_then_red_countdown",
+      "counter_families": ["mobility", "control", "objective_repair"],
+      "reward_choices": ["catalyst", "blessing_deepen", "active_slot"],
+      "description": "A demolition machine that still believes every collapse is part of a schedule."
+    },
+    {
+      "id": "boss.factory_heart",
+      "name": "The Factory Heart",
+      "role": "connected_machine",
+      "phases": [
+        {"id": "pulse", "rule": "damage_connected_relay_network"},
+        {"id": "feed", "rule": "convert_destroyed_machines_into_hazards"},
+        {"id": "choice", "rule": "player_must_preserve_one_of_three_nodes"}
+      ],
+      "telegraph": "connected_red_cables_before_pulse",
+      "counter_families": ["cut_tether", "witness", "focused_damage"],
+      "reward_choices": ["memory", "rare_relic", "route_unlock"],
+      "description": "A central engine that cannot tell a heartbeat from an order."
+    },
+    {
+      "id": "boss.saint_no_repairs",
+      "name": "The Saint of No Repairs",
+      "role": "anti_healing_copy",
+      "phases": [
+        {"id": "deny", "rule": "disable_repair_effects"},
+        {"id": "copy", "rule": "turn_restored_objects_hostile"},
+        {"id": "choice", "rule": "force_player_to_choose_between_memory_and_structure"}
+      ],
+      "telegraph": "white_crossed_wrench_icon",
+      "counter_families": ["burst", "quiet", "mourn"],
+      "reward_choices": ["ending_memory", "blessing_mutation", "dismantle_key"],
+      "description": "A maintenance automaton that decided the world would be safer if nothing could be fixed."
+    }
+  ]
+}
