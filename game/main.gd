@@ -332,7 +332,7 @@ func build_ui():
 		if evolution_ledger_open:
 			for i in range(sim.config.evolutions.size()):
 				var recipe_id = sim.config.evolutions[i]
-				var evolve_button = button("EVOLVE", Rect2(408 + (i % 2) * 470, 234 + int(i / 2) * 108, 92, 28), func(): act("evolve", recipe_id))
+				var evolve_button = button("EVOLVE", Rect2(408 + (i % 2) * 470, 222 + int(i / 2) * 88, 92, 26), func(): act("evolve", recipe_id))
 				evolve_button.disabled = sim.evolution_recipe_state(recipe_id) != "READY"
 			button("BACK TO WORKSHOP", Rect2(742, 678, 250, 38), func(): evolution_ledger_open = false; build_ui(), true).grab_focus()
 		else:
@@ -346,7 +346,7 @@ func build_ui():
 			var costs = sim.config.economy.reroll_costs
 			var refresh = "No refreshes left" if sim.state.rerolls >= costs.size() else ("Refresh · FREE" if costs[sim.state.rerolls] == 0 else "Refresh · %d Scrap" % costs[sim.state.rerolls])
 			button(refresh, Rect2(108, 613, 220, 40), func(): act("reroll"))
-			button("EVOLUTION LEDGER · 8", Rect2(344, 613, 250, 40), func(): evolution_ledger_open = true; build_ui())
+			button("EVOLUTION LEDGER · %d" % sim.config.evolutions.size(), Rect2(344, 613, 250, 40), func(): evolution_ledger_open = true; build_ui())
 			button("NEXT WAVE  →", Rect2(734, 613, 250, 40), func(): act("continue"), true).grab_focus()
 			button("Combine pair", Rect2(1060, 573, 188, 32), func(): act("combine"))
 			button("Equip reserve", Rect2(1060, 613, 188, 32), func(): act("equip"))
@@ -646,6 +646,13 @@ func draw_world():
 				for target in h.get("copy_points", []):
 					draw_line(h.from, target, Color(0.9, 0.4, 0.3, 0.15 + f * 0.3), maxf(5, copy_width))
 					draw_circle(target, maxf(8, copy_width), Color(0.9, 0.4, 0.3, 0.12))
+			elif copy_shape == "parade":
+				draw_arc(h.from, copy_range, 0, TAU, 56, Color(RED, 0.45 + f * 0.4), 3)
+				draw_arc(h.from, float(h.get("copy_inner_range", copy_range * 0.58)), 0, TAU, 44, Color(PAPER, 0.25 + f * 0.35), 2)
+			elif copy_shape == "lattice":
+				var points = h.get("copy_points", [])
+				if points.size() == 3:
+					for index in range(3): draw_line(points[index], points[(index + 1) % 3], Color(0.9, 0.4, 0.3, 0.28 + f * 0.35), maxf(3, copy_width), true)
 			else:
 				var zone_radius = copy_width if copy_shape == "benediction" else copy_range
 				draw_circle(h.p, zone_radius, Color(0.9, 0.4, 0.3, 0.08 + f * 0.12))
@@ -668,11 +675,22 @@ func draw_world():
 	for w in sim.state.weapons:
 		if w.id == "weapon.procession_gear":
 			var gear_data = sim.resolved_weapon_rule(w)
-			var gear_offset = Vector2.from_angle(sim.state.tick * 0.045) * float(gear_data.range)
-			draw_arc(sim.state.position, float(gear_data.range), 0, TAU, 48, Color(0.5, 0.75, 0.65, 0.12), 1)
-			draw_gear(sim.state.position + gear_offset, 15, GREEN, sim.state.tick * 0.08)
-			if int(gear_data.get("orbit_contacts", 1)) > 1:
-				draw_gear(sim.state.position - gear_offset, 15, GREEN, sim.state.tick * 0.08 + PI)
+			var parade = sim.weapon_evolution_id(w) == "evolution.maintenance_parade"
+			var inner_range = float(gear_data.get("inner_range", gear_data.range))
+			var outer_range = float(gear_data.get("extended_range", 176) if parade and int(sim.state.get("parade_until", 0)) > sim.state.tick else gear_data.range)
+			var inner_angle = sim.state.tick * float(gear_data.get("inner_speed", 0.045))
+			var p = sim.state.position + Vector2.from_angle(inner_angle) * inner_range
+			draw_arc(sim.state.position, inner_range, 0, TAU, 48, Color(0.5, 0.75, 0.65, 0.12), 1)
+			draw_gear(p, 15, GREEN, sim.state.tick * 0.08)
+			if parade:
+				var outer_angle = sim.state.tick * float(gear_data.outer_speed) + PI / 3.0
+				var outer = sim.state.position + Vector2.from_angle(outer_angle) * outer_range
+				draw_arc(sim.state.position, outer_range, 0, TAU, 64, Color(0.86, 0.73, 0.42, 0.17), 2)
+				draw_gear(sim.state.position - Vector2.from_angle(inner_angle) * inner_range, 12, PAPER, -sim.state.tick * 0.07)
+				draw_gear(outer, 13, GOLD, -sim.state.tick * 0.06)
+				draw_gear(sim.state.position - Vector2.from_angle(outer_angle) * outer_range, 13, GOLD, sim.state.tick * 0.06)
+			elif int(gear_data.get("orbit_contacts", 1)) > 1:
+				draw_gear(sim.state.position - (p - sim.state.position), 15, GREEN, sim.state.tick * 0.08 + PI)
 		if w.id == "weapon.foundry_censer":
 			var ashen = sim.weapon_evolution_id(w) == "evolution.ashen_benediction"
 			var censer_data = sim.resolved_weapon_rule(w)
@@ -691,6 +709,10 @@ func draw_world():
 			if sim.weapon_evolution_id(w) == "evolution.halo_of_repairs":
 				draw_arc(sim.state.position, 40, -angle, -angle + TAU * 0.82, 36, Color("d6edbf"), 2)
 				draw_circle(sim.state.position - Vector2.from_angle(angle) * 40, 4, PAPER)
+		if w.id == "weapon.cable_contrition" and sim.weapon_evolution_id(w) == "evolution.contrition_lattice":
+			var angle = sim.state.tick * 0.012
+			var points = [sim.state.position + Vector2.from_angle(angle) * 58, sim.state.position + Vector2.from_angle(angle + TAU / 3.0) * 58, sim.state.position + Vector2.from_angle(angle + TAU * 2.0 / 3.0) * 58]
+			for index in range(3): draw_line(points[index], points[(index + 1) % 3], Color(0.5, 0.72, 0.82, 0.28), 2, true)
 	draw_saint(sim.state.position, sim.state.facing)
 	for e in fx: draw_effect(e)
 
@@ -1065,6 +1087,15 @@ func draw_effect(e):
 					draw_line(e.from, e.to, Color(color, fade * 0.35), 2, true)
 					draw_circle(e.to, e.range, Color(0.72, 0.85, 0.60, fade * 0.10))
 					draw_arc(e.to, e.range, 0, TAU, 40, GREEN if e.shape == "consecrated" else color, 4)
+				"parade":
+					draw_arc(e.from, e.inner_range, 0, TAU, 48, Color(color, fade * 0.28), 2)
+					draw_arc(e.from, e.range, 0, TAU, 64, Color(GOLD if e.get("extended", false) else color, fade * 0.32), 3)
+					for contact in [e.to, e.to2] + e.get("points", []): draw_circle(contact, 9, Color(color, fade * 0.4))
+				"lattice":
+					var points = e.get("points", [])
+					if points.size() == 3:
+						for index in range(3): draw_line(points[index], points[(index + 1) % 3], Color(color, fade * 0.42), 7, true)
+						for point in points: draw_circle(point, 6, Color(PAPER, fade * 0.7))
 		"charge": draw_line(e.from, e.to, Color(0.9, 0.8, 0.5, fade * 0.35), 1)
 		"hit", "death":
 			for i in range(4):
@@ -1171,19 +1202,19 @@ func draw_shop():
 
 func draw_evolution_ledger():
 	draw_rect(Rect2(60, 148, 980, 588), Color("101f24"))
-	text_at("Evolution Ledger", Vector2(88, 185), 30, PAPER, true)
-	text_at("Rank III + one named catalyst. Every higher form remains optional.", Vector2(365, 183), 13, MUTED)
+	text_at("Evolution Ledger", Vector2(88, 181), 28, PAPER, true)
+	text_at("Rank III + one named catalyst. Every higher form remains optional.", Vector2(365, 179), 13, MUTED)
 	for i in range(sim.config.evolutions.size()):
 		var recipe_id = sim.config.evolutions[i]
 		var recipe = sim.evolution_recipes[recipe_id]
 		var x = 82 + (i % 2) * 470
-		var y = 204 + int(i / 2) * 108
-		panel(Rect2(x, y, 448, 94), Color("203538"))
-		text_at(recipe.name.to_upper(), Vector2(x + 14, y + 22), 14, GOLD)
-		text_at(sim.config.weapons[recipe.base_item_id].short + " III  +  " + sim.config.catalysts[recipe.required_catalyst_id].short, Vector2(x + 14, y + 43), 11, PAPER)
+		var y = 194 + int(i / 2) * 88
+		panel(Rect2(x, y, 448, 78), Color("203538"))
+		text_at(recipe.name.to_upper(), Vector2(x + 14, y + 18), 13, GOLD)
+		text_at(sim.config.weapons[recipe.base_item_id].short + " III  +  " + sim.config.catalysts[recipe.required_catalyst_id].short, Vector2(x + 14, y + 37), 10, PAPER)
 		var state_label = sim.evolution_recipe_state(recipe_id)
-		text_at(state_label, Vector2(x + 14, y + 69), 11, GREEN if state_label == "READY" or state_label == "COMPLETED" else MUTED)
-		wrapped(str(recipe.result_geometry).replace("_", " "), Vector2(x + 118, y + 65), 305, 10, MUTED)
+		text_at(state_label, Vector2(x + 14, y + 60), 10, GREEN if state_label == "READY" or state_label == "COMPLETED" else MUTED)
+		text_at(str(recipe.result_geometry).replace("_", " "), Vector2(x + 118, y + 60), 10, MUTED)
 	text_at("The Ledger names transformations; it never commits one without the EVOLVE command.", Vector2(88, 662), 12, MUTED)
 
 func draw_results():

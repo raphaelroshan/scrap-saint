@@ -253,11 +253,15 @@
     },
     "catalyst.blue_wire_from_pump": {
       "short": "Blue Pump Wire",
-      "description": "Rank III Penance Winch can become The Long Hand."
+      "description": "Rank III Penance Winch becomes The Long Hand; Rank III Contrition Cable becomes Contrition Lattice."
     },
     "catalyst.folded_maintenance_blueprint": {
       "short": "Folded Blueprint",
       "description": "Rank III Hymn Coil can become Quiet Sermon."
+    },
+    "catalyst.pilgrim_spindle": {
+      "short": "Pilgrim Spindle",
+      "description": "Rank III Procession Gear can become The Maintenance Parade."
     }
   },
   "gifts": {
@@ -358,7 +362,9 @@
     "evolution.halo_of_repairs",
     "evolution.candle_unreturned",
     "evolution.quiet_sermon",
-    "evolution.workshop_benediction"
+    "evolution.workshop_benediction",
+    "evolution.maintenance_parade",
+    "evolution.contrition_lattice"
   ],
   "rail": {
     "damage": 70,
@@ -465,6 +471,33 @@
       "repair_progress": 28,
       "saint_repair": 4,
       "archivist_copy": {"shape": "benediction", "behavior": "cluster_blast"}
+    },
+    "evolution.maintenance_parade": {
+      "shape": "parade",
+      "short": "The Maintenance Parade",
+      "damage": 10,
+      "cooldown": 22,
+      "range": 126,
+      "inner_range": 72,
+      "extended_range": 176,
+      "width": 24,
+      "inner_speed": 0.052,
+      "outer_speed": -0.031,
+      "extension_ticks": 240,
+      "archivist_copy": {"shape": "parade", "behavior": "slow_cycles", "range": 126, "inner_range": 72, "width": 18, "effect_ticks": 90, "effect_value": 1.18}
+    },
+    "evolution.contrition_lattice": {
+      "shape": "lattice",
+      "short": "Contrition Lattice",
+      "damage": 8,
+      "cooldown": 58,
+      "range": 320,
+      "width": 12,
+      "rear_offset": 30,
+      "half_width": 105,
+      "bind_ticks": 150,
+      "redirect_distance": 50,
+      "archivist_copy": {"shape": "lattice", "behavior": "redirect", "range": 320, "width": 12, "rear_offset": 30, "half_width": 105, "effect_value": 50}
     }
   },
   "combat": {

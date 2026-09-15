@@ -34,15 +34,15 @@ func capture():
 	game.screen = "game"
 	game.debug_visible = true
 	game.fixture_label = true
-	game.capture_label = "FIXTURE / P14.1"
+	game.capture_label = "FIXTURE / P15"
 	game.seed_value = 147
 
 	game.sim.start(0, 147, "optional")
 	game.sim.enter_shop()
 	game.sim.state.scrap = 72
 	game.sim.state.shards = 6
-	game.sim.state.weapons = [game.sim.make_weapon("weapon.foundry_censer", 3), game.sim.make_weapon("weapon.hymn_coil", 3), game.sim.make_weapon("weapon.altar_mortar", 2)]
-	game.sim.state.catalysts = ["catalyst.black_candle", "catalyst.folded_maintenance_blueprint", "catalyst.saints_rivet"]
+	game.sim.state.weapons = [game.sim.make_weapon("weapon.procession_gear", 3), game.sim.make_weapon("weapon.cable_contrition", 3)]
+	game.sim.state.catalysts = ["catalyst.pilgrim_spindle", "catalyst.blue_wire_from_pump"]
 	game.evolution_ledger_open = true
 	await save_frame(game, output.path_join("EVOLUTION_LEDGER.png"))
 
@@ -82,7 +82,24 @@ func capture():
 	for event in game.sim.events: game.present(event)
 	await save_frame(game, output.path_join("EVOLVED_GEOMETRIES_B.png"))
 
+	game.sim.start(3, 147, "optional")
+	game.sim.state.wave = 6
+	game.sim.state.position = Vector2(550, 530)
+	game.sim.state.weapons = [
+		evolved_weapon(game.sim, "weapon.procession_gear", "evolution.maintenance_parade"),
+		evolved_weapon(game.sim, "weapon.cable_contrition", "evolution.contrition_lattice")
+	]
+	game.sim.state.evolutions = game.sim.state.weapons.map(func(w): return w.evolution)
+	game.sim.state.parade_until = 240
+	add_enemy(game.sim, "enemy.rivet_hound", game.sim.state.position + Vector2(72, 0))
+	add_enemy(game.sim, "enemy.forklift_brute", game.sim.state.position + Vector2(270, 0))
+	add_enemy(game.sim, "enemy.rivet_hound", game.sim.state.position + Vector2(150, 52))
+	game.sim.update_weapons()
+	game.fx.clear()
+	for event in game.sim.events: game.present(event)
+	await save_frame(game, output.path_join("EVOLVED_GEOMETRIES_C.png"))
+
 	game.queue_free()
 	await process_frame
-	print("P14.1 fixtures: configured executable states, seed147, Godot %s, 1280x800; not human playtests" % Engine.get_version_info().string)
+	print("P15 fixtures: configured executable states, seed147, Godot %s, 1280x800; not human playtests" % Engine.get_version_info().string)
 	quit()

@@ -91,14 +91,14 @@ def validate_slice(manifest: dict, data: dict) -> None:
     blessings = {entry['id'] for entry in data['blessings']['blessings']}
     evolutions = {entry['id']: entry for entry in data['items']['evolutions']}
     assert len(manifest['weapons']) == 10, 'P14 slice must enable ten role-distinct weapons'
-    assert len(manifest['catalysts']) == 7, 'P14.1 slice must enable seven recipe-supporting catalysts'
+    assert len(manifest['catalysts']) == 8, 'P15 slice must enable eight recipe-supporting catalysts'
     assert len(manifest['gifts']) == 3 and manifest['gift_slots'] == 2, 'P14 slice needs three Gifts and two slots'
     assert len(manifest['enemies']) == 6, 'slice must enable six ordinary enemies'
     assert len(manifest['blessings']) == 4 and len(set(manifest['blessings'])) == 4
     assert set(manifest['blessings']) <= blessings
     assert manifest['elite'] in enemies and manifest['boss'] in bosses
     assert set(manifest['enemies']) <= enemies
-    assert len(manifest['evolutions']) == 8, 'P14.1 slice must expose eight meaningful Evolutions'
+    assert len(manifest['evolutions']) == 10, 'P15 slice must expose ten meaningful Evolutions'
     for kind in ('weapons', 'catalysts', 'gifts'):
         for item_id, settings in manifest[kind].items():
             assert item_id in items, f'unknown enabled item {item_id}'

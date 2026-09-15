@@ -6,10 +6,10 @@ The project now contains a runnable Godot 4.5.1 desktop prototype. This is the f
 
 - A title screen, five-page field manual, three selectable Saint frames, persistent accessibility/settings controls, save/resume and profile unlocks.
 - Eight 70-second Workshop waves, followed by two selectable road legs, a four-wave mid-site and a three-wave terminal site. Each road has two unskippable authored decisions; shop, map and travel reading time is paused.
-- Four Blessings, ten automatic weapons with authored Rank II and Rank III behavior, seven catalysts, eight visible evolutions, four active slots, one reserve and two run-local Gift slots.
+- Four Blessings, ten automatic weapons with authored Rank II and Rank III behavior, eight catalysts, ten visible evolutions, four active slots, one reserve and two run-local Gift slots.
 - Movement, three optional repair machines, pickups, seven ordinary enemy families, an elite and six distinct phased destination bosses. Relay defence remains a development comparison.
 - Purchases, automatic duplicate combining, explicit combine, sell/dismantle, reserve/equip, offer lock and one free/two paid refreshes.
-- Eight Rank III plus catalyst Evolutions with distinct geometry, target, control, repair or resource behaviour. Catalysts are consumed atomically, and every encounter supports unevolved runs.
+- Ten Rank III plus catalyst Evolutions with distinct geometry, target, control, repair or resource behaviour. Catalysts are consumed atomically, and every encounter supports unevolved runs.
 - Procedural weapon effects and synthesized audio, title/tutorial/selection/shop/travel/pause/Results, remappable keyboard and basic controller navigation.
 - Deterministic simulation tests and full-run scripted policies; real rendered fixture captures with provenance.
 
@@ -23,7 +23,7 @@ Blessing fulfilment counts two distinct active weapon IDs sharing the doctrine's
 
 The three doctrine services are deliberately small: Workshop restores structure, Bell lengthens authored threat telegraphs by 50% for the next wave, and Mourner makes the next six defeats leave healing motes. Full rebuild/refund and elite-remnant services from the long-term bible are deferred. Every shop exposes the authored next-wave pressure and valid geometry families; Bell buys additional response time rather than hidden information.
 
-The ten weapons cover piercing priority, stagger, orbit, execution, binding, dense-line fire, clustered bombardment, close smoke control and repair contact. Every base weapon has cumulative, content-owned Rank II and Rank III rules that change geometry, target count, cadence, control, repair or resource behavior beyond the shared damage increase. Combat events carry the stable active rank-behavior IDs, and the loadout identifies the current named rank behavior. Shop cards state each relic's role and weakness. Eight Evolutions visibly alter geometry, targeting, control, objective interaction or resource behaviour; the in-game Ledger previews each recipe and its missing ingredients.
+The ten weapons cover piercing priority, stagger, orbit, execution, binding, dense-line fire, clustered bombardment, close smoke control and repair contact. Every base weapon has cumulative, content-owned Rank II and Rank III rules that change geometry, target count, cadence, control, repair or resource behavior beyond the shared damage increase. Combat events carry the stable active rank-behavior IDs, and the loadout identifies the current named rank behavior. Shop cards state each relic's role and weakness. Ten Evolutions visibly alter geometry, targeting, control, objective interaction or resource behaviour; the in-game Ledger previews each recipe and its missing ingredients.
 
 The Crane copies rail geometry if an evolution exists and otherwise telegraphs a circular attack. Foreman moves faster and closes distance across Demolition, Workers and Final Orders phases. Each phase uses a deterministic route-shaped hazard pattern; later phases summon trace-labelled workers and close one additional lane. The Choir Regent has its own Measure, Grand Toll and Answer in Threes contract: announced resonance slows weapon cycling, then shifts from the Saint's position to the three visible relay rings. The Factory Heart instead pulses through the visible pump, temporarily suspends repair work, calls a trace-labelled Rust Pilgrim during Graft Feed, and ends with a pump-versus-personal-safety hazard choice. Destination boss cadence, warning, damage, movement and stop distances are owned by boss content data. Mites return stolen Scrap on defeat.
 
@@ -58,6 +58,16 @@ Recipe definitions, catalysts and combat values are content-owned. Each weapon s
 Configured 1280×800 renderer fixtures under `artifacts/evolutions` show the eight-entry Ledger and the six new geometries at seed 147 on Godot 4.5.1. Controlled-start policies establish executable chapter viability on both roads, not natural recipe timing or human preference.
 
 Exactly one next task: uncoached 1× comparison of all eight Evolution choices, with attention to Ledger comprehension and overlapping effect density.
+
+## P15 - complete weapon Evolution endpoints
+
+Procession Gear Rank III plus Pilgrim Spindle now becomes **The Maintenance Parade**. Its single close orbit becomes two counter-rotating escort rings with four contact points. Completing an actual Workshop machine or destination objective node extends the outer route for four seconds, so repair work visibly changes its coverage without removing the close-range commitment.
+
+Cable of Contrition Rank III plus Blue Wire from the Pump now becomes **Contrition Lattice**. Its broad inward sweep becomes a triangular cable boundary aimed at a distant priority threat. Enemies crossing any edge are bound, have objective strikes cancelled and are redirected laterally; enemies merely standing inside the triangle are not hit. Blue Wire remains shared with The Long Hand and is consumed separately for either recipe.
+
+Both forms use stable per-weapon Evolution IDs, survive version-3 save/restore, appear in the ten-entry Ledger and Results, and expose authored geometry/behaviour to the Archivist Prime copy. Ten controlled-start Evolution policies complete full two-leg chapters. Configured 1280×800 fixtures under `artifacts/evolutions` show the complete Ledger and the two new forms together at seed 147 on Godot 4.5.1; they are not human playtests.
+
+Exactly one next task: uncoached 1× comparison of the ten Evolution choices, focusing on Parade extension comprehension and Lattice edge readability.
 
 
 ## SC-02 — authored Collapsed Workshop
@@ -178,6 +188,6 @@ Each expedition now crosses the Collapsed Workshop, one mid-site and one termina
 
 Route eligibility, two-leg history, objective state, transient boss locks, completed sites, defeated bosses and recovered memories are deterministic simulation/save data. Terminal memories end the chapter; mid-site memories preserve the build and return to the next valid route choice. Policy timeouts derive the longest authored graph path rather than assuming one destination.
 
-Current integrated evidence passes 666 Godot assertions plus eleven Python manifest checks on Godot 4.5.1. The normal-economy matrix wins 12/12, the three-frame × four-Blessing × two-first-route matrix wins 24/24, all four controlled assembly paths finish, and all eight Evolution policies complete their two-leg route. Ten chapter fixtures include all three terminal objective/boss states at 1280×800, seed 147, Compatibility renderer on Apple M1 Pro. These are deterministic policies and configured captures, not human enjoyment evidence.
+Current integrated evidence passes 705 Godot assertions plus eleven Python manifest checks on Godot 4.5.1. The normal-economy matrix wins 12/12, the three-frame × four-Blessing × two-first-route matrix wins 24/24, all four controlled assembly paths finish, and all ten Evolution policies complete their two-leg route. Chapter and Evolution fixtures include all three terminal objective/boss states and the two final Evolution geometries at 1280×800, seed 147, Compatibility renderer on Apple M1 Pro. These are deterministic policies and configured captures, not human enjoyment evidence.
 
 Exactly one next task: run uncoached 1× sessions through all four route chains and tune only observed objective comprehension, road-choice value and boss reaction-time friction.
