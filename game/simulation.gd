@@ -842,7 +842,12 @@ func update_enemies():
 				for i in range(offsets.size()):
 					var offset = Vector2(offsets[i][0], offsets[i][1]).rotated((boss_elapsed / int(config.boss_rules.hazard_interval) + phase) * PI / 2.0)
 					var p = arena.move_body(state.position, offset, config.boss_rules.hazard_radius)
-					state.hazards.append({"p": p, "from": e.p, "until": state.tick + int(config.boss_rules.hazard_warning_ticks * warning_multiplier()), "radius": config.boss_rules.hazard_radius, "source": e.type, "source_id": e.id, "copy": e.type == config.elite and has_evolution("evolution.mercy_rail"), "copy_shape": "rail"})
+					var copies_mercy = e.type == config.elite and has_evolution("evolution.mercy_rail")
+					var hazard = {"p": p, "from": e.p, "until": state.tick + int(config.boss_rules.hazard_warning_ticks * warning_multiplier()), "radius": config.boss_rules.hazard_radius, "source": e.type, "source_id": e.id, "copy": copies_mercy}
+					if copies_mercy:
+						hazard.copy_evolution = "evolution.mercy_rail"
+						hazard.copy_shape = "rail"
+					state.hazards.append(hazard)
 				emit("warning", {"position": e.p, "phase": phase, "safe_lane": (phase + int(boss_elapsed / config.boss_rules.hazard_interval)) % 4})
 			if boss and e.hp / e.max_hp < 0.67 and boss_elapsed > 0 and boss_elapsed % int(config.boss_rules.worker_interval) == 0: call_deferred_spawn = true
 			if boss and is_destination(): update_destination_pressure(e, boss_elapsed)

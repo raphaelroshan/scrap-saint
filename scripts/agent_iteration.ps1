@@ -28,6 +28,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Roaming quality tests failed' }
 if ($LASTEXITCODE -ne 0) { throw 'UI tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_assembly.gd 2>&1 | Tee-Object -FilePath "$bundlePath\assembly.log"
 if ($LASTEXITCODE -ne 0) { throw 'Assembly tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_acquisition.gd 2>&1 | Tee-Object -FilePath "$bundlePath\acquisition.log"
+if ($LASTEXITCODE -ne 0) { throw 'Acquisition tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/run_playthroughs.gd -- --optional 2>&1 | Tee-Object -FilePath "$bundlePath\playthroughs.log"
 if ($LASTEXITCODE -ne 0) { throw 'Playthrough runner failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/run_assembly_playthroughs.gd 2>&1 | Tee-Object -FilePath "$bundlePath\assembly-playthroughs.log"

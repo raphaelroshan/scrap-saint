@@ -14,6 +14,7 @@ mkdir -p artifacts/agent-iteration
 "$GODOT_BIN" --headless --path . --script res://tests/test_roaming_quality.gd | tee artifacts/agent-iteration/roaming-quality.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_ui.gd | tee artifacts/agent-iteration/ui.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_assembly.gd | tee artifacts/agent-iteration/assembly.log
+"$GODOT_BIN" --headless --path . --script res://tests/test_acquisition.gd | tee artifacts/agent-iteration/acquisition.log
 "$GODOT_BIN" --headless --path . --script res://tests/run_playthroughs.gd -- --optional | tee artifacts/agent-iteration/optional-playthroughs.log
 "$GODOT_BIN" --headless --path . --script res://tests/run_assembly_playthroughs.gd | tee artifacts/agent-iteration/assembly-playthroughs.log
 "$GODOT_BIN" --path . -- --capture-dir="$PWD/artifacts/agent-iteration" | tee artifacts/agent-iteration/capture.log
