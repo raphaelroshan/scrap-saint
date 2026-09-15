@@ -183,9 +183,9 @@
       "weakness": "Low burst and poor reach against ranged threats.",
       "cost_scrap": 19,
       "base_effect": "rotating_contact_damage",
-      "secondary_effect": "nearby_optional_machine_repair_pulse",
+      "secondary_effect": "nearby_visible_objective_repair_pulse",
       "evolution_ids": [],
-      "description": "A crooked welding ring whose bright cardinal arc stitches nearby machines while it guards the Saint."
+      "description": "A crooked welding ring whose bright cardinal arc stitches the current repair objective while it guards the Saint."
     },
     {
       "id": "catalyst.saints_rivet",

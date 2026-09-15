@@ -6,8 +6,13 @@ var obstacles: Array[Rect2] = []
 var graphs = {}
 
 func _init():
-	data = JSON.parse_string(FileAccess.get_file_as_string("res://content/arenas/collapsed_workshop.json"))
+	load_file("res://content/arenas/collapsed_workshop.json")
+
+func load_file(path: String):
+	data = JSON.parse_string(FileAccess.get_file_as_string(path))
 	bounds = rect(data.bounds)
+	obstacles.clear()
+	graphs.clear()
 	for machine in data.obstacles: obstacles.append(rect(machine.rect))
 
 func rect(values: Array) -> Rect2:

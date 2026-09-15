@@ -16,6 +16,7 @@ For faster development, use **Play Scrap Saint 5x Dev.cmd**. Combat runs at 5× 
 - WASD or arrows: move; weapons attack automatically. In Optional repairs, short repairs reward Scrap, healing or a stagger pulse. Machines cannot be destroyed and repairs are never required to win. In Relay defence, stay near the relay to repair it and keep it alive.
 - Escape: pause; F5: save; F9: load; M: mute; F3: diagnostic overlay.
 - Between waves: buy/combine, sell, store, equip, lock and refresh. Mercy Rail is optional.
+- Defeating the Foreman opens Brass Choir Relay and Rootworks Pump. The selected road carries the current build, economy and Blessing into a distinct objective and ends with a route-specific memory.
 - Controller: left stick movement, standard UI navigation/accept, Start to pause.
 
 See [runtime status](docs/runtime_status.md) for implemented rules, prototype substitutions, and limitations. The enabled slice and balance values live in `content/slices/first_shift.json`.

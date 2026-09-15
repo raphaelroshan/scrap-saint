@@ -6,26 +6,42 @@ var visits = 0
 func _initialize(): call_deferred("capture")
 
 func policy_step(seek_repair: bool = true):
+	if game.sim.state.phase == "route":
+		game.sim.command("choose_route", "route.brass_choir")
+		return
+	if game.sim.state.phase == "travel":
+		game.sim.command("advance_travel")
+		return
+	if game.sim.state.phase == "memory":
+		game.sim.command("accept_memory")
+		return
 	if game.sim.state.phase == "shop":
 		visits += 1
 		if game.sim.state.hp < 65: game.sim.command("buy", 4)
 		for index in [0, 1, 2, 3]: game.sim.command("buy", index)
+		game.sim.command("evolve")
 		game.sim.command("reroll")
 		for index in [0, 1]: game.sim.command("buy", index)
 		game.sim.command("continue")
 		return
 	var state = game.sim.state
 	var desired = game.sim.relay_position() + Vector2.from_angle(state.tick * 0.013) * 62
+	if game.sim.is_destination() and not state.objective_complete:
+		for i in range(state.objective.size()):
+			if not state.objective[i].complete:
+				var node = game.sim.objective_data().nodes[i]
+				desired = Vector2(node.position[0], node.position[1])
+				break
 	var major = state.enemies.filter(func(enemy): return enemy.major)
 	if not major.is_empty():
 		desired = major[0].p + Vector2.from_angle(state.tick * 0.013) * 84
-	elif seek_repair and not state.machines[0].complete:
+	elif seek_repair and not game.sim.is_destination() and not state.machines[0].complete:
 		var data = game.sim.config.optional_repairs.machines[0]
 		desired = Vector2(data.position[0], data.position[1])
 	var movement = game.sim.arena.direction_to(state.position, desired, game.sim.config.saint.radius)
 	for enemy in state.enemies:
 		var diff = state.position - enemy.p
-		if diff.length() < 62: movement += diff.normalized() * 2.4
+		if diff.length() < 72: movement += diff.normalized() * 3.0
 	for hazard in state.hazards:
 		var diff = state.position - hazard.p
 		if diff.length() < hazard.radius + 28: movement += diff.normalized() * 4.0
@@ -60,7 +76,7 @@ func capture():
 		policy_step()
 		if game.sim.state.tick > 4000: break
 	await save_state("NATURAL_REPAIR_REWARD")
-	while game.sim.state.phase not in ["won", "lost"] and game.sim.state.tick < game.sim.config.wave_ticks * game.sim.config.wave_count + 60:
+	while game.sim.state.phase not in ["won", "lost"] and game.sim.state.tick < game.sim.config.wave_ticks * game.sim.config.wave_count + 16000:
 		policy_step()
 	await save_state("NATURAL_RESULTS")
 	print("Core quality natural policy: seed147, Workshop Gospel, repair-seeking, normal economy, %d shops, %s" % [visits, game.sim.state.phase])

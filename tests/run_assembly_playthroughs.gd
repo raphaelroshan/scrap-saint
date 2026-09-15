@@ -25,7 +25,16 @@ func _initialize():
 		if sim.state.weapons.any(func(w): return w.get("toll", false)):
 			sim.state.evolutions = ["evolution.great_toll"]
 			sim.state.evolved = true
-		while sim.state.phase not in ["won", "lost"] and sim.state.tick < sim.config.wave_ticks * sim.config.wave_count + 60:
+		while sim.state.phase not in ["won", "lost"] and sim.state.tick < sim.config.wave_ticks * sim.config.wave_count + 16000:
+			if sim.state.phase == "route":
+				sim.command("choose_route", "route.brass_choir" if results.size() % 2 == 0 else "route.rootworks")
+				continue
+			if sim.state.phase == "travel":
+				sim.command("advance_travel")
+				continue
+			if sim.state.phase == "memory":
+				sim.command("accept_memory")
+				continue
 			if sim.state.phase == "shop":
 				if sim.state.hp < 70: sim.command("buy", 4)
 				# A bounded natural policy improves the current build, then considers one new direction.
@@ -33,6 +42,12 @@ func _initialize():
 				if sim.state.weapons.size() + sim.state.reserve.size() < 4: sim.command("buy", 1)
 				sim.command("continue")
 			var desired = sim.state.position + Vector2.from_angle(sim.state.tick * 0.011) * 80
+			if sim.is_destination() and not sim.state.objective_complete:
+				for i in range(sim.state.objective.size()):
+					if not sim.state.objective[i].complete:
+						var node = sim.objective_data().nodes[i]
+						desired = Vector2(node.position[0], node.position[1])
+						break
 			for enemy in sim.state.enemies:
 				if enemy.major:
 					desired = enemy.p + Vector2.from_angle(sim.state.tick * 0.013) * 92
@@ -46,7 +61,7 @@ func _initialize():
 				if diff.length() < hazard.radius + 30: move += diff.normalized() * 4.0
 			sim.step(move.limit_length())
 		failed = failed or sim.state.phase != "won"
-		results.append({"id": scenario.id, "outcome": sim.state.phase, "wave": sim.state.wave, "seconds": sim.state.tick / 60.0, "hp": sim.state.hp, "kills": sim.state.kills, "repairs": sim.state.machines.filter(func(m): return m.complete).size(), "damage": sim.state.damage, "gifts": sim.state.gifts})
+		results.append({"id": scenario.id, "route": sim.state.route, "chapter_complete": sim.state.chapter_complete, "outcome": sim.state.phase, "wave": sim.state.wave, "seconds": sim.state.tick / 60.0, "hp": sim.state.hp, "kills": sim.state.kills, "repairs": sim.state.machines.filter(func(m): return m.complete).size(), "damage": sim.state.damage, "gifts": sim.state.gifts, "evolutions": sim.state.evolutions})
 	print(JSON.stringify(results, "  "))
 	DirAccess.make_dir_recursive_absolute("res://artifacts/agent-iteration")
 	var file = FileAccess.open("res://artifacts/agent-iteration/assembly_playthroughs.json", FileAccess.WRITE)

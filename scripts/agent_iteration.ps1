@@ -20,6 +20,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Relay tests failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Arena tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_simulation.gd 2>&1 | Tee-Object -FilePath "$bundlePath\simulation.log"
 if ($LASTEXITCODE -ne 0) { throw 'Simulation tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_chapter.gd 2>&1 | Tee-Object -FilePath "$bundlePath\chapter.log"
+if ($LASTEXITCODE -ne 0) { throw 'Chapter tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_roaming_quality.gd 2>&1 | Tee-Object -FilePath "$bundlePath\roaming-quality.log"
 if ($LASTEXITCODE -ne 0) { throw 'Roaming quality tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_ui.gd 2>&1 | Tee-Object -FilePath "$bundlePath\ui.log"
@@ -32,6 +34,10 @@ if ($LASTEXITCODE -ne 0) { throw 'Playthrough runner failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Assembly playthrough runner failed' }
 & $GodotBin --path $projectRoot -- --capture-dir=$bundlePath 2>&1 | Tee-Object -FilePath "$bundlePath\capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Capture failed' }
+& $GodotBin --path $projectRoot --script res://tests/capture_chapter.gd -- --capture-dir=$bundlePath 2>&1 | Tee-Object -FilePath "$bundlePath\chapter-capture.log"
+if ($LASTEXITCODE -ne 0) { throw 'Chapter capture failed' }
+& $GodotBin --path $projectRoot --script res://tests/capture_core_quality.gd 2>&1 | Tee-Object -FilePath "$bundlePath\core-quality-capture.log"
+if ($LASTEXITCODE -ne 0) { throw 'Core quality capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_assembly.gd 2>&1 | Tee-Object -FilePath "$bundlePath\assembly-capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Assembly capture failed' }
 $commitId = git -C $projectRoot rev-parse HEAD

@@ -40,8 +40,20 @@ func run_checks():
 	var before = game.sim.state_hash()
 	game.load_run()
 	check(game.sim.state_hash() == before, "actual file save/load preserves shop")
+	game.sim.state.phase = "route"
+	game.sim.state.scrap = 20
+	game.build_ui()
+	for child in game.ui.get_children():
+		if child is Button and child.text == "CHOOSE ROOTWORKS PUMP": child.pressed.emit(); break
+	check(game.sim.state.phase == "travel" and game.sim.state.route == "route.rootworks", "route button sends authoritative choice")
+	for beat in range(3):
+		for child in game.ui.get_children():
+			if child is Button and (child.text == "CONTINUE ALONG THE ROAD" or child.text == "ENTER ROOTWORKS PUMP"):
+				child.pressed.emit()
+				break
+	check(game.sim.state.phase == "combat" and game.sim.state.site_id == "site.rootworks_pump", "travel buttons arrive at selected destination")
 	DirAccess.remove_absolute(path)
 	game.queue_free()
 	await process_frame
-	print("UI TESTS: 8 checks, %d failures" % failures)
+	print("UI TESTS: 9 checks, %d failures" % failures)
 	quit(1 if failures else 0)

@@ -4,7 +4,7 @@ The project now contains a runnable Godot 4.5.1 desktop prototype. This is the f
 
 ## Implemented
 
-- Eight 70-second maximum waves, with the final boss ending the run early when defeated. Shop reading time is additional and paused.
+- Eight 70-second Workshop waves, followed after Foreman victory by one selected four-wave destination. Shop and travel reading time is additional and paused.
 - Three starting Blessings, ten automatic weapons, four catalysts, two visible evolutions, four active slots, one reserve and two run-local Gift slots.
 - Movement, three optional repair machines, pickups, six ordinary enemy families, an elite and phased boss attacks. Relay defence remains a development comparison.
 - Purchases, automatic duplicate combining, explicit combine, sell/dismantle, reserve/equip, offer lock and one free/two paid refreshes.
@@ -137,6 +137,16 @@ Foreman phases now change movement speed, stop distance and route-shaped demolit
 
 The prior Mourner seed-104729 loss was an uncontrolled mixed-wave composition failure, not evidence that Mourner required a global damage bonus. The authored wave-five Pilgrim repair line isolates healer priority with Hound/Mite support. On the same seed, the non-evolved Mourner policy now reaches and defeats Foreman with Rank III Candle, Rank III Bell and Rank I Cable. The full main-mode matrix is 12/12 wins across seeds 147, 104729 and 104730; each seed includes an evolution policy, Bell survival policy, non-evolved Mourner policy and repair/explorer policy. No shop visit in that matrix lacks an affordable action, and all three repair policies complete one useful machine.
 
-Current local evidence: 185 focused Godot assertions across relay, arena, simulation, optional repair, shop, variety, roaming quality and UI suites; 12/12 normal-economy main-mode policies; natural policy captures at 1280x800 in `artifacts/core-quality`. Godot is pinned to 4.5.1. The shell loop was once externally terminated while the long playthrough process was active; the same playthrough command passed independently and generated the recorded JSON. This is not human enjoyment evidence.
+Current integrated evidence: 273 focused Godot assertions across relay, arena, simulation, chapter, assembly, optional repair, shop, variety, roaming quality and UI suites. Full-chapter main and assembly policy matrices are the release regression gates; natural policy captures live at 1280x800 in `artifacts/core-quality`. Godot is pinned to 4.5.1. This is not human enjoyment evidence.
 
-Exactly one next task: uncoached 1x comparison of close-control, priority-control and repair-roaming builds.
+Exactly one next task: uncoached 1x comparison of close-control, priority-control and repair-roaming builds across both chapter routes.
+
+## SC-15 — compact first-chapter pilgrimage (current)
+
+Foreman victory now opens an authoritative two-route decision instead of ending the expedition. Eight Scrap recovered from the Foreman guarantees both roads remain affordable. Brass Choir Relay costs 8 Scrap and asks the Saint to clear and tune three distributed signal rings; Rootworks Pump costs 6 Scrap and asks it to finish one exposed, persistent pump repair while healer-heavy enemies sustain the crowd. Each destination runs four compact waves, uses a route-specific authored pressure profile and boss, and ends in its own memory and causal Results.
+
+Route choice, travel beat, selected arena, objective nodes, carried weapons/reserve/catalysts/currencies, core-quality metrics, boss result, memory and chapter completion are part of version-2 deterministic save state. Version-1 Workshop saves migrate to the combined state without being rerolled. Arrival clears per-wave shop services and timers while preserving permanent build state. Boss hazards and destination pressures schedule from boss arrival rather than inherited global time. Damage and income traces use `site_id:wave_N` segment keys, and Results expose completed site and defeated boss IDs. Presentation sends `choose_route`, `advance_travel` and `accept_memory`; it does not decide arrival, repair progress or completion.
+
+The implementation is a systems-complete chapter proof layered on the P12 core-quality gate, not the full Early Access breadth target. It deliberately reuses the current combat roster and procedural visual/audio language. Destination pacing, boss differentiation in motion and the intended 25–35 minute commercial expedition still require human testing.
+
+Exactly one next task: run uncoached full-expedition playtests of the expanded builds on both routes at 1× and tune destination pressure from observed comprehension and pacing evidence.

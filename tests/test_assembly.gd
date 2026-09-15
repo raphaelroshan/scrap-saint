@@ -88,6 +88,7 @@ func _initialize():
 	s.command("continue")
 	s.state.tick = int(s.config.boss_rules.hazard_interval)
 	s.spawn(s.config.elite)
+	s.state.tick += int(s.config.boss_rules.hazard_interval)
 	s.update_enemies()
 	check(not s.state.hazards.is_empty() and s.state.hazards.all(func(h): return not h.copy), "Toll-only build does not trigger Memory Crane's Mercy Rail copy")
 	s.state.enemies.clear()
@@ -95,6 +96,7 @@ func _initialize():
 	s.state.evolutions = ["evolution.mercy_rail"]
 	s.state.evolved = true
 	s.spawn(s.config.elite)
+	s.state.tick += int(s.config.boss_rules.hazard_interval)
 	s.update_enemies()
 	check(not s.state.hazards.is_empty() and s.state.hazards.any(func(h): return h.copy), "Memory Crane copy remains keyed to Mercy Rail")
 	s.state.enemies.clear()
@@ -137,6 +139,26 @@ func _initialize():
 	s.step(Vector2.RIGHT)
 	check(s.state.machines[0].progress > baseline.state.machines[0].progress, "Spare Hand completes optional work faster")
 	check(s.state.position.distance_to(machine_p) < baseline.state.position.distance_to(machine_p), "Spare Hand slows movement only during work exposure")
+
+	# Destination ownership keeps carried Workshop machines inert and redirects Halo to visible route work.
+	s.start(0, 147, "optional")
+	s.state.wave = 8
+	s.state.boss_dead = true
+	s.step(Vector2.ZERO)
+	s.state.scrap = 20
+	s.command("choose_route", "route.rootworks")
+	while s.state.phase == "travel": s.command("advance_travel")
+	var pump = Vector2(s.objective_data().nodes[0].position[0], s.objective_data().nodes[0].position[1])
+	s.state.position = pump + Vector2(70, 0)
+	s.state.weapons = [weapon("weapon.welded_halo")]
+	var carried_machine_progress = s.state.machines[0].progress
+	s.update_weapons()
+	check(s.state.objective[0].progress == s.config.weapons["weapon.welded_halo"].repair_progress, "Halo repairs the current visible destination objective")
+	check(s.state.machines[0].progress == carried_machine_progress, "Halo never mutates carried Workshop machines at a destination")
+	s.state.gifts = ["gift.spare_hand"]
+	var before_destination_move = s.state.position
+	s.step(Vector2.RIGHT)
+	check(is_equal_approx(s.state.position.distance_to(before_destination_move), float(s.config.saint.speed) / s.config.tick_rate), "Spare Hand does not apply invisible Workshop work slowdown at a destination")
 
 	s.start(0, 147, "optional")
 	s.state.gifts = ["gift.inspection_lens"]

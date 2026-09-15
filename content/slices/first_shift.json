@@ -170,7 +170,7 @@
       "short": "Welded Halo",
       "shape": "halo",
       "target_rule": "orbit_contact",
-      "role": "Convert a repair detour into close defence and machine progress.",
+      "role": "Convert a repair detour into close defence and visible objective progress.",
       "weakness": "Low burst and poor reach against ranged threats.",
       "counter_families": ["enemy.scrap_mite", "enemy.rivet_hound"],
       "damage": 13,
@@ -181,7 +181,7 @@
       "repair_progress": 16,
       "saint_repair": 0.5,
       "color": "a9e0b1",
-      "description": "A rotating close guard. Near an unfinished machine, each contact adds a visible repair stitch."
+      "description": "A rotating close guard. Near an unfinished repair objective, each contact adds a visible stitch."
     }
   },
   "catalysts": {
