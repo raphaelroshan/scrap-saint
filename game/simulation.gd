@@ -80,7 +80,7 @@ func weapon_rank_rule(w: Dictionary) -> Dictionary:
 	var rank_rules = config.weapons[w.id].get("rank_rules", {})
 	for rank in range(2, mini(3, int(w.rank)) + 1):
 		for field in rank_rules.get(str(rank), {}):
-			if field not in ["id", "name", "description"]: rule[field] = rank_rules[str(rank)][field]
+			if field not in ["id", "name", "description", "change_family"]: rule[field] = rank_rules[str(rank)][field]
 	return rule
 
 func resolved_weapon_rule(w: Dictionary) -> Dictionary:

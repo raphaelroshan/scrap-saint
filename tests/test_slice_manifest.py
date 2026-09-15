@@ -34,6 +34,42 @@ class ManifestTests(unittest.TestCase):
         with self.assertRaises(AssertionError):
             validator.validate_slice(self.manifest, self.data)
 
+    def test_reject_missing_rank_behavior(self):
+        weapon = self.manifest['weapons']['weapon.nailer_small_mercies']
+        weapon['rank_rules']['2'] = {
+            'id': 'rank.nailer.empty', 'name': 'EMPTY', 'description': 'Only presentation.',
+            'change_family': 'geometry',
+        }
+        with self.assertRaises(AssertionError):
+            validator.validate_slice(self.manifest, self.data)
+
+    def test_reject_unknown_rank_field(self):
+        self.manifest['weapons']['weapon.nailer_small_mercies']['rank_rules']['2']['unowned_magic'] = 1
+        with self.assertRaises(AssertionError):
+            validator.validate_slice(self.manifest, self.data)
+
+    def test_reject_duplicate_rank_id(self):
+        duplicate = self.manifest['weapons']['weapon.nailer_small_mercies']['rank_rules']['2']['id']
+        self.manifest['weapons']['weapon.bell_last_shift']['rank_rules']['2']['id'] = duplicate
+        with self.assertRaises(AssertionError):
+            validator.validate_slice(self.manifest, self.data)
+
+    def test_reject_orphan_evolution_rule(self):
+        self.manifest['evolution_rules']['evolution.orphan'] = copy.deepcopy(next(iter(self.manifest['evolution_rules'].values())))
+        with self.assertRaises(AssertionError):
+            validator.validate_slice(self.manifest, self.data)
+
+    def test_reject_inexact_evolution_backlink(self):
+        items = {item['id']: item for item in self.data['items']['items']}
+        items['weapon.nailer_small_mercies']['evolution_ids'].append('evolution.great_toll')
+        with self.assertRaises(AssertionError):
+            validator.validate_slice(self.manifest, self.data)
+
+    def test_reject_unsupported_evolution_shape(self):
+        self.manifest['evolution_rules']['evolution.mercy_rail']['shape'] = 'unimplemented_shape'
+        with self.assertRaises(AssertionError):
+            validator.validate_slice(self.manifest, self.data)
+
 
 class ExpeditionGraphTests(unittest.TestCase):
     def setUp(self):

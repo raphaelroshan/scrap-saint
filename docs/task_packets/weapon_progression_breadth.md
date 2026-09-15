@@ -1,6 +1,6 @@
 # Task packet: P15 — complete weapon progression
 
-> Implementation note: P15-A in this change is intentionally bounded to differentiated Rank II/III behavior for the ten existing base weapons. The proposed additional Evolutions in this packet remain deferred; no Evolution, Gift, Confluence or base weapon is added.
+> Implementation note: P15 completes differentiated Rank II/III behavior for the ten existing base weapons and the two missing Evolution endpoints. No Gift, Confluence or base weapon is added.
 
 ## Player-facing objective
 

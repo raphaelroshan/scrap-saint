@@ -4,7 +4,7 @@
 
 The runtime tests now exist. Run the complete Windows loop with `scripts/agent_iteration.ps1 -GodotBin <path> -PythonBin <path>`, then inspect the captures and score the report. On other platforms use `GODOT_BIN=godot bash scripts/agent_iteration.sh`.
 
-- `python tests/test_slice_manifest.py`: four manifest acceptance/rejection tests.
+- `python tests/test_slice_manifest.py`: seventeen manifest and graph acceptance/rejection tests.
 - `godot --headless --path . --script res://tests/test_simulation.gd`: 31 deterministic simulation checks.
 - `godot --headless --path . --script res://tests/test_chapter.gd`: deterministic route, travel, carryover, objective, distinct three-phase destination bosses, memory, and chapter save checks.
 - `godot --headless --path . --script res://tests/test_ui.gd`: direct UI state and button-signal coverage with temporary local files.

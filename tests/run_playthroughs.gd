@@ -21,7 +21,14 @@ func policy_route(sim, first_route: String, variant: int) -> String:
 func choose_road(sim):
 	var options = sim.current_road_node().get("choices", [])
 	var affordable = options.filter(func(choice): return int(choice.cost) <= int(sim.state.scrap))
-	if not affordable.is_empty(): sim.command("choose_road_option", affordable[-1].id)
+	if affordable.is_empty(): return
+	# The viability policy uses the same disclosed consequences as the player:
+	# preserve Structure first, then prefer the better Scrap outcome.
+	var best = affordable[0]
+	for choice in affordable.slice(1):
+		if float(choice.structure_delta) > float(best.structure_delta) or (float(choice.structure_delta) == float(best.structure_delta) and int(choice.scrap_delta) > int(best.scrap_delta)):
+			best = choice
+	sim.command("choose_road_option", best.id)
 
 func _initialize():
 	var results = []
@@ -101,12 +108,14 @@ func _initialize():
 				var repair_data = sim.config.optional_repairs.machines[0]
 				desired = Vector2(repair_data.position[0], repair_data.position[1])
 			var move = sim.arena.direction_to(s.position, desired, sim.config.saint.radius)
+			var danger_radius = 112.0 if variant == 1 else 72.0
+			var evade_weight = 5.0 if variant == 1 else 3.0
 			for enemy in s.enemies:
 				var diff = s.position - enemy.p
-				if diff.length() < 72: move += diff.normalized() * 3.0
+				if diff.length() < danger_radius: move += diff.normalized() * evade_weight
 			for hazard in s.hazards:
 				var diff = s.position - hazard.p
-				if diff.length() < hazard.radius + 28: move += diff.normalized() * 4.0
+				if diff.length() < hazard.radius + (48 if variant == 1 else 28): move += diff.normalized() * (6.0 if variant == 1 else 4.0)
 			sim.step(move.limit_length())
 		unfinished = unfinished or sim.state.phase != "won"
 		results.append({"mode": sim.state.mode, "frame_id": sim.state.frame_id, "route": sim.state.route, "route_history": sim.state.route_history, "chapter_complete": sim.state.chapter_complete, "objective": sim.state.objective, "policy": policy_name, "repairs_completed": sim.state.machines.filter(func(m): return m.complete).size(), "repair_metrics": sim.state.metrics, "seed": seed_value, "backup_absorbed": sim.state.backup_absorbed, "relay_damage_sources": sim.state.relay_damage_sources, "damage_taken": sim.state.damage_taken, "damage_by_wave": sim.state.damage_by_wave, "weapon_damage": sim.state.damage, "weapon_kills": sim.state.kills_by_weapon, "weapon_ranks": sim.state.weapons.map(func(w): return {"id": w.id, "rank": w.rank, "evolved": sim.weapon_evolution_id(w).trim_prefix("evolution.")}), "gifts": sim.state.gifts.duplicate(), "scrap_sources": sim.state.scrap_sources, "transactions": sim.state.transactions, "doctrine": doctrine, "evolution_policy": variant == 0, "outcome": sim.state.phase, "wave": sim.state.wave, "seconds": sim.state.tick / 60.0, "hp": sim.state.hp, "relay": sim.state.relay_hp, "progress": sim.state.progress / sim.config.relay.required_ticks, "kills": sim.state.kills, "shops": visits, "reason": sim.state.last_reason, "result_summary": sim.state.result_summary})
