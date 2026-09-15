@@ -15,8 +15,15 @@
       "wave_ticks": 3000,
       "spawn_interval": 104,
       "enemy_pool": ["enemy.choir_drone", "enemy.cinder_spitter", "enemy.rivet_hound"],
+      "wave_profiles": [
+        {"name": "OUT-OF-TIME ESCORT", "pressure": "Choir drones hold distance while Hounds test the open lanes.", "primary": "enemy.choir_drone", "primary_weight": 1, "support": ["enemy.rivet_hound"], "spawn_interval": 124, "counters": ["orbit", "control"]},
+        {"name": "DELAYED REFRAIN", "pressure": "One Cinder Spitter writes a delayed beat through a mixed escort.", "primary": "enemy.cinder_spitter", "primary_weight": 1, "support": ["enemy.choir_drone", "enemy.rivet_hound"], "spawn_interval": 132, "counters": ["movement", "priority"]},
+        {"name": "BROKEN PROCESSION", "pressure": "Hounds close the road while a single ranged line denies stillness.", "primary": "enemy.rivet_hound", "primary_weight": 2, "support": ["enemy.cinder_spitter"], "spawn_interval": 124, "counters": ["control", "movement"]},
+        {"name": "THE REGENT'S MEASURE", "pressure": "The Regent slows weapon cycles while its Choir screens the final relay.", "primary": "enemy.choir_drone", "primary_weight": 2, "support": ["enemy.rivet_hound"], "spawn_interval": 116, "counters": ["priority", "orbit", "control"]}
+      ],
       "boss": "boss.choir_regent",
       "boss_hp": 1150,
+      "arrival_repair_floor": 1.0,
       "objective": {
         "id": "objective.tune_choir_relays",
         "name": "TUNE THE THREE RELAYS",
@@ -63,8 +70,15 @@
       "wave_ticks": 3000,
       "spawn_interval": 98,
       "enemy_pool": ["enemy.rust_pilgrim", "enemy.forklift_brute", "enemy.scrap_mite"],
+      "wave_profiles": [
+        {"name": "GRAFTED HANDS", "pressure": "Rust Pilgrims sustain a light scavenger screen around the exposed pump.", "primary": "enemy.rust_pilgrim", "primary_weight": 1, "support": ["enemy.scrap_mite"], "spawn_interval": 116, "counters": ["priority", "pierce"]},
+        {"name": "LOAD-BEARING LINE", "pressure": "Forklift Brutes shove the Saint away while Pilgrims repair each opening.", "primary": "enemy.forklift_brute", "primary_weight": 1, "support": ["enemy.rust_pilgrim", "enemy.scrap_mite"], "spawn_interval": 118, "counters": ["control", "priority"]},
+        {"name": "SALVAGE FEVER", "pressure": "Mites strip loose Scrap behind a slow line of grafted repairers.", "primary": "enemy.scrap_mite", "primary_weight": 2, "support": ["enemy.rust_pilgrim"], "spawn_interval": 108, "counters": ["area", "pierce"]},
+        {"name": "THE HEART'S QUOTA", "pressure": "The Factory Heart calls repairers behind a final heavy work line.", "primary": "enemy.forklift_brute", "primary_weight": 1, "support": ["enemy.rust_pilgrim", "enemy.scrap_mite"], "spawn_interval": 116, "counters": ["priority", "control", "area"]}
+      ],
       "boss": "boss.factory_heart",
       "boss_hp": 1250,
+      "arrival_repair_floor": 1.0,
       "objective": {
         "id": "objective.stabilize_rootworks_pump",
         "name": "STABILIZE THE WATER PUMP",

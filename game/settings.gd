@@ -49,6 +49,7 @@ func rebind(action: String, physical_keycode: int) -> bool:
 	return true
 
 func apply_input_map():
+	var arrow_keys = {"move_up": KEY_UP, "move_down": KEY_DOWN, "move_left": KEY_LEFT, "move_right": KEY_RIGHT}
 	for action in ACTIONS:
 		if not InputMap.has_action(action):
 			InputMap.add_action(action)
@@ -58,6 +59,10 @@ func apply_input_map():
 		var key_event = InputEventKey.new()
 		key_event.physical_keycode = int(state.controls[action])
 		InputMap.action_add_event(action, key_event)
+		if int(state.controls[action]) != int(arrow_keys[action]):
+			var arrow_event = InputEventKey.new()
+			arrow_event.physical_keycode = int(arrow_keys[action])
+			InputMap.action_add_event(action, arrow_event)
 
 func apply_presentation():
 	AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), state.muted)

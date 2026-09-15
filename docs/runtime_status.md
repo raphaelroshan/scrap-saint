@@ -1,15 +1,16 @@
-# First Shift runtime — 0.1.0
+# First Shift runtime — 0.2.0 preview
 
 The project now contains a runnable Godot 4.5.1 desktop prototype. This is the first implementation, not a finished creative vertical. `content/slices/first_shift.json` is the authoritative enabled catalogue and tuning source; the larger catalogues also contain future concepts.
 
 ## Implemented
 
-- Eight 70-second Workshop waves, followed after Foreman victory by one selected four-wave destination. Shop and travel reading time is additional and paused.
-- Three starting Blessings, ten automatic weapons, four catalysts, two visible evolutions, four active slots, one reserve and two run-local Gift slots.
+- A title screen, five-page field manual, three selectable Saint frames, persistent accessibility/settings controls, save/resume and profile unlocks.
+- Eight 70-second Workshop waves, followed after Foreman victory by a three-beat road journey and one selected four-wave destination. Shop and travel reading time is additional and paused. Road rest restores full structure before the destination.
+- Four Blessings, ten automatic weapons, four catalysts, two visible evolutions, four active slots, one reserve and two run-local Gift slots.
 - Movement, three optional repair machines, pickups, six ordinary enemy families, an elite and phased boss attacks. Relay defence remains a development comparison.
 - Purchases, automatic duplicate combining, explicit combine, sell/dismantle, reserve/equip, offer lock and one free/two paid refreshes.
 - Optional Rank III Nailer plus Saint's Rivet evolution and Rank III Bell plus Cracked Clapper evolution. Catalysts are consumed atomically. Every encounter supports unevolved runs.
-- Procedural weapon effects and synthesized audio, title/selection/shop/pause/Results, keyboard and basic controller navigation, local save/resume.
+- Procedural weapon effects and synthesized audio, title/tutorial/selection/shop/travel/pause/Results, remappable keyboard and basic controller navigation.
 - Deterministic simulation tests and full-run scripted policies; real rendered fixture captures with provenance.
 
 ## Exact prototype rules
@@ -34,7 +35,7 @@ Art is original procedural placeholder geometry drawn by the renderer. Audio is 
 
 ## Remaining limitations
 
-Settings are basic; full remapping and persisted settings are not implemented. The fixed simulation is replay-tested within the pinned engine/platform, not certified cross-platform. Save files are local version-1 snapshots, with no migration support yet. Content tuning, shop breadth and secondary effects remain prototype-level. Natural policies do not establish feel, preference, effect readability in motion or ideal 1x density.
+Settings, volume, screen mode, reduced motion, high contrast and movement remapping persist locally. The fixed simulation is replay-tested within the pinned engine/platform, not certified cross-platform. Save files are local version-2 snapshots and migrate version-1 Workshop runs. Content tuning, shop breadth and secondary effects remain preview-level. Natural policies do not establish feel, preference, effect readability in motion or ideal 1x density.
 
 Exactly one next task: focused uncoached human playtest of the complete First Shift at 1x.
 
@@ -137,7 +138,7 @@ Foreman phases now change movement speed, stop distance and route-shaped demolit
 
 The prior Mourner seed-104729 loss was an uncontrolled mixed-wave composition failure, not evidence that Mourner required a global damage bonus. The authored wave-five Pilgrim repair line isolates healer priority with Hound/Mite support. On the same seed, the non-evolved Mourner policy now reaches and defeats Foreman with Rank III Candle, Rank III Bell and Rank I Cable. The full main-mode matrix is 12/12 wins across seeds 147, 104729 and 104730; each seed includes an evolution policy, Bell survival policy, non-evolved Mourner policy and repair/explorer policy. No shop visit in that matrix lacks an affordable action, and all three repair policies complete one useful machine.
 
-Current integrated evidence: 273 focused Godot assertions across relay, arena, simulation, chapter, assembly, optional repair, shop, variety, roaming quality and UI suites. Full-chapter main and assembly policy matrices are the release regression gates; natural policy captures live at 1280x800 in `artifacts/core-quality`. Godot is pinned to 4.5.1. This is not human enjoyment evidence.
+Current integrated evidence: 328 focused Godot assertions plus four Python manifest checks. The normal-economy chapter matrix wins 12/12, the three-frame × four-Blessing × two-route matrix wins 24/24, and assembly-specialist policies win 4/4. Natural policy captures live at 1280x800 in `artifacts/core-quality`; product-shell fixtures cover title, setup, tutorial, settings and Results. Godot is pinned to 4.5.1. This is deterministic viability evidence, not human enjoyment evidence.
 
 Exactly one next task: uncoached 1x comparison of close-control, priority-control and repair-roaming builds across both chapter routes.
 

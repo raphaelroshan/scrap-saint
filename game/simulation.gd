@@ -3,6 +3,7 @@ extends RefCounted
 var arena = preload("res://game/arena.gd").new()
 var config = {}
 var catalogue = {}
+var frames = {}
 var chapter = {}
 var routes = {}
 var state = {}
@@ -18,12 +19,16 @@ func _init():
 	config.relay.radius = arena.data.repair_radius
 	for item in JSON.parse_string(FileAccess.get_file_as_string("res://content/items/first_slice.json")).items:
 		catalogue[item.id] = item
+	for frame in JSON.parse_string(FileAccess.get_file_as_string("res://content/frames/first_chapter.json")).frames:
+		frames[frame.id] = frame
 
-func start(doctrine: int = 0, seed_value: int = 147, mode: String = "relay"):
+func start(doctrine: int = 0, seed_value: int = 147, mode: String = "relay", frame_id: String = "frame.pilgrim", run_id: String = ""):
 	arena.load_file("res://content/arenas/collapsed_workshop.json")
-	state = {"mode": "optional" if mode == "optional" else "relay", "machines": [], "version": 2, "arena_id": arena.data.id, "site_id": "site.collapsed_workshop", "route": "", "travel_step": 0, "objective": [], "objective_complete": false, "memory_id": "", "chapter_complete": false, "pressure_until": 0, "seed": seed_value, "rng": maxi(1, seed_value), "tick": 0, "phase": "combat", "paused": false,
+	if not frames.has(frame_id): frame_id = "frame.pilgrim"
+	var frame = frames[frame_id]
+	state = {"mode": "optional" if mode == "optional" else "relay", "machines": [], "version": 2, "run_id": run_id if run_id != "" else "test-%d-%d-%s" % [seed_value, doctrine, frame_id], "frame_id": frame_id, "max_hp": float(frame.structure), "move_speed": float(frame.speed), "repair_grace_ticks": int(frame.repair_grace_ticks), "knockback_multiplier": float(frame.knockback_multiplier), "keeper_shove_segment": "", "repair_grace_until": 0, "arena_id": arena.data.id, "site_id": "site.collapsed_workshop", "route": "", "travel_step": 0, "objective": [], "objective_complete": false, "memory_id": "", "chapter_complete": false, "pressure_until": 0, "seed": seed_value, "rng": maxi(1, seed_value), "tick": 0, "phase": "combat", "paused": false,
 		"wave": 1, "wave_tick": 0, "doctrine": doctrine, "position": arena.point(arena.data.start), "facing": Vector2.UP,
-		"hp": float(config.saint.structure), "relay_hp": float(config.relay.structure * config.relay.starting_fraction), "progress": 0.0,
+		"hp": float(frame.structure), "relay_hp": float(config.relay.structure * config.relay.starting_fraction), "progress": 0.0,
 		"scrap": int(config.economy.starting_scrap), "shards": 0, "kills": 0, "next_id": 1,
 		"weapons": [], "reserve": [], "catalysts": [], "gifts": [], "enemies": [], "pickups": [], "hazards": [],
 		"offers": [], "locked": "", "rerolls": 0, "hurt_until": 0, "boss_spawned": false,
@@ -34,8 +39,9 @@ func start(doctrine: int = 0, seed_value: int = 147, mode: String = "relay"):
 		"scrap_by_segment": {"site.collapsed_workshop:wave_1": int(config.economy.starting_scrap)}, "completed_site_ids": [], "defeated_boss_ids": [],
 		"metrics": {"first_contact_tick": -1, "longest_threat_gap": 0, "threat_gap_started": 0, "had_threat": false, "repairs_started": 0, "repairs_interrupted": 0, "useful_repairs": 0, "wasted_repairs": 0, "dead_shop_visits": 0},
 		"result_summary": {}, "component_tag": "", "inspection": "", "scrap_tax_progress": 0, "censer_defeats": 0}
-	var starts = ["weapon.nailer_small_mercies", "weapon.bell_last_shift", "weapon.candle_nailer"]
-	state.weapons.append(make_weapon(starts[clampi(doctrine, 0, 2)]))
+	var starts = ["weapon.nailer_small_mercies", "weapon.bell_last_shift", "weapon.candle_nailer", "weapon.procession_gear"]
+	state.doctrine = clampi(doctrine, 0, starts.size() - 1)
+	state.weapons.append(make_weapon(starts[state.doctrine]))
 	for machine in config.optional_repairs.machines:
 		state.machines.append({"id": machine.id, "progress": 0.0, "complete": false, "deferred": ""})
 	events.clear()
@@ -52,6 +58,12 @@ func has_evolution(id: String) -> bool:
 
 func has_gift(id: String) -> bool:
 	return id in state.get("gifts", [])
+
+func saint_max_structure() -> float:
+	return float(state.get("max_hp", config.saint.structure))
+
+func saint_speed() -> float:
+	return float(state.get("move_speed", config.saint.speed))
 
 func random_int(limit: int) -> int:
 	state.rng = (int(state.rng) * 48271) % 2147483647
@@ -201,6 +213,9 @@ func enter_destination(route: Dictionary):
 	arena.load_file(route.arena_path)
 	state.arena_id = arena.data.id
 	state.site_id = route.site_id
+	var arrival_floor = saint_max_structure() * float(route.get("arrival_repair_floor", 0.0))
+	var arrival_repair = maxf(0.0, arrival_floor - state.hp)
+	state.hp = maxf(state.hp, arrival_floor)
 	state.position = arena.point(arena.data.start)
 	state.facing = Vector2.UP
 	state.wave = 1
@@ -211,6 +226,7 @@ func enter_destination(route: Dictionary):
 	state.spawn_count = 0
 	state.active_machine = ""
 	state.repair_blocked_until = 0
+	state.repair_grace_until = 0
 	state.service_used = false
 	state.service_active = false
 	state.calibrated = false
@@ -221,7 +237,7 @@ func enter_destination(route: Dictionary):
 		state.objective.append({"id": node.id, "progress": 0.0, "complete": false})
 	state.objective_complete = false
 	state.pressure_until = 0
-	emit("destination_arrived", {"route": state.route, "site_id": state.site_id})
+	emit("destination_arrived", {"route": state.route, "site_id": state.site_id, "arrival_repair": arrival_repair})
 
 func objective_data() -> Dictionary:
 	return current_route().get("objective", {})
@@ -339,25 +355,28 @@ func buy(index: int) -> String:
 		var cost = int(config.shop_rules.services[state.doctrine].cost) if id == "service.doctrine" else int(config.economy.repair_cost)
 		if state.scrap < cost: return "INSUFFICIENT_SCRAP"
 		if id == "service.repair":
-			if state.hp >= config.saint.structure and (optional_mode() or state.relay_hp >= config.relay.structure): return "ALREADY_REPAIRED"
-			state.hp = minf(config.saint.structure, state.hp + config.economy.repair_amount)
+			if state.hp >= saint_max_structure() and (optional_mode() or state.relay_hp >= config.relay.structure): return "ALREADY_REPAIRED"
+			state.hp = minf(saint_max_structure(), state.hp + config.economy.repair_amount)
 			repair_relay(config.economy.repair_amount)
 		elif id == "service.calibrate":
 			if state.calibrated: return "SERVICE_USED"
 			state.calibrated = true
 		else:
 			if state.service_used: return "SERVICE_USED"
-			if state.doctrine == 0 and state.hp >= config.saint.structure and (optional_mode() or state.relay_hp >= config.relay.structure): return "ALREADY_REPAIRED"
+			if state.doctrine == 0 and state.hp >= saint_max_structure() and (optional_mode() or state.relay_hp >= config.relay.structure): return "ALREADY_REPAIRED"
 			state.service_used = true
 			state.service_active = true
 			match state.doctrine:
 				0:
-					state.hp = minf(config.saint.structure, state.hp + (config.doctrine_rules.workshop_service_relay if optional_mode() else config.doctrine_rules.workshop_service_hp))
+					state.hp = minf(saint_max_structure(), state.hp + (config.doctrine_rules.workshop_service_relay if optional_mode() else config.doctrine_rules.workshop_service_hp))
 					repair_relay(config.doctrine_rules.workshop_service_relay)
 				1:
 					state.forecast = true
 				2:
 					state.motes_left = int(config.shop_rules.mourner_motes)
+				3:
+					# Procession service widens orbiting mechanisms for one pressure beat.
+					state.forecast = true
 		state.scrap -= cost
 	elif id in config.catalysts:
 		if id in state.catalysts: return "ALREADY_OWNED"
@@ -400,7 +419,7 @@ func buy(index: int) -> String:
 	return "OK"
 
 func update_fulfilment():
-	var tags = ["labour", "witness", "mourn"]
+	var tags = ["labour", "witness", "mourn", "orbit"]
 	var unique = {}
 	for w in state.weapons:
 		if tags[state.doctrine] in catalogue[w.id].tags: unique[w.id] = true
@@ -452,7 +471,7 @@ func roll_shop():
 	var affordable_fresh = fresh.filter(func(id): return catalogue[id].cost_scrap <= state.scrap)
 	var current_offer = shop_pick(upgrades, 0) if not upgrades.is_empty() else shop_pick(affordable_fresh, 0)
 	state.offers = [current_offer, shop_pick(fresh, 1), path, preferred if preferred in support else shop_pick(support, 3), "service.repair", "service.doctrine"]
-	if state.hp >= config.saint.structure and (optional_mode() or state.relay_hp >= config.relay.structure): state.offers[4] = "service.calibrate"
+	if state.hp >= saint_max_structure() and (optional_mode() or state.relay_hp >= config.relay.structure): state.offers[4] = "service.calibrate"
 	# A six-role workshop must not present the same fallback card repeatedly.
 	var seen = {}
 	for i in range(4):
@@ -472,8 +491,11 @@ func warning_multiplier() -> float:
 func wave_profile(wave_number: int = -1) -> Dictionary:
 	if is_destination():
 		var route = current_route()
-		var pool: Array = route.enemy_pool
+		var authored_profiles: Array = route.get("wave_profiles", [])
 		var destination_wave = state.wave if wave_number < 0 else wave_number
+		if not authored_profiles.is_empty():
+			return authored_profiles[clampi(destination_wave - 1, 0, authored_profiles.size() - 1)]
+		var pool: Array = route.enemy_pool
 		var primary_index = clampi(destination_wave - 1, 0, pool.size() - 1)
 		var support = pool.duplicate()
 		support.erase(pool[primary_index])
@@ -546,7 +568,7 @@ func step(move: Vector2):
 	move = move.limit_length()
 	if move.length() > 0.1: state.facing = move.normalized()
 	var move_multiplier = catalogue["gift.spare_hand"].tradeoff_value if has_gift("gift.spare_hand") and working_optional_machine() else 1.0
-	state.position = arena.move_body(state.position, move * config.saint.speed * move_multiplier / config.tick_rate, config.saint.radius)
+	state.position = arena.move_body(state.position, move * saint_speed() * move_multiplier / config.tick_rate, config.saint.radius)
 	if is_destination(): update_destination_objective()
 	elif optional_mode(): update_optional_repairs()
 	elif state.position.distance_to(relay_position()) < config.relay.radius:
@@ -610,13 +632,30 @@ func update_optional_repairs():
 			nearby = i
 			break
 	if state.active_machine != "" and (nearby < 0 or state.machines[nearby].id != state.active_machine):
-		state.metrics.repairs_interrupted += 1
-		emit("machine_repair_interrupted", {"machine_id": state.active_machine, "reason": "LEFT_WORK_RING"})
-		state.active_machine = ""
+		var active_index = -1
+		for i in range(state.machines.size()):
+			if state.machines[i].id == state.active_machine: active_index = i; break
+		if state.repair_grace_ticks > 0 and active_index >= 0:
+			if state.repair_grace_until == 0:
+				state.repair_grace_until = state.tick + state.repair_grace_ticks
+				emit("frame_rule", {"frame_id": state.frame_id, "rule": "REPAIR_GRACE", "until": state.repair_grace_until})
+			if state.tick <= state.repair_grace_until:
+				nearby = active_index
+			else:
+				state.metrics.repairs_interrupted += 1
+				emit("machine_repair_interrupted", {"machine_id": state.active_machine, "reason": "LEFT_WORK_RING"})
+				state.active_machine = ""
+				state.repair_grace_until = 0
+		else:
+			state.metrics.repairs_interrupted += 1
+			emit("machine_repair_interrupted", {"machine_id": state.active_machine, "reason": "LEFT_WORK_RING"})
+			state.active_machine = ""
+	if nearby >= 0 and state.active_machine == state.machines[nearby].id and state.position.distance_to(Vector2(config.optional_repairs.machines[nearby].position[0], config.optional_repairs.machines[nearby].position[1])) < config.optional_repairs.radius:
+		state.repair_grace_until = 0
 	if nearby < 0 or state.tick < state.repair_blocked_until: return
 	var candidate = state.machines[nearby]
 	var candidate_data = config.optional_repairs.machines[nearby]
-	if candidate_data.reward == "heal" and state.hp >= config.saint.structure:
+	if candidate_data.reward == "heal" and state.hp >= saint_max_structure():
 		if candidate.deferred == "": emit("machine_repair_deferred", {"position": Vector2(candidate_data.position[0], candidate_data.position[1]), "machine_id": candidate.id, "reason": "INTEGRITY_FULL"})
 		candidate.deferred = "INTEGRITY_FULL"
 		return
@@ -651,7 +690,7 @@ func advance_optional_machine(index: int, amount: float, source = null, track_pr
 	state.metrics.useful_repairs += 1
 	match data.reward:
 		"scrap": record_scrap("optional_repair", int(data.amount))
-		"heal": state.hp = minf(config.saint.structure, state.hp + data.amount)
+		"heal": state.hp = minf(saint_max_structure(), state.hp + data.amount)
 		"stun":
 			var living = state.enemies.filter(func(enemy): return enemy.hp > 0)
 			if living.is_empty(): state.signal_reserve = int(data.amount)
@@ -683,9 +722,11 @@ func classify_failure() -> String:
 
 func evolution_status() -> String:
 	var completed = []
+	if has_evolution("evolution.mercy_rail"): completed.append("MERCY_RAIL")
+	if has_evolution("evolution.great_toll"): completed.append("GREAT_TOLL")
 	for weapon in state.weapons + state.reserve:
-		if weapon.get("rail", false): completed.append("MERCY_RAIL")
-		if weapon.get("toll", false): completed.append("GREAT_TOLL")
+		if weapon.get("rail", false) and "MERCY_RAIL" not in completed: completed.append("MERCY_RAIL")
+		if weapon.get("toll", false) and "GREAT_TOLL" not in completed: completed.append("GREAT_TOLL")
 	if not completed.is_empty(): return "+".join(completed) + "_COMPLETED"
 	var nailer_rank = 0
 	var bell_rank = 0
@@ -718,6 +759,14 @@ func build_result_summary(won: bool) -> Dictionary:
 	elif completed.is_empty(): cue = "Try one optional machine when its visible reward solves the next decision."
 	elif not state.evolved: cue = "Compare this reliable build with a visible evolution route next shift."
 	return {
+		"run_id": state.run_id,
+		"won": won,
+		"site_id": state.site_id,
+		"boss_id": current_boss_id(),
+		"route_id": state.route,
+		"optional_repairs": completed.size(),
+		"memory_ids": [state.memory_id] if state.memory_id != "" else [],
+		"evolution_ids": state.evolutions.duplicate(),
 		"failure_cause": cause,
 		"repairs": completed,
 		"top_weapon": top_weapon,
@@ -850,7 +899,13 @@ func update_enemies():
 		e.p = arena.move_body(e.p, direction * speed / config.tick_rate, e.radius)
 		if e.p.distance_to(state.position) < e.radius + config.saint.radius:
 			if e.type == "enemy.forklift_brute" and state.tick >= state.hurt_until:
-				state.position = arena.move_body(state.position, (state.position - e.p).normalized() * data.push_distance, config.saint.radius)
+				var push = float(data.push_distance)
+				var segment = site_wave_key()
+				if state.frame_id == "frame.keeper" and state.keeper_shove_segment != segment:
+					push *= state.knockback_multiplier
+					state.keeper_shove_segment = segment
+					emit("frame_rule", {"frame_id": state.frame_id, "rule": "BRACED", "position": state.position})
+				state.position = arena.move_body(state.position, (state.position - e.p).normalized() * push, config.saint.radius)
 			hurt_saint(data.damage, e.type)
 		update_relay_strike(e, data.damage)
 	if call_deferred_spawn:
@@ -955,6 +1010,8 @@ func update_weapons():
 		var toll = w.get("toll", false)
 		var shape = "rail" if rail else ("radial" if toll else data.shape)
 		var radius = config.rail.range if rail else (config.great_toll.range if toll else data.range)
+		if state.service_active and state.doctrine == 3 and shape in ["orbit", "censer", "halo"]:
+			radius *= config.shop_rules.procession_radius_multiplier
 		var target = null
 		var score = INF
 		for e in state.enemies:
@@ -1031,7 +1088,7 @@ func update_weapons():
 				e.p = arena.move_body(e.p, delta.normalized() * config.great_toll.push_distance, e.radius)
 			if shape == "rail" and e.major:
 				if optional_mode():
-					state.hp = minf(config.saint.structure, state.hp + config.rail.repair_on_elite_hit)
+					state.hp = minf(saint_max_structure(), state.hp + config.rail.repair_on_elite_hit)
 					emit("repair", {"position": state.position, "source": e.p})
 				else: repair_relay(config.rail.repair_on_elite_hit, e.p)
 			emit("hit", {"position": e.p, "amount": dealt, "weapon": w.id, "color": data.color})
@@ -1060,8 +1117,8 @@ func update_weapons():
 func apply_halo_repair(data: Dictionary):
 	if state.tick < state.repair_blocked_until: return
 	if apply_objective_repair_pulse(data.repair_progress, data.machine_range, state.position): return
-	if state.hp < config.saint.structure:
-		var actual = minf(data.saint_repair, config.saint.structure - state.hp)
+	if state.hp < saint_max_structure():
+		var actual = minf(data.saint_repair, saint_max_structure() - state.hp)
 		state.hp += actual
 		if actual > 0: emit("repair", {"position": state.position, "amount": actual, "source": state.position + Vector2(0, -28)})
 
@@ -1077,7 +1134,7 @@ func apply_objective_repair_pulse(amount: float, radius: float, source: Vector2)
 			if state.machines[i].complete: continue
 			var machine_data = config.optional_repairs.machines[i]
 			var p = Vector2(machine_data.position[0], machine_data.position[1])
-			if machine_data.reward == "heal" and state.hp >= config.saint.structure: continue
+			if machine_data.reward == "heal" and state.hp >= saint_max_structure(): continue
 			if source.distance_to(p) <= radius:
 				advance_optional_machine(i, amount, source)
 				return true
@@ -1087,7 +1144,7 @@ func update_pickups():
 	for p in state.pickups:
 		if p.p.distance_to(state.position) < config.combat.pickup_radius:
 			if p.kind == "scrap": collect_scrap(int(p.amount), "pickups")
-			else: state.hp = minf(config.saint.structure, state.hp + p.amount)
+			else: state.hp = minf(saint_max_structure(), state.hp + p.amount)
 			emit("pickup", {"position": p.p, "amount": p.amount})
 			p.amount = 0
 	state.pickups = state.pickups.filter(func(p): return p.amount > 0)
@@ -1139,7 +1196,7 @@ func restore(saved: Dictionary) -> bool:
 	if not state.has("mode"): state.mode = "relay"
 	if not state.has("machines"): state.machines = []
 	# Compatible defaults for existing authored-workshop saves.
-	var defaults = {"relay_last_hit": -999, "relay_damage_sources": {}, "relay_last_source": "", "backup_absorbed": 0.0, "calibrated": false, "service_active": false, "motes_left": 0,
+	var defaults = {"run_id": "legacy-%d-%d" % [saved.get("seed", 0), saved.get("tick", 0)], "frame_id": "frame.pilgrim", "max_hp": float(config.saint.structure), "move_speed": float(config.saint.speed), "repair_grace_ticks": 0, "repair_grace_until": 0, "knockback_multiplier": 1.0, "keeper_shove_segment": "", "relay_last_hit": -999, "relay_damage_sources": {}, "relay_last_source": "", "backup_absorbed": 0.0, "calibrated": false, "service_active": false, "motes_left": 0,
 		"spawn_count": 0, "active_machine": "", "repair_blocked_until": 0, "signal_reserve": 0, "kills_by_weapon": {}, "damage_taken": {}, "damage_by_wave": {}, "last_damage_source": "",
 		"scrap_sources": {"starting": int(config.economy.starting_scrap)}, "metrics": {"first_contact_tick": -1, "longest_threat_gap": 0, "threat_gap_started": state.get("tick", 0), "had_threat": false, "repairs_started": 0, "repairs_interrupted": 0, "useful_repairs": 0, "wasted_repairs": 0, "dead_shop_visits": 0}, "result_summary": {},
 		"scrap_by_segment": {}, "completed_site_ids": [], "defeated_boss_ids": [],

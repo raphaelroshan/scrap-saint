@@ -11,6 +11,8 @@ FILES = {
     "blessings": ROOT / "content/blessings/first_slice.json",
     "enemies": ROOT / "content/enemies/first_slice.json",
     "bosses": ROOT / "content/bosses/first_slice.json",
+    "frames": ROOT / "content/frames/first_chapter.json",
+    "progression": ROOT / "content/progression/first_chapter.json",
 }
 
 
@@ -41,7 +43,7 @@ def validate_slice(manifest: dict, data: dict) -> None:
     assert len(manifest['catalysts']) == 4, 'slice must enable four useful catalysts'
     assert len(manifest['gifts']) == 3 and manifest['gift_slots'] == 2, 'P14 slice needs three Gifts and two slots'
     assert len(manifest['enemies']) == 6, 'slice must enable six ordinary enemies'
-    assert len(manifest['blessings']) == 3 and len(set(manifest['blessings'])) == 3
+    assert len(manifest['blessings']) == 4 and len(set(manifest['blessings'])) == 4
     assert set(manifest['blessings']) <= blessings
     assert manifest['elite'] in enemies and manifest['boss'] in bosses
     assert set(manifest['enemies']) <= enemies
@@ -96,6 +98,14 @@ def validate_chapter(data: dict) -> None:
         assert route["boss"] in boss_ids, f"{route['id']}: unknown boss"
         assert set(route["enemy_pool"]) <= set(data["enemies_by_id"]), f"{route['id']}: unknown enemy"
         assert len(route["travel"]) >= 2, f"{route['id']}: travel needs more than one beat"
+        assert 0.0 <= float(route.get("arrival_repair_floor", -1)) <= 1.0, f"{route['id']}: invalid arrival repair floor"
+        profiles = route.get("wave_profiles", [])
+        assert len(profiles) == route["wave_count"], f"{route['id']}: every destination wave needs an authored profile"
+        for profile in profiles:
+            assert profile.get("name") and profile.get("pressure") and profile.get("counters")
+            assert profile.get("primary") in route["enemy_pool"]
+            assert profile.get("support") and set(profile["support"]) <= set(route["enemy_pool"])
+            assert profile.get("primary_weight", 0) > 0 and profile.get("spawn_interval", 0) > 0
         objective = route["objective"]
         assert objective.get("id") and objective.get("description") and objective.get("nodes")
         unique_ids(objective["nodes"], f"{route['id']} objective nodes")
@@ -104,6 +114,41 @@ def validate_chapter(data: dict) -> None:
         arena = json.loads(arena_path.read_text(encoding="utf-8"))
         assert arena.get("id") and arena.get("bounds") and arena.get("start") and arena.get("entries")
         assert route["memory"].get("id") and route["memory"].get("text") and route["memory"].get("conclusion")
+
+
+def validate_progression(data: dict) -> None:
+    frames = data["frames"].get("frames", [])
+    progression = data["progression"]
+    frame_ids = unique_ids(frames, "frames")
+    assert len(frames) == 3, "first chapter needs three role-distinct frames"
+    for frame in frames:
+        for field in ("name", "role", "structure", "speed", "starting_rule", "tradeoff", "description"):
+            assert frame.get(field) not in (None, ""), f"{frame['id']}: missing {field}"
+        assert frame["structure"] > 0 and frame["speed"] > 0
+
+    blessing_ids = {entry["id"] for entry in data["blessings"]["blessings"]}
+    recipe_ids = {entry["id"] for entry in data["items"]["evolutions"]}
+    starts = progression.get("starting_unlocks", {})
+    assert set(starts.get("frames", [])) <= frame_ids
+    assert set(starts.get("blessings", [])) <= blessing_ids
+    assert set(starts.get("recipes", [])) <= recipe_ids
+
+    chapter = json.loads((ROOT / "content/chapter/first_chapter.json").read_text(encoding="utf-8"))
+    route_sites = {route["site_id"] for route in chapter["routes"]}
+    route_memories = {route["memory"]["id"] for route in chapter["routes"]}
+    known_sites = route_sites | {"site.collapsed_workshop"}
+    assert set(starts.get("sites", [])) <= known_sites
+    memory_ids = unique_ids(progression.get("memories", []), "progression memories")
+    assert route_memories <= memory_ids, "every destination memory must be durable progression content"
+    for memory in progression.get("memories", []):
+        assert memory.get("site_id") in known_sites and memory.get("text")
+
+    reward_catalogues = {"frame": frame_ids, "blessing": blessing_ids, "site": known_sites, "recipe": recipe_ids}
+    unique_ids(progression.get("unlocks", []), "progression unlocks")
+    for unlock in progression.get("unlocks", []):
+        assert unlock.get("condition") and unlock.get("reason")
+        assert unlock.get("reward_type") in reward_catalogues
+        assert unlock.get("reward_id") in reward_catalogues[unlock["reward_type"]]
 
 
 def main() -> int:
@@ -122,6 +167,7 @@ def main() -> int:
     validate_slice(load(ROOT / 'content/slices/first_shift.json'), data)
     data["enemies_by_id"] = enemy_ids
     validate_chapter(data)
+    validate_progression(data)
 
     if len(blessings) < 3:
         raise AssertionError("first slice needs at least three Blessings")
@@ -166,7 +212,7 @@ def main() -> int:
             raise AssertionError(f"{boss['id']}: boss needs at least two rule phases")
 
     print("PASS: Scrap Saint first-slice and first-chapter content contracts")
-    print(f"  items={len(items)} evolutions={len(evolutions)} blessings={len(blessings)} enemies={len(enemies)} bosses={len(bosses)}")
+    print(f"  items={len(items)} evolutions={len(evolutions)} blessings={len(blessings)} frames={len(data['frames']['frames'])} enemies={len(enemies)} bosses={len(bosses)}")
     return 0
 
 

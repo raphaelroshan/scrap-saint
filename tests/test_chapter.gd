@@ -50,11 +50,14 @@ func _initialize():
 	sim.state.calibrated = true
 	sim.state.motes_left = 4
 	sim.state.forecast = true
+	sim.state.hp = 10
 	finish_travel(sim)
 	check(sim.state.site_id == "site.brass_choir_relay" and sim.arena.data.id == "arena.brass_choir_relay", "Brass Choir arrival loads authored arena")
+	check(sim.state.hp == sim.saint_max_structure(), "road rest repairs structure to the authored arrival floor")
 	check(not sim.state.service_used and not sim.state.service_active and not sim.state.calibrated and sim.state.motes_left == 0 and not sim.state.forecast, "arrival clears prior-wave services and timers")
 	check(sim.state.weapons == carried_weapons and sim.state.reserve == carried_reserve and sim.state.catalysts == carried_catalysts, "build carries into destination unchanged")
 	check(sim.current_enemy_pool() == ["enemy.choir_drone", "enemy.cinder_spitter", "enemy.rivet_hound"] and sim.current_boss_id() == "boss.choir_regent", "Brass route owns enemy pool and boss")
+	check(sim.wave_profile().name == "OUT-OF-TIME ESCORT" and sim.wave_profile(2).primary == "enemy.cinder_spitter", "Brass route exposes authored wave identities")
 	sim.state.tick = 73
 	sim.spawn(sim.current_boss_id())
 	var regent = sim.state.enemies[-1]
@@ -104,6 +107,7 @@ func _initialize():
 	check(root.command("choose_route", "route.rootworks") == "OK", "Rootworks route accepted")
 	finish_travel(root)
 	check(root.state.site_id == "site.rootworks_pump" and root.current_boss_id() == "boss.factory_heart", "Rootworks arrival owns arena and boss")
+	check(root.wave_profile().name == "GRAFTED HANDS" and root.wave_profile(4).name == "THE HEART'S QUOTA", "Rootworks route exposes authored wave identities")
 	var root_objective = root.objective_data()
 	var pump = Vector2(root_objective.nodes[0].position[0], root_objective.nodes[0].position[1])
 	root.state.position = pump

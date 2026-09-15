@@ -21,7 +21,7 @@
       "speed": 250,
       "repair_grace_ticks": 45,
       "knockback_multiplier": 1.0,
-      "starting_rule": "Interrupted repair work continues briefly while the Saint repositions.",
+      "starting_rule": "Workshop-machine work continues briefly while the Saint repositions.",
       "tradeoff": "Lower maximum structure.",
       "description": "Long legs, a folding map arm, and just enough time to reconsider a route."
     },

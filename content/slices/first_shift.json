@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "slice.first_shift",
-  "version": "0.1.0",
+  "version": "0.2.0-preview",
   "tick_rate": 60,
   "wave_ticks": 4200,
   "wave_count": 8,
@@ -231,7 +231,8 @@
   "blessings": [
     "blessing.workshop_gospel",
     "blessing.bell_ward",
-    "blessing.mourner"
+    "blessing.mourner",
+    "blessing.procession"
   ],
   "enemies": {
     "enemy.rivet_hound": {
@@ -381,7 +382,8 @@
     "doctrine_tags": [
       "labour",
       "witness",
-      "mourn"
+      "mourn",
+      "orbit"
     ],
     "threat_support": [
       "catalyst.cracked_bell_clapper",
@@ -391,6 +393,7 @@
     "calibration_multiplier": 0.9,
     "bell_warning_multiplier": 1.5,
     "mourner_motes": 6,
+    "procession_radius_multiplier": 1.35,
     "services": [
       {
         "name": "Workshop restoration",
@@ -405,6 +408,11 @@
       {
         "name": "Remember the fallen",
         "description": "Next wave: the first six defeats leave healing motes.",
+        "cost": 5
+      },
+      {
+        "name": "Escort formation",
+        "description": "Next wave: orbiting relics travel 35% farther from the Saint.",
         "cost": 5
       }
     ]

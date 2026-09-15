@@ -7,7 +7,7 @@ import sys
 
 root = Path(__file__).resolve().parents[1]
 data = {
-    'build': '0.1.0',
+    'build': '0.2.0-preview',
     'base_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip(),
     'dirty': bool(subprocess.check_output(['git', 'status', '--porcelain'], cwd=root, text=True)),
     'godot': subprocess.check_output([sys.argv[1], '--version'], text=True).strip(),

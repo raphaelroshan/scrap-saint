@@ -18,7 +18,7 @@ func _initialize():
 	check(settings.rebind("move_up", KEY_I) and not settings.rebind("fire", KEY_F), "known controls rebind and unknown controls reject")
 	settings.apply_input_map()
 	var key_events = InputMap.action_get_events("move_up").filter(func(event): return event is InputEventKey)
-	check(key_events.size() == 1 and key_events[0].physical_keycode == KEY_I, "keyboard binding applies to named action")
+	check(key_events.any(func(event): return event.physical_keycode == KEY_I) and key_events.any(func(event): return event.physical_keycode == KEY_UP), "keyboard binding applies while arrows remain available")
 	var path = "user://settings_test.save"
 	check(settings.save_to(path), "settings save")
 	var loaded = Settings.new()
