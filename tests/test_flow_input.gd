@@ -99,12 +99,14 @@ func run_checks():
 	game.build_ui()
 	await process_frame
 	check(game.sim.state.phase == "route", "Foreman completion reaches route selection")
-	check(root.gui_get_focus_owner() is Button and root.gui_get_focus_owner().text.begins_with("CHOOSE "), "route selection has a controller focus target")
+	check(root.gui_get_focus_owner() is Button and root.gui_get_focus_owner().text == "BRASS CHOIR RELAY", "expedition map has a controller focus target")
 	await activate(root.gui_get_focus_owner())
+	check(game.map_selection == "route.brass_choir" and game.sim.state.phase == "route", "controller preview does not accept an assignment implicitly")
+	await activate(button_with(game, "ACCEPT ASSIGNMENT", true))
 	check(game.sim.state.phase == "travel", "focused route card accepts controller-style input")
 
 	while game.sim.state.phase == "travel":
-		check(root.gui_get_focus_owner() is Button, "each travel beat has a focused continuation")
+		check(root.gui_get_focus_owner() is Button and root.gui_get_focus_owner().text.contains(" · "), "each in-between area has a focused authored choice")
 		await activate(root.gui_get_focus_owner())
 	check(game.sim.state.phase == "combat" and game.sim.is_destination(), "travel input reaches the selected destination")
 

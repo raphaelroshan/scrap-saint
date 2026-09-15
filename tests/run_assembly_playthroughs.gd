@@ -1,6 +1,11 @@
 extends SceneTree
 const Sim = preload("res://game/simulation.gd")
 
+func choose_road(sim):
+	var options = sim.current_road_node().get("choices", [])
+	var affordable = options.filter(func(choice): return int(choice.cost) <= int(sim.state.scrap))
+	if not affordable.is_empty(): sim.command("choose_road_option", affordable[-1].id)
+
 func weapon(id: String, rank = 1, toll = false):
 	return {"id": id, "rank": rank, "rail": false, "toll": toll, "ready": 0}
 
@@ -46,7 +51,7 @@ func _initialize():
 				sim.command("choose_route", next_route(sim, scenario.route_path))
 				continue
 			if sim.state.phase == "travel":
-				sim.command("advance_travel")
+				choose_road(sim)
 				continue
 			if sim.state.phase == "memory":
 				sim.command("accept_memory")

@@ -76,15 +76,17 @@ func run_checks():
 	game.sim.state.hp = 10
 	game.build_ui()
 	for child in game.ui.get_children():
-		if child is Button and child.text == "CHOOSE ROOTWORKS PUMP": child.pressed.emit(); break
+		if child is Button and child.text == "ROOTWORKS PUMP": child.pressed.emit(); break
+	for child in game.ui.get_children():
+		if child is Button and child.text.begins_with("ACCEPT ASSIGNMENT"): child.pressed.emit(); break
 	check(game.sim.state.phase == "travel" and game.sim.state.route == "route.rootworks", "route button sends authoritative choice")
-	for beat in range(3):
+	while game.sim.state.phase == "travel":
 		for child in game.ui.get_children():
-			if child is Button and (child.text == "CONTINUE ALONG THE ROAD" or child.text == "ENTER ROOTWORKS PUMP"):
+			if child is Button and child.text.contains("· FREE"):
 				child.pressed.emit()
 				break
 	check(game.sim.state.phase == "combat" and game.sim.state.site_id == "site.rootworks_pump", "travel buttons arrive at selected destination")
-	check(game.notification == "ROAD REST / 90 structure restored", "arrival explains the between-site recovery")
+	check(game.notification == "ROAD REST / 59 structure restored", "arrival explains recovery without erasing the road consequence")
 	game.profile.state.unlocked_frames.append("frame.keeper")
 	game.profile.state.unlocked_blessings.append("blessing.procession")
 	game.screen = "menu"

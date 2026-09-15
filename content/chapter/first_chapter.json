@@ -1,6 +1,25 @@
 {
   "id": "chapter.first_pilgrimage",
   "name": "The First Pilgrimage",
+  "expedition_map": {
+    "origin_site_id": "site.collapsed_workshop",
+    "sites": [
+      {"id": "site.collapsed_workshop", "name": "Collapsed Workshop", "tier": 0, "position": [0.08, 0.50]},
+      {"id": "site.brass_choir_relay", "name": "Brass Choir", "tier": 1, "position": [0.43, 0.27]},
+      {"id": "site.rootworks_pump", "name": "Rootworks", "tier": 1, "position": [0.43, 0.73]},
+      {"id": "site.pale_archive", "name": "Pale Archive", "tier": 2, "position": [0.82, 0.12]},
+      {"id": "site.red_foundry", "name": "Red Foundry", "tier": 2, "position": [0.82, 0.50]},
+      {"id": "site.null_assembly", "name": "Null Assembly", "tier": 2, "position": [0.82, 0.88]}
+    ],
+    "edges": [
+      {"route_id": "route.brass_choir", "from_site_id": "site.collapsed_workshop", "to_site_id": "site.brass_choir_relay"},
+      {"route_id": "route.rootworks", "from_site_id": "site.collapsed_workshop", "to_site_id": "site.rootworks_pump"},
+      {"route_id": "route.pale_archive", "from_site_id": "site.brass_choir_relay", "to_site_id": "site.pale_archive"},
+      {"route_id": "route.red_foundry", "from_site_id": "site.brass_choir_relay", "to_site_id": "site.red_foundry"},
+      {"route_id": "route.red_foundry", "from_site_id": "site.rootworks_pump", "to_site_id": "site.red_foundry"},
+      {"route_id": "route.null_assembly", "from_site_id": "site.rootworks_pump", "to_site_id": "site.null_assembly"}
+    ]
+  },
   "routes": [
     {
       "id": "route.brass_choir",
@@ -9,11 +28,14 @@
       "terminal": false,
       "route_salvage": 7,
       "site_id": "site.brass_choir_relay",
+      "from_site_id": "site.collapsed_workshop",
+      "assignment_id": "assignment.brass_choir",
       "name": "Brass Choir Relay",
       "direction": "NORTH ROAD / THREE SIGNAL FIRES",
       "description": "Tune three relay bells while the Choir bends the timing of every mechanism.",
       "cost": 8,
       "news": "Ada-9 heard three bells answer one another. None kept the same time.",
+      "risk": "Frayed warning wire crosses an exposed north road. Structure or Scrap may pay the toll.",
       "arena_path": "res://content/arenas/brass_choir_relay.json",
       "wave_count": 4,
       "wave_ticks": 3000,
@@ -27,7 +49,7 @@
       ],
       "boss": "boss.choir_regent",
       "boss_hp": 1150,
-      "arrival_repair_floor": 1.0,
+      "arrival_repair_floor": 0.6,
       "objective": {
         "id": "objective.tune_choir_relays",
         "name": "TUNE THE THREE RELAYS",
@@ -54,6 +76,31 @@
         "Bell wire crosses the road. Every loose bolt hums before the wind arrives.",
         "The Choir Relay answers with a note too orderly to be welcoming."
       ],
+      "road_nodes": [
+        {
+          "id": "road.brass.warning_wire",
+          "kind": "encounter",
+          "name": "The Warning Wire",
+          "news": "The wire rings before anything moves. Ada-9's report was accurate.",
+          "risk": "Crossing untreated costs 12 Structure; careful splicing costs 2 Scrap.",
+          "choices": [
+            {"id": "choice.brass.splice", "label": "Splice the warning wire", "description": "Spend 2 Scrap and leave a working alarm for the return road.", "cost": 2, "structure_delta": 0, "scrap_delta": 0, "flag": "road.brass.warning_restored", "result": "The wire learns one honest note."},
+            {"id": "choice.brass.cross", "label": "Cross beneath the ringing", "description": "Keep your Scrap. Loose cable tears 12 Structure from the chassis.", "cost": 0, "structure_delta": -12, "scrap_delta": 0, "flag": "road.brass.warning_endured", "result": "The Saint crosses before the third false alarm."}
+          ]
+        },
+        {
+          "id": "road.brass.ada_waycart",
+          "kind": "merchant",
+          "name": "Ada-9's Waycart",
+          "news": "A hand-painted sign offers repairs, bearings, and news in that order.",
+          "risk": "Repairs consume the same Scrap needed at the next workshop.",
+          "choices": [
+            {"id": "choice.brass.repair", "label": "Buy a road repair", "description": "Spend 4 Scrap to restore 22 Structure.", "cost": 4, "structure_delta": 22, "scrap_delta": 0, "flag": "road.brass.repaired", "result": "Ada-9 tightens every bolt that still believes in threads."},
+            {"id": "choice.brass.news", "label": "Buy the Choir timings", "description": "Spend 1 Scrap. Carry Ada-9's warning into the destination record.", "cost": 1, "structure_delta": 0, "scrap_delta": 0, "flag": "road.brass.choir_timings", "result": "Three bad timings become one useful warning."},
+            {"id": "choice.brass.pass", "label": "Keep moving", "description": "Spend nothing and preserve the current build.", "cost": 0, "structure_delta": 0, "scrap_delta": 0, "flag": "road.brass.passed_waycart", "result": "Ada-9 salutes with a wrench."}
+          ]
+        }
+      ],
       "memory": {
         "id": "memory.borrowed_bell",
         "title": "MEMORY / THE BORROWED BELL",
@@ -68,11 +115,14 @@
       "terminal": false,
       "route_salvage": 7,
       "site_id": "site.rootworks_pump",
+      "from_site_id": "site.collapsed_workshop",
+      "assignment_id": "assignment.rootworks",
       "name": "Rootworks Pump",
       "direction": "LOW ROAD / WATER UNDER IRON",
       "description": "Stabilize an exposed water pump while grafted machines repair one another.",
       "cost": 6,
       "news": "Morrow found wet footprints made by machines that have no feet.",
+      "risk": "Flooded iron hides a damaged culvert. Safe bracing costs Scrap; wading costs Structure.",
       "arena_path": "res://content/arenas/rootworks_pump.json",
       "wave_count": 4,
       "wave_ticks": 3000,
@@ -86,7 +136,7 @@
       ],
       "boss": "boss.factory_heart",
       "boss_hp": 1250,
-      "arrival_repair_floor": 1.0,
+      "arrival_repair_floor": 0.6,
       "objective": {
         "id": "objective.stabilize_rootworks_pump",
         "name": "STABILIZE THE WATER PUMP",
@@ -110,6 +160,31 @@
         "The road sinks until old pipes become handrails.",
         "Warm water clicks beneath the plates. Something below keeps trying to repair the road.",
         "A pump coughs once in the dark, then waits for your answer."
+      ],
+      "road_nodes": [
+        {
+          "id": "road.rootworks.flooded_culvert",
+          "kind": "encounter",
+          "name": "The Flooded Culvert",
+          "news": "Warm water rises around a brace cut with the Workshop's old mark.",
+          "risk": "Bracing the crossing costs 3 Scrap; forcing the ford costs 10 Structure.",
+          "choices": [
+            {"id": "choice.rootworks.brace", "label": "Brace the old crossing", "description": "Spend 3 Scrap and leave the culvert safer than you found it.", "cost": 3, "structure_delta": 0, "scrap_delta": 0, "flag": "road.rootworks.culvert_braced", "result": "The old brace takes weight again."},
+            {"id": "choice.rootworks.ford", "label": "Wade through the warm water", "description": "Keep your Scrap. The flooded iron costs 10 Structure.", "cost": 0, "structure_delta": -10, "scrap_delta": 0, "flag": "road.rootworks.ford_endured", "result": "Water drains from the Saint in patient red lines."}
+          ]
+        },
+        {
+          "id": "road.rootworks.morrow_cart",
+          "kind": "service",
+          "name": "Morrow's Tinker Cart",
+          "news": "Morrow has heard the pump answer machines that never learned its name.",
+          "risk": "Repairs consume destination Scrap; selling the spare valve gives up a useful part.",
+          "choices": [
+            {"id": "choice.rootworks.repair", "label": "Commission a field patch", "description": "Spend 4 Scrap to restore 20 Structure.", "cost": 4, "structure_delta": 20, "scrap_delta": 0, "flag": "road.rootworks.repaired", "result": "Morrow seals the chassis with a strip of old boiler prayer."},
+            {"id": "choice.rootworks.sell_valve", "label": "Sell the spare valve", "description": "Gain 4 Scrap and record the part left behind.", "cost": 0, "structure_delta": 0, "scrap_delta": 4, "flag": "road.rootworks.valve_sold", "result": "The cart keeps the valve; the Saint keeps moving."},
+            {"id": "choice.rootworks.pass", "label": "Keep the spare valve", "description": "Spend nothing and preserve the current build.", "cost": 0, "structure_delta": 0, "scrap_delta": 0, "flag": "road.rootworks.kept_valve", "result": "Morrow marks the low road clear."}
+          ]
+        }
       ],
       "memory": {
         "id": "memory.borrowed_arm",

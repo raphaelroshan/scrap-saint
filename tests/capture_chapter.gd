@@ -12,7 +12,9 @@ func capture(game, directory: String, name: String):
 	print("CHAPTER CAPTURE ", path)
 
 func finish_travel(sim):
-	while sim.state.phase == "travel": sim.command("advance_travel")
+	while sim.state.phase == "travel":
+		var free_choice = sim.current_road_node().choices.filter(func(choice): return int(choice.cost) == 0)[0]
+		sim.command("choose_road_option", free_choice.id)
 
 func arrive_terminal(game, parent_site: String, first_route: String, first_memory: String, terminal_route: String):
 	game.sim.start(0, 147, "optional")
@@ -56,7 +58,6 @@ func run_capture():
 	await capture(game, directory, "ROUTE_CHOICE")
 
 	game.sim.command("choose_route", "route.brass_choir")
-	game.sim.command("advance_travel")
 	await capture(game, directory, "TRAVEL_BRASS")
 	finish_travel(game.sim)
 	game.sim.state.position = Vector2(50, 170)

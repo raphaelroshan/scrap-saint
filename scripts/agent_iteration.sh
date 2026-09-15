@@ -8,6 +8,7 @@ mkdir -p artifacts/agent-iteration
 "$GODOT_BIN" --headless --path . --script res://tests/test_arena.gd | tee artifacts/agent-iteration/arena.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_simulation.gd | tee artifacts/agent-iteration/simulation.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_chapter.gd | tee artifacts/agent-iteration/chapter.log
+"$GODOT_BIN" --headless --path . --script res://tests/test_expedition_map.gd | tee artifacts/agent-iteration/expedition-map.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_optional_repairs.gd | tee artifacts/agent-iteration/optional-repairs.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_shop.gd | tee artifacts/agent-iteration/shop.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_variety.gd | tee artifacts/agent-iteration/variety.log
@@ -23,6 +24,7 @@ mkdir -p artifacts/agent-iteration
 "$GODOT_BIN" --headless --path . --script res://tests/run_evolution_playthroughs.gd | tee artifacts/agent-iteration/evolution-playthroughs.log
 "$GODOT_BIN" --path . -- --capture-dir="$PWD/artifacts/agent-iteration" | tee artifacts/agent-iteration/capture.log
 "$GODOT_BIN" --path . --script res://tests/capture_chapter.gd -- --capture-dir="$PWD/artifacts/agent-iteration" | tee artifacts/agent-iteration/chapter-capture.log
+"$GODOT_BIN" --path . --script res://tests/capture_expedition_map.gd -- --capture-dir="$PWD/artifacts/agent-iteration" | tee artifacts/agent-iteration/expedition-map-capture.log
 "$GODOT_BIN" --path . --script res://tests/capture_core_quality.gd | tee artifacts/agent-iteration/core-quality-capture.log
 "$GODOT_BIN" --path . --script res://tests/capture_assembly.gd | tee artifacts/agent-iteration/assembly-capture.log
 "$GODOT_BIN" --path . --script res://tests/capture_evolutions.gd | tee artifacts/agent-iteration/evolution-capture.log

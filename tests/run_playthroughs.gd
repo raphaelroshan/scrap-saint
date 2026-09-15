@@ -18,6 +18,11 @@ func policy_route(sim, first_route: String, variant: int) -> String:
 	if sim.state.site_id == "site.rootworks_pump": return "route.red_foundry" if variant % 2 == 0 else "route.null_assembly"
 	return ""
 
+func choose_road(sim):
+	var options = sim.current_road_node().get("choices", [])
+	var affordable = options.filter(func(choice): return int(choice.cost) <= int(sim.state.scrap))
+	if not affordable.is_empty(): sim.command("choose_road_option", affordable[-1].id)
+
 func _initialize():
 	var results = []
 	var args = OS.get_cmdline_user_args()
@@ -58,7 +63,7 @@ func _initialize():
 				sim.command("choose_route", policy_route(sim, scenario.route_id, variant))
 				continue
 			if sim.state.phase == "travel":
-				sim.command("advance_travel")
+				choose_road(sim)
 				continue
 			if sim.state.phase == "memory":
 				sim.command("accept_memory")

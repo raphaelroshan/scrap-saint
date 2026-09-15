@@ -16,7 +16,9 @@ func reach_route(sim):
 
 func finish_travel(sim):
 	while sim.state.phase == "travel":
-		check(sim.command("advance_travel") == "OK", "travel beat advances")
+		var node = sim.current_road_node()
+		var free_choice = node.choices.filter(func(choice): return int(choice.cost) == 0)[0]
+		check(sim.command("choose_road_option", free_choice.id) == "OK", "authored road choice advances")
 
 func _initialize():
 	var sim = Sim.new()
@@ -40,7 +42,8 @@ func _initialize():
 	check(sim.command("choose_route", "route.brass_choir") == "OK", "Brass Choir route accepted")
 	check(sim.state.phase == "travel" and sim.state.scrap == 32, "route cost is authoritative")
 	check(sim.command("choose_route", "route.rootworks") == "OUTSIDE_WINDOW", "route cannot be changed during travel")
-	check(sim.command("advance_travel") == "OK", "first travel beat advances")
+	check(sim.command("advance_travel") == "ROAD_CHOICE_REQUIRED", "travel cannot bypass an in-between area")
+	check(sim.command("choose_road_option", "choice.brass.splice") == "OK", "first road encounter resolves through its authored choice")
 	var travel_save = sim.snapshot()
 	var restored = Sim.new()
 	check(restored.restore(travel_save), "travel save restores")
@@ -53,7 +56,7 @@ func _initialize():
 	sim.state.hp = 10
 	finish_travel(sim)
 	check(sim.state.site_id == "site.brass_choir_relay" and sim.arena.data.id == "arena.brass_choir_relay", "Brass Choir arrival loads authored arena")
-	check(sim.state.hp == sim.saint_max_structure(), "road rest repairs structure to the authored arrival floor")
+	check(sim.state.hp == sim.saint_max_structure() * 0.6, "road rest repairs only to the authored floor without erasing road consequences")
 	check(not sim.state.service_used and not sim.state.service_active and not sim.state.calibrated and sim.state.motes_left == 0 and not sim.state.forecast, "arrival clears prior-wave services and timers")
 	check(sim.state.weapons == carried_weapons and sim.state.reserve == carried_reserve and sim.state.catalysts == carried_catalysts, "build carries into destination unchanged")
 	check(sim.current_enemy_pool() == ["enemy.choir_drone", "enemy.cinder_spitter", "enemy.rivet_hound"] and sim.current_boss_id() == "boss.choir_regent", "Brass route owns enemy pool and boss")
@@ -112,6 +115,7 @@ func _initialize():
 	check(sim.state.phase == "memory" and sim.state.memory_id == "memory.borrowed_bell", "Brass completion opens its authored memory")
 	var brass_memory_save = sim.snapshot()
 	check(restored.restore(brass_memory_save) and restored.state.phase == "memory", "memory state saves and restores")
+	check(sim.state.road_history.size() == 2 and sim.state.assignment_statuses["route.brass_choir"] == "accepted", "mid-site memory preserves the accepted assignment and every road decision")
 	var scrap_before_mid_memory = sim.state.scrap
 	check(sim.command("accept_memory") == "OK" and sim.state.phase == "route" and not sim.state.chapter_complete, "accepting a mid-site memory continues the pilgrimage")
 	check(sim.state.memory_ids == ["memory.borrowed_bell"] and sim.state.scrap == scrap_before_mid_memory, "mid-site memory and previously granted road salvage persist")
@@ -152,6 +156,7 @@ func _initialize():
 	check(sim.state.result_summary.completed_site_ids == ["site.collapsed_workshop", "site.brass_choir_relay", "site.pale_archive"] and sim.state.result_summary.defeated_boss_ids == ["boss.foreman_engine", "boss.choir_regent", "boss.archivist_prime"], "Results expose all three completed sites and bosses")
 	check(sim.state.result_summary.memory_ids == ["memory.borrowed_bell", "memory.borrowed_lens"] and sim.state.result_summary.route_ids == ["route.brass_choir", "route.pale_archive"], "Results preserve the complete route and memory history")
 	check(sim.state.result_summary.route_id == "route.brass_choir" and sim.state.result_summary.terminal_route_id == "route.pale_archive", "Results retain the profile-compatible first route and explicit terminal route")
+	check(sim.state.result_summary.road_history.size() == 4 and sim.state.result_summary.assignment_ids == ["assignment.brass_choir", "assignment.pale_archive"], "terminal Results preserve both assignments and every road decision")
 
 	var root = Sim.new()
 	root.start(2, 104729, "optional")

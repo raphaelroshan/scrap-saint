@@ -33,7 +33,7 @@ func start(doctrine: int = 0, seed_value: int = 147, mode: String = "relay", fra
 	arena.load_file("res://content/arenas/collapsed_workshop.json")
 	if not frames.has(frame_id): frame_id = "frame.pilgrim"
 	var frame = frames[frame_id]
-	state = {"mode": "optional" if mode == "optional" else "relay", "machines": [], "version": 2, "run_id": run_id if run_id != "" else "test-%d-%d-%s" % [seed_value, doctrine, frame_id], "frame_id": frame_id, "max_hp": float(frame.structure), "move_speed": float(frame.speed), "repair_grace_ticks": int(frame.repair_grace_ticks), "knockback_multiplier": float(frame.knockback_multiplier), "keeper_shove_segment": "", "repair_grace_until": 0, "arena_id": arena.data.id, "site_id": "site.collapsed_workshop", "route": "", "route_history": [], "travel_step": 0, "objective": [], "objective_complete": false, "objective_lock_until": 0, "weapon_lock_until": 0, "memory_id": "", "memory_ids": [], "chapter_complete": false, "pressure_until": 0, "pressure_multiplier": 1.0, "seed": seed_value, "rng": maxi(1, seed_value), "tick": 0, "phase": "combat", "paused": false,
+	state = {"mode": "optional" if mode == "optional" else "relay", "machines": [], "version": 3, "run_id": run_id if run_id != "" else "test-%d-%d-%s" % [seed_value, doctrine, frame_id], "frame_id": frame_id, "max_hp": float(frame.structure), "move_speed": float(frame.speed), "repair_grace_ticks": int(frame.repair_grace_ticks), "knockback_multiplier": float(frame.knockback_multiplier), "keeper_shove_segment": "", "repair_grace_until": 0, "arena_id": arena.data.id, "site_id": "site.collapsed_workshop", "route": "", "route_history": [], "route_origin_site_id": "", "travel_step": 0, "assignment_statuses": {}, "road_history": [], "road_flags": [], "road_totals": {"route_cost": 0, "service_cost": 0, "scrap_delta": 0, "structure_delta": 0.0}, "objective": [], "objective_complete": false, "objective_lock_until": 0, "weapon_lock_until": 0, "memory_id": "", "memory_ids": [], "chapter_complete": false, "pressure_until": 0, "pressure_multiplier": 1.0, "seed": seed_value, "rng": maxi(1, seed_value), "tick": 0, "phase": "combat", "paused": false,
 		"wave": 1, "wave_tick": 0, "doctrine": doctrine, "position": arena.point(arena.data.start), "facing": Vector2.UP,
 		"hp": float(frame.structure), "relay_hp": float(config.relay.structure * config.relay.starting_fraction), "progress": 0.0,
 		"scrap": int(config.economy.starting_scrap), "shards": 0, "kills": 0, "next_id": 1,
@@ -120,8 +120,7 @@ func command(action: String, value = null) -> String:
 		if route_result == "OK": state.last_reason = route_result
 		return route_result
 	if state.phase == "travel":
-		var travel_result = advance_travel() if action == "advance_travel" else "OUTSIDE_WINDOW"
-		state.last_reason = travel_result
+		var travel_result = choose_road_option(str(value)) if action == "choose_road_option" else (advance_travel() if action == "advance_travel" else "OUTSIDE_WINDOW")
 		return travel_result
 	if state.phase == "memory":
 		if action != "accept_memory": return "OUTSIDE_WINDOW"
@@ -227,29 +226,102 @@ func current_boss_id() -> String:
 func current_enemy_pool() -> Array:
 	return current_route().get("enemy_pool", config.enemies.keys()) if is_destination() else config.enemies.keys()
 
+func available_routes() -> Array:
+	var result: Array = []
+	var visible_ids: Array = []
+	for edge in chapter.get("expedition_map", {}).get("edges", []):
+		if str(edge.from_site_id) == str(state.site_id) and routes.has(str(edge.route_id)) and str(edge.route_id) not in visible_ids:
+			visible_ids.append(str(edge.route_id))
+	for route in chapter.routes:
+		if route.id in visible_ids or (visible_ids.is_empty() and str(route.get("from_site_id", chapter.expedition_map.origin_site_id)) == str(state.site_id)):
+			result.append(route)
+	return result
+
+func assignment_status(route_id: String) -> String:
+	if state.get("route", "") == route_id and state.get("phase", "") in ["travel", "combat", "shop", "memory", "won", "lost"]:
+		return "accepted"
+	if state.get("assignment_statuses", {}).has(route_id):
+		return str(state.assignment_statuses[route_id])
+	for route in available_routes():
+		if route.id == route_id: return "available"
+	return "unavailable"
+
+func refresh_assignments():
+	for route_id in state.assignment_statuses:
+		if state.assignment_statuses[route_id] != "accepted": state.assignment_statuses[route_id] = "unavailable"
+	for route in available_routes(): state.assignment_statuses[route.id] = "available"
+
+func road_nodes_for(route: Dictionary) -> Array:
+	if route.has("road_nodes"): return route.road_nodes
+	# Compatibility extension point: newly-authored sites may land with legacy travel
+	# beats before they receive bespoke road choices. Each beat still requires a command.
+	var nodes: Array = []
+	for i in range(route.get("travel", []).size()):
+		nodes.append({"id": "%s.passage.%d" % [route.id, i], "kind": "passage", "name": "Road passage", "news": route.travel[i], "risk": "No reported hazard.", "choices": [{"id": "%s.continue.%d" % [route.id, i], "label": "Continue", "description": "Follow the authored road.", "cost": 0, "structure_delta": 0, "scrap_delta": 0, "flag": "%s.passage.%d" % [route.id, i], "result": route.travel[i]}]})
+	return nodes
+
+func current_road_node() -> Dictionary:
+	var route = current_route()
+	if route.is_empty(): return {}
+	var nodes = road_nodes_for(route)
+	var index = int(state.get("travel_step", 0))
+	return nodes[index] if index >= 0 and index < nodes.size() else {}
+
 func choose_route(route_id: String) -> String:
 	if not routes.has(route_id): return "INVALID_ROUTE"
 	var route = routes[route_id]
+	if assignment_status(route_id) != "available": return "ROUTE_UNAVAILABLE"
 	if state.site_id not in route.get("from_sites", ["site.collapsed_workshop"]): return "ROUTE_NOT_CONNECTED"
 	if state.scrap < int(route.cost): return "INSUFFICIENT_SCRAP"
 	state.scrap -= int(route.cost)
 	state.route = route_id
 	state.route_history.append(route_id)
+	state.route_origin_site_id = state.site_id
 	state.travel_step = 0
+	state.road_totals.route_cost += int(route.cost)
+	state.road_totals.scrap_delta -= int(route.cost)
+	state.assignment_statuses[route_id] = "accepted"
 	state.phase = "travel"
 	state.enemies.clear()
 	state.hazards.clear()
 	state.pickups.clear()
 	state.transactions.append({"tick": state.tick, "site_id": state.site_id, "wave": state.wave, "action": "choose_route", "value": route_id, "cost": int(route.cost)})
-	emit("route_chosen", {"route": route_id})
+	emit("route_chosen", {"route": route_id, "assignment_id": route.get("assignment_id", route_id), "road_nodes": road_nodes_for(route).size()})
 	return "OK"
 
 func advance_travel() -> String:
+	return "ROAD_CHOICE_REQUIRED" if not current_road_node().is_empty() else "INVALID_ROUTE"
+
+func choose_road_option(option_id: String) -> String:
 	var route = current_route()
-	if route.is_empty(): return "INVALID_ROUTE"
+	var node = current_road_node()
+	if route.is_empty() or node.is_empty(): return "INVALID_ROUTE"
+	var choice: Dictionary = {}
+	for candidate in node.choices:
+		if str(candidate.id) == option_id:
+			choice = candidate
+			break
+	if choice.is_empty(): return "INVALID_ROAD_OPTION"
+	var cost = int(choice.get("cost", 0))
+	if state.scrap < cost: return "INSUFFICIENT_SCRAP"
+	var before_hp = float(state.hp)
+	var scrap_delta = int(choice.get("scrap_delta", 0)) - cost
+	state.scrap += scrap_delta
+	state.hp = clampf(state.hp + float(choice.get("structure_delta", 0)), 1.0, saint_max_structure())
+	var actual_structure_delta = float(state.hp) - before_hp
+	var flag = str(choice.get("flag", ""))
+	if flag != "" and flag not in state.road_flags: state.road_flags.append(flag)
+	var record = {"route_id": state.route, "node_id": node.id, "choice_id": option_id, "kind": node.kind, "scrap_delta": scrap_delta, "structure_delta": actual_structure_delta, "flag": flag, "result": str(choice.get("result", ""))}
+	state.road_history.append(record)
+	state.road_totals.service_cost += cost
+	state.road_totals.scrap_delta += scrap_delta
+	state.road_totals.structure_delta += actual_structure_delta
+	state.transactions.append({"tick": state.tick, "site_id": state.site_id, "wave": state.wave, "action": "choose_road_option", "value": option_id, "node_id": node.id, "scrap_delta": scrap_delta, "structure_delta": actual_structure_delta})
+	emit("road_choice", record.duplicate(true))
+	state.last_reason = str(choice.get("result", "The road remembers the choice."))
 	state.travel_step += 1
-	if state.travel_step >= route.travel.size(): enter_destination(route)
-	else: emit("travel_advanced", {"route": state.route, "step": state.travel_step})
+	if state.travel_step >= road_nodes_for(route).size(): enter_destination(route)
+	else: emit("travel_advanced", {"route": state.route, "step": state.travel_step, "node_id": current_road_node().id})
 	return "OK"
 
 func enter_destination(route: Dictionary):
@@ -351,6 +423,7 @@ func complete_workshop():
 	# The Foreman's road-worthy salvage guarantees that neither authored branch can dead-end.
 	record_scrap("foreman_travel", 8)
 	state.phase = "route"
+	refresh_assignments()
 	state.last_reason = "The Foreman is silent. Two roads answer the repaired workshop."
 	state.enemies.clear()
 	state.hazards.clear()
@@ -865,6 +938,12 @@ func build_result_summary(won: bool) -> Dictionary:
 		"scrap_by_segment": state.scrap_by_segment.duplicate(true),
 		"completed_site_ids": state.completed_site_ids.duplicate(),
 		"defeated_boss_ids": state.defeated_boss_ids.duplicate(),
+		"assignment_id": current_route().get("assignment_id", state.route),
+		"assignment_ids": state.get("route_history", []).map(func(route_id): return routes.get(route_id, {}).get("assignment_id", route_id)),
+		"route_history": state.get("route_history", []).duplicate(),
+		"road_history": state.get("road_history", []).duplicate(true),
+		"road_flags": state.get("road_flags", []).duplicate(),
+		"road_totals": state.get("road_totals", {}).duplicate(true),
 		"blessing_fulfilled": state.fulfilled,
 		"evolution": evolution_status(),
 		"replay_cue": cue
@@ -1426,13 +1505,20 @@ func snapshot() -> Dictionary:
 	return state.duplicate(true)
 
 func restore(saved: Dictionary) -> bool:
-	if saved.get("version", 0) not in [1, 2] or not saved.has("weapons") or not saved.has("rng"): return false
+	if saved.get("version", 0) not in [1, 2, 3] or not saved.has("weapons") or not saved.has("rng"): return false
+	var saved_version = int(saved.get("version", 0))
 	var saved_route = str(saved.get("route", ""))
-	if saved.get("site_id", "site.collapsed_workshop") != "site.collapsed_workshop" and saved_route != "" and routes.has(saved_route): arena.load_file(routes[saved_route].arena_path)
+	var saved_site = str(saved.get("site_id", "site.collapsed_workshop"))
+	var site_route: Dictionary = {}
+	for route in chapter.routes:
+		if str(route.site_id) == saved_site:
+			site_route = route
+			break
+	if not site_route.is_empty(): arena.load_file(site_route.arena_path)
 	else: arena.load_file("res://content/arenas/collapsed_workshop.json")
 	if saved.get("arena_id", "") != arena.data.id: return false
 	state = saved.duplicate(true)
-	state.version = 2
+	state.version = 3
 	if not state.has("mode"): state.mode = "relay"
 	if not state.has("machines"): state.machines = []
 	var legacy_pressure_multiplier = float(routes.get(saved_route, {}).get("pressure", {}).get("cooldown_multiplier", 1.0))
@@ -1441,12 +1527,20 @@ func restore(saved: Dictionary) -> bool:
 		"spawn_count": 0, "active_machine": "", "repair_blocked_until": 0, "signal_reserve": 0, "kills_by_weapon": {}, "damage_taken": {}, "damage_by_wave": {}, "last_damage_source": "",
 		"scrap_sources": {"starting": int(config.economy.starting_scrap)}, "metrics": {"first_contact_tick": -1, "longest_threat_gap": 0, "threat_gap_started": state.get("tick", 0), "had_threat": false, "repairs_started": 0, "repairs_interrupted": 0, "useful_repairs": 0, "wasted_repairs": 0, "dead_shop_visits": 0}, "result_summary": {},
 		"scrap_by_segment": {}, "completed_site_ids": [], "defeated_boss_ids": [],
-		"site_id": "site.collapsed_workshop", "route": "", "route_history": [], "travel_step": 0, "objective": [], "objective_complete": false, "objective_lock_until": 0, "weapon_lock_until": 0, "memory_id": "", "memory_ids": [], "chapter_complete": false, "pressure_until": 0, "pressure_multiplier": legacy_pressure_multiplier,
+		"site_id": "site.collapsed_workshop", "route": "", "route_history": [], "route_origin_site_id": "", "travel_step": 0, "assignment_statuses": {}, "road_history": [], "road_flags": [], "road_totals": {"route_cost": 0, "service_cost": 0, "scrap_delta": 0, "structure_delta": 0.0}, "objective": [], "objective_complete": false, "objective_lock_until": 0, "weapon_lock_until": 0, "memory_id": "", "memory_ids": [], "chapter_complete": false, "pressure_until": 0, "pressure_multiplier": legacy_pressure_multiplier,
 		"evolutions": [], "gifts": [], "component_tag": "", "inspection": "", "scrap_tax_progress": 0, "censer_defeats": 0, "ashen_defeats": 0}
 	for field in defaults:
 		if not state.has(field): state[field] = defaults[field]
 	if state.route_history.is_empty() and state.route != "": state.route_history.append(state.route)
 	if state.memory_ids.is_empty() and state.memory_id != "": state.memory_ids.append(state.memory_id)
+	if saved_version < 3:
+		# Legacy travel beats had no choices. Resume at the first authored road node
+		# rather than silently skipping a newly meaningful in-between area.
+		if state.phase == "travel": state.travel_step = 0
+		if state.route != "":
+			state.assignment_statuses[state.route] = "accepted"
+			state.route_history = [state.route]
+		elif state.phase == "route": refresh_assignments()
 	for machine in state.machines:
 		if not machine.has("deferred"): machine.deferred = ""
 	for w in state.weapons + state.reserve:

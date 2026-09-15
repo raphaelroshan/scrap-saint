@@ -21,7 +21,8 @@ func policy_step(seek_repair: bool = true):
 		game.sim.command("choose_route", "route.brass_choir" if game.sim.state.site_id == "site.collapsed_workshop" else "route.pale_archive")
 		return
 	if game.sim.state.phase == "travel":
-		game.sim.command("advance_travel")
+		var free_choice = game.sim.current_road_node().choices.filter(func(choice): return int(choice.cost) == 0)[0]
+		game.sim.command("choose_road_option", free_choice.id)
 		return
 	if game.sim.state.phase == "memory":
 		game.sim.command("accept_memory")
