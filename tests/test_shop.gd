@@ -28,8 +28,13 @@ func _initialize():
 	a.state.weapons[0].rail = true
 	for id in a.config.catalysts: a.state.catalysts.append(id)
 	a.roll_shop()
-	check(a.state.offers[0] == "service.calibrate" and a.state.offers[2] == "service.calibrate", "completed rank/evolution have useful fallback")
-	check(a.state.offers[3] == "service.calibrate", "owned catalysts excluded")
+	check(a.state.offers.slice(0, 4).count("service.calibrate") <= 1, "fallback calibration is never duplicated")
+	check(a.state.offers.slice(0, 4).all(func(id): return id not in a.config.catalysts), "owned catalysts excluded")
+	a.start(2, 104729, "optional")
+	a.enter_shop()
+	check(a.state.offers[0] in a.catalogue and a.catalogue[a.state.offers[0]].get("cost_scrap", 999) <= a.state.scrap, "normal shop guarantees affordable build action")
+	var forecast = a.forecast_data()
+	check(forecast.primary != "" and not forecast.counters.is_empty(), "shop forecast exposes authored pressure and counters")
 	for doctrine in range(3):
 		a.start(doctrine)
 		a.enter_shop()
