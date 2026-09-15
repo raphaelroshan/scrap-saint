@@ -33,6 +33,8 @@ No new weapons, Gifts, Confluences, frames, currencies, dialogue tree, procedura
 5. Brass Choir has three independently persistent calibration nodes that require local safety; Rootworks has one persistent pump repair that can progress under pressure.
 6. Each destination uses its own enemy pool, boss ID, objective requirement, memory and conclusion.
 7. Destination boss defeat cannot complete the chapter before its objective; completed objective plus boss opens the correct memory, and accepting it reaches Results.
+8. Arrival clears previous-wave service/calibration/mote/forecast state without clearing permanent build state.
+9. Destination boss hazards and pressure begin relative to boss arrival, and damage/income traces distinguish the site and wave.
 
 ## Evidence states
 Actual Godot 4.5.1 desktop renders at 1280x800: `ROUTE_CHOICE`, `TRAVEL_BRASS`, `BRASS_OBJECTIVE`, `ROOTWORKS_OBJECTIVE`, and `CHAPTER_MEMORY`. Fixture seed 147, explicit fixture label and source/content hashes in the iteration report.
@@ -58,4 +60,4 @@ Godot 4.5.1 Compatibility renderer, macOS/Apple M1 Pro, 1280×800, seed 147, scr
 
 Confirmed visual defect corrected during review: the Rootworks route card and button originally overlapped the right loadout rail; both now remain inside the 980-pixel play column. Automated fixtures are not evidence of human enjoyment, comprehension time or final balance.
 
-Natural-policy smoke: seed 147 completed both routes with ordinary income and no fixture health/currency after the Foreman. Workshop Gospel reached the Brass conclusion at 659 simulated seconds; Bell Ward reached the Rootworks conclusion at 655.7 simulated seconds. This proves two executable full-expedition paths, not player enjoyment or final balance.
+Natural-policy smoke after P12 core-quality integration: seed 147 completed both routes with ordinary income and no fixture health/currency after the Foreman. Workshop Gospel reached the Brass conclusion at 658.5 simulated seconds; Bell Ward reached the Rootworks conclusion at 655.5 simulated seconds. This proves two executable full-expedition paths, not player enjoyment or final balance.
