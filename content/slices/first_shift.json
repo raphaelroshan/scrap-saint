@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "slice.first_shift",
-  "version": "0.1.0",
+  "version": "0.2.0-preview",
   "tick_rate": 60,
   "wave_ticks": 4200,
   "wave_count": 8,
@@ -40,6 +40,10 @@
     "weapon.nailer_small_mercies": {
       "short": "Nailer",
       "shape": "line",
+      "target_rule": "priority",
+      "role": "Priority damage against support and objective threats.",
+      "weakness": "Only pierces two targets and cannot clear a surrounding swarm.",
+      "counter_families": ["enemy.choir_drone", "enemy.rust_pilgrim", "enemy.cinder_spitter"],
       "damage": 16,
       "cooldown": 30,
       "range": 330,
@@ -50,6 +54,10 @@
     "weapon.bell_last_shift": {
       "short": "Last Shift Bell",
       "shape": "cone",
+      "target_rule": "nearest",
+      "role": "Emergency space, stagger and charge interruption.",
+      "weakness": "Slow cycle and weak sustained damage against one heavy target.",
+      "counter_families": ["enemy.rivet_hound", "enemy.forklift_brute"],
       "damage": 12,
       "cooldown": 65,
       "range": 155,
@@ -60,6 +68,10 @@
     "weapon.procession_gear": {
       "short": "Procession Gear",
       "shape": "orbit",
+      "target_rule": "nearest",
+      "role": "Close defence while roaming or repairing.",
+      "weakness": "Cannot answer distant support or ranged threats.",
+      "counter_families": ["enemy.scrap_mite", "enemy.rivet_hound"],
       "damage": 17,
       "cooldown": 19,
       "range": 80,
@@ -70,6 +82,10 @@
     "weapon.candle_nailer": {
       "short": "Candle-Nailer",
       "shape": "shot",
+      "target_rule": "weakest",
+      "role": "Execute damaged targets and turn defeats into recovery.",
+      "weakness": "Low crowd coverage and recovery depends on securing kills.",
+      "counter_families": ["enemy.choir_drone", "enemy.cinder_spitter"],
       "damage": 29,
       "cooldown": 48,
       "range": 390,
@@ -80,6 +96,10 @@
     "weapon.cable_contrition": {
       "short": "Contrition Cable",
       "shape": "tether",
+      "target_rule": "nearest",
+      "role": "Delay a broad approach and pull threats off their route.",
+      "weakness": "Low burst damage against urgent or armoured targets.",
+      "counter_families": ["enemy.rivet_hound", "enemy.forklift_brute"],
       "damage": 10,
       "cooldown": 55,
       "range": 195,
@@ -90,6 +110,10 @@
     "weapon.hymn_coil": {
       "short": "Hymn Coil",
       "shape": "beam",
+      "target_rule": "line_density",
+      "role": "Long-range line clear and support-pressure response.",
+      "weakness": "A narrow beam with low damage per hit when enemies spread.",
+      "counter_families": ["enemy.scrap_mite", "enemy.choir_drone", "enemy.rust_pilgrim"],
       "damage": 4,
       "cooldown": 8,
       "range": 420,
@@ -100,12 +124,64 @@
     "weapon.altar_mortar": {
       "short": "Altar Mortar",
       "shape": "blast",
+      "target_rule": "cluster",
+      "role": "Delete a clustered pressure pocket before it closes.",
+      "weakness": "Slow cadence and poor emergency defence at close range.",
+      "counter_families": ["enemy.scrap_mite", "enemy.forklift_brute"],
       "damage": 38,
       "cooldown": 100,
       "range": 330,
       "width": 72,
       "color": "e89765",
       "description": "Burst shells hit a cluster around the nearest enemy."
+    },
+    "weapon.foundry_censer": {
+      "short": "Foundry Censer",
+      "shape": "censer",
+      "target_rule": "nearest",
+      "role": "Slow surrounding close pressure while crossing the workshop.",
+      "weakness": "Cannot answer distant support or ranged threats.",
+      "counter_families": ["enemy.scrap_mite", "enemy.rivet_hound"],
+      "damage": 7,
+      "cooldown": 24,
+      "range": 96,
+      "width": 0,
+      "slow_ticks": 42,
+      "scrap_every": 3,
+      "color": "74b9a6",
+      "description": "A close smoke ring. Slows nearby threats; every third close defeat leaves Scrap."
+    },
+    "weapon.penance_winch": {
+      "short": "Penance Winch",
+      "shape": "winch",
+      "target_rule": "objective_attacker_then_farthest",
+      "role": "Cancel one urgent strike or pull a distant priority threat off route.",
+      "weakness": "Long cooldown and almost no swarm coverage.",
+      "counter_families": ["enemy.rivet_hound", "enemy.forklift_brute"],
+      "damage": 20,
+      "cooldown": 95,
+      "range": 520,
+      "width": 0,
+      "pull_distance": 74,
+      "color": "d6b16d",
+      "description": "Hooks one relay attacker or the farthest threat, cancels its strike, and pulls it off route."
+    },
+    "weapon.welded_halo": {
+      "short": "Welded Halo",
+      "shape": "halo",
+      "target_rule": "orbit_contact",
+      "role": "Convert a repair detour into close defence and visible objective progress.",
+      "weakness": "Low burst and poor reach against ranged threats.",
+      "counter_families": ["enemy.scrap_mite", "enemy.rivet_hound"],
+      "damage": 13,
+      "cooldown": 38,
+      "range": 84,
+      "width": 28,
+      "machine_range": 150,
+      "repair_progress": 16,
+      "saint_repair": 0.5,
+      "color": "a9e0b1",
+      "description": "A rotating close guard. Near an unfinished repair objective, each contact adds a visible stitch."
     }
   },
   "catalysts": {
@@ -116,7 +192,7 @@
     },
     "catalyst.cracked_bell_clapper": {
       "short": "Cracked Clapper",
-      "description": "Staggers and binds last 50% longer.",
+      "description": "Control lasts 50% longer. Rank III Bell can become The Great Toll.",
       "control_multiplier": 1.5
     },
     "catalyst.black_candle": {
@@ -130,10 +206,33 @@
       "cooldown_multiplier": 0.9
     }
   },
+  "gifts": {
+    "gift.spare_hand": {
+      "short": "Spare Hand",
+      "description": "Repair 25% faster; move 20% slower while working."
+    },
+    "gift.inspection_lens": {
+      "short": "Inspection Lens",
+      "description": "Reveal major rules and priority targets; lose every fifth ordinary Scrap."
+    },
+    "gift.black_ledger": {
+      "short": "Black Ledger",
+      "description": "Dismantle for less Scrap to guarantee one matching workshop lead."
+    }
+  },
+  "gift_slots": 2,
+  "gift_rules": {
+    "inspection_properties": {
+      "elite.memory_crane": "COPIES YOUR EVOLVED GEOMETRY",
+      "boss.foreman_engine": "DEMOLITION CIRCLES / WORKER CALLS"
+    },
+    "ordinary_scrap_tax_interval": 5
+  },
   "blessings": [
     "blessing.workshop_gospel",
     "blessing.bell_ward",
-    "blessing.mourner"
+    "blessing.mourner",
+    "blessing.procession"
   ],
   "enemies": {
     "enemy.rivet_hound": {
@@ -198,7 +297,8 @@
   "elite": "elite.memory_crane",
   "boss": "boss.foreman_engine",
   "evolutions": [
-    "evolution.mercy_rail"
+    "evolution.mercy_rail",
+    "evolution.great_toll"
   ],
   "rail": {
     "damage": 70,
@@ -207,6 +307,14 @@
     "width": 19,
     "charge_ticks": 18,
     "repair_on_elite_hit": 6
+  },
+  "great_toll": {
+    "damage": 25,
+    "cooldown": 118,
+    "range": 215,
+    "push_distance": 44,
+    "mark_ticks": 150,
+    "stun_ticks": 62
   },
   "combat": {
     "spawn_interval": 110,
@@ -220,7 +328,8 @@
     "scrap_drop_every": 5,
     "hound_charge_ticks": 36,
     "hound_charge_speed": 240,
-    "roaming_spawn_radius": 460
+    "roaming_spawn_radius": 390,
+    "repair_hit_pause_ticks": 45
   },
   "doctrine_rules": {
     "workshop_rate": 1.25,
@@ -252,7 +361,14 @@
     "hazard_radius": 62,
     "hazard_damage": 17,
     "worker_interval": 300,
-    "relay_damage_multiplier": 0.5
+    "relay_damage_multiplier": 0.5,
+    "phase_speed": [24, 30, 38],
+    "phase_stop_distance": [185, 155, 125],
+    "phase_hazard_offsets": [
+      [[0, 0], [150, 0], [-150, 0]],
+      [[0, 0], [125, 100], [-125, 100]],
+      [[0, 0], [115, 0], [-115, 0], [0, 115]]
+    ]
   },
   "shop_rules": {
     "roles": [
@@ -266,7 +382,8 @@
     "doctrine_tags": [
       "labour",
       "witness",
-      "mourn"
+      "mourn",
+      "orbit"
     ],
     "threat_support": [
       "catalyst.cracked_bell_clapper",
@@ -276,6 +393,7 @@
     "calibration_multiplier": 0.9,
     "bell_warning_multiplier": 1.5,
     "mourner_motes": 6,
+    "procession_radius_multiplier": 1.35,
     "services": [
       {
         "name": "Workshop restoration",
@@ -290,6 +408,11 @@
       {
         "name": "Remember the fallen",
         "description": "Next wave: the first six defeats leave healing motes.",
+        "cost": 5
+      },
+      {
+        "name": "Escort formation",
+        "description": "Next wave: orbiting relics travel 35% farther from the Saint.",
         "cost": 5
       }
     ]
@@ -329,8 +452,82 @@
         ],
         "reward": "stun",
         "amount": 180,
-        "description": "Stagger present enemies for 3s"
+        "description": "Stagger present or next-arriving enemies for 3s"
       }
     ]
-  }
+  },
+  "wave_profiles": [
+    {
+      "name": "Loose salvage",
+      "primary": "enemy.scrap_mite",
+      "support": ["enemy.rivet_hound"],
+      "primary_weight": 3,
+      "spawn_interval": 96,
+      "pressure": "Collect through a loose swarm.",
+      "counters": ["orbit", "beam", "blast"]
+    },
+    {
+      "name": "Charging lane",
+      "primary": "enemy.rivet_hound",
+      "support": ["enemy.scrap_mite"],
+      "primary_weight": 3,
+      "spawn_interval": 91,
+      "pressure": "Read charges and preserve an escape lane.",
+      "counters": ["priority", "cone", "tether"]
+    },
+    {
+      "name": "Choir approach",
+      "primary": "enemy.choir_drone",
+      "support": ["enemy.rivet_hound"],
+      "primary_weight": 2,
+      "spawn_interval": 87,
+      "pressure": "Reach the support field before mechanisms slow.",
+      "counters": ["priority", "beam", "cone"]
+    },
+    {
+      "name": "Cinder floor",
+      "primary": "enemy.cinder_spitter",
+      "support": ["enemy.scrap_mite"],
+      "primary_weight": 2,
+      "spawn_interval": 83,
+      "pressure": "Keep moving through delayed blast marks.",
+      "counters": ["priority", "weakest", "cone"]
+    },
+    {
+      "name": "Pilgrim repair line",
+      "primary": "enemy.rust_pilgrim",
+      "support": ["enemy.rivet_hound", "enemy.scrap_mite"],
+      "primary_weight": 2,
+      "spawn_interval": 80,
+      "pressure": "Choose between the healer and immediate contact pressure.",
+      "counters": ["priority", "beam", "blast"]
+    },
+    {
+      "name": "Borrowed memory",
+      "primary": "enemy.choir_drone",
+      "support": ["enemy.rivet_hound"],
+      "primary_weight": 2,
+      "spawn_interval": 78,
+      "pressure": "Route around copied geometry while clearing support.",
+      "counters": ["priority", "cone", "tether"]
+    },
+    {
+      "name": "Forklift crossing",
+      "primary": "enemy.forklift_brute",
+      "support": ["enemy.cinder_spitter", "enemy.rivet_hound"],
+      "primary_weight": 2,
+      "spawn_interval": 75,
+      "pressure": "Preserve space through displacement and delayed fire.",
+      "counters": ["cone", "tether", "blast"]
+    },
+    {
+      "name": "Final orders",
+      "primary": "enemy.rivet_hound",
+      "support": ["enemy.forklift_brute", "enemy.cinder_spitter"],
+      "primary_weight": 3,
+      "spawn_interval": 72,
+      "pressure": "Clear workers while routing around demolition.",
+      "counters": ["cone", "beam", "blast"]
+    }
+  ]
 }

@@ -1,0 +1,25 @@
+{
+  "id": "arena.brass_choir_relay",
+  "name": "Brass Choir Relay",
+  "pixels_per_metre": 40,
+  "bounds": [-120, -80, 1120, 840],
+  "start": [470, 650],
+  "relay": [470, 360],
+  "repair_radius": 86,
+  "obstacles": [
+    {"id": "machine.choir_dais", "name": "CHOIR DAIS", "rect": [365, 260, 210, 90]},
+    {"id": "machine.west_organ", "name": "WEST ORGAN", "rect": [180, 430, 90, 180]},
+    {"id": "machine.east_organ", "name": "EAST ORGAN", "rect": [680, 365, 90, 180]}
+  ],
+  "entries": [
+    {"id": "entry.choir_west", "name": "LOW CHIME", "from": [-50, 180], "to": [-50, 330]},
+    {"id": "entry.choir_north", "name": "HIGH CHIME", "from": [400, 0], "to": [560, 0]},
+    {"id": "entry.choir_east", "name": "ORDER GATE", "from": [930, 350], "to": [930, 510]}
+  ],
+  "zones": [
+    {"id": "zone.vesper", "name": "VESPER GALLERY", "rect": [-20, 90, 220, 210]},
+    {"id": "zone.nave", "name": "RELAY NAVE", "rect": [300, 40, 340, 170]},
+    {"id": "zone.mercy", "name": "MERCY GALLERY", "rect": [710, 540, 220, 150]},
+    {"id": "zone.road", "name": "PILGRIM ENTRY", "rect": [340, 590, 260, 110]}
+  ]
+}

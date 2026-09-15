@@ -74,7 +74,7 @@ func _initialize():
 	a.state.progress = a.config.relay.required_ticks
 	a.state.boss_dead = true
 	a.step(Vector2.ZERO)
-	check(a.state.phase == "won" and not a.state.evolved, "winning does not require Mercy Rail")
+	check(a.state.phase == "route" and not a.state.evolved, "Foreman victory opens routes without requiring Mercy Rail")
 	a.start()
 	a.state.hp = 0
 	a.step(Vector2.ZERO)

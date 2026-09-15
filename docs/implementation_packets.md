@@ -120,3 +120,74 @@
 - Evidence: actual enlarged map, new weapon effects and enemy fixtures at 1280x800 with source/content provenance.
 - Limitation: wider content and camera pacing require human tuning.
 - Exactly one next task: playtest roaming density and weapon/enemy balance.
+
+## SC-15 — compact first-chapter pilgrimage
+- Objective: defeat the Foreman, choose a road, travel with the current build, complete a destination-specific objective and boss, and recover a route-specific memory.
+- Owner: simulation owns route validation/cost, travel progress, arena loading, carried state, objective progress, boss result, memory, save/restore and completion; UI renders state and sends explicit commands.
+- Files: content/chapter/first_chapter.json, two destination arenas, game/arena.gd, game/simulation.gd, game/main.gd, tests/test_chapter.gd, tests/capture_chapter.gd, runtime documentation.
+- Preserve: optional-repair Workshop, deterministic fixed ticks, existing build/economy rules, four active slots plus reserve, no presentation-authored outcomes.
+- Acceptance: two affordable routes; rejected choices do not mutate; travel and destination saves repeat; permanent build state carries while per-wave services clear; Brass and Rootworks objectives differ; boss cadence starts on arrival; metrics retain site+wave identity; boss cannot bypass objective; correct memory reaches Results.
+- Evidence: five actual 1280×800 Godot 4.5.1 fixtures under artifacts/chapter plus 38 deterministic chapter checks.
+- Limitation: compact four-wave destinations reuse the current roster and need human 1× pacing validation.
+- Exactly one next task: uncoached full-expedition testing of both routes at 1×.
+
+## P14 - replayable assembly package
+- Objective: choose a close-pressure, priority-control, or repair-roaming weapon, visibly evolve Bell into The Great Toll, and carry up to two Gifts that alter repair risk, threat information, or dismantling decisions.
+- Authorization: the owner explicitly requested the researched P14 package after the current roadmap update.
+- Owner: content data defines roles, costs, effects and trade-offs; `game/simulation.gd` owns target selection, damage, control, repair progress, Gift slots, economy, evolution eligibility and save state; presentation renders authoritative events and loadout state.
+- Files: `content/items/first_slice.json`, `content/slices/first_shift.json`, `game/simulation.gd`, `game/main.gd`, `game/sound.gd`, `scripts/validate_content.py`, `tests/test_assembly.gd`, `tests/test_slice_manifest.py`, `tests/capture_assembly.gd`, `scripts/agent_iteration.sh`, `scripts/agent_iteration.ps1`, `docs/runtime_status.md`, `docs/verification_0_1.md`, `roadmap.md`.
+- Preserve: four active weapon slots plus one reserve, two run currencies, deterministic fixed ticks and isolated shop rolls, existing Combine semantics, catalyst-based Evolution semantics, optional repairs, viable unevolved builds and all P12 content. Confluences remain disabled.
+- Acceptance: Censer slows close threats and earns only deterministic close-defeat embers; Winch selects a relay attacker before the farthest eligible target and visibly pulls one threat; Halo damages on its rotating contact point and advances only the current visible repair objective or repairs the Saint; Bell Rank III plus Cracked Clapper atomically becomes radial Great Toll while failed evolution does not mutate state; two unique Gift slots persist through saves; Spare Hand changes Workshop work rate and movement exposure without acting on invisible carried machines at destinations; Inspection Lens reveals the next major property with a deterministic ordinary-Scrap tax; Black Ledger reduces dismantle refund and guarantees a matching temporary shop lead; shop offers, active effects, Results and captures identify weapons, evolutions and Gifts distinctly.
+- Capture: Godot 4.5.1, 1280x800, seed 147, fixture-configured states `P14_EXPANSION_A`, `P14_GREAT_TOLL`, and `P14_GIFTS`; inspect all captures and record renderer/build provenance. These are executable fixtures, not human playtests.
+- Limitation: deterministic viability and screenshots do not establish whether the expanded pool is enjoyable or correctly weighted for human players.
+- Exactly one next task: run uncoached 1x sessions comparing a close-control, route-control and repair-roaming build.
+
+## P12.1 - authored roaming pressure and useful repairs
+- Objective: cross the Workshop at 1x under purposeful pressure and choose an optional machine because its visible reward solves an immediate problem.
+- Owner: `game/simulation.gd` owns wave profiles, repair state, interruption, rewards, events and metrics; `game/main.gd` only renders those states.
+- Files: `content/slices/first_shift.json`, `game/simulation.gd`, `game/main.gd`, `tests/test_optional_repairs.gd`, `tests/run_playthroughs.gd`, `tests/test_roaming_quality.gd`, `docs/runtime_status.md`.
+- Preserve: optional repairs, fixed ticks, free movement, automatic attacks, three machines, two currencies and existing arena topology. No new sites, weapons or meta-progression.
+- Acceptance: authored primary/support families reproduce by seed; no reward is silently wasted; leaving the ring or taking a hit emits interruption while preserving progress; a repair-seeking policy completes a useful repair; traces report contact and threat-gap metrics.
+- Capture: natural policy at 1280x800, seed 104729, Godot 4.5.1, plus clearly labelled machine fixtures.
+- Limitation: automated movement establishes reachability and utility, not human enjoyment.
+- Exactly one next task: P12.2, isolate Mourner wave-five attrition and validate weapon roles.
+
+## P12.2 - Mourner viability and weapon-role evidence
+- Objective: every Blessing reaches the Foreman through a coherent non-evolution route, while each weapon keeps a legible strength and weakness.
+- Owner: content data owns role tuning; simulation owns targeting, damage attribution, enemy damage sources and failure classification; policies only issue movement/shop commands.
+- Files: `content/slices/first_shift.json`, `game/simulation.gd`, `tests/test_variety.gd`, `tests/run_playthroughs.gd`, `tests/test_roaming_quality.gd`, `docs/runtime_status.md`.
+- Preserve: no blanket doctrine damage multiplier, no Mercy requirement, and no attempt to make every weapon solve every matchup.
+- Acceptance: seed 104729 exposes its first causal damage spike; 12/12 standard runs complete; each doctrine has a non-evolution win; controlled role checks prove the seven geometries' intended target access and preserved weakness.
+- Capture: same-seed combat states for all three Blessings at 1280x800, classified as natural or fixture.
+- Limitation: deterministic policies cannot rank subjective weapon satisfaction.
+- Exactly one next task: P12.3, make workshop roles affordable, non-redundant and doctrine-specific.
+
+## P12.3 - actionable workshop and distinct services
+- Objective: every visit offers an affordable current improvement, a future path, a forecast response and a doctrine service whose effect is visibly different.
+- Owner: simulation owns offer construction, affordability, forecast facts and service effects; presentation explains offer purpose without changing shop state.
+- Files: `content/slices/first_shift.json`, `game/simulation.gd`, `game/main.gd`, `tests/test_shop.gd`, `tests/run_playthroughs.gd`, `docs/runtime_status.md`.
+- Preserve: six offer roles, one free refresh, four active plus one reserve, deterministic local shop hash and hybrid builds.
+- Acceptance: at least one offer is actionable at normal funds; calibration never duplicates another calibration card; forecast names the authored next pressure and counters; all doctrine services change different authoritative state.
+- Capture: three seeded service shops at 1280x800, Godot 4.5.1, explicitly fixture-labelled.
+- Limitation: human price sensitivity remains unmeasured.
+- Exactly one next task: P12.4, strengthen Memory Crane and Foreman movement/priority questions.
+
+## P12.4 - readable elite and Foreman phases
+- Objective: the elite and Foreman ask readable movement and target-priority questions without Mercy Rail or a manual interrupt.
+- Owner: simulation owns phase, routed hazard destinations, worker targets and damage; presentation renders phase intent and safe-lane cues.
+- Files: `content/slices/first_shift.json`, `game/simulation.gd`, `game/main.gd`, `tests/test_variety.gd`, `tests/test_roaming_quality.gd`, `docs/runtime_status.md`.
+- Preserve: automatic combat, optional repairs, no manual interrupt and no presentation-authored damage.
+- Acceptance: telegraphs precede damage; boss phases use distinct hazard counts/routes; workers are identifiable in traces; evolved and non-evolved policies can win.
+- Capture: Foreman phase fixtures and one natural boss approach at 1280x800, Godot 4.5.1.
+- Limitation: motion readability still requires a human 1x session.
+- Exactly one next task: P12.5, make Results explain causes and suggest one grounded experiment.
+
+## P12.5 - causal Results and replay cue
+- Objective: understand what caused the outcome, which relic mattered, which repairs were chosen, and one useful next experiment.
+- Owner: simulation owns damage, kills, economy, repair, Blessing, evolution and failure classification; Results renders the authoritative summary.
+- Files: `game/simulation.gd`, `game/main.gd`, `tests/test_simulation.gd`, `tests/test_roaming_quality.gd`, `docs/runtime_status.md`.
+- Preserve: immediate same-seed restart, concise memory text and no campaign/dialogue expansion.
+- Acceptance: success and failure summaries differ from recorded events; primary cause uses the stable cause vocabulary; weapon contribution, repair reward, worst damage wave, fulfilment and evolution route are present; save/replay retains metrics.
+- Capture: one natural win and one deterministic failure Results at 1280x800, Godot 4.5.1.
+- Limitation: the route preview is a narrative stub until chapter routing exists.
+- Exactly one next task: conduct a focused uncoached human 1x playtest of the complete P12 gate.

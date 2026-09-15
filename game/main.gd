@@ -1,6 +1,8 @@
 extends Node2D
 const Sim = preload("res://game/simulation.gd")
 const Sound = preload("res://game/sound.gd")
+const Profile = preload("res://game/profile.gd")
+const Settings = preload("res://game/settings.gd")
 const INK = Color("101e23")
 const PANEL = Color("17292d")
 const PAPER = Color("e9dec2")
@@ -9,9 +11,14 @@ const GOLD = Color("dfb56b")
 const GREEN = Color("8ecdb2")
 const RED = Color("e48b73")
 var sim = Sim.new()
+var profile = Profile.new()
+var settings = Settings.new()
+var frame_defs: Array = []
 var sound
-var screen = "menu"
+var screen = "title"
+var previous_screen = "title"
 var chosen = 0
+var chosen_frame = "frame.pilgrim"
 var run_mode = "optional"
 var camera_offset = Vector2.ZERO
 const WORLD_VIEW = Rect2(60, 158, 980, 578)
@@ -24,6 +31,8 @@ var notice_until = 0
 var reduced_fx = false
 var debug_visible = false
 var capture_dir = ""
+var fixture_label = false
+var capture_label = "FIXTURE CAPTURE"
 var capture_step = 0
 var rendered_frames = 0
 var last_phase = ""
@@ -32,11 +41,22 @@ var ui_scale = 1.0
 var save_path = "user://first_shift.save"
 var dev_mode = false
 var simulation_speed = 1
+var tutorial_page = 0
+var awaiting_binding = ""
+var recent_unlocks: Array = []
 
 func _ready():
 	title_font.font_names = PackedStringArray(["Georgia", "DejaVu Serif"])
+	frame_defs = JSON.parse_string(FileAccess.get_file_as_string("res://content/frames/first_chapter.json")).frames
+	profile.load_from()
+	settings.load_from()
+	settings.apply_input_map()
+	settings.apply_presentation()
+	reduced_fx = settings.state.reduced_effects
+	ui_scale = settings.state.ui_scale
 	sound = Sound.new()
 	add_child(sound)
+	sound.muted = settings.state.muted
 	ui = Control.new()
 	add_child(ui)
 	for arg in OS.get_cmdline_user_args():
@@ -46,13 +66,16 @@ func _ready():
 		if arg.begins_with("--capture-dir="):
 			capture_dir = arg.trim_prefix("--capture-dir=")
 			run_mode = "relay"
+			screen = "menu"
 			debug_visible = true
 			DirAccess.make_dir_recursive_absolute(capture_dir)
 	build_ui()
 
 func _physics_process(_delta):
 	if screen == "game" and not sim.state.is_empty():
-		var movement = Vector2(float(Input.is_physical_key_pressed(KEY_D) or Input.is_physical_key_pressed(KEY_RIGHT)) - float(Input.is_physical_key_pressed(KEY_A) or Input.is_physical_key_pressed(KEY_LEFT)), float(Input.is_physical_key_pressed(KEY_S) or Input.is_physical_key_pressed(KEY_DOWN)) - float(Input.is_physical_key_pressed(KEY_W) or Input.is_physical_key_pressed(KEY_UP)))
+		var movement = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+		movement += Vector2(float(Input.is_physical_key_pressed(KEY_RIGHT)) - float(Input.is_physical_key_pressed(KEY_LEFT)), float(Input.is_physical_key_pressed(KEY_DOWN)) - float(Input.is_physical_key_pressed(KEY_UP)))
+		movement = movement.limit_length()
 		if Input.get_connected_joypads().size() > 0:
 			var pad = Input.get_connected_joypads()[0]
 			var stick = Vector2(Input.get_joy_axis(pad, JOY_AXIS_LEFT_X), Input.get_joy_axis(pad, JOY_AXIS_LEFT_Y))
@@ -60,6 +83,7 @@ func _physics_process(_delta):
 		advance_simulation(movement)
 		if sim.state.phase != last_phase:
 			last_phase = sim.state.phase
+			if last_phase in ["won", "lost"]: commit_profile_result()
 			build_ui()
 	fx = fx.filter(func(e): return Time.get_ticks_msec() < e.expires)
 	queue_redraw()
@@ -79,11 +103,24 @@ func _process(_delta):
 
 func _unhandled_key_input(event):
 	if not event.pressed or event.echo: return
+	if awaiting_binding != "":
+		if event.keycode != KEY_ESCAPE and settings.rebind(awaiting_binding, event.physical_keycode if event.physical_keycode > 0 else event.keycode):
+			settings.apply_input_map()
+			settings.save_to()
+		awaiting_binding = ""
+		build_ui()
+		return
+	if event.keycode == KEY_ESCAPE and screen in ["settings", "tutorial"]:
+		screen = previous_screen
+		build_ui()
+		return
 	if event.keycode == KEY_F3: debug_visible = not debug_visible
 	if event.keycode == KEY_F6 and dev_mode:
 		simulation_speed = 1 if simulation_speed == 5 else 5
 	if event.keycode == KEY_M:
-		sound.muted = not sound.muted
+		settings.set_option("muted", not settings.state.muted)
+		settings.save_to()
+		sound.muted = settings.state.muted
 		build_ui()
 	if event.keycode == KEY_ESCAPE and screen == "game":
 		sim.command("pause")
@@ -98,21 +135,54 @@ func _input(event):
 
 func begin():
 	# Fixed seed makes the two objective modes directly comparable.
-	sim.start(chosen, seed_value, run_mode)
+	var run_id = "run-%d-%d-%s" % [profile.state.completed_runs.size() + 1, seed_value, chosen_frame]
+	sim.start(chosen, seed_value, run_mode, chosen_frame, run_id)
 	screen = "game"
+	recent_unlocks.clear()
 	last_phase = "combat"
 	fx.clear()
 	build_ui()
 
 func act(action: String, value = null):
 	sim.events.clear()
+	notification = ""
 	var result = sim.command(action, value)
 	for event in sim.events: present(event)
-	notification = result.replace("_", " ").capitalize() if result != "OK" else ""
-	notice_until = Time.get_ticks_msec() + 2500
+	if result != "OK":
+		notification = result.replace("_", " ").capitalize()
+		notice_until = Time.get_ticks_msec() + 2500
 	if action == "evolve" and result == "OK":
-		notification = "MERCY RAIL — a new shape of mercy"
+		notification = ("THE GREAT TOLL — every direction answers" if str(value) == "evolution.great_toll" else "MERCY RAIL — a new shape of mercy")
 		notice_until = Time.get_ticks_msec() + 4500
+	if sim.state.phase in ["won", "lost"]: commit_profile_result()
+	build_ui()
+
+func commit_profile_result():
+	if sim.state.is_empty() or sim.state.result_summary.is_empty(): return
+	recent_unlocks = profile.record_run(sim.state.result_summary)
+	profile.save_to()
+
+func open_panel(panel_name: String):
+	previous_screen = screen
+	screen = panel_name
+	build_ui()
+
+func close_panel():
+	screen = previous_screen
+	build_ui()
+
+func toggle_setting(key: String):
+	settings.set_option(key, not bool(settings.state[key]))
+	settings.apply_presentation()
+	settings.save_to()
+	reduced_fx = settings.state.reduced_effects
+	sound.muted = settings.state.muted
+	build_ui()
+
+func cycle_text_scale():
+	settings.set_option("ui_scale", 1.15 if settings.state.ui_scale <= 1.0 else 1.0)
+	ui_scale = settings.state.ui_scale
+	settings.save_to()
 	build_ui()
 
 func save_run():
@@ -130,6 +200,7 @@ func load_run():
 	if saved is Dictionary and sim.restore(saved):
 		screen = "game"
 		fx.clear()
+		if sim.state.phase in ["won", "lost"]: commit_profile_result()
 		build_ui()
 
 	else:
@@ -143,6 +214,9 @@ func present(event):
 	if e.kind == "machine_restored":
 		notification = "RESTORED / " + e.reward
 		notice_until = Time.get_ticks_msec() + 3000
+	if e.kind == "destination_arrived":
+		notification = "ROAD REST / %d structure restored" % int(e.arrival_repair)
+		notice_until = Time.get_ticks_msec() + 3500
 	if e.kind == "attack": sound.play(e.shape)
 	elif e.kind in ["hurt", "relay_hurt", "repair", "pickup"]: sound.play(e.kind)
 
@@ -171,13 +245,58 @@ func build_ui():
 	for child in ui.get_children():
 		ui.remove_child(child)
 		child.queue_free()
-	if screen == "menu":
-		if dev_mode: button("Optional repairs" if run_mode == "optional" else "Relay defence", Rect2(124, 278, 300, 34), func(): run_mode = "relay" if run_mode == "optional" else "optional"; build_ui())
-		button("Seed %d / change seed" % seed_value, Rect2(440, 278, 320, 34), func(): seed_value = randi_range(1, 1000000); build_ui())
-		for i in range(3):
-			button("Choose " + ["Workshop", "Bell Ward", "Mourner"][i], Rect2(124 + i * 354, 522, 322, 42), func(): chosen = i; build_ui(), chosen == i)
+	if screen == "title":
+		button("BEGIN A PILGRIMAGE", Rect2(420, 365, 440, 52), func(): screen = "menu"; build_ui(), true).grab_focus()
+		if FileAccess.file_exists(save_path): button("Resume saved expedition", Rect2(420, 431, 440, 42), load_run)
+		button("How to play", Rect2(420, 487, 212, 40), func(): tutorial_page = 0; open_panel("tutorial"))
+		button("Settings", Rect2(648, 487, 212, 40), func(): open_panel("settings"))
+	elif screen == "tutorial":
+		button("Back", Rect2(318, 640, 180, 42), close_panel)
+		if tutorial_page > 0: button("Previous", Rect2(514, 640, 180, 42), func(): tutorial_page -= 1; build_ui())
+		button("Begin setup" if tutorial_page == 4 else "Next", Rect2(710, 640, 250, 42), func():
+			if tutorial_page == 4:
+				screen = "menu"
+			else:
+				tutorial_page += 1
+			build_ui(), true).grab_focus()
+	elif screen == "settings":
+		button("Sound: " + ("off" if settings.state.muted else "on"), Rect2(250, 280, 360, 42), func(): toggle_setting("muted"))
+		button("Effects: " + ("reduced" if settings.state.reduced_effects else "full"), Rect2(670, 280, 360, 42), func(): toggle_setting("reduced_effects"))
+		button("Text: " + ("large" if settings.state.ui_scale > 1.0 else "normal"), Rect2(250, 338, 360, 42), cycle_text_scale)
+		button("Display: " + ("fullscreen" if settings.state.fullscreen else "windowed"), Rect2(670, 338, 360, 42), func(): toggle_setting("fullscreen"))
+		var labels = {"move_up": "Move up", "move_down": "Move down", "move_left": "Move left", "move_right": "Move right"}
+		for i in range(Settings.ACTIONS.size()):
+			var action = Settings.ACTIONS[i]
+			var key_name = OS.get_keycode_string(int(settings.state.controls[action]))
+			button(labels[action] + ": " + ("press a key…" if awaiting_binding == action else key_name), Rect2(250 + (i % 2) * 420, 430 + int(i / 2) * 58, 360, 42), func(): awaiting_binding = action; build_ui())
+		button("Back", Rect2(470, 590, 340, 46), close_panel, true).grab_focus()
+	elif screen == "menu":
+		if dev_mode: button("Optional repairs" if run_mode == "optional" else "Relay defence", Rect2(55, 166, 220, 32), func(): run_mode = "relay" if run_mode == "optional" else "optional"; build_ui())
+		button("Seed %d / change" % seed_value, Rect2(790, 94, 200, 32), func(): seed_value = randi_range(1, 1000000); build_ui())
+		button("Back", Rect2(1010, 94, 180, 32), func(): screen = "title"; build_ui())
+		for i in range(frame_defs.size()):
+			var frame = frame_defs[i]
+			var unlocked = frame.id in profile.state.unlocked_frames
+			var frame_button = button(("✓ " if chosen_frame == frame.id else "") + frame.name + ("" if unlocked else " · LOCKED"), Rect2(250 + i * 270, 292, 240, 34), func(): chosen_frame = frame.id; build_ui(), chosen_frame == frame.id and unlocked)
+			frame_button.disabled = not unlocked
+		var blessing_names = ["Workshop", "Bell Ward", "Mourner", "Procession"]
+		var blessing_ids = sim.config.blessings
+		for i in range(blessing_names.size()):
+			var unlocked = blessing_ids[i] in profile.state.unlocked_blessings
+			var blessing_button = button(("Choose " if unlocked else "Locked / ") + blessing_names[i], Rect2(56 + i * 292, 548, 276, 38), func(): chosen = i; build_ui(), chosen == i and unlocked)
+			blessing_button.disabled = not unlocked
 		button("BEGIN THE FIRST SHIFT  →", Rect2(436, 613, 408, 52), begin, true).grab_focus()
-		if FileAccess.file_exists(save_path): button("Resume saved shift", Rect2(436, 678, 408, 36), load_run)
+		if FileAccess.file_exists(save_path): button("Resume saved expedition", Rect2(436, 678, 408, 36), load_run)
+	elif sim.state.phase == "route":
+		for i in range(sim.chapter.routes.size()):
+			var route = sim.chapter.routes[i]
+			button("CHOOSE " + route.name.to_upper(), Rect2(96 + i * 470, 585, 430, 48), func(): act("choose_route", route.id), i == 0)
+	elif sim.state.phase == "travel":
+		var route = sim.current_route()
+		var final_beat = sim.state.travel_step >= route.travel.size() - 1
+		button("ENTER " + route.name.to_upper() if final_beat else "CONTINUE ALONG THE ROAD", Rect2(392, 610, 496, 48), func(): act("advance_travel"), true).grab_focus()
+	elif sim.state.phase == "memory":
+		button("CARRY THIS MEMORY  →", Rect2(410, 615, 460, 48), func(): act("accept_memory"), true).grab_focus()
 	elif sim.state.phase == "shop":
 		for i in range(6):
 			var col = i % 3
@@ -189,7 +308,8 @@ func build_ui():
 		var costs = sim.config.economy.reroll_costs
 		var refresh = "No refreshes left" if sim.state.rerolls >= costs.size() else ("Refresh · FREE" if costs[sim.state.rerolls] == 0 else "Refresh · %d Scrap" % costs[sim.state.rerolls])
 		button(refresh, Rect2(108, 613, 220, 40), func(): act("reroll"))
-		button("Mercy Rail · Evolve", Rect2(344, 613, 254, 40), func(): act("evolve"))
+		button("Mercy Rail", Rect2(344, 613, 120, 40), func(): act("evolve", "evolution.mercy_rail"))
+		button("Great Toll", Rect2(470, 613, 128, 40), func(): act("evolve", "evolution.great_toll"))
 		button("NEXT WAVE  →", Rect2(734, 613, 250, 40), func(): act("continue"), true).grab_focus()
 		button("Combine pair", Rect2(1060, 573, 188, 32), func(): act("combine"))
 		button("Equip reserve", Rect2(1060, 613, 188, 32), func(): act("equip"))
@@ -197,15 +317,20 @@ func build_ui():
 			button("Sell", Rect2(1060, 243 + i * 79, 52, 26), func(): act("sell", i))
 			button("Dism.", Rect2(1118, 243 + i * 79, 59, 26), func(): act("dismantle", i))
 			button("Store", Rect2(1183, 243 + i * 79, 65, 26), func(): act("reserve", i))
+		for i in range(sim.state.gifts.size()):
+			button("Sell", Rect2(1152, 665 + i * 30, 45, 24), func(): act("sell_gift", i))
+			button("Dism.", Rect2(1201, 665 + i * 30, 47, 24), func(): act("dismantle_gift", i))
 	elif sim.state.phase in ["won", "lost"]:
-		button("RETURN TO THE WORKSHOP", Rect2(410, 615, 460, 48), func(): screen = "menu"; build_ui(), true).grab_focus()
+		button("RETURN TO THE WORKSHOP", Rect2(410, 655, 460, 44), func(): screen = "menu"; build_ui(), true).grab_focus()
 	elif sim.state.paused:
 		button("Resume", Rect2(475, 355, 330, 46), func(): sim.command("pause"); build_ui(), true).grab_focus()
 		button("Save shift", Rect2(475, 415, 330, 42), save_run)
-		button("Back to title", Rect2(475, 475, 330, 42), func(): screen = "menu"; build_ui())
-	button("Sound " + ("off" if sound.muted else "on"), Rect2(28, 757, 117, 28), func(): sound.muted = not sound.muted; build_ui())
-	button("Effects " + ("low" if reduced_fx else "full"), Rect2(153, 757, 122, 28), func(): reduced_fx = not reduced_fx; build_ui())
-	button("Text " + ("large" if ui_scale > 1 else "normal"), Rect2(283, 757, 127, 28), func(): ui_scale = 1.15 if ui_scale == 1 else 1.0; build_ui())
+		button("Settings", Rect2(475, 475, 330, 42), func(): open_panel("settings"))
+		button("Back to title", Rect2(475, 535, 330, 42), func(): screen = "title"; build_ui())
+	if screen == "game":
+		button("Sound " + ("off" if settings.state.muted else "on"), Rect2(28, 757, 117, 28), func(): toggle_setting("muted"))
+		button("Effects " + ("low" if reduced_fx else "full"), Rect2(153, 757, 122, 28), func(): toggle_setting("reduced_effects"))
+		button("Text " + ("large" if ui_scale > 1 else "normal"), Rect2(283, 757, 127, 28), cycle_text_scale)
 
 func text_at(value: String, p: Vector2, size = 16, color = PAPER, serif = false):
 	draw_string(title_font if serif else font, p, value, HORIZONTAL_ALIGNMENT_LEFT, -1, int(size * ui_scale), color)
@@ -227,16 +352,31 @@ func bar(rect: Rect2, fraction: float, color: Color):
 
 func _draw():
 	draw_rect(Rect2(0, 0, 1280, 800), INK)
-	if screen == "menu":
+	if screen == "title":
+		camera_offset = Vector2.ZERO
+		draw_title()
+	elif screen == "menu":
 		camera_offset = Vector2.ZERO
 		draw_menu()
+	elif screen == "tutorial":
+		camera_offset = Vector2.ZERO
+		draw_title()
+		draw_tutorial()
+	elif screen == "settings":
+		camera_offset = Vector2.ZERO
+		draw_title()
+		draw_settings()
 	else:
-		var half_view = WORLD_VIEW.size * 0.5
-		var camera = sim.state.position.clamp(sim.arena.bounds.position + half_view, sim.arena.bounds.end - half_view)
-		camera_offset = WORLD_VIEW.get_center() - camera
-		draw_set_transform(camera_offset)
-		draw_world()
-		draw_set_transform(Vector2.ZERO)
+		if sim.state.phase == "travel":
+			camera_offset = Vector2.ZERO
+			draw_travel_background()
+		else:
+			var half_view = WORLD_VIEW.size * 0.5
+			var camera = sim.state.position.clamp(sim.arena.bounds.position + half_view, sim.arena.bounds.end - half_view)
+			camera_offset = WORLD_VIEW.get_center() - camera
+			draw_set_transform(camera_offset)
+			draw_world()
+			draw_set_transform(Vector2.ZERO)
 		# Mask world rendering outside the gameplay window; HUD stays screen-space.
 		draw_rect(Rect2(0, 0, 1280, 158), INK)
 		draw_rect(Rect2(0, 736, 1280, 64), INK)
@@ -247,6 +387,9 @@ func _draw():
 		draw_boss_hud()
 		if sim.state.phase == "combat": draw_minimap()
 		if sim.state.phase == "shop": draw_shop()
+		if sim.state.phase == "route": draw_route_choice()
+		if sim.state.phase == "travel": draw_travel()
+		if sim.state.phase == "memory": draw_memory()
 		if sim.state.phase in ["won", "lost"]: draw_results()
 		if sim.state.paused and sim.state.phase == "combat":
 			draw_rect(Rect2(0, 0, 1280, 745), Color(0.025, 0.05, 0.06, 0.87))
@@ -257,35 +400,80 @@ func _draw():
 	if dev_mode:
 		panel(Rect2(924, 94, 328, 33))
 		text_at("DEV %d× SPEED · F6 toggles 1× / 5×" % simulation_speed, Vector2(938, 116), 13, GOLD)
-	text_at("WASD / arrows · move     ESC · pause     F5 / F9 · save / load", Vector2(445, 777), 13, MUTED)
+	if screen == "game": text_at("WASD / arrows · move     ESC · pause     F5 / F9 · save / load", Vector2(445, 777), 13, MUTED)
 	if debug_visible:
-		text_at("BUILD 0.1.0 | Godot %s | 1280×800 | seed %d | tick %d | %s" % [Engine.get_version_info().string, seed_value, sim.state.get("tick", 0), "FIXTURE CAPTURE" if capture_dir != "" else "LIVE"], Vector2(28, 745), 11, GOLD)
+		text_at("BUILD %s | Godot %s | 1280×800 | seed %d | tick %d | %s" % [sim.config.get("version", "dev"), Engine.get_version_info().string, seed_value, sim.state.get("tick", 0), capture_label if capture_dir != "" or fixture_label else "LIVE"], Vector2(28, 745), 11, GOLD)
+
+func draw_title():
+	for x in range(0, 1280, 48): draw_line(Vector2(x, 0), Vector2(x, 745), Color("15252a"))
+	for y in range(0, 745, 48): draw_line(Vector2(0, y), Vector2(1280, y), Color("15252a"))
+	text_at("A PILGRIMAGE OF REPAIRS", Vector2(124, 112), 15, GOLD)
+	text_at("Scrap Saint", Vector2(120, 207), 76, PAPER, true)
+	text_at("Turn scrap into miracles.", Vector2(124, 257), 25, MUTED, true)
+	wrapped("A small maintenance machine crosses ruined workshops, carries incompatible relics, and decides what deserves to work again.", Vector2(124, 292), 680, 17, PAPER)
+	draw_saint(Vector2(1035, 246), Vector2(-1, 0), 3.4)
+	text_at("FIRST CHAPTER · TWO ROADS · TEN WEAPONS · TWO EVOLUTIONS", Vector2(350, 585), 12, GOLD)
+	text_at("Memory fragments: %d" % profile.state.memory_fragments, Vector2(550, 710), 12, MUTED)
 
 func draw_menu():
 	for x in range(0, 1280, 48): draw_line(Vector2(x, 0), Vector2(x, 745), Color("15252a"))
 	for y in range(0, 745, 48): draw_line(Vector2(0, y), Vector2(1280, y), Color("15252a"))
-	text_at("A PILGRIMAGE OF REPAIRS", Vector2(124, 89), 15, GOLD)
-	text_at("Scrap Saint", Vector2(120, 171), 72, PAPER, true)
-	text_at("Turn scrap into miracles.", Vector2(124, 218), 23, MUTED, true)
-	text_at("Roam freely. Repair for rewards. Survive and defeat the Foreman." if run_mode == "optional" else "Protect and repair the relay. Survive and defeat the Foreman.", Vector2(124, 262), 17, PAPER)
-	draw_saint(Vector2(1072, 177), Vector2(-1, 0), 2.8)
-	var titles = ["The Workshop Gospel", "The Bell Ward", "The Mourner"]
-	var lines = [["REPAIR · RELIABILITY", "Begin with the Nailer.", "Complete repairs faster.", "Two Labour weapons fulfil it."], ["CONTROL · ANTICIPATION", "Begin with the Last Shift Bell.", "Push danger out of your path.", "Two Witness weapons fulfil it."], ["REMNANTS · RECOVERY", "Begin with the Candle-Nailer.", "Defeats leave healing motes.", "Two Mourn weapons fulfil it."]]
-	for i in range(3):
-		var x = 108 + i * 354
-		panel(Rect2(x, 324, 338, 254), Color("223733") if chosen == i else PANEL)
-		text_at("0%d / BLESSING" % (i + 1), Vector2(x + 16, 355), 13, GOLD)
-		text_at(titles[i], Vector2(x + 16, 395), 23, PAPER, true)
-		for j in range(4): text_at(lines[i][j], Vector2(x + 16, 429 + j * 24), 14, MUTED if j > 0 else GREEN)
-	text_at("Optional repairs. Your path through the shift.", Vector2(438, 603), 16, MUTED, true)
+	text_at("ASSEMBLE THE SAINT", Vector2(56, 70), 13, GOLD)
+	text_at("Choose a frame and a Blessing.", Vector2(52, 116), 34, PAPER, true)
+	text_at("Frames change movement and recovery. Blessings shape the workshop, never the only viable route.", Vector2(56, 151), 14, MUTED)
+	for i in range(frame_defs.size()):
+		var frame = frame_defs[i]
+		var x = 250 + i * 270
+		var unlocked = frame.id in profile.state.unlocked_frames
+		panel(Rect2(x, 188, 240, 92), Color("223733") if chosen_frame == frame.id and unlocked else PANEL)
+		text_at(frame.name.to_upper(), Vector2(x + 12, 211), 11, GOLD if unlocked else MUTED)
+		text_at("%d structure · %d speed" % [frame.structure, frame.speed], Vector2(x + 12, 234), 11, PAPER if unlocked else MUTED)
+		wrapped(frame.tradeoff if unlocked else "WHY LOCKED / " + ("Restore a machine." if frame.id == "frame.surveyor" else "Defeat the Foreman."), Vector2(x + 12, 256), 215, 10, MUTED)
+	var titles = ["The Workshop Gospel", "The Bell Ward", "The Mourner", "The Procession"]
+	var lines = [["REPAIR · RELIABILITY", "Nailer guarantee.", "Faster restoration."], ["CONTROL · ANTICIPATION", "Bell guarantee.", "Earlier warnings."], ["REMNANTS · RECOVERY", "Candle guarantee.", "Defeats leave motes."], ["ORBIT · ESCORT", "Gear guarantee.", "Wider formations."]]
+	for i in range(4):
+		var x = 56 + i * 292
+		var unlocked = sim.config.blessings[i] in profile.state.unlocked_blessings
+		panel(Rect2(x, 342, 276, 206), Color("223733") if chosen == i and unlocked else PANEL)
+		text_at("0%d / BLESSING" % (i + 1), Vector2(x + 14, 367), 11, GOLD if unlocked else MUTED)
+		text_at(titles[i], Vector2(x + 14, 402), 19, PAPER if unlocked else MUTED, true)
+		for j in range(3): text_at(lines[i][j], Vector2(x + 14, 433 + j * 22), 12, MUTED if j > 0 else GREEN)
+		if not unlocked: text_at("COMPLETE A DESTINATION", Vector2(x + 14, 520), 10, GOLD)
+
+func draw_tutorial():
+	draw_rect(Rect2(155, 115, 970, 545), Color(0.035, 0.075, 0.08, 0.97))
+	var titles = ["Wake, little machine.", "Move; the relics answer.", "Repairs are choices.", "Build a doctrine.", "Carry it down the road."]
+	var bodies = [
+		"You are a maintenance automaton assembled from incompatible machines. Reach the First Engine—and decide whether the old order deserves repair.",
+		"Move with your chosen keys or a controller stick. Weapons fire automatically. Positioning decides which geometry reaches which threat.",
+		"Workshop machines are optional. Their reward and work time are shown before you commit. Leave when the risk stops being worth it; progress is preserved.",
+		"Spend Scrap on weapons and services. Relic Shards buy catalysts. Combine matching ranks; evolve a Rank III relic with its named catalyst. Gifts change one rule and occupy separate slots.",
+		"Defeat the Foreman, choose Brass Choir or Rootworks, and carry the same build onward. Results explain the cause; Memory unlocks choices, never permanent damage."
+	]
+	text_at("FIELD MANUAL %d / 5" % (tutorial_page + 1), Vector2(220, 190), 12, GOLD)
+	text_at(titles[tutorial_page], Vector2(215, 260), 38, PAPER, true)
+	wrapped(bodies[tutorial_page], Vector2(220, 325), 820, 20, GREEN)
+	text_at(["IDENTITY", "COMBAT", "REPAIR", "ASSEMBLY", "PILGRIMAGE"][tutorial_page], Vector2(220, 545), 12, MUTED)
+
+func draw_settings():
+	draw_rect(Rect2(155, 115, 970, 545), Color(0.035, 0.075, 0.08, 0.97))
+	text_at("SETTINGS", Vector2(220, 190), 12, GOLD)
+	text_at("Make the workshop readable.", Vector2(215, 245), 36, PAPER, true)
+	text_at("Keyboard bindings persist locally. Arrow keys and controller movement remain available.", Vector2(220, 405), 14, MUTED)
 
 func draw_header():
 	text_at("SCRAP SAINT", Vector2(28, 42), 25, PAPER, true)
-	text_at("THE FIRST SHIFT / " + ["WORKSHOP GOSPEL", "BELL WARD", "THE MOURNER"][sim.state.doctrine], Vector2(28, 68), 12, GOLD)
+	var site_name = sim.arena.data.name.to_upper()
+	text_at(site_name + " / " + ["WORKSHOP GOSPEL", "BELL WARD", "THE MOURNER", "THE PROCESSION"][sim.state.doctrine], Vector2(28, 68), 12, GOLD)
 	text_at("STRUCTURE", Vector2(352, 31), 11, MUTED)
-	bar(Rect2(352, 43, 175, 8), sim.state.hp / sim.config.saint.structure, GREEN if sim.state.hp > 30 else RED)
-	text_at("%d / %d" % [maxi(0, sim.state.hp), sim.config.saint.structure], Vector2(352, 72), 13)
-	if sim.optional_mode():
+	bar(Rect2(352, 43, 175, 8), sim.state.hp / sim.saint_max_structure(), GREEN if sim.state.hp > 30 else RED)
+	text_at("%d / %d" % [maxi(0, sim.state.hp), sim.saint_max_structure()], Vector2(352, 72), 13)
+	if sim.is_destination():
+		var complete = sim.state.objective.filter(func(node): return node.complete).size()
+		text_at("ROUTE OBJECTIVE", Vector2(568, 31), 11, MUTED)
+		bar(Rect2(568, 43, 175, 8), complete / float(maxi(1, sim.state.objective.size())), GREEN)
+		text_at("%d / %d stations complete" % [complete, sim.state.objective.size()], Vector2(568, 72), 12)
+	elif sim.optional_mode():
 		var count = sim.state.machines.filter(func(m): return m.complete).size()
 		text_at("OPTIONAL REPAIRS", Vector2(568, 31), 11, MUTED)
 		bar(Rect2(568, 43, 175, 8), count / 3.0, GREEN)
@@ -296,7 +484,7 @@ func draw_header():
 		text_at("%d%% integrity · %d%% work" % [sim.state.relay_hp * 100 / sim.config.relay.structure, sim.state.progress * 100 / sim.config.relay.required_ticks], Vector2(568, 72), 13)
 	text_at("%02d  SCRAP" % sim.state.scrap, Vector2(800, 43), 19, GOLD)
 	text_at("%d  RELIC SHARDS" % sim.state.shards, Vector2(800, 69), 12, MUTED)
-	text_at("WAVE %02d / 08" % sim.state.wave, Vector2(1070, 43), 18)
+	text_at("WAVE %02d / %02d" % [sim.state.wave, sim.current_wave_count()], Vector2(1070, 43), 18)
 	text_at("%02d:%02d" % [int(sim.state.tick / 3600), int(sim.state.tick / 60) % 60], Vector2(1070, 70), 14, MUTED)
 	draw_line(Vector2(28, 89), Vector2(1252, 89), Color("3a4d48"))
 	var instruction = "Stay in the work circle to repair. Weapons fire automatically."
@@ -304,7 +492,13 @@ func draw_header():
 	if sim.state.wave == 8: instruction = "FOREMAN ENGINE · Watch the demolition circles. Protect the relay."
 	if sim.state.phase == "shop": instruction = "A moment to rebuild. Choose what your machine becomes."
 	if sim.optional_mode(): instruction = "Survive the shift. Defeat the Foreman. Repairs are optional rewards."
-	if sim.state.wave == 8: instruction = "FOREMAN / Keep moving. Avoid the demolition zones."
+	if sim.state.phase == "combat" and sim.optional_mode(): instruction = sim.wave_profile().pressure
+	if sim.state.wave == 8 and not sim.is_destination(): instruction = "FOREMAN / Keep moving. Avoid the demolition zones."
+	if sim.is_destination(): instruction = sim.objective_data().description
+	if sim.state.phase == "route": instruction = "The Workshop is safe. Choose which need receives your build."
+	if sim.state.phase == "travel": instruction = "Your weapons, Scrap and Blessing travel with you."
+	if sim.state.phase == "memory": instruction = "A repaired machine returns one borrowed purpose."
+	if sim.state.phase in ["won", "lost"]: instruction = "SHIFT RECORDED / Read the cause. Choose one change. Return quickly."
 	text_at(instruction, Vector2(60, 126), 16, GREEN)
 	if sim.state.phase == "combat" and not sim.optional_mode():
 		text_at("STARTUP BACKUP · Relay cannot break before the first workshop" if sim.state.wave == 1 else "BACKUP OFFLINE · Break enemy strike warnings to protect the relay", Vector2(60, 146), 11, GOLD if sim.state.wave == 1 else MUTED)
@@ -354,7 +548,8 @@ func draw_world():
 	panel(Rect2(a[0], a[1], a[2], a[3]), Color("1d3033"))
 	draw_workshop_layout()
 	var relay = sim.relay_position()
-	if sim.optional_mode(): draw_optional_machines()
+	if sim.is_destination(): draw_destination_objective()
+	elif sim.optional_mode(): draw_optional_machines()
 	else:
 		var working = sim.state.position.distance_to(relay) < sim.config.relay.radius
 		var threatened = sim.relay_threat_count()
@@ -384,10 +579,15 @@ func draw_world():
 	for h in sim.state.hazards:
 		var f = 1.0 - float(h.until - sim.state.tick) / h.get("warning_ticks", sim.config.boss_rules.hazard_warning_ticks * sim.warning_multiplier())
 		if h.copy:
-			var direction = (h.p - h.from).normalized()
-			draw_line(h.from, h.from + direction * sim.config.rail.range, Color(0.9, 0.4, 0.3, 0.15 + f * 0.3), sim.config.rail.width * 2)
-			draw_line(h.from, h.from + direction * sim.config.rail.range, RED, 2, true)
-			text_at("COPIED RAIL", h.from + Vector2(-40, -48), 11, RED)
+			if h.get("copy_shape", "rail") == "radial":
+				draw_circle(h.from, sim.config.great_toll.range, Color(0.9, 0.4, 0.3, 0.08 + f * 0.12))
+				draw_arc(h.from, sim.config.great_toll.range, 0, TAU, 56, RED, 3)
+				text_at("COPIED TOLL", h.from + Vector2(-42, -48), 11, RED)
+			else:
+				var direction = (h.p - h.from).normalized()
+				draw_line(h.from, h.from + direction * sim.config.rail.range, Color(0.9, 0.4, 0.3, 0.15 + f * 0.3), sim.config.rail.width * 2)
+				draw_line(h.from, h.from + direction * sim.config.rail.range, RED, 2, true)
+				text_at("COPIED RAIL", h.from + Vector2(-40, -48), 11, RED)
 			continue
 		draw_circle(h.p, h.radius, Color(0.85, 0.3, 0.18, 0.13 + f * 0.1))
 		draw_arc(h.p, h.radius, 0, TAU, 40, RED, 2)
@@ -404,6 +604,17 @@ func draw_world():
 			var p = sim.state.position + Vector2.from_angle(sim.state.tick * 0.045) * sim.config.weapons[w.id].range
 			draw_arc(sim.state.position, 80, 0, TAU, 48, Color(0.5, 0.75, 0.65, 0.12), 1)
 			draw_gear(p, 15, GREEN, sim.state.tick * 0.08)
+		if w.id == "weapon.foundry_censer":
+			var p = sim.state.position + Vector2.from_angle(sim.state.tick * 0.055) * 62
+			draw_circle(sim.state.position, sim.config.weapons[w.id].range, Color(0.25, 0.62, 0.55, 0.06))
+			draw_arc(sim.state.position, sim.config.weapons[w.id].range, 0, TAU, 56, Color(0.32, 0.72, 0.63, 0.22), 2)
+			draw_line(sim.state.position, p, Color("6b5944"), 2)
+			draw_circle(p, 8, Color("273b38"))
+			draw_circle(p, 3, GOLD)
+		if w.id == "weapon.welded_halo":
+			var angle = sim.state.tick * 0.045
+			draw_arc(sim.state.position, 31, angle, angle + TAU * 0.82, 36, Color("9ac99d"), 3)
+			draw_circle(sim.state.position + Vector2.from_angle(angle) * 31, 4, PAPER)
 	draw_saint(sim.state.position, sim.state.facing)
 	for e in fx: draw_effect(e)
 
@@ -411,9 +622,13 @@ func draw_boss_hud():
 	for e in sim.state.enemies:
 		if e.major:
 			panel(Rect2(293, 167, 490, 46), Color("152428"))
-			text_at("FOREMAN ENGINE" if e.type == sim.config.boss else "MEMORY CRANE", Vector2(309, 186), 12, GOLD)
-			if e.type == sim.config.boss: text_at("DEMOLITION" if e.hp / e.max_hp > 0.67 else ("WORKERS" if e.hp / e.max_hp > 0.34 else "FINAL ORDERS"), Vector2(617, 186), 11, RED)
+			var boss_names = {"boss.foreman_engine": "FOREMAN ENGINE", "boss.choir_regent": "CHOIR REGENT", "boss.factory_heart": "FACTORY HEART", "elite.memory_crane": "MEMORY CRANE"}
+			text_at(boss_names.get(e.type, str(e.type).trim_prefix("boss.").replace("_", " ").to_upper()), Vector2(309, 186), 12, GOLD)
+			if e.type == sim.current_boss_id():
+				var phase_name = "DEMOLITION" if not sim.is_destination() else sim.current_route().pressure.name
+				text_at(phase_name, Vector2(582, 186), 11, RED)
 			bar(Rect2(309, 196, 458, 6), e.hp / e.max_hp, RED)
+			if e.get("inspected", false): text_at("INSPECTED / " + sim.state.inspection, Vector2(309, 218), 10, Color("8edce0"))
 
 func draw_minimap():
 	var r = Rect2(76, 610, 150, 105)
@@ -421,14 +636,91 @@ func draw_minimap():
 	var factor = r.size / sim.arena.bounds.size
 	for obstacle in sim.arena.obstacles:
 		draw_rect(Rect2(r.position + (obstacle.position - sim.arena.bounds.position) * factor, obstacle.size * factor), MUTED)
-	for i in range(sim.state.machines.size()):
-		var data = sim.config.optional_repairs.machines[i]
-		var p = Vector2(data.position[0], data.position[1])
-		draw_circle(r.position + (p - sim.arena.bounds.position) * factor, 3, GREEN if sim.state.machines[i].complete else GOLD)
+	if sim.is_destination():
+		var objective = sim.objective_data()
+		for i in range(sim.state.objective.size()):
+			var node_data = objective.nodes[i]
+			var p = Vector2(node_data.position[0], node_data.position[1])
+			draw_circle(r.position + (p - sim.arena.bounds.position) * factor, 3, GREEN if sim.state.objective[i].complete else GOLD)
+	else:
+		for i in range(sim.state.machines.size()):
+			var data = sim.config.optional_repairs.machines[i]
+			var p = Vector2(data.position[0], data.position[1])
+			draw_circle(r.position + (p - sim.arena.bounds.position) * factor, 3, GREEN if sim.state.machines[i].complete else GOLD)
 	draw_circle(r.position + (sim.state.position - sim.arena.bounds.position) * factor, 3, PAPER)
 	var visible = Rect2(WORLD_VIEW.position - camera_offset, WORLD_VIEW.size)
 	draw_rect(Rect2(r.position + (visible.position - sim.arena.bounds.position) * factor, visible.size * factor), GREEN, false, 1)
-	text_at("WORKSHOP / 40 x 28m", r.position + Vector2(0, -7), 10, MUTED)
+	text_at(sim.arena.data.name.to_upper(), r.position + Vector2(0, -7), 10, MUTED)
+
+func draw_destination_objective():
+	var objective = sim.objective_data()
+	if objective.is_empty(): return
+	for i in range(sim.state.objective.size()):
+		var node = sim.state.objective[i]
+		var data = objective.nodes[i]
+		var p = Vector2(data.position[0], data.position[1])
+		var color = GREEN if node.complete else GOLD
+		draw_circle(p, 29, Color("1c3432"))
+		draw_arc(p, float(objective.radius), 0, TAU, 48, Color(color, 0.38), 2)
+		draw_arc(p, 38, -PI / 2, -PI / 2 + TAU * maxf(0.001, node.progress / float(objective.required_ticks)), 32, color, 4)
+		draw_gear(p, 18, color, sim.state.tick * 0.018 if node.complete else 0)
+		panel(Rect2(p + Vector2(-82, -74), Vector2(164, 22)), PANEL)
+		text_at(data.name, p + Vector2(-72, -57), 11, color)
+		if objective.type == "CALIBRATE_NODES" and not node.complete:
+			var unsafe = sim.state.enemies.any(func(enemy): return enemy.hp > 0 and enemy.p.distance_to(p) < float(objective.safety_radius))
+			if unsafe: text_at("CLEAR THE RING", p + Vector2(-49, 70), 10, RED)
+
+func draw_travel_background():
+	for y in range(160, 736, 54):
+		draw_line(Vector2(60, y), Vector2(1040, y), Color("1f3335"), 2)
+	for i in range(9):
+		var x = 105 + i * 116
+		draw_line(Vector2(x, 736), Vector2(505 + (x - 505) * 0.22, 158), Color("304344"), 2)
+	var route = sim.current_route()
+	var accent = GOLD if sim.state.route == "route.brass_choir" else GREEN
+	for i in range(6):
+		var p = Vector2(145 + i * 165, 570 - (i % 2) * 70)
+		draw_circle(p, 15 + i * 2, Color(accent, 0.16))
+		draw_arc(p, 18 + i * 2, 0, TAU, 20, accent, 2)
+
+func draw_route_choice():
+	draw_rect(Rect2(60, 148, 980, 588), Color(0.035, 0.075, 0.08, 0.96))
+	text_at("THE WORKSHOP ANSWERS", Vector2(118, 205), 13, GOLD)
+	text_at("Two roads need the same small saint.", Vector2(114, 255), 34, PAPER, true)
+	wrapped("Your relics, ranks, catalysts, Scrap and Blessing will carry forward. Eight Scrap from the Foreman is reserved for the road.", Vector2(118, 292), 840, 15, MUTED)
+	for i in range(sim.chapter.routes.size()):
+		var route = sim.chapter.routes[i]
+		var x = 88 + i * 470
+		panel(Rect2(x, 360, 448, 196), Color("213638"))
+		text_at(route.direction, Vector2(x + 22, 392), 11, GOLD)
+		text_at(route.name, Vector2(x + 20, 431), 25, PAPER, true)
+		wrapped(route.description, Vector2(x + 20, 462), 398, 14, GREEN)
+		wrapped(route.news, Vector2(x + 20, 509), 398, 12, MUTED)
+		text_at("ROAD COST / %d SCRAP" % route.cost, Vector2(x + 268, 543), 11, GOLD)
+
+func draw_travel():
+	draw_rect(Rect2(60, 148, 980, 588), Color(0.03, 0.065, 0.07, 0.80))
+	var route = sim.current_route()
+	text_at("ON THE ROAD / " + route.direction, Vector2(112, 207), 12, GOLD)
+	text_at(route.name, Vector2(108, 264), 42, PAPER, true)
+	var step = mini(sim.state.travel_step, route.travel.size() - 1)
+	wrapped(route.travel[step], Vector2(112, 335), 800, 23, PAPER)
+	for i in range(route.travel.size()):
+		var p = Vector2(190 + i * 245, 525)
+		draw_line(p, p + Vector2(200, 0), Color("49605c"), 3)
+		draw_circle(p, 11, GREEN if i <= step else MUTED)
+		text_at("0%d" % (i + 1), p + Vector2(-8, 36), 11, MUTED)
+	text_at("BUILD CARRIED / %d relics · %d Scrap · %d Shards" % [sim.state.weapons.size(), sim.state.scrap, sim.state.shards], Vector2(112, 570), 13, GREEN)
+
+func draw_memory():
+	draw_rect(Rect2(60, 148, 980, 588), Color(0.045, 0.06, 0.075, 0.96))
+	var memory = sim.current_route().memory
+	text_at(memory.title, Vector2(150, 225), 13, Color("cbb8ed"))
+	text_at("A borrowed purpose returns.", Vector2(145, 292), 38, PAPER, true)
+	draw_circle(Vector2(185, 405), 56, Color("5d5575"))
+	draw_arc(Vector2(185, 405), 72, 0, TAU, 40, Color("cbb8ed"), 3)
+	wrapped(memory.text, Vector2(285, 374), 650, 20, PAPER)
+	wrapped(memory.conclusion, Vector2(285, 465), 650, 15, GREEN)
 
 func draw_optional_machines():
 	for i in range(sim.state.machines.size()):
@@ -436,7 +728,7 @@ func draw_optional_machines():
 		var data = sim.config.optional_repairs.machines[i]
 		var p = Vector2(data.position[0], data.position[1])
 		var color = GREEN if machine.complete else GOLD
-		var working = not machine.complete and sim.state.position.distance_to(p) < sim.config.optional_repairs.radius
+		var working = not machine.complete and sim.state.active_machine == machine.id
 		if not machine.complete:
 			draw_arc(p, sim.config.optional_repairs.radius, 0, TAU, 40, Color("506657"), 1)
 			draw_arc(p, sim.config.optional_repairs.radius, -PI / 2, -PI / 2 + TAU * maxf(0.001, machine.progress / sim.config.optional_repairs.required_ticks), 40, color, 3)
@@ -445,9 +737,10 @@ func draw_optional_machines():
 		panel(Rect2(p + Vector2(-70, -57), Vector2(148, 17)), PANEL)
 		text_at(data.name, p + Vector2(-64, -44), 11, color)
 		text_at("RESTORED" if machine.complete else data.description, p + Vector2(-75, 76), 10, color)
+		if machine.get("deferred", "") == "INTEGRITY_FULL": text_at("SAVE FOR DAMAGE", p + Vector2(-67, 94), 10, MUTED)
 		if working:
 			draw_line(sim.state.position, p, GREEN, 2)
-			text_at("REPAIRING", p + Vector2(-32, -30), 10, GREEN)
+			text_at("REPAIRING · %.1fs" % ((sim.config.optional_repairs.required_ticks - machine.progress) / sim.config.tick_rate), p + Vector2(-52, -30), 10, GREEN)
 
 func draw_gear(p: Vector2, radius: float, color: Color, angle: float):
 	for i in range(8):
@@ -480,8 +773,21 @@ func draw_saint(p: Vector2, direction: Vector2, size_factor = 1.0):
 	draw_line(direction * (24 - recoil), direction * (39 - recoil), GOLD, 5)
 	if screen == "game" and sim.state.get("evolved", false):
 		draw_line(direction * 21 + direction.orthogonal() * 5, direction * 45 + direction.orthogonal() * 5, PAPER, 3)
+	if screen == "game" and sim.state.weapons.any(func(w): return w.get("toll", false)):
+		draw_line(Vector2(0, -20), Vector2(0, -34), Color("9e8150"), 4)
+		draw_colored_polygon(PackedVector2Array([Vector2(-11, -34), Vector2(11, -34), Vector2(15, -23), Vector2(-15, -23)]), Color("b58645"))
+		draw_circle(Vector2(0, -21), 3, PAPER)
 	draw_line(Vector2(-13, 2), Vector2(-25, 9), Color("ac7455"), 4)
 	draw_circle(Vector2(-25, 9), 4, GOLD)
+	if screen == "game" and sim.has_gift("gift.spare_hand"):
+		draw_line(Vector2(-10, -1), Vector2(-28, -9), Color("a99160"), 5)
+		draw_line(Vector2(-28, -9), Vector2(-35, 2), PAPER, 3)
+	if screen == "game" and sim.has_gift("gift.inspection_lens"):
+		draw_arc(Vector2(0, -9), 10, -0.9, 0.9, 14, Color("8edce0"), 3)
+		draw_line(Vector2(9, -11), Vector2(17, -18), Color("8edce0"), 2)
+	if screen == "game" and sim.has_gift("gift.black_ledger"):
+		draw_rect(Rect2(13, 4, 10, 14), Color("17171b"))
+		draw_line(Vector2(16, 7), Vector2(21, 7), GOLD, 1)
 	for bolt in [Vector2(-10, -15), Vector2(10, -15), Vector2(-10, 10), Vector2(10, 10)]: draw_circle(bolt, 1.4, PAPER)
 	draw_set_transform(camera_offset)
 
@@ -537,6 +843,10 @@ func draw_enemy(e):
 		draw_line(p + Vector2(-4, -e.radius - 17), p + Vector2(4, -e.radius - 9), GOLD, 2)
 		draw_line(p + Vector2(4, -e.radius - 17), p + Vector2(-4, -e.radius - 9), GOLD, 2)
 	if e.bound > sim.state.tick: draw_line(p, sim.state.position, Color("81b8d0"), 1.5)
+	if e.get("slow", 0) > sim.state.tick: draw_arc(p, e.radius + 10, 0, TAU, 24, Color("74b9a6"), 2)
+	if e.get("inspected", false):
+		draw_arc(p, e.radius + 14, 0, TAU, 28, Color("8edce0"), 2)
+		text_at("PRIORITY", p + Vector2(-25, -e.radius - 19), 9, Color("8edce0"))
 	if e.get("relay_strike_at", 0) > sim.state.tick and e.stun <= sim.state.tick:
 		var charge = 1.0 - float(e.relay_strike_at - sim.state.tick) / (sim.config.relay.strike_warning_ticks * sim.warning_multiplier())
 		draw_line(p, sim.relay_position(), Color(0.9, 0.4, 0.3, 0.6), 2)
@@ -562,6 +872,25 @@ func draw_effect(e):
 					var angle = (e.to - e.from).angle()
 					draw_arc(e.from, e.range * (1 - fade * 0.4), angle - 0.8, angle + 0.8, 24, color, 3, true)
 				"orbit": draw_arc(e.to, 23 * (2 - fade), 0, TAU, 20, color, 2)
+				"censer":
+					draw_circle(e.from, e.range, Color(color, fade * 0.06))
+					draw_arc(e.from, e.range * (1.0 - fade * 0.08), 0, TAU, 44, color, 3)
+				"winch":
+					var delta = e.to - e.from
+					for segment in range(3):
+						var a = e.from + delta * segment / 3.0
+						var b = e.from + delta * (segment + 0.82) / 3.0
+						draw_line(a, b, color, 5, true)
+					draw_line(e.to + Vector2(-7, -6), e.to, PAPER, 3)
+					draw_line(e.to + Vector2(-7, 6), e.to, PAPER, 3)
+				"halo":
+					draw_arc(e.from, 31, 0, TAU, 28, Color(color, fade * 0.65), 2)
+					draw_line(e.from, e.to, Color(0.75, 1.0, 0.78, fade), 2, true)
+					draw_arc(e.to, 11, 0, TAU, 16, color, 2)
+				"radial":
+					draw_circle(e.from, e.range * (1.0 - fade * 0.2), Color(color, fade * 0.055))
+					draw_arc(e.from, e.range * (1.0 - fade * 0.2), 0, TAU, 64, color, 6, true)
+					for i in range(4): draw_arc(e.from + Vector2.from_angle(i * PI / 2) * e.range * 0.55, 13, 0, TAU, 18, PAPER, 2)
 		"charge": draw_line(e.from, e.to, Color(0.9, 0.8, 0.5, fade * 0.35), 1)
 		"hit", "death":
 			for i in range(4):
@@ -587,17 +916,19 @@ func draw_loadout():
 		var data = sim.config.weapons[w.id]
 		var y = 219 + i * 79
 		text_at("%02d" % (i + 1), Vector2(1068, y), 12, MUTED)
-		text_at("Mercy Rail" if w.rail else data.short, Vector2(1095, y), 14, Color(data.color))
-		text_at("RANK " + ["I", "II", "III"][w.rank - 1] + (" · EVOLVED" if w.rail else ""), Vector2(1095, y + 20), 11, MUTED)
-	text_at("RESERVE", Vector2(1068, 549), 11, GOLD)
-	if not sim.state.reserve.is_empty(): text_at(sim.config.weapons[sim.state.reserve[0].id].short, Vector2(1068, 568), 12)
-	else: text_at("One open place", Vector2(1068, 568), 12, MUTED)
+		var evolved_name = "Mercy Rail" if w.get("rail", false) else ("The Great Toll" if w.get("toll", false) else data.short)
+		text_at(evolved_name, Vector2(1095, y), 14, Color(data.color))
+		text_at("RANK " + ["I", "II", "III"][w.rank - 1] + (" · EVOLVED" if sim.weapon_evolved(w) else ""), Vector2(1095, y + 20), 11, MUTED)
+	text_at("RESERVE", Vector2(1068, 539), 11, GOLD)
+	if not sim.state.reserve.is_empty(): text_at(sim.config.weapons[sim.state.reserve[0].id].short, Vector2(1068, 558), 12)
+	else: text_at("One open place", Vector2(1068, 558), 12, MUTED)
+	var gifts_y = 658 if sim.state.phase == "shop" else 589
+	text_at("GIFTS  %d / %d" % [sim.state.gifts.size(), sim.config.gift_slots], Vector2(1068, gifts_y), 11, GOLD)
+	for i in range(sim.state.gifts.size()): text_at(sim.config.gifts[sim.state.gifts[i]].short, Vector2(1068, gifts_y + 23 + i * 30), 10, Color("8edce0"))
 	if sim.state.phase != "shop":
-		text_at("DOCTRINE", Vector2(1068, 619), 11, GOLD)
-		text_at("Fulfilled" if sim.state.fulfilled else "Taking shape", Vector2(1068, 641), 15, GREEN)
-		if sim.state.fulfilled: text_at(["Faster relay work", "Staggers mark targets", "More healing motes"][sim.state.doctrine], Vector2(1068, 660), 11, MUTED)
-		text_at("%d machines laid to rest" % sim.state.kills, Vector2(1068, 684), 11, MUTED)
-		text_at("%d catalysts carried" % sim.state.catalysts.size(), Vector2(1068, 708), 11, MUTED)
+		text_at("DOCTRINE / " + ("FULFILLED" if sim.state.fulfilled else "TAKING SHAPE"), Vector2(1068, 664), 10, GOLD)
+		if sim.state.inspection != "": wrapped("LENS / " + sim.state.inspection, Vector2(1068, 683), 170, 9, Color("8edce0"))
+		else: text_at("%d machines laid to rest" % sim.state.kills, Vector2(1068, 686), 10, MUTED)
 
 func wrapped(value: String, p: Vector2, width: float, size = 14, color = MUTED):
 	var line = ""
@@ -614,7 +945,8 @@ func wrapped(value: String, p: Vector2, width: float, size = 14, color = MUTED):
 func draw_shop():
 	draw_rect(Rect2(60, 148, 980, 588), Color("14272b"))
 	text_at("The relic workshop", Vector2(108, 189), 29, PAPER, true)
-	text_at("Next: " + ["Rivet Hounds · intercept / displace", "Scrap Mites · collect / clear", "Choir Drones · approach / focus"][mini(2, int((sim.state.wave + 1) / 2))], Vector2(483, 186), 14, GREEN)
+	var forecast = sim.forecast_data()
+	text_at("Next: %s · %s" % [forecast.name, " / ".join(forecast.counters)], Vector2(483, 186), 14, GREEN)
 	for i in range(6):
 		var id = sim.state.offers[i]
 		var x = 94 + (i % 3) * 302
@@ -628,13 +960,17 @@ func draw_shop():
 		var price = ""
 		if id in sim.config.weapons:
 			name_text = sim.config.weapons[id].short
-			description = sim.config.weapons[id].description
+			description = sim.config.weapons[id].role + " Weakness: " + sim.config.weapons[id].weakness
 			price = "%d SCRAP · RANK I" % sim.catalogue[id].cost_scrap
 		elif id in sim.config.catalysts:
 			name_text = sim.config.catalysts[id].short
 			description = sim.config.catalysts[id].description
 			if sim.optional_mode() and id == "catalyst.saints_rivet": description = "Repair machines 25% faster. Rank III Nailer can evolve."
 			price = "2 RELIC SHARDS"
+		elif id in sim.config.gifts:
+			name_text = sim.config.gifts[id].short
+			description = sim.config.gifts[id].description
+			price = "%d SCRAP · GIFT" % sim.catalogue[id].cost_scrap
 		else:
 			if id == "service.repair":
 				name_text = "A little maintenance"
@@ -647,26 +983,43 @@ func draw_shop():
 				description = sim.config.shop_rules.services[sim.state.doctrine].description
 				if sim.optional_mode() and sim.state.doctrine == 0: description = "Restore 45 Saint integrity."
 				if sim.optional_mode() and sim.state.doctrine == 1: description = "Next wave: demolition warnings last 50% longer."
+				if sim.state.doctrine == 3: description = "Next wave: orbiting relics travel 35% farther."
 			price = "%d SCRAP / SERVICE" % (sim.config.shop_rules.services[sim.state.doctrine].cost if id == "service.doctrine" else sim.config.economy.repair_cost)
 		text_at(sim.config.shop_rules.roles[i] + (" / LOCKED" if sim.state.locked == id else ""), Vector2(x + 16, y + 16), 9, MUTED)
 		text_at(price, Vector2(x + 16, y + 33), 10, GOLD)
 		text_at(name_text, Vector2(x + 16, y + 60), 19, PAPER, true)
 		wrapped(description, Vector2(x + 16, y + 82), 252, 12)
-	text_at("Duplicate purchases combine automatically. Two of a rank become the next rank.", Vector2(108, 685), 13, MUTED)
+	text_at("Combine raises rank. Evolution consumes one catalyst. Gifts occupy two separate slots.", Vector2(108, 685), 13, MUTED)
 	var rank = 0
+	var bell_rank = 0
 	for w in sim.state.weapons:
-		if w.id == "weapon.nailer_small_mercies" and not w.rail: rank = maxi(rank, w.rank)
-	text_at("MERCY RAIL: Nailer %s / Rank III  +  Saint's Rivet %s" % ["absent" if rank == 0 else "Rank " + ["I", "II", "III"][rank - 1], "owned" if "catalyst.saints_rivet" in sim.state.catalysts else "missing"], Vector2(108, 714), 12, GOLD)
+		if w.id == "weapon.nailer_small_mercies" and not sim.weapon_evolved(w): rank = maxi(rank, w.rank)
+		if w.id == "weapon.bell_last_shift" and not sim.weapon_evolved(w): bell_rank = maxi(bell_rank, w.rank)
+	text_at("MERCY RAIL  Nailer %s + Rivet %s    /    GREAT TOLL  Bell %s + Clapper %s" % ["—" if rank == 0 else ["I", "II", "III"][rank - 1], "✓" if "catalyst.saints_rivet" in sim.state.catalysts else "—", "—" if bell_rank == 0 else ["I", "II", "III"][bell_rank - 1], "✓" if "catalyst.cracked_bell_clapper" in sim.state.catalysts else "—"], Vector2(108, 714), 11, GOLD)
 
 func draw_results():
 	draw_rect(Rect2(60, 148, 1192, 588), Color(0.04, 0.08, 0.09, 0.97))
 	var won = sim.state.phase == "won"
 	text_at("SHIFT COMPLETE" if won else "THE SHIFT FALLS SILENT", Vector2(220, 237), 14, GOLD)
-	text_at("A small miracle." if won else "Even saints need repairs.", Vector2(216, 305), 46, PAPER, true)
-	text_at(sim.state.last_reason, Vector2(220, 350), 20, GREEN if won else RED)
-	text_at(("%d enemies stopped     %d Scrap remaining     %d optional repairs" % [sim.state.kills, sim.state.scrap, sim.state.machines.filter(func(m): return m.complete).size()]) if sim.optional_mode() else ("%d machines stopped     %d Scrap remaining     %d%% relay repaired" % [sim.state.kills, sim.state.scrap, sim.state.progress * 100 / sim.config.relay.required_ticks]), Vector2(220, 409), 17)
-	text_at("Your machine: " + ", ".join(sim.state.weapons.map(func(w): return "Mercy Rail" if w.rail else sim.config.weapons[w.id].short)), Vector2(220, 452), 16, MUTED)
-	wrapped("MEMORY 01 / Your arm remembers a waterworks. Your bell remembers a factory. Neither remembers being asked to become a weapon." if won else ("The workshop keeps your place. Try another build, make room to dodge, or repair a machine for a useful reward." if sim.optional_mode() else "The workshop keeps your place. Try a different relic, leave the work circle to intercept threats, or return sooner to mend the relay."), Vector2(220, 510), 820, 18, PAPER)
+	text_at("A road remembers you." if won and sim.state.chapter_complete else ("A small miracle." if won else "Even saints need repairs."), Vector2(216, 305), 46, PAPER, true)
+	wrapped(sim.state.last_reason, Vector2(220, 350), 850, 18, GREEN if won else RED)
+	var summary = sim.state.result_summary
+	var outcome_line = ("%d stopped  ·  %d Scrap  ·  %d optional repairs" % [sim.state.kills, sim.state.scrap, summary.get("repairs", []).size()]) if sim.optional_mode() else ("%d stopped  ·  %d Scrap  ·  %d%% relay repaired" % [sim.state.kills, sim.state.scrap, sim.state.progress * 100 / sim.config.relay.required_ticks])
+	if sim.state.chapter_complete: outcome_line += "  ·  " + sim.current_route().name
+	text_at(outcome_line, Vector2(220, 402), 16)
+	var top = summary.get("top_weapon", "")
+	var top_name = sim.config.weapons[top].short if top in sim.config.weapons else "No relic recorded"
+	text_at("MOST WORK  %s · %d damage" % [top_name, int(summary.get("top_weapon_damage", 0))], Vector2(220, 440), 14, GOLD)
+	text_at("BLESSING  %s     EVOLUTION  %s" % ["FULFILLED" if summary.get("blessing_fulfilled", false) else "UNFULFILLED", str(summary.get("evolution", "")).replace("_", " ")], Vector2(220, 469), 13, MUTED)
+	text_at("GIFTS  " + ("NONE" if sim.state.gifts.is_empty() else ", ".join(sim.state.gifts.map(func(id): return sim.config.gifts[id].short))), Vector2(220, 492), 12, Color("8edce0"))
+	if not won:
+		var loss_segment = str(summary.get("worst_damage_segment", "wave " + str(summary.get("worst_damage_wave", 0)))).replace("site.", "").replace(":wave_", " / wave ").replace("_", " ")
+		text_at("PRIMARY CAUSE  " + summary.get("failure_cause", "UNCLASSIFIED") + " · largest loss " + loss_segment, Vector2(220, 515), 14, RED)
+	wrapped(summary.get("replay_cue", "Try one clear change next shift."), Vector2(220, 545), 820, 17, PAPER)
+	var memory_copy = sim.current_route().memory.text if won and sim.state.chapter_complete else "MEMORY 01 / Your arm remembers a waterworks. Your bell remembers a factory. Neither remembers being asked to become a weapon."
+	wrapped(memory_copy, Vector2(220, 603), 820, 14, MUTED)
+	if not recent_unlocks.is_empty():
+		text_at("NEW OPTIONS  " + ", ".join(recent_unlocks.map(func(id): return str(id).get_slice(".", 1).replace("_", " ").to_upper())), Vector2(220, 638), 11, GOLD)
 
 func capture_sequence():
 	# Reproducible visual fixtures exercise real simulation commands; not a human playthrough.

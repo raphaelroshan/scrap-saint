@@ -20,14 +20,28 @@ if ($LASTEXITCODE -ne 0) { throw 'Relay tests failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Arena tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_simulation.gd 2>&1 | Tee-Object -FilePath "$bundlePath\simulation.log"
 if ($LASTEXITCODE -ne 0) { throw 'Simulation tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_chapter.gd 2>&1 | Tee-Object -FilePath "$bundlePath\chapter.log"
+if ($LASTEXITCODE -ne 0) { throw 'Chapter tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_roaming_quality.gd 2>&1 | Tee-Object -FilePath "$bundlePath\roaming-quality.log"
+if ($LASTEXITCODE -ne 0) { throw 'Roaming quality tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_ui.gd 2>&1 | Tee-Object -FilePath "$bundlePath\ui.log"
 if ($LASTEXITCODE -ne 0) { throw 'UI tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_assembly.gd 2>&1 | Tee-Object -FilePath "$bundlePath\assembly.log"
+if ($LASTEXITCODE -ne 0) { throw 'Assembly tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/run_playthroughs.gd -- --optional 2>&1 | Tee-Object -FilePath "$bundlePath\playthroughs.log"
 if ($LASTEXITCODE -ne 0) { throw 'Playthrough runner failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/run_assembly_playthroughs.gd 2>&1 | Tee-Object -FilePath "$bundlePath\assembly-playthroughs.log"
+if ($LASTEXITCODE -ne 0) { throw 'Assembly playthrough runner failed' }
 & $GodotBin --path $projectRoot -- --capture-dir=$bundlePath 2>&1 | Tee-Object -FilePath "$bundlePath\capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Capture failed' }
+& $GodotBin --path $projectRoot --script res://tests/capture_chapter.gd -- --capture-dir=$bundlePath 2>&1 | Tee-Object -FilePath "$bundlePath\chapter-capture.log"
+if ($LASTEXITCODE -ne 0) { throw 'Chapter capture failed' }
+& $GodotBin --path $projectRoot --script res://tests/capture_core_quality.gd 2>&1 | Tee-Object -FilePath "$bundlePath\core-quality-capture.log"
+if ($LASTEXITCODE -ne 0) { throw 'Core quality capture failed' }
+& $GodotBin --path $projectRoot --script res://tests/capture_assembly.gd 2>&1 | Tee-Object -FilePath "$bundlePath\assembly-capture.log"
+if ($LASTEXITCODE -ne 0) { throw 'Assembly capture failed' }
 $commitId = git -C $projectRoot rev-parse HEAD
 $godotVersion = & $GodotBin --version
 $files = Get-ChildItem -LiteralPath "$projectRoot\game" -Filter '*.gd' | ForEach-Object { @{ path = $_.Name; sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash } }
-@{ build = '0.1.0'; base_commit = $commitId; dirty = [bool](git -C $projectRoot status --porcelain); godot = $godotVersion; viewport = @(1280,800); scaling = 'canvas_items'; seed = 147; timestamp_utc = [DateTime]::UtcNow.ToString('o'); capture_type = 'rendered simulation fixtures; includes explicit setup budgets and Results fixture'; source_hashes = @($files); limitation = 'No human playtest or performance benchmark'; next_task = 'Human playtest of the shared arena and build feedback' } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath "$bundlePath\provenance.json" -Encoding utf8
+@{ build = '0.2.0-preview'; base_commit = $commitId; dirty = [bool](git -C $projectRoot status --porcelain); godot = $godotVersion; viewport = @(1280,800); scaling = 'canvas_items'; seed = 147; timestamp_utc = [DateTime]::UtcNow.ToString('o'); capture_type = 'rendered simulation fixtures; includes explicit setup budgets and Results fixture'; source_hashes = @($files); limitation = 'No human playtest or performance benchmark'; next_task = 'Human playtest of the shared arena and build feedback' } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath "$bundlePath\provenance.json" -Encoding utf8
 Write-Output "Bundle ready for visual review: $bundlePath"

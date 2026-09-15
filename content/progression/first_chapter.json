@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "starting_unlocks": {
+    "frames": ["frame.pilgrim"],
+    "blessings": ["blessing.workshop_gospel", "blessing.bell_ward", "blessing.mourner"],
+    "sites": ["site.collapsed_workshop"],
+    "recipes": ["evolution.mercy_rail"]
+  },
+  "unlocks": [
+    {
+      "id": "unlock.frame.surveyor",
+      "condition": "complete_optional_repair",
+      "reward_type": "frame",
+      "reward_id": "frame.surveyor",
+      "reason": "Restore any optional machine during a completed shift."
+    },
+    {
+      "id": "unlock.frame.keeper",
+      "condition": "defeat_foreman",
+      "reward_type": "frame",
+      "reward_id": "frame.keeper",
+      "reason": "Defeat the Foreman Engine."
+    },
+    {
+      "id": "unlock.site.brass_choir",
+      "condition": "choose_brass_route",
+      "reward_type": "site",
+      "reward_id": "site.brass_choir_relay",
+      "reason": "Commit to the Brass Choir route after the First Shift."
+    },
+    {
+      "id": "unlock.site.rootworks",
+      "condition": "choose_rootworks_route",
+      "reward_type": "site",
+      "reward_id": "site.rootworks_pump",
+      "reason": "Commit to the Rootworks route after the First Shift."
+    },
+    {
+      "id": "unlock.blessing.procession",
+      "condition": "complete_destination",
+      "reward_type": "blessing",
+      "reward_id": "blessing.procession",
+      "reason": "Carry one assembled machine safely through a destination site."
+    }
+  ],
+  "memories": [
+    {
+      "id": "memory.first_shift",
+      "site_id": "site.collapsed_workshop",
+      "text": "Your arm remembers a waterworks. Your bell remembers a factory. Neither remembers being asked to become a weapon."
+    },
+    {
+      "id": "memory.borrowed_bell",
+      "site_id": "site.brass_choir_relay",
+      "text": "The bell once announced a shift. Someone later taught it to announce obedience."
+    },
+    {
+      "id": "memory.borrowed_arm",
+      "site_id": "site.rootworks_pump",
+      "text": "The pump did not know who deserved water. It only knew that something downstream was thirsty."
+    }
+  ]
+}

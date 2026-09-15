@@ -1,0 +1,114 @@
+{
+  "id": "chapter.first_pilgrimage",
+  "name": "The First Pilgrimage",
+  "routes": [
+    {
+      "id": "route.brass_choir",
+      "site_id": "site.brass_choir_relay",
+      "name": "Brass Choir Relay",
+      "direction": "NORTH ROAD / THREE SIGNAL FIRES",
+      "description": "Tune three relay bells while the Choir bends the timing of every mechanism.",
+      "cost": 8,
+      "news": "Ada-9 heard three bells answer one another. None kept the same time.",
+      "arena_path": "res://content/arenas/brass_choir_relay.json",
+      "wave_count": 4,
+      "wave_ticks": 3000,
+      "spawn_interval": 104,
+      "enemy_pool": ["enemy.choir_drone", "enemy.cinder_spitter", "enemy.rivet_hound"],
+      "wave_profiles": [
+        {"name": "OUT-OF-TIME ESCORT", "pressure": "Choir drones hold distance while Hounds test the open lanes.", "primary": "enemy.choir_drone", "primary_weight": 1, "support": ["enemy.rivet_hound"], "spawn_interval": 124, "counters": ["orbit", "control"]},
+        {"name": "DELAYED REFRAIN", "pressure": "One Cinder Spitter writes a delayed beat through a mixed escort.", "primary": "enemy.cinder_spitter", "primary_weight": 1, "support": ["enemy.choir_drone", "enemy.rivet_hound"], "spawn_interval": 132, "counters": ["movement", "priority"]},
+        {"name": "BROKEN PROCESSION", "pressure": "Hounds close the road while a single ranged line denies stillness.", "primary": "enemy.rivet_hound", "primary_weight": 2, "support": ["enemy.cinder_spitter"], "spawn_interval": 124, "counters": ["control", "movement"]},
+        {"name": "THE REGENT'S MEASURE", "pressure": "The Regent slows weapon cycles while its Choir screens the final relay.", "primary": "enemy.choir_drone", "primary_weight": 2, "support": ["enemy.rivet_hound"], "spawn_interval": 116, "counters": ["priority", "orbit", "control"]}
+      ],
+      "boss": "boss.choir_regent",
+      "boss_hp": 1150,
+      "arrival_repair_floor": 1.0,
+      "objective": {
+        "id": "objective.tune_choir_relays",
+        "name": "TUNE THE THREE RELAYS",
+        "type": "CALIBRATE_NODES",
+        "description": "Stand inside a relay ring after clearing nearby hostiles. Progress persists.",
+        "radius": 72,
+        "safety_radius": 115,
+        "required_ticks": 150,
+        "nodes": [
+          {"id": "relay.vesper", "name": "VESPER BELL", "position": [50, 170]},
+          {"id": "relay.shift", "name": "SHIFT BELL", "position": [760, 90]},
+          {"id": "relay.mercy", "name": "MERCY BELL", "position": [820, 640]}
+        ]
+      },
+      "pressure": {
+        "name": "REGENT RESONANCE",
+        "description": "The Regent periodically slows every weapon cycle; move first, then endure the toll.",
+        "interval": 300,
+        "duration": 120,
+        "cooldown_multiplier": 1.35
+      },
+      "travel": [
+        "The workshop lamps become three small stars behind you.",
+        "Bell wire crosses the road. Every loose bolt hums before the wind arrives.",
+        "The Choir Relay answers with a note too orderly to be welcoming."
+      ],
+      "memory": {
+        "id": "memory.borrowed_bell",
+        "title": "MEMORY / THE BORROWED BELL",
+        "text": "Your bell remembers warning workers before a furnace opened. It was built to preserve choice, not demand obedience.",
+        "conclusion": "The north road carries your repaired signal. The Choir heard a bell ring without permission."
+      }
+    },
+    {
+      "id": "route.rootworks",
+      "site_id": "site.rootworks_pump",
+      "name": "Rootworks Pump",
+      "direction": "LOW ROAD / WATER UNDER IRON",
+      "description": "Stabilize an exposed water pump while grafted machines repair one another.",
+      "cost": 6,
+      "news": "Morrow found wet footprints made by machines that have no feet.",
+      "arena_path": "res://content/arenas/rootworks_pump.json",
+      "wave_count": 4,
+      "wave_ticks": 3000,
+      "spawn_interval": 98,
+      "enemy_pool": ["enemy.rust_pilgrim", "enemy.forklift_brute", "enemy.scrap_mite"],
+      "wave_profiles": [
+        {"name": "GRAFTED HANDS", "pressure": "Rust Pilgrims sustain a light scavenger screen around the exposed pump.", "primary": "enemy.rust_pilgrim", "primary_weight": 1, "support": ["enemy.scrap_mite"], "spawn_interval": 116, "counters": ["priority", "pierce"]},
+        {"name": "LOAD-BEARING LINE", "pressure": "Forklift Brutes shove the Saint away while Pilgrims repair each opening.", "primary": "enemy.forklift_brute", "primary_weight": 1, "support": ["enemy.rust_pilgrim", "enemy.scrap_mite"], "spawn_interval": 118, "counters": ["control", "priority"]},
+        {"name": "SALVAGE FEVER", "pressure": "Mites strip loose Scrap behind a slow line of grafted repairers.", "primary": "enemy.scrap_mite", "primary_weight": 2, "support": ["enemy.rust_pilgrim"], "spawn_interval": 108, "counters": ["area", "pierce"]},
+        {"name": "THE HEART'S QUOTA", "pressure": "The Factory Heart calls repairers behind a final heavy work line.", "primary": "enemy.forklift_brute", "primary_weight": 1, "support": ["enemy.rust_pilgrim", "enemy.scrap_mite"], "spawn_interval": 116, "counters": ["priority", "control", "area"]}
+      ],
+      "boss": "boss.factory_heart",
+      "boss_hp": 1250,
+      "arrival_repair_floor": 1.0,
+      "objective": {
+        "id": "objective.stabilize_rootworks_pump",
+        "name": "STABILIZE THE WATER PUMP",
+        "type": "REPAIR_PUMP",
+        "description": "Work inside the pump ring. The repair persists even when the roots force you away.",
+        "radius": 86,
+        "safety_radius": 0,
+        "required_ticks": 420,
+        "nodes": [
+          {"id": "pump.rootworks", "name": "ROOTWORKS PUMP", "position": [470, 365]}
+        ]
+      },
+      "pressure": {
+        "name": "GRAFTED RECOVERY",
+        "description": "The Heart calls a Rust Pilgrim to sustain the crowd until the pump is stable.",
+        "interval": 360,
+        "duration": 0,
+        "cooldown_multiplier": 1.0
+      },
+      "travel": [
+        "The road sinks until old pipes become handrails.",
+        "Warm water clicks beneath the plates. Something below keeps trying to repair the road.",
+        "A pump coughs once in the dark, then waits for your answer."
+      ],
+      "memory": {
+        "id": "memory.borrowed_arm",
+        "title": "MEMORY / THE WATERWORKS ARM",
+        "text": "Your repair arm remembers closing a valve while the factory order said to keep production moving. Someone chose the town over the schedule.",
+        "conclusion": "Water returns by the low road. The Rootworks learned that a graft may keep its own purpose."
+      }
+    }
+  ]
+}
