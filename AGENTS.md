@@ -2,7 +2,7 @@
 
 ## Read first
 
-Before editing, read [`README.md`](README.md), [`docs/astra_game_bible.md`](docs/astra_game_bible.md), [`docs/story_and_acts.md`](docs/story_and_acts.md), [`design/gameplay_contract.md`](design/gameplay_contract.md), [`design/shop_and_blessings.md`](design/shop_and_blessings.md), and [`docs/progression_map_weapons_metagame.md`](docs/progression_map_weapons_metagame.md). Then select the smallest relevant roadmap and source/test files.
+Before editing, read [`README.md`](README.md), [`docs/agent_completion_prompt.md`](docs/agent_completion_prompt.md), [`docs/astra_game_bible.md`](docs/astra_game_bible.md), [`docs/story_and_acts.md`](docs/story_and_acts.md), [`design/gameplay_contract.md`](design/gameplay_contract.md), [`design/shop_and_blessings.md`](design/shop_and_blessings.md), and [`docs/progression_map_weapons_metagame.md`](docs/progression_map_weapons_metagame.md). Then select the smallest relevant roadmap and source/test files.
 
 ## Product invariants
 
