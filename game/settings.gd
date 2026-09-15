@@ -91,9 +91,14 @@ func _migrate(loaded: Dictionary) -> Dictionary:
 	var version = int(loaded.get("version", 1))
 	if version < 1 or version > CURRENT_VERSION: return {}
 	var fresh = state.duplicate(true)
-	for key in fresh.keys():
-		if key == "controls": continue
-		if loaded.has(key): fresh[key] = loaded[key]
+	for key in ["muted", "reduced_effects", "screen_shake", "fullscreen"]:
+		if loaded.get(key) is bool: fresh[key] = loaded[key]
+	var volume = loaded.get("master_volume", fresh.master_volume)
+	if (volume is float or volume is int) and float(volume) >= 0.0 and float(volume) <= 1.0:
+		fresh.master_volume = float(volume)
+	var scale = loaded.get("ui_scale", fresh.ui_scale)
+	if (scale is float or scale is int) and float(scale) >= 0.9 and float(scale) <= 1.3:
+		fresh.ui_scale = float(scale)
 	if loaded.get("controls", {}) is Dictionary:
 		for action in ACTIONS:
 			if loaded.controls.has(action) and int(loaded.controls[action]) > 0:

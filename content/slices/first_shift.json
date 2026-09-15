@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "slice.first_shift",
-  "version": "0.2.0-preview",
+  "version": "0.2.1-preview",
   "tick_rate": 60,
   "wave_ticks": 4200,
   "wave_count": 8,

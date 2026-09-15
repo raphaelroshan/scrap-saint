@@ -4,6 +4,7 @@ var arena = preload("res://game/arena.gd").new()
 var config = {}
 var catalogue = {}
 var frames = {}
+var bosses = {}
 var chapter = {}
 var routes = {}
 var state = {}
@@ -21,12 +22,14 @@ func _init():
 		catalogue[item.id] = item
 	for frame in JSON.parse_string(FileAccess.get_file_as_string("res://content/frames/first_chapter.json")).frames:
 		frames[frame.id] = frame
+	for boss in JSON.parse_string(FileAccess.get_file_as_string("res://content/bosses/first_slice.json")).bosses:
+		bosses[boss.id] = boss
 
 func start(doctrine: int = 0, seed_value: int = 147, mode: String = "relay", frame_id: String = "frame.pilgrim", run_id: String = ""):
 	arena.load_file("res://content/arenas/collapsed_workshop.json")
 	if not frames.has(frame_id): frame_id = "frame.pilgrim"
 	var frame = frames[frame_id]
-	state = {"mode": "optional" if mode == "optional" else "relay", "machines": [], "version": 2, "run_id": run_id if run_id != "" else "test-%d-%d-%s" % [seed_value, doctrine, frame_id], "frame_id": frame_id, "max_hp": float(frame.structure), "move_speed": float(frame.speed), "repair_grace_ticks": int(frame.repair_grace_ticks), "knockback_multiplier": float(frame.knockback_multiplier), "keeper_shove_segment": "", "repair_grace_until": 0, "arena_id": arena.data.id, "site_id": "site.collapsed_workshop", "route": "", "travel_step": 0, "objective": [], "objective_complete": false, "memory_id": "", "chapter_complete": false, "pressure_until": 0, "seed": seed_value, "rng": maxi(1, seed_value), "tick": 0, "phase": "combat", "paused": false,
+	state = {"mode": "optional" if mode == "optional" else "relay", "machines": [], "version": 2, "run_id": run_id if run_id != "" else "test-%d-%d-%s" % [seed_value, doctrine, frame_id], "frame_id": frame_id, "max_hp": float(frame.structure), "move_speed": float(frame.speed), "repair_grace_ticks": int(frame.repair_grace_ticks), "knockback_multiplier": float(frame.knockback_multiplier), "keeper_shove_segment": "", "repair_grace_until": 0, "arena_id": arena.data.id, "site_id": "site.collapsed_workshop", "route": "", "travel_step": 0, "objective": [], "objective_complete": false, "objective_lock_until": 0, "memory_id": "", "chapter_complete": false, "pressure_until": 0, "pressure_multiplier": 1.0, "seed": seed_value, "rng": maxi(1, seed_value), "tick": 0, "phase": "combat", "paused": false,
 		"wave": 1, "wave_tick": 0, "doctrine": doctrine, "position": arena.point(arena.data.start), "facing": Vector2.UP,
 		"hp": float(frame.structure), "relay_hp": float(config.relay.structure * config.relay.starting_fraction), "progress": 0.0,
 		"scrap": int(config.economy.starting_scrap), "shards": 0, "kills": 0, "next_id": 1,
@@ -46,6 +49,7 @@ func start(doctrine: int = 0, seed_value: int = 147, mode: String = "relay", fra
 		state.machines.append({"id": machine.id, "progress": 0.0, "complete": false, "deferred": ""})
 	events.clear()
 	call_deferred_spawn = false
+	deferred_spawn_id = ""
 
 func make_weapon(id: String, rank: int = 1):
 	return {"id": id, "rank": rank, "ready": 0, "rail": false, "toll": false}
@@ -236,7 +240,9 @@ func enter_destination(route: Dictionary):
 	for node in route.objective.nodes:
 		state.objective.append({"id": node.id, "progress": 0.0, "complete": false})
 	state.objective_complete = false
+	state.objective_lock_until = 0
 	state.pressure_until = 0
+	state.pressure_multiplier = 1.0
 	emit("destination_arrived", {"route": state.route, "site_id": state.site_id, "arrival_repair": arrival_repair})
 
 func objective_data() -> Dictionary:
@@ -255,6 +261,7 @@ func update_destination_objective():
 func destination_node_valid(index: int, source: Vector2, radius: float) -> bool:
 	var objective = objective_data()
 	if objective.is_empty() or index < 0 or index >= state.objective.size() or state.objective[index].complete: return false
+	if state.tick < int(state.get("objective_lock_until", 0)): return false
 	var node_data = objective.nodes[index]
 	var p = Vector2(node_data.position[0], node_data.position[1])
 	if source.distance_to(p) >= radius: return false
@@ -824,7 +831,50 @@ func spawn(id: String):
 
 func boss_phase(enemy: Dictionary) -> int:
 	var ratio = enemy.hp / enemy.max_hp
-	return 0 if ratio > 0.67 else (1 if ratio > 0.34 else 2)
+	var thresholds = bosses.get(enemy.type, {}).get("phase_thresholds", [0.67, 0.34])
+	return 0 if ratio > float(thresholds[0]) else (1 if ratio > float(thresholds[1]) else 2)
+
+func boss_phase_data(enemy: Dictionary, phase: int = -1) -> Dictionary:
+	var contract = bosses.get(enemy.type, {})
+	var phases = contract.get("phases", [])
+	var index = boss_phase(enemy) if phase < 0 else phase
+	return phases[index] if index >= 0 and index < phases.size() else {}
+
+func boss_phase_name(enemy: Dictionary) -> String:
+	var data = boss_phase_data(enemy)
+	return str(data.get("name", data.get("id", "PRESSURE"))).to_upper()
+
+func append_boss_hazard(boss: Dictionary, phase_data: Dictionary, position: Vector2):
+	var warning_ticks = int(float(phase_data.warning_ticks) * warning_multiplier())
+	state.hazards.append({"p": position, "from": boss.p, "until": state.tick + warning_ticks, "warning_ticks": warning_ticks,
+		"radius": float(phase_data.hazard_radius), "damage": float(phase_data.hazard_damage), "source": boss.type, "source_id": boss.id,
+		"copy": false, "kind": str(phase_data.id), "phase": boss.phase})
+
+func destination_hazard_points(pattern: String) -> Array:
+	var points: Array = []
+	if pattern in ["player", "player_and_objective_nodes", "objective_and_player"]:
+		points.append(state.position)
+	if pattern in ["objective", "objective_nodes", "player_and_objective_nodes", "objective_and_player"]:
+		for node in objective_data().get("nodes", []):
+			var point = Vector2(node.position[0], node.position[1])
+			if not points.any(func(existing): return existing.distance_to(point) < 1.0): points.append(point)
+	return points
+
+func update_destination_boss(boss: Dictionary, boss_elapsed: int, phase_data: Dictionary):
+	if phase_data.is_empty() or boss_elapsed <= 0 or boss_elapsed % int(phase_data.interval) != 0: return
+	for point in destination_hazard_points(str(phase_data.hazard_pattern)):
+		append_boss_hazard(boss, phase_data, point)
+	if boss.type == "boss.choir_regent":
+		state.pressure_until = state.tick + int(phase_data.pressure_duration)
+		state.pressure_multiplier = float(phase_data.cooldown_multiplier)
+	if boss.type == "boss.factory_heart":
+		state.objective_lock_until = maxi(int(state.objective_lock_until), state.tick + int(phase_data.objective_lock_ticks))
+		var summon_id = str(phase_data.get("summon_id", ""))
+		if summon_id != "" and state.enemies.size() < int(config.combat.enemy_limit):
+			call_deferred_spawn = true
+			deferred_spawn_id = summon_id
+	emit("boss_contract", {"position": boss.p, "boss_id": boss.type, "phase_id": phase_data.id, "phase_name": phase_data.name,
+		"rule": phase_data.rule, "pressure_until": state.pressure_until, "objective_lock_until": state.objective_lock_until})
 
 func update_enemies():
 	for e in state.enemies:
@@ -835,17 +885,23 @@ func update_enemies():
 			var boss_elapsed = state.tick - int(e.get("spawn_tick", state.tick))
 			if e.phase != phase:
 				e.phase = phase
-				var phase_name = ["DEMOLITION", "WORKERS", "FINAL_ORDERS"][phase] if not is_destination() else current_route().pressure.name
+				var phase_name = ["DEMOLITION", "WORKERS", "FINAL_ORDERS"][phase] if not is_destination() else boss_phase_name(e)
 				emit("boss_phase", {"position": e.p, "phase": phase, "name": phase_name})
-			if boss_elapsed > 0 and boss_elapsed % int(config.boss_rules.hazard_interval) == 0:
+			if boss and is_destination():
+				update_destination_boss(e, boss_elapsed, boss_phase_data(e, phase))
+			elif boss_elapsed > 0 and boss_elapsed % int(config.boss_rules.hazard_interval) == 0:
 				var offsets = config.boss_rules.phase_hazard_offsets[phase] if boss else [[0, 0]]
 				for i in range(offsets.size()):
 					var offset = Vector2(offsets[i][0], offsets[i][1]).rotated((boss_elapsed / int(config.boss_rules.hazard_interval) + phase) * PI / 2.0)
 					var p = arena.move_body(state.position, offset, config.boss_rules.hazard_radius)
-					state.hazards.append({"p": p, "from": e.p, "until": state.tick + int(config.boss_rules.hazard_warning_ticks * warning_multiplier()), "radius": config.boss_rules.hazard_radius, "source": e.type, "source_id": e.id, "copy": e.type == config.elite and has_evolution("evolution.mercy_rail"), "copy_shape": "rail"})
+					var copies_mercy = e.type == config.elite and has_evolution("evolution.mercy_rail")
+					var hazard = {"p": p, "from": e.p, "until": state.tick + int(config.boss_rules.hazard_warning_ticks * warning_multiplier()), "radius": config.boss_rules.hazard_radius, "source": e.type, "source_id": e.id, "copy": copies_mercy}
+					if copies_mercy:
+						hazard.copy_evolution = "evolution.mercy_rail"
+						hazard.copy_shape = "rail"
+					state.hazards.append(hazard)
 				emit("warning", {"position": e.p, "phase": phase, "safe_lane": (phase + int(boss_elapsed / config.boss_rules.hazard_interval)) % 4})
-			if boss and e.hp / e.max_hp < 0.67 and boss_elapsed > 0 and boss_elapsed % int(config.boss_rules.worker_interval) == 0: call_deferred_spawn = true
-			if boss and is_destination(): update_destination_pressure(e, boss_elapsed)
+			if boss and not is_destination() and e.hp / e.max_hp < 0.67 and boss_elapsed > 0 and boss_elapsed % int(config.boss_rules.worker_interval) == 0: call_deferred_spawn = true
 		if e.stun > state.tick:
 			e.relay_strike_at = 0
 			continue
@@ -877,11 +933,12 @@ func update_enemies():
 			e.attack = state.tick + int(data.attack_interval)
 			state.hazards.append({"p": state.position, "from": e.p, "until": state.tick + int(data.warning_ticks * warning_multiplier()), "warning_ticks": data.warning_ticks * warning_multiplier(), "radius": data.blast_radius, "damage": data.damage, "copy": false, "source": e.type, "source_id": e.id})
 		var direction = arena.direction_to(e.p, target, e.radius)
-		var speed = float(config.boss_rules.phase_speed[e.phase]) if e.type == current_boss_id() else (float(config.enemy_rules.major_speed) if e.major else float(data.speed))
+		var destination_phase = boss_phase_data(e, e.phase) if e.type == current_boss_id() and is_destination() else {}
+		var speed = float(destination_phase.get("speed", config.boss_rules.phase_speed[e.phase])) if e.type == current_boss_id() else (float(config.enemy_rules.major_speed) if e.major else float(data.speed))
 		if e.get("slow", 0) > state.tick: speed *= 0.62
 		# Controllers threaten the relay through announced hazards and workers.
 		# They do not park on it and apply unavoidable contact damage.
-		var major_stop = float(config.boss_rules.phase_stop_distance[e.phase]) if e.type == current_boss_id() else float(config.enemy_rules.drone_distance)
+		var major_stop = float(destination_phase.get("stop_distance", config.boss_rules.phase_stop_distance[e.phase])) if e.type == current_boss_id() else float(config.enemy_rules.drone_distance)
 		if e.major and e.p.distance_to(target) < major_stop: speed = 0
 		if e.bound > state.tick: speed *= 0.3
 		if e.type in ["enemy.rivet_hound", "enemy.forklift_brute"] and e.p.distance_to(target) < config.enemy_rules.hound_range:
@@ -910,22 +967,14 @@ func update_enemies():
 		update_relay_strike(e, data.damage)
 	if call_deferred_spawn:
 		call_deferred_spawn = false
-		spawn("enemy.rust_pilgrim" if state.get("route", "") == "route.rootworks" else "enemy.rivet_hound")
+		var spawn_id = deferred_spawn_id if deferred_spawn_id != "" else ("enemy.rust_pilgrim" if state.get("route", "") == "route.rootworks" else "enemy.rivet_hound")
+		deferred_spawn_id = ""
+		spawn(spawn_id)
 		state.enemies.back().worker = true
 		emit("worker_called", {"position": state.enemies.back().p, "source": current_boss_id()})
 
-func update_destination_pressure(boss: Dictionary, boss_elapsed: int):
-	var route = current_route()
-	var pressure = route.get("pressure", {})
-	if pressure.is_empty() or int(pressure.interval) <= 0 or boss_elapsed <= 0 or boss_elapsed % int(pressure.interval) != 0: return
-	if state.route == "route.brass_choir":
-		state.pressure_until = state.tick + int(pressure.duration)
-		emit("site_pressure", {"position": boss.p, "pressure": pressure.name})
-	elif state.route == "route.rootworks" and not state.objective_complete:
-		spawn("enemy.rust_pilgrim")
-		emit("site_pressure", {"position": boss.p, "pressure": pressure.name})
-
 var call_deferred_spawn = false
+var deferred_spawn_id = ""
 
 func hurt_saint(amount: float, source: String = "contact"):
 	if state.tick < state.hurt_until: return
@@ -1034,7 +1083,7 @@ func update_weapons():
 				break
 		if "catalyst.quiet_gear" in state.catalysts: cooldown *= config.catalysts["catalyst.quiet_gear"].cooldown_multiplier
 		if state.calibrated: cooldown *= config.shop_rules.calibration_multiplier
-		if is_destination() and state.pressure_until > state.tick: cooldown *= float(current_route().pressure.cooldown_multiplier)
+		if is_destination() and state.pressure_until > state.tick: cooldown *= float(state.get("pressure_multiplier", current_route().pressure.cooldown_multiplier))
 		w.ready = state.tick + int(cooldown)
 		var origin = state.position
 		var direction = (target.p - origin).normalized() if target != null else Vector2.from_angle(state.tick * 0.045)
@@ -1195,12 +1244,13 @@ func restore(saved: Dictionary) -> bool:
 	state.version = 2
 	if not state.has("mode"): state.mode = "relay"
 	if not state.has("machines"): state.machines = []
+	var legacy_pressure_multiplier = float(routes.get(saved_route, {}).get("pressure", {}).get("cooldown_multiplier", 1.0))
 	# Compatible defaults for existing authored-workshop saves.
 	var defaults = {"run_id": "legacy-%d-%d" % [saved.get("seed", 0), saved.get("tick", 0)], "frame_id": "frame.pilgrim", "max_hp": float(config.saint.structure), "move_speed": float(config.saint.speed), "repair_grace_ticks": 0, "repair_grace_until": 0, "knockback_multiplier": 1.0, "keeper_shove_segment": "", "relay_last_hit": -999, "relay_damage_sources": {}, "relay_last_source": "", "backup_absorbed": 0.0, "calibrated": false, "service_active": false, "motes_left": 0,
 		"spawn_count": 0, "active_machine": "", "repair_blocked_until": 0, "signal_reserve": 0, "kills_by_weapon": {}, "damage_taken": {}, "damage_by_wave": {}, "last_damage_source": "",
 		"scrap_sources": {"starting": int(config.economy.starting_scrap)}, "metrics": {"first_contact_tick": -1, "longest_threat_gap": 0, "threat_gap_started": state.get("tick", 0), "had_threat": false, "repairs_started": 0, "repairs_interrupted": 0, "useful_repairs": 0, "wasted_repairs": 0, "dead_shop_visits": 0}, "result_summary": {},
 		"scrap_by_segment": {}, "completed_site_ids": [], "defeated_boss_ids": [],
-		"site_id": "site.collapsed_workshop", "route": "", "travel_step": 0, "objective": [], "objective_complete": false, "memory_id": "", "chapter_complete": false, "pressure_until": 0,
+		"site_id": "site.collapsed_workshop", "route": "", "travel_step": 0, "objective": [], "objective_complete": false, "objective_lock_until": 0, "memory_id": "", "chapter_complete": false, "pressure_until": 0, "pressure_multiplier": legacy_pressure_multiplier,
 		"evolutions": [], "gifts": [], "component_tag": "", "inspection": "", "scrap_tax_progress": 0, "censer_defeats": 0}
 	for field in defaults:
 		if not state.has(field): state[field] = defaults[field]
@@ -1220,6 +1270,8 @@ func restore(saved: Dictionary) -> bool:
 		if not enemy.has("slow"): enemy.slow = 0
 		if not enemy.has("inspected"): enemy.inspected = false
 	events.clear()
+	call_deferred_spawn = false
+	deferred_spawn_id = ""
 	return true
 
 func state_hash() -> String:

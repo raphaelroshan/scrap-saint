@@ -33,5 +33,14 @@ func _initialize():
 	check(migrated.state.version == Settings.CURRENT_VERSION and migrated.state.muted, "migration preserves known values")
 	check(migrated.state.controls.move_left == KEY_J and migrated.state.controls.move_right == KEY_D, "migration restores missing controls")
 	DirAccess.remove_absolute(legacy_path)
+	var invalid_path = "user://settings_invalid_legacy_test.save"
+	file = FileAccess.open(invalid_path, FileAccess.WRITE)
+	file.store_var({"version": 1, "muted": "yes", "master_volume": -2.0, "ui_scale": 9.0, "controls": {"move_up": -1, "move_left": KEY_J}})
+	file = null
+	var bounded = Settings.new()
+	check(bounded.load_from(invalid_path), "invalid legacy values migrate without rejecting the whole settings file")
+	check(not bounded.state.muted and bounded.state.master_volume == 1.0 and bounded.state.ui_scale == 1.0, "invalid legacy presentation values retain safe defaults")
+	check(bounded.state.controls.move_up == KEY_W and bounded.state.controls.move_left == KEY_J, "invalid legacy controls fall back independently")
+	DirAccess.remove_absolute(invalid_path)
 	print("SETTINGS: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

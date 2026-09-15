@@ -46,6 +46,8 @@ for test_path in tests/test_*.gd; do
   "$GODOT_BIN" --headless --path . --script "$test_path" | tee -a "$OUTPUT_DIR/tests.log"
 done
 
+"$GODOT_BIN" --headless --path . --script tests/benchmark_peak_density.gd | tee -a "$OUTPUT_DIR/tests.log"
+
 # Release builds also prove normal-economy completion rather than relying only on fixtures.
 "$GODOT_BIN" --headless --path . --script tests/run_playthroughs.gd -- --optional | tee -a "$OUTPUT_DIR/tests.log"
 "$GODOT_BIN" --headless --path . --script tests/run_playthroughs.gd -- --optional --ea-matrix | tee -a "$OUTPUT_DIR/tests.log"

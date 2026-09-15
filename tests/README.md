@@ -6,14 +6,17 @@ The runtime tests now exist. Run the complete Windows loop with `scripts/agent_i
 
 - `python tests/test_slice_manifest.py`: four manifest acceptance/rejection tests.
 - `godot --headless --path . --script res://tests/test_simulation.gd`: 31 deterministic simulation checks.
-- `godot --headless --path . --script res://tests/test_chapter.gd`: deterministic route, travel, carryover, objective, memory, and chapter save checks.
-- `godot --headless --path . --script res://tests/test_ui.gd`: seven UI flow/save checks using actual button signals and a temporary save file.
+- `godot --headless --path . --script res://tests/test_chapter.gd`: deterministic route, travel, carryover, objective, distinct three-phase destination bosses, memory, and chapter save checks.
+- `godot --headless --path . --script res://tests/test_ui.gd`: direct UI state and button-signal coverage with temporary local files.
+- `godot --headless --path . --script res://tests/test_flow_input.gd`: controller-style focus/action traversal across settings, setup, shop, route, travel, memory, Results, and replay.
+- `godot --headless --path . --script res://tests/test_save_flow.gd`: exact state-hash and next-event restoration across every expedition phase plus version-one migration coverage.
 - `godot --headless --path . --script res://tests/run_playthroughs.gd`: four shared-seed normal-economy policies, including no-evolution Workshop. Results are saved separately from visual fixtures.
+- `godot --headless --path . --script res://tests/benchmark_peak_density.gd`: records deterministic simulation throughput with 65 persistent threats and four Rank III weapons. It is not a rendered-frame benchmark.
 - Add `-- --optional --quick` to smoke one normal-economy policy through each destination without running the full twelve-policy matrix.
 
 Rendered fixtures use explicit setup budgets/states, including a Results fixture. They are not screenshots of the full-run policies. The earlier list below remains a broader target, not a claim all planned mechanics are implemented. See `docs/runtime_status.md` for scope differences.
 
-SC-15 adds five rendered chapter fixtures: `ROUTE_CHOICE`, `TRAVEL_BRASS`, `BRASS_OBJECTIVE`, `ROOTWORKS_OBJECTIVE`, and `CHAPTER_MEMORY`. They are explicit deterministic presentation fixtures, not a natural completed expedition.
+SC-15/SC-16 add seven rendered chapter fixtures: `ROUTE_CHOICE`, `TRAVEL_BRASS`, `BRASS_OBJECTIVE`, `CHOIR_REGENT_TOLL`, `ROOTWORKS_OBJECTIVE`, `FACTORY_HEART_FEED`, and `CHAPTER_MEMORY`. They are explicit deterministic presentation fixtures, not a natural completed expedition.
 
 Run:
 
@@ -76,4 +79,6 @@ P12: `test_variety.gd` covers beam/cluster damage, cooldowns, ally healing, bomb
 
 P12 core-quality gate: `test_roaming_quality.gd` covers authored wave profiles, opening contact metrics, weapon role/weakness data, useful repair economy, Foreman route phases/workers and causal Results. `run_playthroughs.gd -- --optional` reports damage by source/wave, weapon contribution/ranks, shop transactions, repair metrics and result classification for 12 normal-economy policies. `capture_core_quality.gd` records seed-147 Workshop Gospel repair-decision, reward and Results states in `artifacts/core-quality`; these are time-compressed deterministic policy traces labelled `NATURAL POLICY TRACE`, not human play.
 
-P14 replayable assembly: `test_assembly.gd` covers Foundry Censer, Penance Winch, Welded Halo, Great Toll, two unique Gift slots, save restoration, Gift trade-offs, independent evolution tracking and destination-safe Workshop repair ownership. `run_assembly_playthroughs.gd` executes four controlled-start build identities through complete seed-147 runs; these prove executable viability, not natural acquisition or human balance. `capture_assembly.gd` renders the three configured 1280x800 assembly states in `artifacts/assembly`.
+P14 replayable assembly: `test_assembly.gd` covers Foundry Censer, Penance Winch, Welded Halo, Great Toll, two unique Gift slots, save restoration, Gift trade-offs, independent evolution tracking and destination-safe Workshop repair ownership. `test_acquisition.gd` scans seeded ordinary shop rolls for the full enabled pool and assembles both Evolutions in either order entirely through buy/combine/evolve commands with ordinary income bands; configured offers isolate transaction order without injecting inventory. `run_assembly_playthroughs.gd` executes four controlled-start build identities through complete seed-147 runs; these prove executable viability, not natural acquisition or human balance. `capture_assembly.gd` renders the three configured 1280x800 assembly states in `artifacts/assembly`.
+
+Peak-density simulation benchmark: Apple M1 Pro, Godot 4.5.1, 65 persistent mixed threats, four Rank III weapons and 1,800 fixed ticks completed at 319 simulation ticks/second (5.31× the 60 Hz requirement) in the integrated release run. This measures authoritative simulation throughput only; rendered Windows minimum-hardware performance remains unverified.

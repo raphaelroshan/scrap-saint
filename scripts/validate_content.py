@@ -88,7 +88,8 @@ def validate_chapter(data: dict) -> None:
     assert len(routes) == 2, "first chapter must offer exactly two destination routes"
     route_ids = unique_ids(routes, "chapter routes")
     assert route_ids == {"route.brass_choir", "route.rootworks"}
-    boss_ids = {entry["id"] for entry in data["bosses"]["bosses"]}
+    bosses_by_id = {entry["id"]: entry for entry in data["bosses"]["bosses"]}
+    boss_ids = set(bosses_by_id)
     site_ids: set[str] = set()
     for route in routes:
         for field in ("site_id", "name", "description", "news", "arena_path", "boss", "objective", "pressure", "travel", "memory"):
@@ -96,6 +97,13 @@ def validate_chapter(data: dict) -> None:
         assert route["site_id"] not in site_ids, f"{route['id']}: duplicate site"
         site_ids.add(route["site_id"])
         assert route["boss"] in boss_ids, f"{route['id']}: unknown boss"
+        boss = bosses_by_id[route["boss"]]
+        assert len(boss.get("phase_thresholds", [])) == 2, f"{boss['id']}: missing phase thresholds"
+        assert len(boss.get("phases", [])) == 3, f"{boss['id']}: destination boss needs three phases"
+        for phase in boss["phases"]:
+            for field in ("id", "name", "rule", "interval", "warning_ticks", "hazard_pattern", "hazard_radius", "hazard_damage", "speed", "stop_distance"):
+                assert phase.get(field) not in (None, ""), f"{boss['id']}.{phase.get('id', 'unknown')}: missing {field}"
+            assert phase["interval"] > phase["warning_ticks"] > 0, f"{boss['id']}.{phase['id']}: warning must resolve before next cadence"
         assert set(route["enemy_pool"]) <= set(data["enemies_by_id"]), f"{route['id']}: unknown enemy"
         assert len(route["travel"]) >= 2, f"{route['id']}: travel needs more than one beat"
         assert 0.0 <= float(route.get("arrival_repair_floor", -1)) <= 1.0, f"{route['id']}: invalid arrival repair floor"

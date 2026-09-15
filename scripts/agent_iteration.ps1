@@ -26,8 +26,14 @@ if ($LASTEXITCODE -ne 0) { throw 'Chapter tests failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Roaming quality tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_ui.gd 2>&1 | Tee-Object -FilePath "$bundlePath\ui.log"
 if ($LASTEXITCODE -ne 0) { throw 'UI tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_flow_input.gd 2>&1 | Tee-Object -FilePath "$bundlePath\flow-input.log"
+if ($LASTEXITCODE -ne 0) { throw 'Flow input tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_save_flow.gd 2>&1 | Tee-Object -FilePath "$bundlePath\save-flow.log"
+if ($LASTEXITCODE -ne 0) { throw 'Save flow tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_assembly.gd 2>&1 | Tee-Object -FilePath "$bundlePath\assembly.log"
 if ($LASTEXITCODE -ne 0) { throw 'Assembly tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_acquisition.gd 2>&1 | Tee-Object -FilePath "$bundlePath\acquisition.log"
+if ($LASTEXITCODE -ne 0) { throw 'Acquisition tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/run_playthroughs.gd -- --optional 2>&1 | Tee-Object -FilePath "$bundlePath\playthroughs.log"
 if ($LASTEXITCODE -ne 0) { throw 'Playthrough runner failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/run_assembly_playthroughs.gd 2>&1 | Tee-Object -FilePath "$bundlePath\assembly-playthroughs.log"
@@ -43,5 +49,5 @@ if ($LASTEXITCODE -ne 0) { throw 'Assembly capture failed' }
 $commitId = git -C $projectRoot rev-parse HEAD
 $godotVersion = & $GodotBin --version
 $files = Get-ChildItem -LiteralPath "$projectRoot\game" -Filter '*.gd' | ForEach-Object { @{ path = $_.Name; sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash } }
-@{ build = '0.2.0-preview'; base_commit = $commitId; dirty = [bool](git -C $projectRoot status --porcelain); godot = $godotVersion; viewport = @(1280,800); scaling = 'canvas_items'; seed = 147; timestamp_utc = [DateTime]::UtcNow.ToString('o'); capture_type = 'rendered simulation fixtures; includes explicit setup budgets and Results fixture'; source_hashes = @($files); limitation = 'No human playtest or performance benchmark'; next_task = 'Human playtest of the shared arena and build feedback' } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath "$bundlePath\provenance.json" -Encoding utf8
+@{ build = '0.2.1-preview'; base_commit = $commitId; dirty = [bool](git -C $projectRoot status --porcelain); godot = $godotVersion; viewport = @(1280,800); scaling = 'canvas_items'; seed = 147; timestamp_utc = [DateTime]::UtcNow.ToString('o'); capture_type = 'rendered simulation fixtures; includes explicit setup budgets and Results fixture'; source_hashes = @($files); limitation = 'No human playtest or rendered minimum-hardware benchmark'; next_task = 'Human playtest of the shared arena and build feedback' } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath "$bundlePath\provenance.json" -Encoding utf8
 Write-Output "Bundle ready for visual review: $bundlePath"
