@@ -28,7 +28,10 @@ func run_checks():
 	game._unhandled_key_input(event)
 	check(not game.sim.state.paused, "Escape resumes")
 	game.sim.enter_shop()
+	game.sim.state.gifts = ["gift.spare_hand"]
 	game.build_ui()
+	var labels = game.ui.get_children().filter(func(child): return child is Button).map(func(child): return child.text)
+	check("Mercy Rail" in labels and "Great Toll" in labels and "Dism." in labels, "shop exposes distinct Evolution and Gift management controls")
 	game._unhandled_key_input(event)
 	check(not game.sim.state.paused, "shop Escape cannot strand next combat paused")
 	var path = "user://ui_test.save"
