@@ -82,13 +82,15 @@ func run_checks():
 
 	game.sim.state.scrap = 200
 	game.sim.enter_shop()
+	game.last_phase = game.sim.state.phase
 	game.build_ui()
 	await process_frame
 	var transactions_before = game.sim.state.transactions.size()
 	await activate(button_with(game, "BUY / COMBINE"))
 	check(game.sim.state.transactions.size() == transactions_before + 1, "controller-style shop input purchases an authoritative offer")
-	check(root.gui_get_focus_owner() is Button and root.gui_get_focus_owner().text == "NEXT WAVE  →", "shop exposes a controller-focused continuation")
-	await activate(root.gui_get_focus_owner())
+	var shop_focus = root.gui_get_focus_owner()
+	check(shop_focus is Button and shop_focus.text == "NEXT WAVE  →", "shop exposes a controller-focused continuation")
+	await activate(shop_focus)
 	check(game.sim.state.phase == "combat", "shop continuation returns to combat")
 
 	game.sim.state.wave = game.sim.current_wave_count()
