@@ -70,7 +70,9 @@
       "cost_scrap": 15,
       "base_effect": "witness_priority_target",
       "secondary_effect": "mourned_mote_on_kill",
-      "evolution_ids": [],
+      "evolution_ids": [
+        "evolution.candle_unreturned"
+      ],
       "description": "A flare pistol that treats every target as evidence."
     },
     {
@@ -104,7 +106,9 @@
       "cost_scrap": 19,
       "base_effect": "pierce_line",
       "secondary_effect": "none",
-      "evolution_ids": [],
+      "evolution_ids": [
+        "evolution.quiet_sermon"
+      ],
       "description": "A copper coil that pulses through lines of hostile machinery."
     },
     {
@@ -121,7 +125,9 @@
       "cost_scrap": 21,
       "base_effect": "area_burst",
       "secondary_effect": "none",
-      "evolution_ids": [],
+      "evolution_ids": [
+        "evolution.workshop_benediction"
+      ],
       "description": "A chapel font rebuilt to burst shells among clustered machines."
     },
     {
@@ -142,7 +148,9 @@
       "cost_scrap": 18,
       "base_effect": "slow_enemies_inside_ring",
       "secondary_effect": "every_third_close_defeat_drops_scrap_ember",
-      "evolution_ids": [],
+      "evolution_ids": [
+        "evolution.ashen_benediction"
+      ],
       "description": "A soot-black censer that slows close threats and remembers every third defeat as Scrap."
     },
     {
@@ -163,7 +171,9 @@
       "cost_scrap": 20,
       "base_effect": "bind_and_pull_priority_target",
       "secondary_effect": "cancel_relay_strike_windup",
-      "evolution_ids": [],
+      "evolution_ids": [
+        "evolution.long_hand"
+      ],
       "description": "A telescoping maintenance arm that hooks one dangerous machine and drags it off schedule."
     },
     {
@@ -184,7 +194,9 @@
       "cost_scrap": 19,
       "base_effect": "rotating_contact_damage",
       "secondary_effect": "nearby_visible_objective_repair_pulse",
-      "evolution_ids": [],
+      "evolution_ids": [
+        "evolution.halo_of_repairs"
+      ],
       "description": "A crooked welding ring whose bright cardinal arc stitches the current repair objective while it guards the Saint."
     },
     {
@@ -198,7 +210,9 @@
       ],
       "cost_relic_shards": 2,
       "compatible_evolution_ids": [
-        "evolution.mercy_rail"
+        "evolution.mercy_rail",
+        "evolution.halo_of_repairs",
+        "evolution.workshop_benediction"
       ],
       "description": "A rivet that remembers every structure it ever held together."
     },
@@ -226,7 +240,9 @@
         "catalyst"
       ],
       "cost_relic_shards": 2,
-      "compatible_evolution_ids": [],
+      "compatible_evolution_ids": [
+        "evolution.ashen_benediction"
+      ],
       "description": "A candle reserved for machines that cannot be repaired."
     },
     {
@@ -240,6 +256,33 @@
       "cost_relic_shards": 2,
       "compatible_evolution_ids": [],
       "description": "A gear whose teeth move without permitting a sound."
+    },
+    {
+      "id": "catalyst.mourners_wick",
+      "kind": "catalyst",
+      "name": "Mourner's Wick",
+      "tags": ["mourn", "catalyst"],
+      "cost_relic_shards": 2,
+      "compatible_evolution_ids": ["evolution.candle_unreturned"],
+      "description": "A wick kept for names that deserve to find their way home."
+    },
+    {
+      "id": "catalyst.blue_wire_from_pump",
+      "kind": "catalyst",
+      "name": "Blue Wire from the Pump",
+      "tags": ["tether", "repair", "catalyst"],
+      "cost_relic_shards": 2,
+      "compatible_evolution_ids": ["evolution.long_hand"],
+      "description": "A measured length of pump wire that remembers the safest route through pressure."
+    },
+    {
+      "id": "catalyst.folded_maintenance_blueprint",
+      "kind": "catalyst",
+      "name": "Folded Maintenance Blueprint",
+      "tags": ["silence", "labour", "catalyst"],
+      "cost_relic_shards": 2,
+      "compatible_evolution_ids": ["evolution.quiet_sermon"],
+      "description": "Instructions folded until only the quietest line remains visible."
     },
     {
       "id": "gift.spare_hand",
@@ -321,6 +364,66 @@
         "displace"
       ],
       "transformation_event": "evolution.great_toll_triggered"
+    },
+    {
+      "id": "evolution.ashen_benediction",
+      "name": "Ashen Benediction",
+      "base_item_id": "weapon.foundry_censer",
+      "required_rank": 3,
+      "required_catalyst_id": "catalyst.black_candle",
+      "result_geometry": "offset_mourning_smoke_zone",
+      "result_effects": ["slow", "seeking_mote", "objective_seek"],
+      "transformation_event": "evolution.ashen_benediction_triggered"
+    },
+    {
+      "id": "evolution.long_hand",
+      "name": "The Long Hand",
+      "base_item_id": "weapon.penance_winch",
+      "required_rank": 3,
+      "required_catalyst_id": "catalyst.blue_wire_from_pump",
+      "result_geometry": "routed_tether_corridor",
+      "result_effects": ["multi_bind", "pull", "cancel_objective_strike"],
+      "transformation_event": "evolution.long_hand_triggered"
+    },
+    {
+      "id": "evolution.halo_of_repairs",
+      "name": "Halo of Repairs",
+      "base_item_id": "weapon.welded_halo",
+      "required_rank": 3,
+      "required_catalyst_id": "catalyst.saints_rivet",
+      "result_geometry": "dual_rotating_repair_contacts",
+      "result_effects": ["dual_contact", "objective_repair", "saint_repair_circuit"],
+      "transformation_event": "evolution.halo_of_repairs_triggered"
+    },
+    {
+      "id": "evolution.candle_unreturned",
+      "name": "Candle for the Unreturned",
+      "base_item_id": "weapon.candle_nailer",
+      "required_rank": 3,
+      "required_catalyst_id": "catalyst.mourners_wick",
+      "result_geometry": "three_seeking_funeral_shots",
+      "result_effects": ["weakest_three", "seeking_motes", "marked_support_motes"],
+      "transformation_event": "evolution.candle_unreturned_triggered"
+    },
+    {
+      "id": "evolution.quiet_sermon",
+      "name": "Quiet Sermon",
+      "base_item_id": "weapon.hymn_coil",
+      "required_rank": 3,
+      "required_catalyst_id": "catalyst.folded_maintenance_blueprint",
+      "result_geometry": "wide_moving_silence_lane",
+      "result_effects": ["quieted", "delay_support_action", "pierce_lane"],
+      "transformation_event": "evolution.quiet_sermon_triggered"
+    },
+    {
+      "id": "evolution.workshop_benediction",
+      "name": "Workshop Benediction",
+      "base_item_id": "weapon.altar_mortar",
+      "required_rank": 3,
+      "required_catalyst_id": "catalyst.saints_rivet",
+      "result_geometry": "blast_or_consecrated_repair_zone",
+      "result_effects": ["cluster_blast", "objective_repair", "consecrated"],
+      "transformation_event": "evolution.workshop_benediction_triggered"
     }
   ]
 }

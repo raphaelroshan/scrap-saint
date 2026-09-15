@@ -44,6 +44,8 @@ var simulation_speed = 1
 var tutorial_page = 0
 var awaiting_binding = ""
 var recent_unlocks: Array = []
+var evolution_ledger_open = false
+var map_selection = ""
 
 func _ready():
 	title_font.font_names = PackedStringArray(["Georgia", "DejaVu Serif"])
@@ -114,6 +116,10 @@ func _unhandled_key_input(event):
 		screen = previous_screen
 		build_ui()
 		return
+	if event.keycode == KEY_ESCAPE and screen == "game" and evolution_ledger_open:
+		evolution_ledger_open = false
+		build_ui()
+		return
 	if event.keycode == KEY_F3: debug_visible = not debug_visible
 	if event.keycode == KEY_F6 and dev_mode:
 		simulation_speed = 1 if simulation_speed == 5 else 5
@@ -152,10 +158,16 @@ func act(action: String, value = null):
 		notification = result.replace("_", " ").capitalize()
 		notice_until = Time.get_ticks_msec() + 2500
 	if action == "evolve" and result == "OK":
-		notification = ("THE GREAT TOLL — every direction answers" if str(value) == "evolution.great_toll" else "MERCY RAIL — a new shape of mercy")
+		notification = sim.evolution_recipes[str(value)].name.to_upper() + " — the relic answers differently"
 		notice_until = Time.get_ticks_msec() + 4500
+		evolution_ledger_open = false
 	if sim.state.phase in ["won", "lost"]: commit_profile_result()
 	build_ui()
+
+func select_map_route(route_id: String):
+	if sim.available_routes().any(func(route): return route.id == route_id):
+		map_selection = route_id
+		queue_redraw()
 
 func commit_profile_result():
 	if sim.state.is_empty() or sim.state.result_summary.is_empty(): return
@@ -216,6 +228,9 @@ func present(event):
 		notice_until = Time.get_ticks_msec() + 3000
 	if e.kind == "destination_arrived":
 		notification = "ROAD REST / %d structure restored" % int(e.arrival_repair)
+		notice_until = Time.get_ticks_msec() + 3500
+	if e.kind == "road_choice":
+		notification = str(e.result)
 		notice_until = Time.get_ticks_msec() + 3500
 	if e.kind == "boss_contract":
 		notification = str(e.phase_name) + " / " + str(e.rule).replace("_", " ").to_upper()
@@ -291,39 +306,57 @@ func build_ui():
 		button("BEGIN THE FIRST SHIFT  →", Rect2(436, 613, 408, 52), begin, true).grab_focus()
 		if FileAccess.file_exists(save_path): button("Resume saved expedition", Rect2(436, 678, 408, 36), load_run)
 	elif sim.state.phase == "route":
-		for i in range(sim.chapter.routes.size()):
-			var route = sim.chapter.routes[i]
-			var route_button = button("CHOOSE " + route.name.to_upper(), Rect2(96 + i * 470, 585, 430, 48), func(): act("choose_route", route.id), i == 0)
+		var route_options = sim.available_routes()
+		if route_options.size() > 0 and not route_options.any(func(route): return route.id == map_selection): map_selection = route_options[0].id
+		for i in range(route_options.size()):
+			var route_id = str(route_options[i].id)
+			var route_button = button(route_options[i].name.to_upper(), Rect2(96 + i * 286, 610, 270, 42), func(): select_map_route(route_id))
+			route_button.focus_entered.connect(func(): select_map_route(route_id))
 			if i == 0: route_button.grab_focus()
+		var accepted = map_selection != "" and sim.assignment_status(map_selection) == "accepted"
+		var confirm = button("ASSIGNMENT ACCEPTED" if accepted else "ACCEPT ASSIGNMENT  →", Rect2(690, 610, 312, 42), func(): act("choose_route", map_selection), true)
+		confirm.disabled = map_selection == "" or accepted
 	elif sim.state.phase == "travel":
-		var route = sim.current_route()
-		var final_beat = sim.state.travel_step >= route.travel.size() - 1
-		button("ENTER " + route.name.to_upper() if final_beat else "CONTINUE ALONG THE ROAD", Rect2(392, 610, 496, 48), func(): act("advance_travel"), true).grab_focus()
+		var node = sim.current_road_node()
+		var first_affordable: Button = null
+		for i in range(node.get("choices", []).size()):
+			var option = node.choices[i]
+			var option_id = str(option.id)
+			var option_button = button(str(option.label).to_upper() + " · " + road_choice_terms(option), Rect2(92, 548 + i * 54, 910, 42), func(): act("choose_road_option", option_id), i == 0)
+			option_button.disabled = sim.state.scrap < int(option.cost)
+			if first_affordable == null and not option_button.disabled: first_affordable = option_button
+		if first_affordable != null: first_affordable.grab_focus()
 	elif sim.state.phase == "memory":
 		button("CARRY THIS MEMORY  →", Rect2(410, 615, 460, 48), func(): act("accept_memory"), true).grab_focus()
 	elif sim.state.phase == "shop":
-		for i in range(6):
-			var col = i % 3
-			var row = int(i / 3)
-			var x = 94 + col * 302
-			var y = 208 + row * 192
-			button("BUY / COMBINE" if i < 2 else "ACQUIRE", Rect2(x + 14, y + 129, 182, 32), func(): act("buy", i))
-			button("◆" if sim.state.locked == sim.state.offers[i] and sim.state.offers[i] != "" else "Lock", Rect2(x + 205, y + 129, 66, 32), func(): act("lock", i))
-		var costs = sim.config.economy.reroll_costs
-		var refresh = "No refreshes left" if sim.state.rerolls >= costs.size() else ("Refresh · FREE" if costs[sim.state.rerolls] == 0 else "Refresh · %d Scrap" % costs[sim.state.rerolls])
-		button(refresh, Rect2(108, 613, 220, 40), func(): act("reroll"))
-		button("Mercy Rail", Rect2(344, 613, 120, 40), func(): act("evolve", "evolution.mercy_rail"))
-		button("Great Toll", Rect2(470, 613, 128, 40), func(): act("evolve", "evolution.great_toll"))
-		button("NEXT WAVE  →", Rect2(734, 613, 250, 40), func(): act("continue"), true).grab_focus()
-		button("Combine pair", Rect2(1060, 573, 188, 32), func(): act("combine"))
-		button("Equip reserve", Rect2(1060, 613, 188, 32), func(): act("equip"))
-		for i in range(sim.state.weapons.size()):
-			button("Sell", Rect2(1060, 243 + i * 79, 52, 26), func(): act("sell", i))
-			button("Dism.", Rect2(1118, 243 + i * 79, 59, 26), func(): act("dismantle", i))
-			button("Store", Rect2(1183, 243 + i * 79, 65, 26), func(): act("reserve", i))
-		for i in range(sim.state.gifts.size()):
-			button("Sell", Rect2(1152, 665 + i * 30, 45, 24), func(): act("sell_gift", i))
-			button("Dism.", Rect2(1201, 665 + i * 30, 47, 24), func(): act("dismantle_gift", i))
+		if evolution_ledger_open:
+			for i in range(sim.config.evolutions.size()):
+				var recipe_id = sim.config.evolutions[i]
+				var evolve_button = button("EVOLVE", Rect2(408 + (i % 2) * 470, 234 + int(i / 2) * 108, 92, 28), func(): act("evolve", recipe_id))
+				evolve_button.disabled = sim.evolution_recipe_state(recipe_id) != "READY"
+			button("BACK TO WORKSHOP", Rect2(742, 678, 250, 38), func(): evolution_ledger_open = false; build_ui(), true).grab_focus()
+		else:
+			for i in range(6):
+				var col = i % 3
+				var row = int(i / 3)
+				var x = 94 + col * 302
+				var y = 208 + row * 192
+				button("BUY / COMBINE" if i < 2 else "ACQUIRE", Rect2(x + 14, y + 129, 182, 32), func(): act("buy", i))
+				button("◆" if sim.state.locked == sim.state.offers[i] and sim.state.offers[i] != "" else "Lock", Rect2(x + 205, y + 129, 66, 32), func(): act("lock", i))
+			var costs = sim.config.economy.reroll_costs
+			var refresh = "No refreshes left" if sim.state.rerolls >= costs.size() else ("Refresh · FREE" if costs[sim.state.rerolls] == 0 else "Refresh · %d Scrap" % costs[sim.state.rerolls])
+			button(refresh, Rect2(108, 613, 220, 40), func(): act("reroll"))
+			button("EVOLUTION LEDGER · 8", Rect2(344, 613, 250, 40), func(): evolution_ledger_open = true; build_ui())
+			button("NEXT WAVE  →", Rect2(734, 613, 250, 40), func(): act("continue"), true).grab_focus()
+			button("Combine pair", Rect2(1060, 573, 188, 32), func(): act("combine"))
+			button("Equip reserve", Rect2(1060, 613, 188, 32), func(): act("equip"))
+			for i in range(sim.state.weapons.size()):
+				button("Sell", Rect2(1060, 243 + i * 79, 52, 26), func(): act("sell", i))
+				button("Dism.", Rect2(1118, 243 + i * 79, 59, 26), func(): act("dismantle", i))
+				button("Store", Rect2(1183, 243 + i * 79, 65, 26), func(): act("reserve", i))
+			for i in range(sim.state.gifts.size()):
+				button("Sell", Rect2(1152, 665 + i * 30, 45, 24), func(): act("sell_gift", i))
+				button("Dism.", Rect2(1201, 665 + i * 30, 47, 24), func(): act("dismantle_gift", i))
 	elif sim.state.phase in ["won", "lost"]:
 		button("RETURN TO THE WORKSHOP", Rect2(410, 655, 460, 44), func(): screen = "menu"; build_ui(), true).grab_focus()
 	elif sim.state.paused:
@@ -335,6 +368,12 @@ func build_ui():
 		button("Sound " + ("off" if settings.state.muted else "on"), Rect2(28, 757, 117, 28), func(): toggle_setting("muted"))
 		button("Effects " + ("low" if reduced_fx else "full"), Rect2(153, 757, 122, 28), func(): toggle_setting("reduced_effects"))
 		button("Text " + ("large" if ui_scale > 1 else "normal"), Rect2(283, 757, 127, 28), cycle_text_scale)
+
+func road_choice_terms(option: Dictionary) -> String:
+	var terms: Array[String] = ["FREE" if int(option.get("cost", 0)) == 0 else "%d SCRAP" % int(option.cost)]
+	if int(option.get("scrap_delta", 0)) != 0: terms.append("%+d SCRAP" % int(option.scrap_delta))
+	if int(option.get("structure_delta", 0)) != 0: terms.append("%+d STRUCTURE" % int(option.structure_delta))
+	return " / ".join(terms)
 
 func text_at(value: String, p: Vector2, size = 16, color = PAPER, serif = false):
 	draw_string(title_font if serif else font, p, value, HORIZONTAL_ALIGNMENT_LEFT, -1, int(size * ui_scale), color)
@@ -390,7 +429,9 @@ func _draw():
 		draw_loadout()
 		draw_boss_hud()
 		if sim.state.phase == "combat": draw_minimap()
-		if sim.state.phase == "shop": draw_shop()
+		if sim.state.phase == "shop":
+			if evolution_ledger_open: draw_evolution_ledger()
+			else: draw_shop()
 		if sim.state.phase == "route": draw_route_choice()
 		if sim.state.phase == "travel": draw_travel()
 		if sim.state.phase == "memory": draw_memory()
@@ -416,7 +457,7 @@ func draw_title():
 	text_at("Turn scrap into miracles.", Vector2(124, 257), 25, MUTED, true)
 	wrapped("A small maintenance machine crosses ruined workshops, carries incompatible relics, and decides what deserves to work again.", Vector2(124, 292), 680, 17, PAPER)
 	draw_saint(Vector2(1035, 246), Vector2(-1, 0), 3.4)
-	text_at("FIRST CHAPTER · TWO ROADS · TEN WEAPONS · TWO EVOLUTIONS", Vector2(350, 585), 12, GOLD)
+	text_at("FIRST CHAPTER · FIVE SITES · TEN WEAPONS · EIGHT EVOLUTIONS", Vector2(330, 585), 12, GOLD)
 	text_at("Memory fragments: %d" % profile.state.memory_fragments, Vector2(550, 710), 12, MUTED)
 
 func draw_menu():
@@ -452,7 +493,7 @@ func draw_tutorial():
 		"Move with your chosen keys or a controller stick. Weapons fire automatically. Positioning decides which geometry reaches which threat.",
 		"Workshop machines are optional. Their reward and work time are shown before you commit. Leave when the risk stops being worth it; progress is preserved.",
 		"Spend Scrap on weapons and services. Relic Shards buy catalysts. Combine matching ranks; evolve a Rank III relic with its named catalyst. Gifts change one rule and occupy separate slots.",
-		"Defeat the Foreman, choose Brass Choir or Rootworks, and carry the same build onward. Results explain the cause; Memory unlocks choices, never permanent damage."
+		"Defeat the Foreman, choose Brass Choir or Rootworks, then follow one final authored road. Results explain the full route; Memory unlocks choices, never permanent damage."
 	]
 	text_at("FIELD MANUAL %d / 5" % (tutorial_page + 1), Vector2(220, 190), 12, GOLD)
 	text_at(titles[tutorial_page], Vector2(215, 260), 38, PAPER, true)
@@ -488,7 +529,10 @@ func draw_header():
 		text_at("%d%% integrity · %d%% work" % [sim.state.relay_hp * 100 / sim.config.relay.structure, sim.state.progress * 100 / sim.config.relay.required_ticks], Vector2(568, 72), 13)
 	text_at("%02d  SCRAP" % sim.state.scrap, Vector2(800, 43), 19, GOLD)
 	text_at("%d  RELIC SHARDS" % sim.state.shards, Vector2(800, 69), 12, MUTED)
-	text_at("WAVE %02d / %02d" % [sim.state.wave, sim.current_wave_count()], Vector2(1070, 43), 18)
+	var stage_label = "WAVE %02d / %02d" % [sim.state.wave, sim.current_wave_count()]
+	if sim.state.phase == "route": stage_label = "ROUTE MAP"
+	elif sim.state.phase == "travel": stage_label = "ROAD %02d / %02d" % [sim.state.travel_step + 1, sim.road_nodes_for(sim.current_route()).size()]
+	text_at(stage_label, Vector2(1070, 43), 18)
 	text_at("%02d:%02d" % [int(sim.state.tick / 3600), int(sim.state.tick / 60) % 60], Vector2(1070, 70), 14, MUTED)
 	draw_line(Vector2(28, 89), Vector2(1252, 89), Color("3a4d48"))
 	var instruction = "Stay in the work circle to repair. Weapons fire automatically."
@@ -499,8 +543,8 @@ func draw_header():
 	if sim.state.phase == "combat" and sim.optional_mode(): instruction = sim.wave_profile().pressure
 	if sim.state.wave == 8 and not sim.is_destination(): instruction = "FOREMAN / Keep moving. Avoid the demolition zones."
 	if sim.is_destination(): instruction = sim.objective_data().description
-	if sim.state.phase == "route": instruction = "The Workshop is safe. Choose which need receives your build."
-	if sim.state.phase == "travel": instruction = "Your weapons, Scrap and Blessing travel with you."
+	if sim.state.phase == "route": instruction = "Preview a grey assignment, then accept it. Gold marks your selection."
+	if sim.state.phase == "travel": instruction = "Resolve this in-between area. No road node can be bypassed."
 	if sim.state.phase == "memory": instruction = "A repaired machine returns one borrowed purpose."
 	if sim.state.phase in ["won", "lost"]: instruction = "SHIFT RECORDED / Read the cause. Choose one change. Return quickly."
 	text_at(instruction, Vector2(60, 126), 16, GREEN)
@@ -583,21 +627,36 @@ func draw_world():
 	for h in sim.state.hazards:
 		var f = 1.0 - float(h.until - sim.state.tick) / h.get("warning_ticks", sim.config.boss_rules.hazard_warning_ticks * sim.warning_multiplier())
 		if h.copy:
-			if h.get("copy_shape", "rail") == "radial":
-				draw_circle(h.from, sim.config.great_toll.range, Color(0.9, 0.4, 0.3, 0.08 + f * 0.12))
-				draw_arc(h.from, sim.config.great_toll.range, 0, TAU, 56, RED, 3)
-				text_at("COPIED TOLL", h.from + Vector2(-42, -48), 11, RED)
+			var copy_shape = str(h.get("copy_shape", "rail"))
+			var copy_range = float(h.get("copy_range", h.radius))
+			var copy_width = float(h.get("copy_width", h.radius))
+			var direction = (h.p - h.from).normalized()
+			if direction == Vector2.ZERO: direction = Vector2.RIGHT
+			if copy_shape == "radial":
+				draw_circle(h.from, copy_range, Color(0.9, 0.4, 0.3, 0.08 + f * 0.12))
+				draw_arc(h.from, copy_range, 0, TAU, 56, RED, 3)
+			elif copy_shape in ["rail", "sermon", "long_hand"]:
+				draw_line(h.from, h.from + direction * copy_range, Color(0.9, 0.4, 0.3, 0.15 + f * 0.3), maxf(8, copy_width * 2))
+				draw_line(h.from, h.from + direction * copy_range, RED, 2, true)
+			elif copy_shape == "repair_halo":
+				for contact in [h.from + direction * copy_range, h.from - direction * copy_range]:
+					draw_circle(contact, copy_width, Color(0.9, 0.4, 0.3, 0.08 + f * 0.12))
+					draw_arc(contact, copy_width, 0, TAU, 36, RED, 2)
+			elif copy_shape == "funeral_shots":
+				for target in h.get("copy_points", []):
+					draw_line(h.from, target, Color(0.9, 0.4, 0.3, 0.15 + f * 0.3), maxf(5, copy_width))
+					draw_circle(target, maxf(8, copy_width), Color(0.9, 0.4, 0.3, 0.12))
 			else:
-				var direction = (h.p - h.from).normalized()
-				draw_line(h.from, h.from + direction * sim.config.rail.range, Color(0.9, 0.4, 0.3, 0.15 + f * 0.3), sim.config.rail.width * 2)
-				draw_line(h.from, h.from + direction * sim.config.rail.range, RED, 2, true)
-				text_at("COPIED RAIL", h.from + Vector2(-40, -48), 11, RED)
+				var zone_radius = copy_width if copy_shape == "benediction" else copy_range
+				draw_circle(h.p, zone_radius, Color(0.9, 0.4, 0.3, 0.08 + f * 0.12))
+				draw_arc(h.p, zone_radius, 0, TAU, 48, RED, 3)
+			text_at("COPIED " + copy_shape.replace("_", " ").to_upper(), h.from + Vector2(-52, -48), 11, RED)
 			continue
 		draw_circle(h.p, h.radius, Color(0.85, 0.3, 0.18, 0.13 + f * 0.1))
 		draw_arc(h.p, h.radius, 0, TAU, 40, RED, 2)
 		draw_arc(h.p, h.radius * f, 0, TAU, 40, GOLD, 2)
-		if h.get("kind", "") in ["pulse", "feed", "choice"]: draw_line(h.from, h.p, Color(0.89, 0.36, 0.24, 0.45), 3, true)
-		var hazard_labels = {"measure": "BEAT", "toll": "TOLL", "answer": "III", "pulse": "PULSE", "feed": "FEED", "choice": "CHOOSE"}
+		if h.get("source", "") == "boss.factory_heart": draw_line(h.from, h.p, Color(0.89, 0.36, 0.24, 0.45), 3, true)
+		var hazard_labels = {"measure": "BEAT", "toll": "TOLL", "answer": "III", "pulse": "PULSE", "feed": "FEED", "choice": "CHOOSE", "index": "INDEX", "duplicate": "COPY", "redact": "REDACT", "kindling": "HEAT", "overheat": "VENT", "quota": "QUOTA", "inventory": "LIST", "reject": "REJECT", "blank": "NULL"}
 		var hazard_label = hazard_labels.get(h.get("kind", ""), "!")
 		text_at(hazard_label, h.p + Vector2(-font.get_string_size(hazard_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 10).x * 0.5, 5), 10, GOLD)
 	for p in sim.state.pickups:
@@ -612,9 +671,12 @@ func draw_world():
 			draw_arc(sim.state.position, 80, 0, TAU, 48, Color(0.5, 0.75, 0.65, 0.12), 1)
 			draw_gear(p, 15, GREEN, sim.state.tick * 0.08)
 		if w.id == "weapon.foundry_censer":
-			var p = sim.state.position + Vector2.from_angle(sim.state.tick * 0.055) * 62
-			draw_circle(sim.state.position, sim.config.weapons[w.id].range, Color(0.25, 0.62, 0.55, 0.06))
-			draw_arc(sim.state.position, sim.config.weapons[w.id].range, 0, TAU, 56, Color(0.32, 0.72, 0.63, 0.22), 2)
+			var ashen = sim.weapon_evolution_id(w) == "evolution.ashen_benediction"
+			var ring_origin = sim.state.position + (Vector2.from_angle(sim.state.tick * 0.018) * 34 if ashen else Vector2.ZERO)
+			var ring_range = 52.0 if ashen else sim.config.weapons[w.id].range
+			var p = ring_origin + Vector2.from_angle(sim.state.tick * 0.055) * 62
+			draw_circle(ring_origin, ring_range, Color(0.25, 0.62, 0.55, 0.06))
+			draw_arc(ring_origin, ring_range, 0, TAU, 56, Color("b58ebd") if ashen else Color(0.32, 0.72, 0.63, 0.22), 2)
 			draw_line(sim.state.position, p, Color("6b5944"), 2)
 			draw_circle(p, 8, Color("273b38"))
 			draw_circle(p, 3, GOLD)
@@ -622,6 +684,9 @@ func draw_world():
 			var angle = sim.state.tick * 0.045
 			draw_arc(sim.state.position, 31, angle, angle + TAU * 0.82, 36, Color("9ac99d"), 3)
 			draw_circle(sim.state.position + Vector2.from_angle(angle) * 31, 4, PAPER)
+			if sim.weapon_evolution_id(w) == "evolution.halo_of_repairs":
+				draw_arc(sim.state.position, 40, -angle, -angle + TAU * 0.82, 36, Color("d6edbf"), 2)
+				draw_circle(sim.state.position - Vector2.from_angle(angle) * 40, 4, PAPER)
 	draw_saint(sim.state.position, sim.state.facing)
 	for e in fx: draw_effect(e)
 
@@ -629,7 +694,7 @@ func draw_boss_hud():
 	for e in sim.state.enemies:
 		if e.major:
 			panel(Rect2(293, 167, 490, 46), Color("152428"))
-			var boss_names = {"boss.foreman_engine": "FOREMAN ENGINE", "boss.choir_regent": "CHOIR REGENT", "boss.factory_heart": "FACTORY HEART", "elite.memory_crane": "MEMORY CRANE"}
+			var boss_names = {"boss.foreman_engine": "FOREMAN ENGINE", "boss.choir_regent": "CHOIR REGENT", "boss.factory_heart": "FACTORY HEART", "boss.archivist_prime": "ARCHIVIST PRIME", "boss.red_cardinal": "RED CARDINAL", "boss.null_auditor": "NULL AUDITOR", "elite.memory_crane": "MEMORY CRANE"}
 			text_at(boss_names.get(e.type, str(e.type).trim_prefix("boss.").replace("_", " ").to_upper()), Vector2(309, 186), 12, GOLD)
 			if e.type == sim.current_boss_id():
 				var phase_name = "DEMOLITION" if not sim.is_destination() else sim.boss_phase_name(e)
@@ -667,7 +732,9 @@ func draw_destination_objective():
 		var data = objective.nodes[i]
 		var p = Vector2(data.position[0], data.position[1])
 		var locked = sim.state.tick < int(sim.state.get("objective_lock_until", 0))
-		var color = GREEN if node.complete else (RED if locked else GOLD)
+		var active_index = sim.active_destination_node_index()
+		var waiting = objective.type in ["RECOVER_SEQUENCE", "VENT_ROTATION"] and i != active_index and not node.complete
+		var color = GREEN if node.complete else (RED if locked else (MUTED if waiting else GOLD))
 		draw_circle(p, 29, Color("1c3432"))
 		draw_arc(p, float(objective.radius), 0, TAU, 48, Color(color, 0.38), 2)
 		draw_arc(p, 38, -PI / 2, -PI / 2 + TAU * maxf(0.001, node.progress / float(objective.required_ticks)), 32, color, 4)
@@ -679,6 +746,12 @@ func draw_destination_objective():
 			if unsafe: text_at("CLEAR THE RING", p + Vector2(-49, 70), 10, RED)
 		elif locked and not node.complete:
 			text_at("PULSE LOCK · MOVE", p + Vector2(-58, 70), 10, RED)
+		elif objective.type == "VENT_ROTATION" and not node.complete:
+			text_at("ACTIVE VENT" if i == active_index else "STANDBY", p + Vector2(-43, 70), 10, GOLD if i == active_index else MUTED)
+		elif objective.type == "RECOVER_SEQUENCE" and waiting:
+			text_at("AWAIT PRIOR RECORD", p + Vector2(-58, 70), 10, MUTED)
+		elif objective.type == "QUIET_REPAIR" and not node.complete and sim.state.position.distance_to(p) < float(objective.radius):
+			text_at("RELICS QUIET · WORKING", p + Vector2(-68, 70), 10, RED)
 
 func draw_travel_background():
 	for y in range(160, 736, 54):
@@ -687,7 +760,8 @@ func draw_travel_background():
 		var x = 105 + i * 116
 		draw_line(Vector2(x, 736), Vector2(505 + (x - 505) * 0.22, 158), Color("304344"), 2)
 	var route = sim.current_route()
-	var accent = GOLD if sim.state.route == "route.brass_choir" else GREEN
+	var route_colors = {"route.brass_choir": GOLD, "route.rootworks": GREEN, "route.pale_archive": Color("cbb8ed"), "route.red_foundry": RED, "route.null_assembly": Color("8edce0")}
+	var accent = route_colors.get(sim.state.route, GREEN)
 	for i in range(6):
 		var p = Vector2(145 + i * 165, 570 - (i % 2) * 70)
 		draw_circle(p, 15 + i * 2, Color(accent, 0.16))
@@ -695,32 +769,88 @@ func draw_travel_background():
 
 func draw_route_choice():
 	draw_rect(Rect2(60, 148, 980, 588), Color(0.035, 0.075, 0.08, 0.96))
-	text_at("THE WORKSHOP ANSWERS", Vector2(118, 205), 13, GOLD)
-	text_at("Two roads need the same small saint.", Vector2(114, 255), 34, PAPER, true)
-	wrapped("Your relics, ranks, catalysts, Scrap and Blessing will carry forward. Eight Scrap from the Foreman is reserved for the road.", Vector2(118, 292), 840, 15, MUTED)
-	for i in range(sim.chapter.routes.size()):
-		var route = sim.chapter.routes[i]
-		var x = 88 + i * 470
-		panel(Rect2(x, 360, 448, 196), Color("213638"))
-		text_at(route.direction, Vector2(x + 22, 392), 11, GOLD)
-		text_at(route.name, Vector2(x + 20, 431), 25, PAPER, true)
-		wrapped(route.description, Vector2(x + 20, 462), 398, 14, GREEN)
-		wrapped(route.news, Vector2(x + 20, 509), 398, 12, MUTED)
-		text_at("ROAD COST / %d SCRAP" % route.cost, Vector2(x + 268, 543), 11, GOLD)
+	text_at(map_board_title(), Vector2(88, 187), 12, GOLD)
+	text_at("Choose the next repair.", Vector2(84, 225), 30, PAPER, true)
+	var map_data = sim.chapter.expedition_map
+	var sites_by_id = {}
+	for site in map_data.sites: sites_by_id[site.id] = site
+	for edge in map_data.edges:
+		var from = map_site_position(sites_by_id[edge.from_site_id])
+		var to = map_site_position(sites_by_id[edge.to_site_id])
+		var emphasis = map_edge_emphasis(edge)
+		var edge_color = GREEN if emphasis == "accepted" else (GOLD if emphasis == "selected" else Color(MUTED, 0.35))
+		draw_line(from, to, edge_color, 4 if emphasis in ["accepted", "selected"] else 2)
+		for step in range(1, 4): draw_circle(from.lerp(to, step / 4.0), 3, edge_color)
+	for site in map_data.sites:
+		var p = map_site_position(site)
+		var is_origin = site.id == sim.state.site_id
+		var selected_destination = map_selection != "" and sim.routes.has(map_selection) and sim.routes[map_selection].site_id == site.id
+		var accepted_destination = selected_destination and sim.assignment_status(map_selection) == "accepted"
+		var site_color = GOLD if is_origin else (GREEN if accepted_destination else (GOLD if selected_destination else Color(MUTED, 0.48)))
+		draw_circle(p, 15 if is_origin else 11, Color(INK, 0.95))
+		draw_arc(p, 15 if is_origin else 11, 0, TAU, 28, site_color, 3)
+		text_at(site.name.to_upper(), p + Vector2(-45, 33), 9, site_color)
+	var selected = sim.routes.get(map_selection, {})
+	panel(Rect2(676, 250, 340, 330), Color("182e31"))
+	if not selected.is_empty():
+		var selected_status = sim.assignment_status(map_selection)
+		text_at(("ACCEPTED ASSIGNMENT" if selected_status == "accepted" else "AVAILABLE ASSIGNMENT"), Vector2(698, 278), 10, GREEN if selected_status == "accepted" else MUTED)
+		text_at(selected.name, Vector2(696, 315), 24, PAPER, true)
+		wrapped(selected.description, Vector2(698, 340), 294, 13, GREEN)
+		text_at("COST / %d SCRAP" % int(selected.cost), Vector2(698, 408), 12, GOLD)
+		text_at("RISK", Vector2(698, 441), 10, RED)
+		wrapped(selected.risk, Vector2(698, 459), 294, 12, PAPER)
+		text_at("ROAD NEWS", Vector2(698, 516), 10, GOLD)
+		wrapped(selected.news, Vector2(698, 534), 294, 11, MUTED)
+	text_at("AVAILABLE", Vector2(88, 586), 9, MUTED)
+	text_at("SELECTED", Vector2(162, 586), 9, GOLD)
+	text_at("ACCEPTED", Vector2(232, 586), 9, GREEN)
+
+func map_board_title() -> String:
+	var current_site_id = str(sim.state.get("site_id", "site.collapsed_workshop"))
+	for site in sim.chapter.get("expedition_map", {}).get("sites", []):
+		if str(site.id) == current_site_id:
+			return "PILGRIMAGE BOARD / " + str(site.name).to_upper()
+	return "PILGRIMAGE BOARD / " + current_site_id.trim_prefix("site.").replace("_", " ").to_upper()
+
+func map_edge_emphasis(edge: Dictionary) -> String:
+	var route_id = str(edge.route_id)
+	var edge_origin = str(edge.from_site_id)
+	var current_origin = str(sim.state.get("site_id", "site.collapsed_workshop"))
+	if sim.assignment_status(route_id) == "accepted":
+		var accepted_origin = ""
+		var history: Array = sim.state.get("route_history", [])
+		var history_index = history.find(route_id)
+		if history_index == 0: accepted_origin = str(sim.chapter.expedition_map.origin_site_id)
+		elif history_index > 0 and sim.routes.has(str(history[history_index - 1])): accepted_origin = str(sim.routes[str(history[history_index - 1])].site_id)
+		if accepted_origin == "": accepted_origin = str(sim.state.get("route_origin_site_id", ""))
+		if accepted_origin == "": accepted_origin = current_origin
+		if edge_origin == accepted_origin: return "accepted"
+	if route_id == map_selection and edge_origin == current_origin: return "selected"
+	return "available"
+
+func map_site_position(site: Dictionary) -> Vector2:
+	return Vector2(100 + float(site.position[0]) * 525, 252 + float(site.position[1]) * 275)
 
 func draw_travel():
 	draw_rect(Rect2(60, 148, 980, 588), Color(0.03, 0.065, 0.07, 0.80))
 	var route = sim.current_route()
-	text_at("ON THE ROAD / " + route.direction, Vector2(112, 207), 12, GOLD)
-	text_at(route.name, Vector2(108, 264), 42, PAPER, true)
-	var step = mini(sim.state.travel_step, route.travel.size() - 1)
-	wrapped(route.travel[step], Vector2(112, 335), 800, 23, PAPER)
-	for i in range(route.travel.size()):
-		var p = Vector2(190 + i * 245, 525)
-		draw_line(p, p + Vector2(200, 0), Color("49605c"), 3)
-		draw_circle(p, 11, GREEN if i <= step else MUTED)
-		text_at("0%d" % (i + 1), p + Vector2(-8, 36), 11, MUTED)
-	text_at("BUILD CARRIED / %d relics · %d Scrap · %d Shards" % [sim.state.weapons.size(), sim.state.scrap, sim.state.shards], Vector2(112, 570), 13, GREEN)
+	var node = sim.current_road_node()
+	var nodes = sim.road_nodes_for(route)
+	text_at("ACCEPTED / " + route.name.to_upper(), Vector2(92, 188), 11, GREEN)
+	text_at("ROAD %d OF %d / %s" % [sim.state.travel_step + 1, nodes.size(), str(node.kind).to_upper()], Vector2(92, 218), 10, GOLD)
+	text_at(node.name, Vector2(88, 266), 34, PAPER, true)
+	wrapped(node.news, Vector2(92, 300), 820, 16, GREEN)
+	panel(Rect2(92, 353, 910, 62), Color("233236"))
+	text_at("VISIBLE RISK", Vector2(108, 376), 10, RED)
+	wrapped(node.risk, Vector2(108, 396), 870, 12, PAPER)
+	for i in range(nodes.size() + 2):
+		var p = Vector2(128 + i * (820.0 / (nodes.size() + 1)), 453)
+		if i < nodes.size() + 1: draw_line(p, p + Vector2(820.0 / (nodes.size() + 1), 0), Color("49605c"), 3)
+		var complete = i <= sim.state.travel_step
+		draw_circle(p, 10, GREEN if complete else MUTED)
+		text_at("SITE" if i == 0 or i == nodes.size() + 1 else "%02d" % i, p + Vector2(-13, 30), 9, MUTED)
+	text_at("CARRIED / %d SCRAP · %d STRUCTURE     ROAD TOTAL / %+d SCRAP · %+d STRUCTURE" % [sim.state.scrap, sim.state.hp, int(sim.state.road_totals.scrap_delta), int(sim.state.road_totals.structure_delta)], Vector2(92, 514), 11, GOLD)
 
 func draw_memory():
 	draw_rect(Rect2(60, 148, 980, 588), Color(0.045, 0.06, 0.075, 0.96))
@@ -854,6 +984,9 @@ func draw_enemy(e):
 		draw_line(p + Vector2(4, -e.radius - 17), p + Vector2(-4, -e.radius - 9), GOLD, 2)
 	if e.bound > sim.state.tick: draw_line(p, sim.state.position, Color("81b8d0"), 1.5)
 	if e.get("slow", 0) > sim.state.tick: draw_arc(p, e.radius + 10, 0, TAU, 24, Color("74b9a6"), 2)
+	if e.get("quieted", 0) > sim.state.tick:
+		draw_arc(p, e.radius + 11, -PI * 0.75, PI * 0.75, 22, Color("8edce0"), 2)
+		draw_line(p + Vector2(-7, -e.radius - 14), p + Vector2(7, -e.radius - 14), Color("8edce0"), 2)
 	if e.get("inspected", false):
 		draw_arc(p, e.radius + 14, 0, TAU, 28, Color("8edce0"), 2)
 		text_at("PRIORITY", p + Vector2(-25, -e.radius - 19), 9, Color("8edce0"))
@@ -901,6 +1034,29 @@ func draw_effect(e):
 					draw_circle(e.from, e.range * (1.0 - fade * 0.2), Color(color, fade * 0.055))
 					draw_arc(e.from, e.range * (1.0 - fade * 0.2), 0, TAU, 64, color, 6, true)
 					for i in range(4): draw_arc(e.from + Vector2.from_angle(i * PI / 2) * e.range * 0.55, 13, 0, TAU, 18, PAPER, 2)
+				"ashen_censer":
+					draw_line(e.from, e.to, Color(color, fade * 0.25), 2, true)
+					draw_circle(e.to, e.range, Color(0.36, 0.20, 0.42, fade * 0.12))
+					draw_arc(e.to, e.range, 0, TAU, 48, Color(Color("b58ebd"), fade), 3)
+				"long_hand":
+					draw_line(e.from, e.to, Color(color, fade * 0.24), 13, true)
+					for segment in range(5): draw_line(e.from.lerp(e.to, segment / 5.0), e.from.lerp(e.to, (segment + 0.72) / 5.0), color, 4, true)
+				"repair_halo":
+					draw_arc(e.from, 39, 0, TAU, 32, Color(color, fade * 0.7), 3)
+					draw_line(e.to, e.to2, Color(0.78, 1.0, 0.8, fade), 3, true)
+					draw_circle(e.to, 8, Color(color, fade * 0.3))
+					draw_circle(e.to2, 8, Color(color, fade * 0.3))
+				"funeral_shots":
+					for target in e.get("targets", []):
+						draw_line(e.from, target, Color(Color("cbb8ed"), fade), 3, true)
+						draw_circle(target, 6 + 5 * (1.0 - fade), Color(0.64, 0.48, 0.78, fade * 0.25))
+				"sermon":
+					draw_line(e.from, e.to, Color(0.56, 0.86, 0.88, fade * 0.16), 18, true)
+					draw_line(e.from, e.to, Color(Color("bdeff0"), fade), 3, true)
+				"benediction", "consecrated":
+					draw_line(e.from, e.to, Color(color, fade * 0.35), 2, true)
+					draw_circle(e.to, e.range, Color(0.72, 0.85, 0.60, fade * 0.10))
+					draw_arc(e.to, e.range, 0, TAU, 40, GREEN if e.shape == "consecrated" else color, 4)
 		"charge": draw_line(e.from, e.to, Color(0.9, 0.8, 0.5, fade * 0.35), 1)
 		"hit", "death":
 			for i in range(4):
@@ -926,7 +1082,8 @@ func draw_loadout():
 		var data = sim.config.weapons[w.id]
 		var y = 219 + i * 79
 		text_at("%02d" % (i + 1), Vector2(1068, y), 12, MUTED)
-		var evolved_name = "Mercy Rail" if w.get("rail", false) else ("The Great Toll" if w.get("toll", false) else data.short)
+		var evolution_id = sim.weapon_evolution_id(w)
+		var evolved_name = sim.config.evolution_rules[evolution_id].short if evolution_id in sim.config.evolution_rules else data.short
 		text_at(evolved_name, Vector2(1095, y), 14, Color(data.color))
 		text_at("RANK " + ["I", "II", "III"][w.rank - 1] + (" · EVOLVED" if sim.weapon_evolved(w) else ""), Vector2(1095, y + 20), 11, MUTED)
 	text_at("RESERVE", Vector2(1068, 539), 11, GOLD)
@@ -1000,12 +1157,24 @@ func draw_shop():
 		text_at(name_text, Vector2(x + 16, y + 60), 19, PAPER, true)
 		wrapped(description, Vector2(x + 16, y + 82), 252, 12)
 	text_at("Combine raises rank. Evolution consumes one catalyst. Gifts occupy two separate slots.", Vector2(108, 685), 13, MUTED)
-	var rank = 0
-	var bell_rank = 0
-	for w in sim.state.weapons:
-		if w.id == "weapon.nailer_small_mercies" and not sim.weapon_evolved(w): rank = maxi(rank, w.rank)
-		if w.id == "weapon.bell_last_shift" and not sim.weapon_evolved(w): bell_rank = maxi(bell_rank, w.rank)
-	text_at("MERCY RAIL  Nailer %s + Rivet %s    /    GREAT TOLL  Bell %s + Clapper %s" % ["—" if rank == 0 else ["I", "II", "III"][rank - 1], "✓" if "catalyst.saints_rivet" in sim.state.catalysts else "—", "—" if bell_rank == 0 else ["I", "II", "III"][bell_rank - 1], "✓" if "catalyst.cracked_bell_clapper" in sim.state.catalysts else "—"], Vector2(108, 714), 11, GOLD)
+	text_at("Open the Evolution Ledger to inspect every recipe, ingredient and readiness state.", Vector2(108, 714), 11, GOLD)
+
+func draw_evolution_ledger():
+	draw_rect(Rect2(60, 148, 980, 588), Color("101f24"))
+	text_at("Evolution Ledger", Vector2(88, 185), 30, PAPER, true)
+	text_at("Rank III + one named catalyst. Every higher form remains optional.", Vector2(365, 183), 13, MUTED)
+	for i in range(sim.config.evolutions.size()):
+		var recipe_id = sim.config.evolutions[i]
+		var recipe = sim.evolution_recipes[recipe_id]
+		var x = 82 + (i % 2) * 470
+		var y = 204 + int(i / 2) * 108
+		panel(Rect2(x, y, 448, 94), Color("203538"))
+		text_at(recipe.name.to_upper(), Vector2(x + 14, y + 22), 14, GOLD)
+		text_at(sim.config.weapons[recipe.base_item_id].short + " III  +  " + sim.config.catalysts[recipe.required_catalyst_id].short, Vector2(x + 14, y + 43), 11, PAPER)
+		var state_label = sim.evolution_recipe_state(recipe_id)
+		text_at(state_label, Vector2(x + 14, y + 69), 11, GREEN if state_label == "READY" or state_label == "COMPLETED" else MUTED)
+		wrapped(str(recipe.result_geometry).replace("_", " "), Vector2(x + 118, y + 65), 305, 10, MUTED)
+	text_at("The Ledger names transformations; it never commits one without the EVOLVE command.", Vector2(88, 662), 12, MUTED)
 
 func draw_results():
 	draw_rect(Rect2(60, 148, 1192, 588), Color(0.04, 0.08, 0.09, 0.97))
@@ -1022,9 +1191,12 @@ func draw_results():
 	text_at("MOST WORK  %s · %d damage" % [top_name, int(summary.get("top_weapon_damage", 0))], Vector2(220, 440), 14, GOLD)
 	text_at("BLESSING  %s     EVOLUTION  %s" % ["FULFILLED" if summary.get("blessing_fulfilled", false) else "UNFULFILLED", str(summary.get("evolution", "")).replace("_", " ")], Vector2(220, 469), 13, MUTED)
 	text_at("GIFTS  " + ("NONE" if sim.state.gifts.is_empty() else ", ".join(sim.state.gifts.map(func(id): return sim.config.gifts[id].short))), Vector2(220, 492), 12, Color("8edce0"))
+	var road = summary.get("road_totals", {})
+	if not summary.get("road_history", []).is_empty():
+		text_at("ROAD  %d decisions · %+d Scrap · %+d Structure" % [summary.road_history.size(), int(road.get("scrap_delta", 0)), int(road.get("structure_delta", 0))], Vector2(220, 515), 12, GREEN)
 	if not won:
 		var loss_segment = str(summary.get("worst_damage_segment", "wave " + str(summary.get("worst_damage_wave", 0)))).replace("site.", "").replace(":wave_", " / wave ").replace("_", " ")
-		text_at("PRIMARY CAUSE  " + summary.get("failure_cause", "UNCLASSIFIED") + " · largest loss " + loss_segment, Vector2(220, 515), 14, RED)
+		text_at("PRIMARY CAUSE  " + summary.get("failure_cause", "UNCLASSIFIED") + " · largest loss " + loss_segment, Vector2(220, 534), 14, RED)
 	wrapped(summary.get("replay_cue", "Try one clear change next shift."), Vector2(220, 545), 820, 17, PAPER)
 	var memory_copy = sim.current_route().memory.text if won and sim.state.chapter_complete else "MEMORY 01 / Your arm remembers a waterworks. Your bell remembers a factory. Neither remembers being asked to become a weapon."
 	wrapped(memory_copy, Vector2(220, 603), 820, 14, MUTED)

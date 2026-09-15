@@ -147,7 +147,9 @@ func _initialize():
 	s.step(Vector2.ZERO)
 	s.state.scrap = 20
 	s.command("choose_route", "route.rootworks")
-	while s.state.phase == "travel": s.command("advance_travel")
+	while s.state.phase == "travel":
+		var free_choice = s.current_road_node().choices.filter(func(choice): return int(choice.cost) == 0)[0]
+		s.command("choose_road_option", free_choice.id)
 	var pump = Vector2(s.objective_data().nodes[0].position[0], s.objective_data().nodes[0].position[1])
 	s.state.position = pump + Vector2(70, 0)
 	s.state.weapons = [weapon("weapon.welded_halo")]

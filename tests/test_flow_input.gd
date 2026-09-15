@@ -99,12 +99,14 @@ func run_checks():
 	game.build_ui()
 	await process_frame
 	check(game.sim.state.phase == "route", "Foreman completion reaches route selection")
-	check(root.gui_get_focus_owner() is Button and root.gui_get_focus_owner().text.begins_with("CHOOSE "), "route selection has a controller focus target")
+	check(root.gui_get_focus_owner() is Button and root.gui_get_focus_owner().text == "BRASS CHOIR RELAY", "expedition map has a controller focus target")
 	await activate(root.gui_get_focus_owner())
+	check(game.map_selection == "route.brass_choir" and game.sim.state.phase == "route", "controller preview does not accept an assignment implicitly")
+	await activate(button_with(game, "ACCEPT ASSIGNMENT", true))
 	check(game.sim.state.phase == "travel", "focused route card accepts controller-style input")
 
 	while game.sim.state.phase == "travel":
-		check(root.gui_get_focus_owner() is Button, "each travel beat has a focused continuation")
+		check(root.gui_get_focus_owner() is Button and root.gui_get_focus_owner().text.contains(" · "), "each in-between area has a focused authored choice")
 		await activate(root.gui_get_focus_owner())
 	check(game.sim.state.phase == "combat" and game.sim.is_destination(), "travel input reaches the selected destination")
 
@@ -118,7 +120,26 @@ func run_checks():
 	var memory_button = button_with(game, "CARRY THIS MEMORY", true)
 	check(game.sim.state.phase == "memory" and memory_button != null, "completed destination exposes a focused memory action")
 	await activate(memory_button)
-	check(game.sim.state.phase == "won" and not game.sim.state.result_summary.is_empty(), "memory input reaches causal Results")
+	check(game.sim.state.phase == "route" and game.sim.state.memory_ids.size() == 1, "mid-site memory input reaches the terminal route choice")
+	check(root.gui_get_focus_owner() is Button and root.gui_get_focus_owner().text in ["PALE ARCHIVE", "RED FOUNDRY", "NULL ASSEMBLY"], "terminal route selection has a controller focus target")
+	await activate(root.gui_get_focus_owner())
+	check(game.sim.state.phase == "route", "terminal route preview does not bypass assignment confirmation")
+	await activate(button_with(game, "ACCEPT ASSIGNMENT", true))
+	while game.sim.state.phase == "travel":
+		check(root.gui_get_focus_owner() is Button, "each terminal travel beat has a focused continuation")
+		await activate(root.gui_get_focus_owner())
+	check(game.sim.state.phase == "combat" and game.sim.state.route_history.size() == 2, "terminal travel preserves the two-route history")
+	for node in game.sim.state.objective: node.complete = true
+	game.sim.state.objective_complete = true
+	game.sim.state.wave = game.sim.current_wave_count()
+	game.sim.state.boss_dead = true
+	game.sim.step(Vector2.ZERO)
+	game.build_ui()
+	await process_frame
+	memory_button = button_with(game, "CARRY THIS MEMORY", true)
+	check(game.sim.state.phase == "memory" and memory_button != null, "terminal destination exposes its memory action")
+	await activate(memory_button)
+	check(game.sim.state.phase == "won" and not game.sim.state.result_summary.is_empty(), "terminal memory input reaches causal Results")
 	var result_button = button_with(game, "RETURN TO THE WORKSHOP")
 	check(result_button != null and result_button.has_focus(), "Results has a focused replay action")
 	await activate(result_button)

@@ -12,11 +12,11 @@ The runtime tests now exist. Run the complete Windows loop with `scripts/agent_i
 - `godot --headless --path . --script res://tests/test_save_flow.gd`: exact state-hash and next-event restoration across every expedition phase plus version-one migration coverage.
 - `godot --headless --path . --script res://tests/run_playthroughs.gd`: four shared-seed normal-economy policies, including no-evolution Workshop. Results are saved separately from visual fixtures.
 - `godot --headless --path . --script res://tests/benchmark_peak_density.gd`: records deterministic simulation throughput with 65 persistent threats and four Rank III weapons. It is not a rendered-frame benchmark.
-- Add `-- --optional --quick` to smoke one normal-economy policy through each destination without running the full twelve-policy matrix.
+- Add `-- --optional --quick` to smoke the Brass-to-Pale and Brass-to-Red chains. The full twelve-policy matrix covers all four authored chains; `-- --optional --ea-matrix` crosses three frames, four Blessings and both opening routes.
 
 Rendered fixtures use explicit setup budgets/states, including a Results fixture. They are not screenshots of the full-run policies. The earlier list below remains a broader target, not a claim all planned mechanics are implemented. See `docs/runtime_status.md` for scope differences.
 
-SC-15/SC-16 add seven rendered chapter fixtures: `ROUTE_CHOICE`, `TRAVEL_BRASS`, `BRASS_OBJECTIVE`, `CHOIR_REGENT_TOLL`, `ROOTWORKS_OBJECTIVE`, `FACTORY_HEART_FEED`, and `CHAPTER_MEMORY`. They are explicit deterministic presentation fixtures, not a natural completed expedition.
+SC-15/SC-17 add ten rendered chapter fixtures: the seven opening/mid-site states plus `PALE_ARCHIVE_INDEX`, `RED_FOUNDRY_VENTS`, and `NULL_ASSEMBLY_QUIET`. They are explicit deterministic presentation fixtures, not a natural completed expedition.
 
 Run:
 
@@ -81,4 +81,6 @@ P12 core-quality gate: `test_roaming_quality.gd` covers authored wave profiles, 
 
 P14 replayable assembly: `test_assembly.gd` covers Foundry Censer, Penance Winch, Welded Halo, Great Toll, two unique Gift slots, save restoration, Gift trade-offs, independent evolution tracking and destination-safe Workshop repair ownership. `test_acquisition.gd` scans seeded ordinary shop rolls for the full enabled pool and assembles both Evolutions in either order entirely through buy/combine/evolve commands with ordinary income bands; configured offers isolate transaction order without injecting inventory. `run_assembly_playthroughs.gd` executes four controlled-start build identities through complete seed-147 runs; these prove executable viability, not natural acquisition or human balance. `capture_assembly.gd` renders the three configured 1280x800 assembly states in `artifacts/assembly`.
 
-Peak-density simulation benchmark: Apple M1 Pro, Godot 4.5.1, 65 persistent mixed threats, four Rank III weapons and 1,800 fixed ticks completed at 319 simulation ticks/second (5.31× the 60 Hz requirement) in the integrated release run. This measures authoritative simulation throughput only; rendered Windows minimum-hardware performance remains unverified.
+P14.1 Evolution breadth: `test_evolutions.gd` proves all eight data-owned recipes, atomic rejection/consumption, six new geometry/control/objective/resource identities, five-form coexistence and save restoration. `test_acquisition.gd` additionally assembles every recipe through public shop/evolve commands at ordinary income bands and verifies each generated catalyst path. `run_evolution_playthroughs.gd` carries all eight forms through complete two-leg chapters from controlled starting builds. `capture_evolutions.gd` renders the eight-entry Ledger and two configured geometry comparisons in `artifacts/evolutions`; these fixtures are not natural acquisition or human readability evidence.
+
+Peak-density simulation benchmark: Apple M1 Pro, Godot 4.5.1, 65 persistent mixed threats, four Rank III weapons and 1,800 fixed ticks completed at 315 simulation ticks/second (5.25× the 60 Hz requirement) in the integrated release run. This measures authoritative simulation throughput only; rendered Windows minimum-hardware performance remains unverified.

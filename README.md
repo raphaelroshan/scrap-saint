@@ -16,7 +16,7 @@ For faster development, use **Play Scrap Saint 5x Dev.cmd**. Combat runs at 5× 
 - WASD or arrows: move; weapons attack automatically. In Optional repairs, short repairs reward Scrap, healing or a stagger pulse. Machines cannot be destroyed and repairs are never required to win. In Relay defence, stay near the relay to repair it and keep it alive.
 - Escape: pause; F5: save; F9: load; M: mute; F3: diagnostic overlay.
 - Between waves: buy/combine, sell, store, equip, lock and refresh. Mercy Rail is optional.
-- Defeating the Foreman opens Brass Choir Relay and Rootworks Pump. The selected road carries the current build, economy and Blessing into a distinct objective and ends with a route-specific memory.
+- Defeating the Foreman opens Brass Choir Relay and Rootworks Pump. Their memories open a second choice: Brass leads to Pale Archive or Red Foundry; Rootworks leads to Red Foundry or Null Assembly. The build, economy and Blessing persist through all three sites.
 - Controller: left stick movement, standard UI navigation/accept, Start to pause.
 
 See [runtime status](docs/runtime_status.md) for implemented rules, prototype substitutions, and limitations. The enabled slice and balance values live in `content/slices/first_shift.json`.
@@ -62,6 +62,7 @@ Choose a Saint frame and Blessing
 → deepen a Blessing or pursue an evolution
 → survive an elite or boss
 → reveal a memory and choose the next route
+→ cross another authored road and finish at a terminal memory
 ```
 
 A Blessing is a broad run doctrine. The shop provides specific weapons, catalysts, passives, and services. A Blessing should bias the shop and guarantee a starting direction, but it must never hard-lock the run.
@@ -82,7 +83,7 @@ The transformation must change attack geometry, target rules, area control, obje
 
 ## Scope and quality bar
 
-The current early-access preview is a complete first-chapter vertical: three Saint frames, four Blessings, ten base weapons, four catalysts, three run-local Gifts, two visible Evolutions, a Workshop plus two selectable destination sites, seven enemy families, an elite and three bosses. Runs carry their build and economy through a three-beat journey into a route-specific objective, boss and Memory. Combine, Evolution, and future Confluence recipes remain separate systems; no Confluence is enabled.
+The current early-access preview is a complete first-chapter vertical: three Saint frames, four Blessings, ten base weapons, seven catalysts, three run-local Gifts, eight visible Evolutions, a Workshop plus five destination sites, seven enemy families, an elite and six bosses. Runs carry their build and economy through a mid-site and one of three terminal objectives, bosses and Memories across four authored route chains. Combine, Evolution, and future Confluence recipes remain separate systems; no Confluence is enabled.
 
 The project is not complete when the content validator passes. Game quality requires a running build, readable combat, visible build transformation, causal Results, exact screenshot provenance, and evidence-led iteration. Technical tests establish simulation correctness; screenshots establish presentation evidence; neither is a substitute for the other.
 

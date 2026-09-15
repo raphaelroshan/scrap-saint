@@ -1,0 +1,26 @@
+{
+  "id": "arena.red_foundry",
+  "name": "Red Foundry",
+  "pixels_per_metre": 40,
+  "bounds": [-110, -70, 1130, 850],
+  "start": [470, 660],
+  "relay": [475, 335],
+  "repair_radius": 78,
+  "boss_anchors": [[155, 185], [475, 335], [825, 585]],
+  "obstacles": [
+    {"id": "machine.slag_press", "name": "SLAG PRESS", "rect": [260, 240, 110, 225]},
+    {"id": "machine.cardinal_dais", "name": "CARDINAL DAIS", "rect": [425, 90, 230, 90]},
+    {"id": "machine.quench_tank", "name": "QUENCH TANK", "rect": [665, 310, 115, 225]}
+  ],
+  "entries": [
+    {"id": "entry.foundry_west", "name": "COAL MOUTH", "from": [-40, 230], "to": [-40, 410]},
+    {"id": "entry.foundry_north", "name": "STACK CROWN", "from": [415, 0], "to": [570, 0]},
+    {"id": "entry.foundry_east", "name": "QUOTA GATE", "from": [950, 340], "to": [950, 520]}
+  ],
+  "zones": [
+    {"id": "zone.cinder_bank", "name": "CINDER BANK", "rect": [10, 80, 230, 190]},
+    {"id": "zone.press_floor", "name": "PRESS FLOOR", "rect": [385, 235, 190, 210]},
+    {"id": "zone.quench_lane", "name": "QUENCH LANE", "rect": [760, 500, 190, 170]},
+    {"id": "zone.ember_road", "name": "EMBER ROAD", "rect": [350, 580, 250, 120]}
+  ]
+}

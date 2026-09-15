@@ -229,10 +229,10 @@ The first ten authored recipes are:
 | 1 | Nailer of Small Mercies | Saint’s Rivet | Mercy Rail | **Required first slice; guaranteed.** |
 | 2 | Bell of the Last Shift | Cracked Bell Clapper | The Great Toll | Authored; post-Mercy implementation. |
 | 3 | Procession Gear | Pilgrim Spindle | The Maintenance Parade | Authored; post-slice. |
-| 4 | Candle-Nailer | Mourner’s Wick | Candle for the Unreturned | Authored; post-slice. |
+| 4 | Candle-Nailer | Mourner’s Wick | Candle for the Unreturned | **Enabled by P14.1.** |
 | 5 | Cable of Contrition | Blue Wire from the Pump | Contrition Lattice | Authored; post-slice. |
-| 6 | Hymn Coil | Folded Maintenance Blueprint | Quiet Sermon | Authored; post-slice. |
-| 7 | Altar Mortar | Saint’s Rivet | Workshop Benediction | Authored; post-slice. |
+| 6 | Hymn Coil | Folded Maintenance Blueprint | Quiet Sermon | **Enabled by P14.1.** |
+| 7 | Altar Mortar | Saint’s Rivet | Workshop Benediction | **Enabled by P14.1.** |
 | 8 | The Door That Opens Once | Blue Wire from the Pump | The Door of Two Exits | Authored; post-slice. |
 | 9 | The Sermon That Cannot Be Heard | Mourner’s Wick | Unheard Procession | Authored; post-slice. |
 | 10 | Any Rank 3 `SALVAGE` weapon | Folded Maintenance Blueprint | Rebuilt Instrument | Authored wildcard service; must name the selected base in the preview. |

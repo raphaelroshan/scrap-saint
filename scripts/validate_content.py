@@ -33,6 +33,57 @@ def unique_ids(entries: list[dict], label: str) -> set[str]:
     return set(ids)
 
 
+def validate_expedition_graph(chapter: dict) -> None:
+    """Require the rendered map and route command graph to describe one graph."""
+    routes = chapter.get("routes", [])
+    route_ids = unique_ids(routes, "chapter routes")
+    routes_by_id = {route["id"]: route for route in routes}
+    expedition_map = chapter.get("expedition_map", {})
+    origin_site_id = expedition_map.get("origin_site_id")
+    map_sites = expedition_map.get("sites", [])
+    map_site_ids = unique_ids(map_sites, "expedition map sites")
+
+    assert origin_site_id in map_site_ids, "expedition map origin must reference a map site"
+    route_site_ids = [route.get("site_id") for route in routes]
+    assert all(isinstance(site_id, str) and site_id for site_id in route_site_ids), "every route needs a destination site"
+    assert len(route_site_ids) == len(set(route_site_ids)), "chapter routes must have unique destination sites"
+    assert map_site_ids == {origin_site_id, *route_site_ids}, "expedition map contains an orphan or missing route site"
+
+    expected_edges: set[tuple[str, str, str]] = set()
+    expected_pairs: set[tuple[str, str]] = set()
+    for route in routes:
+        from_sites = route.get("from_sites", [])
+        assert from_sites, f"{route['id']}: missing graph parent"
+        assert len(from_sites) == len(set(from_sites)), f"{route['id']}: duplicate graph parent"
+        for from_site_id in from_sites:
+            assert from_site_id in map_site_ids, f"{route['id']}: unknown graph parent {from_site_id}"
+            pair = (from_site_id, route["id"])
+            assert pair not in expected_pairs, f"{route['id']}: duplicate authored graph pair {from_site_id}"
+            expected_pairs.add(pair)
+            expected_edges.add((from_site_id, route["site_id"], route["id"]))
+
+    edges = expedition_map.get("edges", [])
+    actual_edges: set[tuple[str, str, str]] = set()
+    actual_pairs: set[tuple[str, str]] = set()
+    for edge in edges:
+        source = edge.get("from_site_id")
+        destination = edge.get("to_site_id")
+        route_id = edge.get("route_id")
+        assert source in map_site_ids and destination in map_site_ids, "expedition map edge references an unknown site"
+        assert route_id in route_ids, f"expedition map edge references unknown route {route_id}"
+        route = routes_by_id[route_id]
+        assert source in route["from_sites"], f"{route_id}: map edge source is not an authored graph parent"
+        assert destination == route["site_id"], f"{route_id}: map edge destination does not match route site_id"
+        edge_key = (source, destination, route_id)
+        edge_pair = (source, route_id)
+        assert edge_key not in actual_edges, "expedition map edges must be unique"
+        assert edge_pair not in actual_pairs, f"{route_id}: multiple map edges for authored parent {source}"
+        actual_edges.add(edge_key)
+        actual_pairs.add(edge_pair)
+
+    assert actual_edges == expected_edges, "expedition map edges must exactly match authored route from_sites"
+
+
 def validate_slice(manifest: dict, data: dict) -> None:
     items = {entry['id']: entry for entry in data['items']['items']}
     enemies = {entry['id'] for entry in data['enemies']['enemies']}
@@ -40,14 +91,14 @@ def validate_slice(manifest: dict, data: dict) -> None:
     blessings = {entry['id'] for entry in data['blessings']['blessings']}
     evolutions = {entry['id']: entry for entry in data['items']['evolutions']}
     assert len(manifest['weapons']) == 10, 'P14 slice must enable ten role-distinct weapons'
-    assert len(manifest['catalysts']) == 4, 'slice must enable four useful catalysts'
+    assert len(manifest['catalysts']) == 7, 'P14.1 slice must enable seven recipe-supporting catalysts'
     assert len(manifest['gifts']) == 3 and manifest['gift_slots'] == 2, 'P14 slice needs three Gifts and two slots'
     assert len(manifest['enemies']) == 6, 'slice must enable six ordinary enemies'
     assert len(manifest['blessings']) == 4 and len(set(manifest['blessings'])) == 4
     assert set(manifest['blessings']) <= blessings
     assert manifest['elite'] in enemies and manifest['boss'] in bosses
     assert set(manifest['enemies']) <= enemies
-    assert len(manifest['evolutions']) == 2
+    assert len(manifest['evolutions']) == 8, 'P14.1 slice must expose eight meaningful Evolutions'
     for kind in ('weapons', 'catalysts', 'gifts'):
         for item_id, settings in manifest[kind].items():
             assert item_id in items, f'unknown enabled item {item_id}'
@@ -66,9 +117,14 @@ def validate_slice(manifest: dict, data: dict) -> None:
         recipe = evolutions[recipe_id]
         assert recipe['base_item_id'] in manifest['weapons']
         assert recipe['required_catalyst_id'] in manifest['catalysts']
+        assert recipe_id in items[recipe['base_item_id']].get('evolution_ids', []), f'{recipe_id}: base does not advertise recipe'
+        assert recipe_id in items[recipe['required_catalyst_id']].get('compatible_evolution_ids', []), f'{recipe_id}: catalyst does not advertise recipe'
+        rule = manifest.get('evolution_rules', {}).get(recipe_id, {})
+        copy = rule.get('archivist_copy', {})
+        assert copy.get('shape') and copy.get('behavior'), f'{recipe_id}: missing Archivist copy contract'
     assert manifest['economy']['reroll_costs'] == [0, 2, 4]
     assert manifest['wave_ticks'] > 0 and manifest['tick_rate'] == 60
-    assert 'confluences' not in manifest, 'Confluences remain disabled for P14'
+    assert 'confluences' not in manifest, 'Confluences remain disabled for P14.1'
     assert len(manifest.get('wave_profiles', [])) == manifest['wave_count']
     for profile in manifest['wave_profiles']:
         assert profile.get('name') and profile.get('pressure') and profile.get('counters')
@@ -85,17 +141,59 @@ def validate_chapter(data: dict) -> None:
     chapter_path = ROOT / "content/chapter/first_chapter.json"
     chapter = json.loads(chapter_path.read_text(encoding="utf-8"))
     routes = chapter.get("routes", [])
-    assert len(routes) == 2, "first chapter must offer exactly two destination routes"
+    assert len(routes) == 5, "first chapter must contain two mid-sites and three terminal sites"
     route_ids = unique_ids(routes, "chapter routes")
-    assert route_ids == {"route.brass_choir", "route.rootworks"}
+    expected_routes = {"route.brass_choir", "route.rootworks", "route.pale_archive", "route.red_foundry", "route.null_assembly"}
+    assert route_ids == expected_routes
+    assert {"route.brass_choir", "route.rootworks"} <= route_ids, "first branch routes must remain stable"
+    expedition_map = chapter.get("expedition_map", {})
+    assert expedition_map.get("origin_site_id") == "site.collapsed_workshop"
+    map_sites = expedition_map.get("sites", [])
+    map_site_ids = unique_ids(map_sites, "expedition map sites")
+    required_terminal_sites = {"site.pale_archive", "site.red_foundry", "site.null_assembly"}
+    assert {"site.collapsed_workshop", "site.brass_choir_relay", "site.rootworks_pump"} | required_terminal_sites <= map_site_ids
+    for site in map_sites:
+        assert site.get("name") and len(site.get("position", [])) == 2 and site.get("tier") in (0, 1, 2)
+        assert all(0.0 <= float(value) <= 1.0 for value in site["position"]), f"{site['id']}: map position outside normalized viewport"
+    validate_expedition_graph(chapter)
+    edges = expedition_map.get("edges", [])
+    edge_keys = {(edge.get("from_site_id"), edge.get("to_site_id"), edge.get("route_id")) for edge in edges}
+    required_edges = {
+        ("site.collapsed_workshop", "site.brass_choir_relay", "route.brass_choir"),
+        ("site.collapsed_workshop", "site.rootworks_pump", "route.rootworks"),
+        ("site.brass_choir_relay", "site.pale_archive", "route.pale_archive"),
+        ("site.brass_choir_relay", "site.red_foundry", "route.red_foundry"),
+        ("site.rootworks_pump", "site.red_foundry", "route.red_foundry"),
+        ("site.rootworks_pump", "site.null_assembly", "route.null_assembly"),
+    }
+    assert required_edges <= edge_keys, "expedition map must preserve the authored two-tier graph"
     bosses_by_id = {entry["id"]: entry for entry in data["bosses"]["bosses"]}
     boss_ids = set(bosses_by_id)
     site_ids: set[str] = set()
     for route in routes:
-        for field in ("site_id", "name", "description", "news", "arena_path", "boss", "objective", "pressure", "travel", "memory"):
+        for field in ("site_id", "name", "description", "news", "risk", "arena_path", "boss", "objective", "pressure", "travel", "memory"):
             assert route.get(field), f"{route['id']}: missing {field}"
         assert route["site_id"] not in site_ids, f"{route['id']}: duplicate site"
         site_ids.add(route["site_id"])
+        assert route.get("from_sites"), f"{route['id']}: missing graph parent"
+        assert all(next_id in route_ids for next_id in route.get("next_routes", [])), f"{route['id']}: unknown child route"
+        assert bool(route.get("terminal", False)) == (len(route.get("next_routes", [])) == 0), f"{route['id']}: terminal/child mismatch"
+        if route.get("terminal", False):
+            assert route.get("assignment_id") and route.get("risk"), f"{route['id']}: terminal route needs map metadata"
+            road_nodes = route.get("road_nodes", [])
+            assert road_nodes, f"{route['id']}: terminal route needs authored road nodes"
+            unique_ids(road_nodes, f"{route['id']} road nodes")
+            choice_ids: set[str] = set()
+            for road_node in road_nodes:
+                assert road_node.get("kind") in {"encounter", "merchant", "service", "passage"}
+                assert road_node.get("name") and road_node.get("news") and road_node.get("risk") and road_node.get("choices")
+                assert any(int(choice.get("cost", 0)) == 0 for choice in road_node["choices"]), f"{road_node['id']}: needs a free continuation"
+                for choice in road_node["choices"]:
+                    assert choice.get("id") and choice["id"] not in choice_ids, f"{road_node['id']}: duplicate choice ID"
+                    choice_ids.add(choice["id"])
+                    assert choice.get("label") and choice.get("description") and choice.get("result") and choice.get("flag")
+                    assert int(choice.get("cost", -1)) >= 0
+                    assert isinstance(choice.get("scrap_delta"), int) and isinstance(choice.get("structure_delta"), (int, float))
         assert route["boss"] in boss_ids, f"{route['id']}: unknown boss"
         boss = bosses_by_id[route["boss"]]
         assert len(boss.get("phase_thresholds", [])) == 2, f"{boss['id']}: missing phase thresholds"
@@ -106,6 +204,20 @@ def validate_chapter(data: dict) -> None:
             assert phase["interval"] > phase["warning_ticks"] > 0, f"{boss['id']}.{phase['id']}: warning must resolve before next cadence"
         assert set(route["enemy_pool"]) <= set(data["enemies_by_id"]), f"{route['id']}: unknown enemy"
         assert len(route["travel"]) >= 2, f"{route['id']}: travel needs more than one beat"
+        road_nodes = route.get("road_nodes", [])
+        assert road_nodes, f"{route['id']}: every route needs authored in-between areas"
+        unique_ids(road_nodes, f"{route['id']} road nodes")
+        choice_ids: set[str] = set()
+        for node in road_nodes:
+            assert node.get("kind") in {"encounter", "merchant", "service", "passage"}
+            assert node.get("name") and node.get("news") and node.get("risk") and node.get("choices")
+            assert any(int(choice.get("cost", 0)) == 0 for choice in node["choices"]), f"{node['id']}: needs a free continuation"
+            for choice in node["choices"]:
+                assert choice.get("id") and choice["id"] not in choice_ids, f"{node['id']}: duplicate choice ID"
+                choice_ids.add(choice["id"])
+                assert choice.get("label") and choice.get("description") and choice.get("result") and choice.get("flag")
+                assert int(choice.get("cost", -1)) >= 0
+                assert isinstance(choice.get("scrap_delta"), int) and isinstance(choice.get("structure_delta"), (int, float))
         assert 0.0 <= float(route.get("arrival_repair_floor", -1)) <= 1.0, f"{route['id']}: invalid arrival repair floor"
         profiles = route.get("wave_profiles", [])
         assert len(profiles) == route["wave_count"], f"{route['id']}: every destination wave needs an authored profile"
@@ -116,12 +228,21 @@ def validate_chapter(data: dict) -> None:
             assert profile.get("primary_weight", 0) > 0 and profile.get("spawn_interval", 0) > 0
         objective = route["objective"]
         assert objective.get("id") and objective.get("description") and objective.get("nodes")
+        assert objective.get("type") in {"CALIBRATE_NODES", "REPAIR_PUMP", "RECOVER_SEQUENCE", "VENT_ROTATION", "QUIET_REPAIR"}
+        if objective["type"] == "VENT_ROTATION":
+            assert objective.get("active_interval", 0) > 0
         unique_ids(objective["nodes"], f"{route['id']} objective nodes")
         arena_path = ROOT / route["arena_path"].removeprefix("res://")
         assert arena_path.is_file(), f"{route['id']}: missing arena"
         arena = json.loads(arena_path.read_text(encoding="utf-8"))
         assert arena.get("id") and arena.get("bounds") and arena.get("start") and arena.get("entries")
+        if any("arena_anchor" in phase["hazard_pattern"] for phase in boss["phases"]):
+            assert arena.get("boss_anchors"), f"{route['id']}: boss needs arena anchors"
         assert route["memory"].get("id") and route["memory"].get("text") and route["memory"].get("conclusion")
+
+    by_id = {route["id"]: route for route in routes}
+    assert set(by_id["route.brass_choir"]["next_routes"]) == {"route.pale_archive", "route.red_foundry"}
+    assert set(by_id["route.rootworks"]["next_routes"]) == {"route.red_foundry", "route.null_assembly"}
 
 
 def validate_progression(data: dict) -> None:

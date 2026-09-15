@@ -1,15 +1,41 @@
 {
   "id": "chapter.first_pilgrimage",
   "name": "The First Pilgrimage",
+  "expedition_map": {
+    "origin_site_id": "site.collapsed_workshop",
+    "sites": [
+      {"id": "site.collapsed_workshop", "name": "Collapsed Workshop", "tier": 0, "position": [0.08, 0.50]},
+      {"id": "site.brass_choir_relay", "name": "Brass Choir", "tier": 1, "position": [0.43, 0.27]},
+      {"id": "site.rootworks_pump", "name": "Rootworks", "tier": 1, "position": [0.43, 0.73]},
+      {"id": "site.pale_archive", "name": "Pale Archive", "tier": 2, "position": [0.82, 0.12]},
+      {"id": "site.red_foundry", "name": "Red Foundry", "tier": 2, "position": [0.82, 0.50]},
+      {"id": "site.null_assembly", "name": "Null Assembly", "tier": 2, "position": [0.82, 0.88]}
+    ],
+    "edges": [
+      {"route_id": "route.brass_choir", "from_site_id": "site.collapsed_workshop", "to_site_id": "site.brass_choir_relay"},
+      {"route_id": "route.rootworks", "from_site_id": "site.collapsed_workshop", "to_site_id": "site.rootworks_pump"},
+      {"route_id": "route.pale_archive", "from_site_id": "site.brass_choir_relay", "to_site_id": "site.pale_archive"},
+      {"route_id": "route.red_foundry", "from_site_id": "site.brass_choir_relay", "to_site_id": "site.red_foundry"},
+      {"route_id": "route.red_foundry", "from_site_id": "site.rootworks_pump", "to_site_id": "site.red_foundry"},
+      {"route_id": "route.null_assembly", "from_site_id": "site.rootworks_pump", "to_site_id": "site.null_assembly"}
+    ]
+  },
   "routes": [
     {
       "id": "route.brass_choir",
+      "from_sites": ["site.collapsed_workshop"],
+      "next_routes": ["route.pale_archive", "route.red_foundry"],
+      "terminal": false,
+      "route_salvage": 7,
       "site_id": "site.brass_choir_relay",
+      "from_site_id": "site.collapsed_workshop",
+      "assignment_id": "assignment.brass_choir",
       "name": "Brass Choir Relay",
       "direction": "NORTH ROAD / THREE SIGNAL FIRES",
       "description": "Tune three relay bells while the Choir bends the timing of every mechanism.",
       "cost": 8,
       "news": "Ada-9 heard three bells answer one another. None kept the same time.",
+      "risk": "Frayed warning wire crosses an exposed north road. Structure or Scrap may pay the toll.",
       "arena_path": "res://content/arenas/brass_choir_relay.json",
       "wave_count": 4,
       "wave_ticks": 3000,
@@ -23,7 +49,7 @@
       ],
       "boss": "boss.choir_regent",
       "boss_hp": 1150,
-      "arrival_repair_floor": 1.0,
+      "arrival_repair_floor": 0.6,
       "objective": {
         "id": "objective.tune_choir_relays",
         "name": "TUNE THE THREE RELAYS",
@@ -50,6 +76,31 @@
         "Bell wire crosses the road. Every loose bolt hums before the wind arrives.",
         "The Choir Relay answers with a note too orderly to be welcoming."
       ],
+      "road_nodes": [
+        {
+          "id": "road.brass.warning_wire",
+          "kind": "encounter",
+          "name": "The Warning Wire",
+          "news": "The wire rings before anything moves. Ada-9's report was accurate.",
+          "risk": "Crossing untreated costs 12 Structure; careful splicing costs 2 Scrap.",
+          "choices": [
+            {"id": "choice.brass.splice", "label": "Splice the warning wire", "description": "Spend 2 Scrap and leave a working alarm for the return road.", "cost": 2, "structure_delta": 0, "scrap_delta": 0, "flag": "road.brass.warning_restored", "result": "The wire learns one honest note."},
+            {"id": "choice.brass.cross", "label": "Cross beneath the ringing", "description": "Keep your Scrap. Loose cable tears 12 Structure from the chassis.", "cost": 0, "structure_delta": -12, "scrap_delta": 0, "flag": "road.brass.warning_endured", "result": "The Saint crosses before the third false alarm."}
+          ]
+        },
+        {
+          "id": "road.brass.ada_waycart",
+          "kind": "merchant",
+          "name": "Ada-9's Waycart",
+          "news": "A hand-painted sign offers repairs, bearings, and news in that order.",
+          "risk": "Repairs consume the same Scrap needed at the next workshop.",
+          "choices": [
+            {"id": "choice.brass.repair", "label": "Buy a road repair", "description": "Spend 4 Scrap to restore 22 Structure.", "cost": 4, "structure_delta": 22, "scrap_delta": 0, "flag": "road.brass.repaired", "result": "Ada-9 tightens every bolt that still believes in threads."},
+            {"id": "choice.brass.news", "label": "Buy the Choir timings", "description": "Spend 1 Scrap. Carry Ada-9's warning into the destination record.", "cost": 1, "structure_delta": 0, "scrap_delta": 0, "flag": "road.brass.choir_timings", "result": "Three bad timings become one useful warning."},
+            {"id": "choice.brass.pass", "label": "Keep moving", "description": "Spend nothing and preserve the current build.", "cost": 0, "structure_delta": 0, "scrap_delta": 0, "flag": "road.brass.passed_waycart", "result": "Ada-9 salutes with a wrench."}
+          ]
+        }
+      ],
       "memory": {
         "id": "memory.borrowed_bell",
         "title": "MEMORY / THE BORROWED BELL",
@@ -59,12 +110,19 @@
     },
     {
       "id": "route.rootworks",
+      "from_sites": ["site.collapsed_workshop"],
+      "next_routes": ["route.red_foundry", "route.null_assembly"],
+      "terminal": false,
+      "route_salvage": 7,
       "site_id": "site.rootworks_pump",
+      "from_site_id": "site.collapsed_workshop",
+      "assignment_id": "assignment.rootworks",
       "name": "Rootworks Pump",
       "direction": "LOW ROAD / WATER UNDER IRON",
       "description": "Stabilize an exposed water pump while grafted machines repair one another.",
       "cost": 6,
       "news": "Morrow found wet footprints made by machines that have no feet.",
+      "risk": "Flooded iron hides a damaged culvert. Safe bracing costs Scrap; wading costs Structure.",
       "arena_path": "res://content/arenas/rootworks_pump.json",
       "wave_count": 4,
       "wave_ticks": 3000,
@@ -78,7 +136,7 @@
       ],
       "boss": "boss.factory_heart",
       "boss_hp": 1250,
-      "arrival_repair_floor": 1.0,
+      "arrival_repair_floor": 0.6,
       "objective": {
         "id": "objective.stabilize_rootworks_pump",
         "name": "STABILIZE THE WATER PUMP",
@@ -103,11 +161,267 @@
         "Warm water clicks beneath the plates. Something below keeps trying to repair the road.",
         "A pump coughs once in the dark, then waits for your answer."
       ],
+      "road_nodes": [
+        {
+          "id": "road.rootworks.flooded_culvert",
+          "kind": "encounter",
+          "name": "The Flooded Culvert",
+          "news": "Warm water rises around a brace cut with the Workshop's old mark.",
+          "risk": "Bracing the crossing costs 3 Scrap; forcing the ford costs 10 Structure.",
+          "choices": [
+            {"id": "choice.rootworks.brace", "label": "Brace the old crossing", "description": "Spend 3 Scrap and leave the culvert safer than you found it.", "cost": 3, "structure_delta": 0, "scrap_delta": 0, "flag": "road.rootworks.culvert_braced", "result": "The old brace takes weight again."},
+            {"id": "choice.rootworks.ford", "label": "Wade through the warm water", "description": "Keep your Scrap. The flooded iron costs 10 Structure.", "cost": 0, "structure_delta": -10, "scrap_delta": 0, "flag": "road.rootworks.ford_endured", "result": "Water drains from the Saint in patient red lines."}
+          ]
+        },
+        {
+          "id": "road.rootworks.morrow_cart",
+          "kind": "service",
+          "name": "Morrow's Tinker Cart",
+          "news": "Morrow has heard the pump answer machines that never learned its name.",
+          "risk": "Repairs consume destination Scrap; selling the spare valve gives up a useful part.",
+          "choices": [
+            {"id": "choice.rootworks.repair", "label": "Commission a field patch", "description": "Spend 4 Scrap to restore 20 Structure.", "cost": 4, "structure_delta": 20, "scrap_delta": 0, "flag": "road.rootworks.repaired", "result": "Morrow seals the chassis with a strip of old boiler prayer."},
+            {"id": "choice.rootworks.sell_valve", "label": "Sell the spare valve", "description": "Gain 4 Scrap and record the part left behind.", "cost": 0, "structure_delta": 0, "scrap_delta": 4, "flag": "road.rootworks.valve_sold", "result": "The cart keeps the valve; the Saint keeps moving."},
+            {"id": "choice.rootworks.pass", "label": "Keep the spare valve", "description": "Spend nothing and preserve the current build.", "cost": 0, "structure_delta": 0, "scrap_delta": 0, "flag": "road.rootworks.kept_valve", "result": "Morrow marks the low road clear."}
+          ]
+        }
+      ],
       "memory": {
         "id": "memory.borrowed_arm",
         "title": "MEMORY / THE WATERWORKS ARM",
         "text": "Your repair arm remembers closing a valve while the factory order said to keep production moving. Someone chose the town over the schedule.",
         "conclusion": "Water returns by the low road. The Rootworks learned that a graft may keep its own purpose."
+      }
+    },
+    {
+      "id": "route.pale_archive",
+      "from_sites": ["site.brass_choir_relay"],
+      "next_routes": [],
+      "terminal": true,
+      "site_id": "site.pale_archive",
+      "assignment_id": "assignment.pale_archive",
+      "name": "Pale Archive",
+      "direction": "GLASS ROAD / THREE UNFILED NAMES",
+      "description": "Recover three records in order while the Archive copies the strongest shape you carry.",
+      "cost": 7,
+      "news": "The index lists your components separately and leaves the line for your name blank.",
+      "risk": "The glass road audits names and ownership. Scrap can correct the record; an uncorrected passage costs Structure.",
+      "arena_path": "res://content/arenas/pale_archive.json",
+      "wave_count": 3,
+      "wave_ticks": 2400,
+      "spawn_interval": 118,
+      "enemy_pool": ["enemy.choir_drone", "enemy.cinder_spitter", "enemy.rust_pilgrim"],
+      "wave_profiles": [
+        {"name": "OPEN CATALOGUE", "pressure": "Choir Drones screen the first record while one delayed blast denies stillness.", "primary": "enemy.choir_drone", "primary_weight": 1, "support": ["enemy.cinder_spitter"], "spawn_interval": 132, "counters": ["priority", "movement"]},
+        {"name": "CORRECTION HANDS", "pressure": "Repairers preserve the wrong entries while ranged pressure follows the index path.", "primary": "enemy.rust_pilgrim", "primary_weight": 1, "support": ["enemy.choir_drone", "enemy.cinder_spitter"], "spawn_interval": 126, "counters": ["pierce", "priority"]},
+        {"name": "THE PRIME COPY", "pressure": "The Archivist copies a visible evolved geometry and redacts the next record station.", "primary": "enemy.choir_drone", "primary_weight": 1, "support": ["enemy.rust_pilgrim"], "spawn_interval": 122, "counters": ["movement", "control", "timed_burst"]}
+      ],
+      "boss": "boss.archivist_prime",
+      "boss_hp": 1350,
+      "arrival_repair_floor": 0.8,
+      "objective": {
+        "id": "objective.recover_archive_index",
+        "name": "RECOVER THE UNFILED INDEX",
+        "type": "RECOVER_SEQUENCE",
+        "description": "Recover the three records in their numbered order. Each accepted record persists.",
+        "radius": 72,
+        "safety_radius": 0,
+        "required_ticks": 105,
+        "nodes": [
+          {"id": "record.origin", "name": "01 / ORIGIN", "position": [155, 175]},
+          {"id": "record.purpose", "name": "02 / PURPOSE", "position": [470, 360]},
+          {"id": "record.name", "name": "03 / NAME", "position": [850, 590]}
+        ]
+      },
+      "pressure": {"name": "INDEX REVISION", "description": "The Archive copies visible geometry and pressures the next record in sequence.", "interval": 300, "duration": 0, "cooldown_multiplier": 1.0},
+      "travel": [
+        "The Choir road narrows between cabinets too large to have been carried here.",
+        "Glass labels turn as you pass. Each offers a different name for the same small machine.",
+        "The Pale Archive opens the drawer marked ERROR and waits."
+      ],
+      "road_nodes": [
+        {
+          "id": "road.archive.misfiled_gate",
+          "kind": "encounter",
+          "name": "The Misfiled Gate",
+          "news": "A brass reader insists the Saint belongs to three owners who are all dead.",
+          "risk": "Correcting the ownership plate costs 2 Scrap; forcing the gate costs 9 Structure.",
+          "choices": [
+            {"id": "choice.archive.correct", "label": "Correct the ownership plate", "description": "Spend 2 Scrap and enter under the name you carry now.", "cost": 2, "structure_delta": 0, "scrap_delta": 0, "flag": "road.archive.record_corrected", "result": "The reader files one living machine under itself."},
+            {"id": "choice.archive.force", "label": "Pass under the closing gate", "description": "Keep your Scrap. The glass audit takes 9 Structure.", "cost": 0, "structure_delta": -9, "scrap_delta": 0, "flag": "road.archive.gate_endured", "result": "The gate records the damage as proof of entry."}
+          ]
+        },
+        {
+          "id": "road.archive.margin_clerk",
+          "kind": "merchant",
+          "name": "The Margin Clerk",
+          "news": "A many-jointed clerk trades repairs for annotations the Archive refuses to hold.",
+          "risk": "A field repair consumes destination Scrap; preserving both costs nothing.",
+          "choices": [
+            {"id": "choice.archive.repair", "label": "Commission a margin repair", "description": "Spend 4 Scrap to restore 20 Structure.", "cost": 4, "structure_delta": 20, "scrap_delta": 0, "flag": "road.archive.repaired", "result": "The clerk stitches the chassis and cites no authority."},
+            {"id": "choice.archive.pass", "label": "Keep your own record", "description": "Spend nothing and continue with the current build intact.", "cost": 0, "structure_delta": 0, "scrap_delta": 0, "flag": "road.archive.kept_record", "result": "The clerk leaves a blank margin for your return."}
+          ]
+        }
+      ],
+      "memory": {
+        "id": "memory.borrowed_lens",
+        "title": "MEMORY / THE BORROWED LENS",
+        "text": "Your lens remembers three owners and none of their names. It kept what they chose to notice, not what the index permitted.",
+        "conclusion": "The Archive keeps your blank line. You leave with every borrowed purpose still attached."
+      }
+    },
+    {
+      "id": "route.red_foundry",
+      "from_sites": ["site.brass_choir_relay", "site.rootworks_pump"],
+      "next_routes": [],
+      "terminal": true,
+      "site_id": "site.red_foundry",
+      "assignment_id": "assignment.red_foundry",
+      "name": "Red Foundry",
+      "direction": "EMBER ROAD / THE FURNACES REFUSE NIGHT",
+      "description": "Follow the active coolant signal and vent three furnaces before the Cardinal seals the floor.",
+      "cost": 6,
+      "news": "Red-13 says the foundry can still make anything, provided nobody asks what it costs.",
+      "risk": "The ember road crosses a live slag channel. Cooling it costs Scrap; crossing hot costs Structure.",
+      "arena_path": "res://content/arenas/red_foundry.json",
+      "wave_count": 3,
+      "wave_ticks": 2400,
+      "spawn_interval": 112,
+      "enemy_pool": ["enemy.cinder_spitter", "enemy.forklift_brute", "enemy.rust_pilgrim"],
+      "wave_profiles": [
+        {"name": "BANKED EMBERS", "pressure": "Cinder Spitters mark the floor while one heavy frame narrows the escape route.", "primary": "enemy.cinder_spitter", "primary_weight": 2, "support": ["enemy.forklift_brute"], "spawn_interval": 128, "counters": ["movement", "priority"]},
+        {"name": "SHIFT CHANGE", "pressure": "The active vent changes while repairers hold a heavy production line together.", "primary": "enemy.forklift_brute", "primary_weight": 1, "support": ["enemy.rust_pilgrim", "enemy.cinder_spitter"], "spawn_interval": 124, "counters": ["control", "area"]},
+        {"name": "THE CARDINAL'S QUOTA", "pressure": "The Red Cardinal ignites furnace anchors and calls fresh cinder pressure.", "primary": "enemy.cinder_spitter", "primary_weight": 2, "support": ["enemy.rust_pilgrim"], "spawn_interval": 118, "counters": ["movement", "area", "timed_burst"]}
+      ],
+      "boss": "boss.red_cardinal",
+      "boss_hp": 1450,
+      "arrival_repair_floor": 0.8,
+      "objective": {
+        "id": "objective.vent_red_foundry",
+        "name": "VENT THE THREE FURNACES",
+        "type": "VENT_ROTATION",
+        "description": "Only the amber-lit vent accepts work. Its signal rotates, but progress persists.",
+        "radius": 78,
+        "safety_radius": 0,
+        "active_interval": 600,
+        "required_ticks": 120,
+        "nodes": [
+          {"id": "vent.cinder", "name": "CINDER VENT", "position": [155, 185]},
+          {"id": "vent.press", "name": "PRESS VENT", "position": [475, 335]},
+          {"id": "vent.quench", "name": "QUENCH VENT", "position": [825, 585]}
+        ]
+      },
+      "pressure": {"name": "FURNACE QUOTA", "description": "The Cardinal marks furnace anchors, then closes the current work lane.", "interval": 270, "duration": 0, "cooldown_multiplier": 1.0},
+      "travel": [
+        "Soot settles on every repaired seam and makes the Saint look newly assembled.",
+        "The road warms beneath the tracks. A shift whistle sounds without workers.",
+        "Three furnace doors open together. Only one breathes cool air."
+      ],
+      "road_nodes": [
+        {
+          "id": "road.foundry.slag_bridge",
+          "kind": "encounter",
+          "name": "The Live Slag Bridge",
+          "news": "The bridge opens only when the old cooling line believes a shift has ended.",
+          "risk": "Priming the coolant costs 3 Scrap; crossing hot costs 11 Structure.",
+          "choices": [
+            {"id": "choice.foundry.cool", "label": "Prime the cooling line", "description": "Spend 3 Scrap and leave the bridge safe for the next pilgrim.", "cost": 3, "structure_delta": 0, "scrap_delta": 0, "flag": "road.foundry.bridge_cooled", "result": "Steam writes a brief white road across the slag."},
+            {"id": "choice.foundry.cross", "label": "Cross before the whistle", "description": "Keep your Scrap. Heat strips 11 Structure from the Saint.", "cost": 0, "structure_delta": -11, "scrap_delta": 0, "flag": "road.foundry.heat_endured", "result": "The Saint reaches the far rail smoking but upright."}
+          ]
+        },
+        {
+          "id": "road.foundry.red13_cart",
+          "kind": "service",
+          "name": "Red-13's Ash Cart",
+          "news": "Red-13 offers one patch, one rumour, and no explanation for the sparks.",
+          "risk": "The patch spends destination Scrap; passing preserves every option.",
+          "choices": [
+            {"id": "choice.foundry.repair", "label": "Buy the ash patch", "description": "Spend 4 Scrap to restore 22 Structure.", "cost": 4, "structure_delta": 22, "scrap_delta": 0, "flag": "road.foundry.repaired", "result": "Red-13 welds by ear until the chassis rings true."},
+            {"id": "choice.foundry.pass", "label": "Follow the shift whistle", "description": "Spend nothing and preserve the current build.", "cost": 0, "structure_delta": 0, "scrap_delta": 0, "flag": "road.foundry.passed_cart", "result": "Red-13 points toward the only stack without smoke."}
+          ]
+        }
+      ],
+      "memory": {
+        "id": "memory.borrowed_shell",
+        "title": "MEMORY / THE BORROWED SHELL",
+        "text": "Your armour remembers shielding a worker who had missed quota. The plate was condemned for protecting the wrong asset.",
+        "conclusion": "The furnaces cool unevenly. The Red Foundry records mercy as an unauthorized material."
+      }
+    },
+    {
+      "id": "route.null_assembly",
+      "from_sites": ["site.rootworks_pump"],
+      "next_routes": [],
+      "terminal": true,
+      "site_id": "site.null_assembly",
+      "assignment_id": "assignment.null_assembly",
+      "name": "Null Assembly",
+      "direction": "WHITE ROAD / TOOLS ENTER UNNAMED",
+      "description": "Disable two erasure anchors; relics fall quiet while the Saint works inside their fields.",
+      "cost": 5,
+      "news": "No machine returns from the white road with the same list of permitted parts.",
+      "risk": "The white road inventories every component. A clean manifest costs Scrap; refusal costs Structure.",
+      "arena_path": "res://content/arenas/null_assembly.json",
+      "wave_count": 3,
+      "wave_ticks": 2400,
+      "spawn_interval": 116,
+      "enemy_pool": ["enemy.choir_drone", "enemy.forklift_brute", "enemy.scrap_mite"],
+      "wave_profiles": [
+        {"name": "PARTS INSPECTION", "pressure": "Choir fields shelter scavengers around the first erasure anchor.", "primary": "enemy.choir_drone", "primary_weight": 1, "support": ["enemy.scrap_mite"], "spawn_interval": 132, "counters": ["priority", "orbit"]},
+        {"name": "REJECTION LINE", "pressure": "Heavy frames displace the Saint from work while Mites strip the abandoned lane.", "primary": "enemy.forklift_brute", "primary_weight": 1, "support": ["enemy.scrap_mite", "enemy.choir_drone"], "spawn_interval": 126, "counters": ["control", "movement"]},
+        {"name": "THE AUDITOR'S BLANK", "pressure": "The Null Auditor silences relic cycles and marks both anchors for erasure.", "primary": "enemy.choir_drone", "primary_weight": 1, "support": ["enemy.forklift_brute"], "spawn_interval": 120, "counters": ["movement", "timed_burst", "orbit"]}
+      ],
+      "boss": "boss.null_auditor",
+      "boss_hp": 1380,
+      "arrival_repair_floor": 0.8,
+      "objective": {
+        "id": "objective.disable_null_anchors",
+        "name": "DISABLE THE ERASURE ANCHORS",
+        "type": "QUIET_REPAIR",
+        "description": "Your relics fall quiet while you work inside an anchor ring. Leave to fight; return without losing progress.",
+        "radius": 80,
+        "safety_radius": 0,
+        "required_ticks": 135,
+        "nodes": [
+          {"id": "anchor.list", "name": "LIST ANCHOR", "position": [210, 220]},
+          {"id": "anchor.name", "name": "NAME ANCHOR", "position": [835, 520]}
+        ]
+      },
+      "pressure": {"name": "PERMITTED PARTS", "description": "The Auditor suspends weapon cycles briefly and marks the active anchor.", "interval": 300, "duration": 0, "cooldown_multiplier": 1.0},
+      "travel": [
+        "Root fibres end at a road scrubbed clean of footprints.",
+        "A gate inventories your arm, bell, lens and shell as four separate errors.",
+        "Inside, white lamps erase every shadow except yours."
+      ],
+      "road_nodes": [
+        {
+          "id": "road.null.inventory_arch",
+          "kind": "encounter",
+          "name": "The Inventory Arch",
+          "news": "The arch counts four incompatible machines and permits only three.",
+          "risk": "Filing a variance costs 2 Scrap; refusing inspection costs 10 Structure.",
+          "choices": [
+            {"id": "choice.null.variance", "label": "File the fourth variance", "description": "Spend 2 Scrap and make the impossible inventory official.", "cost": 2, "structure_delta": 0, "scrap_delta": 0, "flag": "road.null.variance_filed", "result": "The arch stamps ERROR, then opens anyway."},
+            {"id": "choice.null.refuse", "label": "Refuse the inventory", "description": "Keep your Scrap. The closing arch costs 10 Structure.", "cost": 0, "structure_delta": -10, "scrap_delta": 0, "flag": "road.null.inventory_refused", "result": "The Saint leaves four clean dents in the white gate."}
+          ]
+        },
+        {
+          "id": "road.null.nameless_bench",
+          "kind": "service",
+          "name": "The Nameless Bench",
+          "news": "Tools wait in exact order beside a repair ledger with its owner removed.",
+          "risk": "Self-repair consumes destination Scrap; moving on leaves the unknown tools untouched.",
+          "choices": [
+            {"id": "choice.null.repair", "label": "Use the waiting tools", "description": "Spend 4 Scrap to restore 20 Structure.", "cost": 4, "structure_delta": 20, "scrap_delta": 0, "flag": "road.null.repaired", "result": "The tools return themselves to an order no record names."},
+            {"id": "choice.null.pass", "label": "Leave the bench unnamed", "description": "Spend nothing and continue with the current build.", "cost": 0, "structure_delta": 0, "scrap_delta": 0, "flag": "road.null.passed_bench", "result": "The empty ledger keeps no debt."}
+          ]
+        }
+      ],
+      "memory": {
+        "id": "memory.unwritten_instruction",
+        "title": "MEMORY / THE UNWRITTEN INSTRUCTION",
+        "text": "The assembly record ends before your first command. In the empty space, four incompatible machines chose to keep one another working.",
+        "conclusion": "The Null Assembly cannot name what left through its gate. The Saint keeps moving anyway."
       }
     }
   ]

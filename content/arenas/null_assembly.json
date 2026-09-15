@@ -1,0 +1,26 @@
+{
+  "id": "arena.null_assembly",
+  "name": "Null Assembly",
+  "pixels_per_metre": 40,
+  "bounds": [-110, -70, 1130, 850],
+  "start": [120, 650],
+  "relay": [485, 365],
+  "repair_radius": 80,
+  "boss_anchors": [[210, 220], [485, 365], [760, 520]],
+  "obstacles": [
+    {"id": "machine.null_press", "name": "PARTS PRESS", "rect": [310, 115, 110, 235]},
+    {"id": "machine.blank_table", "name": "BLANK TABLE", "rect": [465, 315, 205, 90]},
+    {"id": "machine.return_cage", "name": "RETURN CAGE", "rect": [690, 445, 105, 215]}
+  ],
+  "entries": [
+    {"id": "entry.null_west", "name": "INTAKE", "from": [-40, 210], "to": [-40, 380]},
+    {"id": "entry.null_north", "name": "WHITE GATE", "from": [420, 0], "to": [575, 0]},
+    {"id": "entry.null_east", "name": "REJECT CHUTE", "from": [950, 340], "to": [950, 520]}
+  ],
+  "zones": [
+    {"id": "zone.list_anchor", "name": "LIST FIELD", "rect": [70, 110, 220, 210]},
+    {"id": "zone.blank_floor", "name": "UNNAMED FLOOR", "rect": [405, 245, 220, 210]},
+    {"id": "zone.name_anchor", "name": "NAME FIELD", "rect": [700, 450, 220, 190]},
+    {"id": "zone.white_road", "name": "WHITE ROAD", "rect": [20, 570, 240, 125]}
+  ]
+}

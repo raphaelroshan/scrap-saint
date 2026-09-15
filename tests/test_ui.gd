@@ -56,7 +56,13 @@ func run_checks():
 	game.sim.state.gifts = ["gift.spare_hand"]
 	game.build_ui()
 	var labels = game.ui.get_children().filter(func(child): return child is Button).map(func(child): return child.text)
-	check("Mercy Rail" in labels and "Great Toll" in labels and "Dism." in labels, "shop exposes distinct Evolution and Gift management controls")
+	check("EVOLUTION LEDGER · 8" in labels and "Dism." in labels, "shop exposes distinct Evolution and Gift management controls")
+	for child in game.ui.get_children():
+		if child is Button and child.text == "EVOLUTION LEDGER · 8": child.pressed.emit(); break
+	labels = game.ui.get_children().filter(func(child): return child is Button).map(func(child): return child.text)
+	check(labels.count("EVOLVE") == 8 and game.sim.evolution_recipes.size() == 8, "Evolution Ledger exposes all eight data-owned recipes")
+	game.evolution_ledger_open = false
+	game.build_ui()
 	game._unhandled_key_input(event)
 	check(not game.sim.state.paused, "shop Escape cannot strand next combat paused")
 	var path = "user://ui_test.save"
@@ -70,15 +76,39 @@ func run_checks():
 	game.sim.state.hp = 10
 	game.build_ui()
 	for child in game.ui.get_children():
-		if child is Button and child.text == "CHOOSE ROOTWORKS PUMP": child.pressed.emit(); break
+		if child is Button and child.text == "ROOTWORKS PUMP": child.pressed.emit(); break
+	for child in game.ui.get_children():
+		if child is Button and child.text.begins_with("ACCEPT ASSIGNMENT"): child.pressed.emit(); break
 	check(game.sim.state.phase == "travel" and game.sim.state.route == "route.rootworks", "route button sends authoritative choice")
-	for beat in range(3):
+	while game.sim.state.phase == "travel":
 		for child in game.ui.get_children():
-			if child is Button and (child.text == "CONTINUE ALONG THE ROAD" or child.text == "ENTER ROOTWORKS PUMP"):
+			if child is Button and child.text.contains("· FREE"):
 				child.pressed.emit()
 				break
 	check(game.sim.state.phase == "combat" and game.sim.state.site_id == "site.rootworks_pump", "travel buttons arrive at selected destination")
-	check(game.notification == "ROAD REST / 90 structure restored", "arrival explains the between-site recovery")
+	check(game.notification == "ROAD REST / 59 structure restored", "arrival explains recovery without erasing the road consequence")
+	var red_edges = game.sim.chapter.expedition_map.edges.filter(func(edge): return edge.route_id == "route.red_foundry")
+	var brass_red_edge = red_edges.filter(func(edge): return edge.from_site_id == "site.brass_choir_relay")[0]
+	var rootworks_red_edge = red_edges.filter(func(edge): return edge.from_site_id == "site.rootworks_pump")[0]
+	game.sim.state.phase = "route"
+	game.sim.state.site_id = "site.brass_choir_relay"
+	game.sim.state.route = "route.brass_choir"
+	game.sim.state.route_origin_site_id = "site.collapsed_workshop"
+	game.sim.refresh_assignments()
+	game.map_selection = "route.red_foundry"
+	check(game.map_board_title() == "PILGRIMAGE BOARD / BRASS CHOIR", "second-tier Brass board derives its title from the current site")
+	check(game.map_edge_emphasis(brass_red_edge) == "selected" and game.map_edge_emphasis(rootworks_red_edge) == "available", "Brass board selects only its own Red Foundry incoming edge")
+	game.sim.state.site_id = "site.rootworks_pump"
+	game.sim.refresh_assignments()
+	check(game.map_board_title() == "PILGRIMAGE BOARD / ROOTWORKS", "second-tier Rootworks board derives its title from the current site")
+	check(game.map_edge_emphasis(brass_red_edge) == "available" and game.map_edge_emphasis(rootworks_red_edge) == "selected", "Rootworks board selects only its own Red Foundry incoming edge")
+	game.sim.state.route = "route.red_foundry"
+	game.sim.state.route_history = ["route.rootworks", "route.red_foundry"]
+	game.sim.state.route_origin_site_id = "site.rootworks_pump"
+	game.sim.state.assignment_statuses["route.red_foundry"] = "accepted"
+	check(game.map_edge_emphasis(brass_red_edge) == "available" and game.map_edge_emphasis(rootworks_red_edge) == "accepted", "accepted shared route uses its persisted authored origin")
+	var workshop_root_edge = game.sim.chapter.expedition_map.edges.filter(func(edge): return edge.route_id == "route.rootworks")[0]
+	check(game.map_edge_emphasis(workshop_root_edge) == "accepted", "completed first leg remains visible as accepted route history")
 	game.profile.state.unlocked_frames.append("frame.keeper")
 	game.profile.state.unlocked_blessings.append("blessing.procession")
 	game.screen = "menu"

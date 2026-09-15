@@ -1,15 +1,15 @@
-# First Shift runtime — 0.2.1 preview
+# First Shift runtime — 0.3.0 preview
 
 The project now contains a runnable Godot 4.5.1 desktop prototype. This is the first implementation, not a finished creative vertical. `content/slices/first_shift.json` is the authoritative enabled catalogue and tuning source; the larger catalogues also contain future concepts.
 
 ## Implemented
 
 - A title screen, five-page field manual, three selectable Saint frames, persistent accessibility/settings controls, save/resume and profile unlocks.
-- Eight 70-second Workshop waves, followed after Foreman victory by a three-beat road journey and one selected four-wave destination. Shop and travel reading time is additional and paused. Road rest restores full structure before the destination.
-- Four Blessings, ten automatic weapons, four catalysts, two visible evolutions, four active slots, one reserve and two run-local Gift slots.
-- Movement, three optional repair machines, pickups, six ordinary enemy families, an elite and phased boss attacks. Relay defence remains a development comparison.
+- Eight 70-second Workshop waves, followed by two selectable road legs, a four-wave mid-site and a three-wave terminal site. Each road has two unskippable authored decisions; shop, map and travel reading time is paused.
+- Four Blessings, ten automatic weapons, seven catalysts, eight visible evolutions, four active slots, one reserve and two run-local Gift slots.
+- Movement, three optional repair machines, pickups, seven ordinary enemy families, an elite and six distinct phased destination bosses. Relay defence remains a development comparison.
 - Purchases, automatic duplicate combining, explicit combine, sell/dismantle, reserve/equip, offer lock and one free/two paid refreshes.
-- Optional Rank III Nailer plus Saint's Rivet evolution and Rank III Bell plus Cracked Clapper evolution. Catalysts are consumed atomically. Every encounter supports unevolved runs.
+- Eight Rank III plus catalyst Evolutions with distinct geometry, target, control, repair or resource behaviour. Catalysts are consumed atomically, and every encounter supports unevolved runs.
 - Procedural weapon effects and synthesized audio, title/tutorial/selection/shop/travel/pause/Results, remappable keyboard and basic controller navigation.
 - Deterministic simulation tests and full-run scripted policies; real rendered fixture captures with provenance.
 
@@ -23,21 +23,32 @@ Blessing fulfilment counts two distinct active weapon IDs sharing the doctrine's
 
 The three doctrine services are deliberately small: Workshop restores structure, Bell lengthens authored threat telegraphs by 50% for the next wave, and Mourner makes the next six defeats leave healing motes. Full rebuild/refund and elite-remnant services from the long-term bible are deferred. Every shop exposes the authored next-wave pressure and valid geometry families; Bell buys additional response time rather than hidden information.
 
-The Nailer pierces up to two targets and prioritises support threats; Bell staggers/pushes a cone; Gear deals orbital contact damage; Candle executes low-health enemies and leaves healing motes; Cable binds/pulls a cone; Hymn Coil chooses a dense piercing line; Altar Mortar chooses the strongest reachable cluster. Shop cards state each relic's role and weakness. Mercy Rail changes line width/range/damage and restores Saint structure on major-enemy hits in the main mode. Additional authored secondary effects, including Scoured and Consecrated interactions, remain future work.
+The ten weapons cover piercing priority, stagger, orbit, execution, binding, dense-line fire, clustered bombardment, close smoke control and repair contact. Shop cards state each relic's role and weakness. Eight Evolutions visibly alter geometry, targeting, control, objective interaction or resource behaviour; the in-game Ledger previews each recipe and its missing ingredients.
 
 The Crane copies rail geometry if an evolution exists and otherwise telegraphs a circular attack. Foreman moves faster and closes distance across Demolition, Workers and Final Orders phases. Each phase uses a deterministic route-shaped hazard pattern; later phases summon trace-labelled workers and close one additional lane. The Choir Regent has its own Measure, Grand Toll and Answer in Threes contract: announced resonance slows weapon cycling, then shifts from the Saint's position to the three visible relay rings. The Factory Heart instead pulses through the visible pump, temporarily suspends repair work, calls a trace-labelled Rust Pilgrim during Graft Feed, and ends with a pump-versus-personal-safety hazard choice. Destination boss cadence, warning, damage, movement and stop distances are owned by boss content data. Mites return stolen Scrap on defeat.
 
 ## Evidence limits
 
-Screenshots are actual Godot renders. Most legacy captures are scripted fixtures with supplied positions or budgets. `artifacts/core-quality` additionally contains a normal-economy, seed-147 repair-policy trace at the repair decision, reward and naturally reached Results; it is labelled `NATURAL POLICY TRACE`, not human play. Passing policies establishes executable routes and regressions, not enjoyment or final balance. The integrated 65-threat headless benchmark reaches 319 simulation ticks/second (5.31× real time) on an Apple M1 Pro; it does not establish rendered Windows minimum-hardware performance. No human playtest or controller hardware session has been claimed.
+Screenshots are actual Godot renders. Most legacy captures are scripted fixtures with supplied positions or budgets. `artifacts/core-quality` additionally contains a normal-economy, seed-147 repair-policy trace at the repair decision, reward and naturally reached Results; it is labelled `NATURAL POLICY TRACE`, not human play. Passing policies establishes executable routes and regressions, not enjoyment or final balance. The integrated 65-threat headless benchmark reaches 315 simulation ticks/second (5.25× real time) on an Apple M1 Pro; it does not establish rendered Windows minimum-hardware performance. No human playtest or controller hardware session has been claimed.
 
 Art is original procedural placeholder geometry drawn by the renderer. Audio is original synthesized placeholder audio in `game/sound.gd`. Both were created on 2026-09-14, use no downloaded art/audio assets, and require later art direction/feel iteration. System fonts use installed fallbacks; no font files are redistributed.
 
 ## Remaining limitations
 
-Settings, volume, screen mode, reduced motion, high contrast and movement remapping persist locally. The fixed simulation is replay-tested within the pinned engine/platform, not certified cross-platform. Save files are local version-2 snapshots and migrate version-1 Workshop runs. Content tuning, shop breadth and secondary effects remain preview-level. Natural policies do not establish feel, preference, effect readability in motion or ideal 1x density.
+Settings, volume, screen mode, reduced motion, high contrast and movement remapping persist locally. The fixed simulation is replay-tested within the pinned engine/platform, not certified cross-platform. Save files are local version-3 snapshots and migrate version-1 Workshop and version-2 chapter runs. Content tuning, shop breadth and secondary effects remain preview-level. Natural policies do not establish feel, preference, effect readability in motion or ideal 1x density.
 
 Exactly one next task: focused uncoached human playtest of the complete First Shift at 1x.
+
+
+## P14.1 - eight visible Evolutions
+
+The Evolution Ledger now exposes eight stable Rank III plus catalyst recipes. Mercy Rail and The Great Toll remain intact. Foundry Censer becomes **Ashen Benediction**, an offset Mourn smoke zone that seeks damaged work and creates seeking motes. Penance Winch becomes **The Long Hand**, a routed corridor that binds and pulls several aligned threats. Welded Halo becomes **Halo of Repairs**, with two opposed contacts and a machine-to-Saint repair circuit. Candle-Nailer becomes **Candle for the Unreturned**, which executes the three weakest reachable threats and sends its funeral motes toward the Saint. Hymn Coil becomes **Quiet Sermon**, a wider silence lane that delays healer, ranged and Choir support actions. Altar Mortar becomes **Workshop Benediction**, retaining clustered damage while gaining a consecrated objective shot when no threat occupies its reach.
+
+Recipe definitions, catalysts and combat values are content-owned. Each weapon stores its own Evolution ID, so feasible multi-Evolution loadouts, chapter carryover, Results and saves no longer depend on one shared evolved form. The ordinary-economy acquisition harness buys and combines every base, acquires its catalyst and evolves it through public commands. Memory Crane remains explicitly keyed to Mercy Rail geometry. Combine and Evolution remain separate and no Confluence is enabled.
+
+Configured 1280×800 renderer fixtures under `artifacts/evolutions` show the eight-entry Ledger and the six new geometries at seed 147 on Godot 4.5.1. Controlled-start policies establish executable chapter viability on both roads, not natural recipe timing or human preference.
+
+Exactly one next task: uncoached 1× comparison of all eight Evolution choices, with attention to Ledger comprehension and overlapping effect density.
 
 
 ## SC-02 — authored Collapsed Workshop
@@ -142,7 +153,7 @@ Current integrated evidence: 469 focused Godot assertions plus four Python manif
 
 Exactly one next task: uncoached 1x comparison of close-control, priority-control and repair-roaming builds across both chapter routes.
 
-## SC-15 — compact first-chapter pilgrimage (current)
+## SC-15 — compact first-chapter pilgrimage foundation
 
 Foreman victory now opens an authoritative two-route decision instead of ending the expedition. Eight Scrap recovered from the Foreman guarantees both roads remain affordable. Brass Choir Relay costs 8 Scrap and asks the Saint to clear and tune three distributed signal rings; Rootworks Pump costs 6 Scrap and asks it to finish one exposed, persistent pump repair while healer-heavy enemies sustain the crowd. Each destination runs four compact waves, uses a route-specific authored pressure profile and boss, and ends in its own memory and causal Results.
 
@@ -151,3 +162,13 @@ Route choice, travel beat, selected arena, objective nodes, carried weapons/rese
 The implementation is a systems-complete chapter proof layered on the P12 core-quality gate, not the full Early Access breadth target. It deliberately reuses the current combat roster and procedural visual/audio language. The two destination bosses now have distinct three-phase authoritative contracts and labelled fixture evidence; reaction-time comfort, boss enjoyment and the intended 25–35 minute commercial expedition still require human testing.
 
 Exactly one next task: run uncoached full-expedition playtests of the expanded builds on both routes at 1× and tune destination pressure from observed comprehension and pacing evidence.
+
+## SC-17 — complete three-site chapter graph (current)
+
+Each expedition now crosses the Collapsed Workshop, one mid-site and one terminal site. Brass Choir opens Pale Archive or the shared Red Foundry; Rootworks opens Red Foundry or Null Assembly. Pale asks for three ordered records while Archivist Prime copies the latest visible Evolution geometry. Red rotates one active furnace vent while the Red Cardinal marks arena anchors and calls cinder pressure. Null silences automatic relics only while the Saint works an anchor, and the Null Auditor temporarily locks both work and weapon cycles. Each site has its own arena, wave profiles, boss contract, memory, assignment ID, route risk and authored encounter plus merchant/service road nodes ready for the expedition-map command layer.
+
+Route eligibility, two-leg history, objective state, transient boss locks, completed sites, defeated bosses and recovered memories are deterministic simulation/save data. Terminal memories end the chapter; mid-site memories preserve the build and return to the next valid route choice. Policy timeouts derive the longest authored graph path rather than assuming one destination.
+
+Current integrated evidence passes 666 Godot assertions plus eleven Python manifest checks on Godot 4.5.1. The normal-economy matrix wins 12/12, the three-frame × four-Blessing × two-first-route matrix wins 24/24, all four controlled assembly paths finish, and all eight Evolution policies complete their two-leg route. Ten chapter fixtures include all three terminal objective/boss states at 1280×800, seed 147, Compatibility renderer on Apple M1 Pro. These are deterministic policies and configured captures, not human enjoyment evidence.
+
+Exactly one next task: run uncoached 1× sessions through all four route chains and tune only observed objective comprehension, road-choice value and boss reaction-time friction.

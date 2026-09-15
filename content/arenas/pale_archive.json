@@ -1,0 +1,26 @@
+{
+  "id": "arena.pale_archive",
+  "name": "Pale Archive",
+  "pixels_per_metre": 40,
+  "bounds": [-110, -70, 1130, 850],
+  "start": [115, 650],
+  "relay": [470, 360],
+  "repair_radius": 72,
+  "boss_anchors": [[155, 175], [470, 360], [820, 590]],
+  "obstacles": [
+    {"id": "machine.index_west", "name": "WEST INDEX", "rect": [270, 105, 105, 235]},
+    {"id": "machine.catalogue_desk", "name": "CATALOGUE DESK", "rect": [500, 300, 210, 90]},
+    {"id": "machine.index_east", "name": "EAST INDEX", "rect": [705, 430, 100, 210]}
+  ],
+  "entries": [
+    {"id": "entry.archive_west", "name": "RETURN SLOT", "from": [-40, 200], "to": [-40, 370]},
+    {"id": "entry.archive_north", "name": "ERRATA CHUTE", "from": [420, 0], "to": [575, 0]},
+    {"id": "entry.archive_east", "name": "CLOSED STACK", "from": [950, 330], "to": [950, 520]}
+  ],
+  "zones": [
+    {"id": "zone.archive_origin", "name": "ORIGIN STACK", "rect": [20, 80, 220, 190]},
+    {"id": "zone.archive_index", "name": "UNFILED INDEX", "rect": [390, 235, 190, 210]},
+    {"id": "zone.archive_name", "name": "NAME STACK", "rect": [760, 500, 190, 170]},
+    {"id": "zone.archive_road", "name": "GLASS ROAD", "rect": [20, 560, 240, 130]}
+  ]
+}

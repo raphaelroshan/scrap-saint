@@ -5,12 +5,24 @@ var visits = 0
 
 func _initialize(): call_deferred("capture")
 
+func route_tick_budget(site_id: String) -> int:
+	var longest = 0
+	for route in game.sim.chapter.routes:
+		if site_id not in route.from_sites: continue
+		var route_ticks = int(route.wave_ticks) * int(route.wave_count)
+		longest = max(longest, route_ticks + route_tick_budget(route.site_id))
+	return longest
+
+func authored_tick_budget() -> int:
+	return int(game.sim.config.wave_ticks) * int(game.sim.config.wave_count) + route_tick_budget("site.collapsed_workshop") + int(game.sim.config.tick_rate) * 30
+
 func policy_step(seek_repair: bool = true):
 	if game.sim.state.phase == "route":
-		game.sim.command("choose_route", "route.brass_choir")
+		game.sim.command("choose_route", "route.brass_choir" if game.sim.state.site_id == "site.collapsed_workshop" else "route.pale_archive")
 		return
 	if game.sim.state.phase == "travel":
-		game.sim.command("advance_travel")
+		var free_choice = game.sim.current_road_node().choices.filter(func(choice): return int(choice.cost) == 0)[0]
+		game.sim.command("choose_road_option", free_choice.id)
 		return
 	if game.sim.state.phase == "memory":
 		game.sim.command("accept_memory")
@@ -26,14 +38,14 @@ func policy_step(seek_repair: bool = true):
 		return
 	var state = game.sim.state
 	var desired = game.sim.relay_position() + Vector2.from_angle(state.tick * 0.013) * 62
-	if game.sim.is_destination() and not state.objective_complete:
-		for i in range(state.objective.size()):
-			if not state.objective[i].complete:
-				var node = game.sim.objective_data().nodes[i]
-				desired = Vector2(node.position[0], node.position[1])
-				break
+	var pursuing_objective = game.sim.is_destination() and not state.objective_complete
+	if pursuing_objective:
+		var objective_index = game.sim.active_destination_node_index()
+		if objective_index >= 0:
+			var node = game.sim.objective_data().nodes[objective_index]
+			desired = Vector2(node.position[0], node.position[1])
 	var major = state.enemies.filter(func(enemy): return enemy.major)
-	if not major.is_empty():
+	if not pursuing_objective and not major.is_empty():
 		desired = major[0].p + Vector2.from_angle(state.tick * 0.013) * 84
 	elif seek_repair and not game.sim.is_destination() and not state.machines[0].complete:
 		var data = game.sim.config.optional_repairs.machines[0]
@@ -76,7 +88,7 @@ func capture():
 		policy_step()
 		if game.sim.state.tick > 4000: break
 	await save_state("NATURAL_REPAIR_REWARD")
-	while game.sim.state.phase not in ["won", "lost"] and game.sim.state.tick < game.sim.config.wave_ticks * game.sim.config.wave_count + 16000:
+	while game.sim.state.phase not in ["won", "lost"] and game.sim.state.tick < authored_tick_budget():
 		policy_step()
 	await save_state("NATURAL_RESULTS")
 	print("Core quality natural policy: seed147, Workshop Gospel, repair-seeking, normal economy, %d shops, %s" % [visits, game.sim.state.phase])

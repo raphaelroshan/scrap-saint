@@ -27,6 +27,26 @@ func defeat_elite_for_shards(s):
 	s.update_weapons()
 	check(s.state.shards >= 2, "elite defeat awards its ordinary Relic Shards")
 
+func assemble_recipe_through_shop(recipe_id: String):
+	var probe = Sim.new()
+	var recipe = probe.evolution_recipes[recipe_id]
+	var doctrine_by_base = {"weapon.nailer_small_mercies": 0, "weapon.bell_last_shift": 1, "weapon.candle_nailer": 2}
+	var doctrine = int(doctrine_by_base.get(recipe.base_item_id, 0))
+	var s = Sim.new()
+	s.start(doctrine, 147, "optional")
+	var copies = 3 if s.state.weapons[0].id == recipe.base_item_id else 4
+	for visit_index in range(1, 9):
+		visit(s)
+		if copies > 0 and s.state.scrap >= int(s.catalogue[recipe.base_item_id].cost_scrap):
+			if buy_configured(s, recipe.base_item_id) == "OK": copies -= 1
+		if copies == 0 and s.state.shards >= int(s.catalogue[recipe.required_catalyst_id].cost_relic_shards):
+			check(buy_configured(s, recipe.required_catalyst_id) == "OK", "%s catalyst is acquired through the shop command" % recipe_id)
+			check(s.command("evolve", recipe_id) == "OK", "%s assembles from ordinary income through public buy/evolve commands" % recipe_id)
+			return s
+		s.command("continue")
+	check(false, "%s reaches its complete ordinary-economy acquisition path" % recipe_id)
+	return s
+
 func assemble_two_evolutions(first: String):
 	var s = Sim.new()
 	var first_is_toll = first == "evolution.great_toll"
@@ -103,6 +123,17 @@ func _initialize():
 				if target in acquired_gifts: break
 				s.command("continue")
 	check(acquired_gifts.size() == 3, "all three Gifts are discoverable and affordable through deterministic shop flow")
+
+	# Every recipe's named catalyst appears in the generated Evolution Path role once its base reaches Rank III.
+	for recipe_id in Sim.new().config.evolutions:
+		var path = Sim.new()
+		path.start(0, 147, "optional")
+		var recipe = path.evolution_recipes[recipe_id]
+		path.state.weapons = [path.make_weapon(recipe.base_item_id, 3)]
+		visit(path)
+		check(path.state.offers[2] == recipe.required_catalyst_id, "%s exposes its named catalyst in the generated Evolution Path slot" % recipe_id)
+		var acquired = assemble_recipe_through_shop(recipe_id)
+		check(acquired.has_evolution(recipe_id), "%s remains recorded after ordinary-economy acquisition" % recipe_id)
 
 	var toll_first = assemble_two_evolutions("evolution.great_toll")
 	var mercy_first = assemble_two_evolutions("evolution.mercy_rail")
