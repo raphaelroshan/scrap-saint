@@ -56,6 +56,9 @@ def validate_slice(manifest: dict, data: dict) -> None:
         for field in ('effect', 'effect_value', 'tradeoff', 'tradeoff_value', 'stack_rule'):
             assert gift.get(field) not in (None, ''), f'{gift_id}: missing {field}'
         assert gift['stack_rule'] == 'unique'
+    for item_id, settings in manifest['weapons'].items():
+        for field in ('target_rule', 'role', 'weakness', 'counter_families'):
+            assert settings.get(field), f'missing weapon role contract {item_id}.{field}'
     for recipe_id in manifest['evolutions']:
         assert recipe_id in evolutions
         recipe = evolutions[recipe_id]
@@ -64,6 +67,16 @@ def validate_slice(manifest: dict, data: dict) -> None:
     assert manifest['economy']['reroll_costs'] == [0, 2, 4]
     assert manifest['wave_ticks'] > 0 and manifest['tick_rate'] == 60
     assert 'confluences' not in manifest, 'Confluences remain disabled for P14'
+    assert len(manifest.get('wave_profiles', [])) == manifest['wave_count']
+    for profile in manifest['wave_profiles']:
+        assert profile.get('name') and profile.get('pressure') and profile.get('counters')
+        assert profile.get('primary') in manifest['enemies']
+        assert profile.get('support') and set(profile['support']) <= set(manifest['enemies'])
+        assert profile.get('spawn_interval', 0) >= manifest['combat']['spawn_minimum']
+    machines = manifest.get('optional_repairs', {}).get('machines', [])
+    assert len(machines) == 3 and len({machine['id'] for machine in machines}) == 3
+    for machine in machines:
+        assert machine.get('name') and machine.get('description') and machine.get('reward')
 
 
 def main() -> int:

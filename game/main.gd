@@ -24,6 +24,7 @@ var notice_until = 0
 var reduced_fx = false
 var debug_visible = false
 var capture_dir = ""
+var capture_label = "FIXTURE CAPTURE"
 var capture_step = 0
 var rendered_frames = 0
 var last_phase = ""
@@ -198,6 +199,9 @@ func build_ui():
 			button("Sell", Rect2(1060, 243 + i * 79, 52, 26), func(): act("sell", i))
 			button("Dism.", Rect2(1118, 243 + i * 79, 59, 26), func(): act("dismantle", i))
 			button("Store", Rect2(1183, 243 + i * 79, 65, 26), func(): act("reserve", i))
+		for i in range(sim.state.gifts.size()):
+			button("Sell", Rect2(1152, 665 + i * 30, 45, 24), func(): act("sell_gift", i))
+			button("Dism.", Rect2(1201, 665 + i * 30, 47, 24), func(): act("dismantle_gift", i))
 	elif sim.state.phase in ["won", "lost"]:
 		button("RETURN TO THE WORKSHOP", Rect2(410, 615, 460, 48), func(): screen = "menu"; build_ui(), true).grab_focus()
 	elif sim.state.paused:
@@ -260,7 +264,7 @@ func _draw():
 		text_at("DEV %d× SPEED · F6 toggles 1× / 5×" % simulation_speed, Vector2(938, 116), 13, GOLD)
 	text_at("WASD / arrows · move     ESC · pause     F5 / F9 · save / load", Vector2(445, 777), 13, MUTED)
 	if debug_visible:
-		text_at("BUILD 0.1.0 | Godot %s | 1280×800 | seed %d | tick %d | %s" % [Engine.get_version_info().string, seed_value, sim.state.get("tick", 0), "FIXTURE CAPTURE" if capture_dir != "" else "LIVE"], Vector2(28, 745), 11, GOLD)
+		text_at("BUILD 0.1.0 | Godot %s | 1280×800 | seed %d | tick %d | %s" % [Engine.get_version_info().string, seed_value, sim.state.get("tick", 0), capture_label if capture_dir != "" else "LIVE"], Vector2(28, 745), 11, GOLD)
 
 func draw_menu():
 	for x in range(0, 1280, 48): draw_line(Vector2(x, 0), Vector2(x, 745), Color("15252a"))
@@ -305,7 +309,9 @@ func draw_header():
 	if sim.state.wave == 8: instruction = "FOREMAN ENGINE · Watch the demolition circles. Protect the relay."
 	if sim.state.phase == "shop": instruction = "A moment to rebuild. Choose what your machine becomes."
 	if sim.optional_mode(): instruction = "Survive the shift. Defeat the Foreman. Repairs are optional rewards."
+	if sim.state.phase == "combat" and sim.optional_mode(): instruction = sim.wave_profile().pressure
 	if sim.state.wave == 8: instruction = "FOREMAN / Keep moving. Avoid the demolition zones."
+	if sim.state.phase in ["won", "lost"]: instruction = "SHIFT RECORDED / Read the cause. Choose one change. Return quickly."
 	text_at(instruction, Vector2(60, 126), 16, GREEN)
 	if sim.state.phase == "combat" and not sim.optional_mode():
 		text_at("STARTUP BACKUP · Relay cannot break before the first workshop" if sim.state.wave == 1 else "BACKUP OFFLINE · Break enemy strike warnings to protect the relay", Vector2(60, 146), 11, GOLD if sim.state.wave == 1 else MUTED)
@@ -385,10 +391,15 @@ func draw_world():
 	for h in sim.state.hazards:
 		var f = 1.0 - float(h.until - sim.state.tick) / h.get("warning_ticks", sim.config.boss_rules.hazard_warning_ticks * sim.warning_multiplier())
 		if h.copy:
-			var direction = (h.p - h.from).normalized()
-			draw_line(h.from, h.from + direction * sim.config.rail.range, Color(0.9, 0.4, 0.3, 0.15 + f * 0.3), sim.config.rail.width * 2)
-			draw_line(h.from, h.from + direction * sim.config.rail.range, RED, 2, true)
-			text_at("COPIED RAIL", h.from + Vector2(-40, -48), 11, RED)
+			if h.get("copy_shape", "rail") == "radial":
+				draw_circle(h.from, sim.config.great_toll.range, Color(0.9, 0.4, 0.3, 0.08 + f * 0.12))
+				draw_arc(h.from, sim.config.great_toll.range, 0, TAU, 56, RED, 3)
+				text_at("COPIED TOLL", h.from + Vector2(-42, -48), 11, RED)
+			else:
+				var direction = (h.p - h.from).normalized()
+				draw_line(h.from, h.from + direction * sim.config.rail.range, Color(0.9, 0.4, 0.3, 0.15 + f * 0.3), sim.config.rail.width * 2)
+				draw_line(h.from, h.from + direction * sim.config.rail.range, RED, 2, true)
+				text_at("COPIED RAIL", h.from + Vector2(-40, -48), 11, RED)
 			continue
 		draw_circle(h.p, h.radius, Color(0.85, 0.3, 0.18, 0.13 + f * 0.1))
 		draw_arc(h.p, h.radius, 0, TAU, 40, RED, 2)
@@ -449,7 +460,7 @@ func draw_optional_machines():
 		var data = sim.config.optional_repairs.machines[i]
 		var p = Vector2(data.position[0], data.position[1])
 		var color = GREEN if machine.complete else GOLD
-		var working = not machine.complete and sim.state.position.distance_to(p) < sim.config.optional_repairs.radius
+		var working = not machine.complete and sim.state.active_machine == machine.id
 		if not machine.complete:
 			draw_arc(p, sim.config.optional_repairs.radius, 0, TAU, 40, Color("506657"), 1)
 			draw_arc(p, sim.config.optional_repairs.radius, -PI / 2, -PI / 2 + TAU * maxf(0.001, machine.progress / sim.config.optional_repairs.required_ticks), 40, color, 3)
@@ -458,9 +469,10 @@ func draw_optional_machines():
 		panel(Rect2(p + Vector2(-70, -57), Vector2(148, 17)), PANEL)
 		text_at(data.name, p + Vector2(-64, -44), 11, color)
 		text_at("RESTORED" if machine.complete else data.description, p + Vector2(-75, 76), 10, color)
+		if machine.get("deferred", "") == "INTEGRITY_FULL": text_at("SAVE FOR DAMAGE", p + Vector2(-67, 94), 10, MUTED)
 		if working:
 			draw_line(sim.state.position, p, GREEN, 2)
-			text_at("REPAIRING", p + Vector2(-32, -30), 10, GREEN)
+			text_at("REPAIRING · %.1fs" % ((sim.config.optional_repairs.required_ticks - machine.progress) / sim.config.tick_rate), p + Vector2(-52, -30), 10, GREEN)
 
 func draw_gear(p: Vector2, radius: float, color: Color, angle: float):
 	for i in range(8):
@@ -642,9 +654,9 @@ func draw_loadout():
 	text_at("RESERVE", Vector2(1068, 539), 11, GOLD)
 	if not sim.state.reserve.is_empty(): text_at(sim.config.weapons[sim.state.reserve[0].id].short, Vector2(1068, 558), 12)
 	else: text_at("One open place", Vector2(1068, 558), 12, MUTED)
-	var gifts_y = 665 if sim.state.phase == "shop" else 589
+	var gifts_y = 658 if sim.state.phase == "shop" else 589
 	text_at("GIFTS  %d / %d" % [sim.state.gifts.size(), sim.config.gift_slots], Vector2(1068, gifts_y), 11, GOLD)
-	for i in range(sim.state.gifts.size()): text_at(sim.config.gifts[sim.state.gifts[i]].short, Vector2(1068, gifts_y + 19 + i * 18), 11, Color("8edce0"))
+	for i in range(sim.state.gifts.size()): text_at(sim.config.gifts[sim.state.gifts[i]].short, Vector2(1068, gifts_y + 23 + i * 30), 10, Color("8edce0"))
 	if sim.state.phase != "shop":
 		text_at("DOCTRINE / " + ("FULFILLED" if sim.state.fulfilled else "TAKING SHAPE"), Vector2(1068, 664), 10, GOLD)
 		if sim.state.inspection != "": wrapped("LENS / " + sim.state.inspection, Vector2(1068, 683), 170, 9, Color("8edce0"))
@@ -665,7 +677,8 @@ func wrapped(value: String, p: Vector2, width: float, size = 14, color = MUTED):
 func draw_shop():
 	draw_rect(Rect2(60, 148, 980, 588), Color("14272b"))
 	text_at("The relic workshop", Vector2(108, 189), 29, PAPER, true)
-	text_at("Next: " + ["Rivet Hounds · intercept / displace", "Scrap Mites · collect / clear", "Choir Drones · approach / focus"][mini(2, int((sim.state.wave + 1) / 2))], Vector2(483, 186), 14, GREEN)
+	var forecast = sim.forecast_data()
+	text_at("Next: %s · %s" % [forecast.name, " / ".join(forecast.counters)], Vector2(483, 186), 14, GREEN)
 	for i in range(6):
 		var id = sim.state.offers[i]
 		var x = 94 + (i % 3) * 302
@@ -679,7 +692,7 @@ func draw_shop():
 		var price = ""
 		if id in sim.config.weapons:
 			name_text = sim.config.weapons[id].short
-			description = sim.config.weapons[id].description
+			description = sim.config.weapons[id].role + " Weakness: " + sim.config.weapons[id].weakness
 			price = "%d SCRAP · RANK I" % sim.catalogue[id].cost_scrap
 		elif id in sim.config.catalysts:
 			name_text = sim.config.catalysts[id].short
@@ -721,10 +734,16 @@ func draw_results():
 	text_at("SHIFT COMPLETE" if won else "THE SHIFT FALLS SILENT", Vector2(220, 237), 14, GOLD)
 	text_at("A small miracle." if won else "Even saints need repairs.", Vector2(216, 305), 46, PAPER, true)
 	text_at(sim.state.last_reason, Vector2(220, 350), 20, GREEN if won else RED)
-	text_at(("%d enemies stopped     %d Scrap remaining     %d optional repairs" % [sim.state.kills, sim.state.scrap, sim.state.machines.filter(func(m): return m.complete).size()]) if sim.optional_mode() else ("%d machines stopped     %d Scrap remaining     %d%% relay repaired" % [sim.state.kills, sim.state.scrap, sim.state.progress * 100 / sim.config.relay.required_ticks]), Vector2(220, 409), 17)
-	text_at("Your machine: " + ", ".join(sim.state.weapons.map(func(w): return "Mercy Rail" if w.get("rail", false) else ("The Great Toll" if w.get("toll", false) else sim.config.weapons[w.id].short))), Vector2(220, 452), 16, MUTED)
-	text_at("Gifts: " + ("none" if sim.state.gifts.is_empty() else ", ".join(sim.state.gifts.map(func(id): return sim.config.gifts[id].short))), Vector2(220, 478), 14, Color("8edce0"))
-	wrapped("MEMORY 01 / Your arm remembers a waterworks. Your bell remembers a factory. Neither remembers being asked to become a weapon." if won else ("The workshop keeps your place. Try another build, make room to dodge, or repair a machine for a useful reward." if sim.optional_mode() else "The workshop keeps your place. Try a different relic, leave the work circle to intercept threats, or return sooner to mend the relay."), Vector2(220, 510), 820, 18, PAPER)
+	var summary = sim.state.result_summary
+	text_at(("%d stopped  ·  %d Scrap  ·  %d optional repairs" % [sim.state.kills, sim.state.scrap, summary.get("repairs", []).size()]) if sim.optional_mode() else ("%d stopped  ·  %d Scrap  ·  %d%% relay repaired" % [sim.state.kills, sim.state.scrap, sim.state.progress * 100 / sim.config.relay.required_ticks]), Vector2(220, 402), 16)
+	var top = summary.get("top_weapon", "")
+	var top_name = sim.config.weapons[top].short if top in sim.config.weapons else "No relic recorded"
+	text_at("MOST WORK  %s · %d damage" % [top_name, int(summary.get("top_weapon_damage", 0))], Vector2(220, 440), 14, GOLD)
+	text_at("BLESSING  %s     EVOLUTION  %s" % ["FULFILLED" if summary.get("blessing_fulfilled", false) else "UNFULFILLED", str(summary.get("evolution", "")).replace("_", " ")], Vector2(220, 469), 13, MUTED)
+	text_at("GIFTS  " + ("NONE" if sim.state.gifts.is_empty() else ", ".join(sim.state.gifts.map(func(id): return sim.config.gifts[id].short))), Vector2(220, 492), 12, Color("8edce0"))
+	if not won: text_at("PRIMARY CAUSE  " + summary.get("failure_cause", "UNCLASSIFIED") + " · largest loss wave " + str(summary.get("worst_damage_wave", 0)), Vector2(220, 515), 14, RED)
+	wrapped(summary.get("replay_cue", "Try one clear change next shift."), Vector2(220, 545), 820, 17, PAPER)
+	wrapped("MEMORY 01 / Your arm remembers a waterworks. Your bell remembers a factory. Neither remembers being asked to become a weapon.", Vector2(220, 603), 820, 14, MUTED)
 
 func capture_sequence():
 	# Reproducible visual fixtures exercise real simulation commands; not a human playthrough.

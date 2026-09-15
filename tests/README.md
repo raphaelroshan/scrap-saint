@@ -33,7 +33,7 @@ When the Godot runtime exists, the authoritative test suite must cover:
 8. Blessing shop bias changes offers without changing the seed contract.
 9. Mercy Rail requires Rank 3 Nailer plus Saint’s Rivet.
 10. Evolution changes geometry/effects and emits a stable transformation event.
-11. Memory Crane copies the last evolution through the public command boundary.
+11. Memory Crane copies Mercy Rail through the public command boundary; unrelated Evolutions do not silently become rails.
 12. Foreman Engine phase transitions and demolition telegraphs reproduce.
 13. Save/load resumes the same wave, shop, objective, and boss state.
 14. Replay identifies the first divergent event when a command is changed.
@@ -69,3 +69,7 @@ The first runtime should capture these named states:
 The visual rubric should check Saint silhouette, enemy direction, objective state, attack geometry, status readability, shop clarity, evolution transformation, effect density, palette consistency, and provenance.
 
 P12: `test_variety.gd` covers beam/cluster damage, cooldowns, ally healing, bombardment timing/evasion, brute displacement and save replay. `capture_variety.gd` renders three explicit optional-mode fixtures in `artifacts/variety`. The PowerShell loop now selects the main optional mode for full-run policies; a loss still fails its all-win gate.
+
+P12 core-quality gate: `test_roaming_quality.gd` covers authored wave profiles, opening contact metrics, weapon role/weakness data, useful repair economy, Foreman route phases/workers and causal Results. `run_playthroughs.gd -- --optional` reports damage by source/wave, weapon contribution/ranks, shop transactions, repair metrics and result classification for 12 normal-economy policies. `capture_core_quality.gd` records seed-147 Workshop Gospel repair-decision, reward and Results states in `artifacts/core-quality`; these are time-compressed deterministic policy traces labelled `NATURAL POLICY TRACE`, not human play.
+
+P14 replayable assembly: `test_assembly.gd` covers Foundry Censer, Penance Winch, Welded Halo, Great Toll, two unique Gift slots, save restoration, Gift trade-offs, independent evolution tracking and destination-safe Workshop repair ownership. `run_assembly_playthroughs.gd` executes four controlled-start build identities through complete seed-147 runs; these prove executable viability, not natural acquisition or human balance. `capture_assembly.gd` renders the three configured 1280x800 assembly states in `artifacts/assembly`.

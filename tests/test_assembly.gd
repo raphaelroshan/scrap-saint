@@ -65,6 +65,12 @@ func _initialize():
 	s.update_weapons()
 	check(is_equal_approx(s.state.machines[0].progress, float(s.config.weapons["weapon.welded_halo"].repair_progress)), "Halo adds an authoritative nearby-machine stitch without a target")
 	check(s.events.any(func(e): return e.kind == "repair") and s.events.any(func(e): return e.kind == "attack" and e.shape == "halo"), "Halo reports repair and rotating attack geometry separately")
+	s.start(0, 147, "optional")
+	s.state.site_id = "site.rootworks_pump"
+	s.state.position = machine_p
+	s.state.weapons = [weapon("weapon.welded_halo")]
+	s.update_weapons()
+	check(s.state.machines[0].progress == 0 and not s.working_optional_machine(), "destination state cannot operate carried Workshop machines")
 
 	# Great Toll remains a catalyst Evolution, not Combine or Confluence.
 	s.start(1, 147, "optional")
@@ -76,8 +82,23 @@ func _initialize():
 	check(s.state.weapons == build_before and s.state.catalysts.is_empty() and [s.state.scrap, s.state.shards, s.state.rng, s.state.tick] == currency_before, "failed Great Toll does not mutate ingredients, currency, RNG, or time")
 	s.state.catalysts.append("catalyst.cracked_bell_clapper")
 	check(s.command("evolve", "evolution.great_toll") == "OK", "Bell Rank III plus Cracked Clapper evolves")
-	check(s.state.weapons[0].toll and "catalyst.cracked_bell_clapper" not in s.state.catalysts, "Great Toll consumes exactly its catalyst")
+	check(s.state.weapons[0].toll and s.state.evolutions == ["evolution.great_toll"] and "catalyst.cracked_bell_clapper" not in s.state.catalysts, "Great Toll records its own ID and consumes exactly its catalyst")
+	s.roll_shop()
+	check(s.state.offers[2] == "catalyst.saints_rivet", "Toll-only build retains the independent Mercy Rail path")
 	s.command("continue")
+	s.state.tick = int(s.config.boss_rules.hazard_interval)
+	s.spawn(s.config.elite)
+	s.update_enemies()
+	check(not s.state.hazards.is_empty() and s.state.hazards.all(func(h): return not h.copy), "Toll-only build does not trigger Memory Crane's Mercy Rail copy")
+	s.state.enemies.clear()
+	s.state.hazards.clear()
+	s.state.evolutions = ["evolution.mercy_rail"]
+	s.state.evolved = true
+	s.spawn(s.config.elite)
+	s.update_enemies()
+	check(not s.state.hazards.is_empty() and s.state.hazards.any(func(h): return h.copy), "Memory Crane copy remains keyed to Mercy Rail")
+	s.state.enemies.clear()
+	s.state.hazards.clear()
 	s.state.position = centre
 	var left = enemy(s, "enemy.rivet_hound", centre + Vector2(-90, 0))
 	var right = enemy(s, "enemy.rivet_hound", centre + Vector2(90, 0))

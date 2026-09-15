@@ -131,3 +131,53 @@
 - Capture: Godot 4.5.1, 1280x800, seed 147, fixture-configured states `P14_EXPANSION_A`, `P14_GREAT_TOLL`, and `P14_GIFTS`; inspect all captures and record renderer/build provenance. These are executable fixtures, not human playtests.
 - Limitation: deterministic viability and screenshots do not establish whether the expanded pool is enjoyable or correctly weighted for human players.
 - Exactly one next task: run uncoached 1x sessions comparing a close-control, route-control and repair-roaming build.
+
+## P12.1 - authored roaming pressure and useful repairs
+- Objective: cross the Workshop at 1x under purposeful pressure and choose an optional machine because its visible reward solves an immediate problem.
+- Owner: `game/simulation.gd` owns wave profiles, repair state, interruption, rewards, events and metrics; `game/main.gd` only renders those states.
+- Files: `content/slices/first_shift.json`, `game/simulation.gd`, `game/main.gd`, `tests/test_optional_repairs.gd`, `tests/run_playthroughs.gd`, `tests/test_roaming_quality.gd`, `docs/runtime_status.md`.
+- Preserve: optional repairs, fixed ticks, free movement, automatic attacks, three machines, two currencies and existing arena topology. No new sites, weapons or meta-progression.
+- Acceptance: authored primary/support families reproduce by seed; no reward is silently wasted; leaving the ring or taking a hit emits interruption while preserving progress; a repair-seeking policy completes a useful repair; traces report contact and threat-gap metrics.
+- Capture: natural policy at 1280x800, seed 104729, Godot 4.5.1, plus clearly labelled machine fixtures.
+- Limitation: automated movement establishes reachability and utility, not human enjoyment.
+- Exactly one next task: P12.2, isolate Mourner wave-five attrition and validate weapon roles.
+
+## P12.2 - Mourner viability and weapon-role evidence
+- Objective: every Blessing reaches the Foreman through a coherent non-evolution route, while each weapon keeps a legible strength and weakness.
+- Owner: content data owns role tuning; simulation owns targeting, damage attribution, enemy damage sources and failure classification; policies only issue movement/shop commands.
+- Files: `content/slices/first_shift.json`, `game/simulation.gd`, `tests/test_variety.gd`, `tests/run_playthroughs.gd`, `tests/test_roaming_quality.gd`, `docs/runtime_status.md`.
+- Preserve: no blanket doctrine damage multiplier, no Mercy requirement, and no attempt to make every weapon solve every matchup.
+- Acceptance: seed 104729 exposes its first causal damage spike; 12/12 standard runs complete; each doctrine has a non-evolution win; controlled role checks prove the seven geometries' intended target access and preserved weakness.
+- Capture: same-seed combat states for all three Blessings at 1280x800, classified as natural or fixture.
+- Limitation: deterministic policies cannot rank subjective weapon satisfaction.
+- Exactly one next task: P12.3, make workshop roles affordable, non-redundant and doctrine-specific.
+
+## P12.3 - actionable workshop and distinct services
+- Objective: every visit offers an affordable current improvement, a future path, a forecast response and a doctrine service whose effect is visibly different.
+- Owner: simulation owns offer construction, affordability, forecast facts and service effects; presentation explains offer purpose without changing shop state.
+- Files: `content/slices/first_shift.json`, `game/simulation.gd`, `game/main.gd`, `tests/test_shop.gd`, `tests/run_playthroughs.gd`, `docs/runtime_status.md`.
+- Preserve: six offer roles, one free refresh, four active plus one reserve, deterministic local shop hash and hybrid builds.
+- Acceptance: at least one offer is actionable at normal funds; calibration never duplicates another calibration card; forecast names the authored next pressure and counters; all doctrine services change different authoritative state.
+- Capture: three seeded service shops at 1280x800, Godot 4.5.1, explicitly fixture-labelled.
+- Limitation: human price sensitivity remains unmeasured.
+- Exactly one next task: P12.4, strengthen Memory Crane and Foreman movement/priority questions.
+
+## P12.4 - readable elite and Foreman phases
+- Objective: the elite and Foreman ask readable movement and target-priority questions without Mercy Rail or a manual interrupt.
+- Owner: simulation owns phase, routed hazard destinations, worker targets and damage; presentation renders phase intent and safe-lane cues.
+- Files: `content/slices/first_shift.json`, `game/simulation.gd`, `game/main.gd`, `tests/test_variety.gd`, `tests/test_roaming_quality.gd`, `docs/runtime_status.md`.
+- Preserve: automatic combat, optional repairs, no manual interrupt and no presentation-authored damage.
+- Acceptance: telegraphs precede damage; boss phases use distinct hazard counts/routes; workers are identifiable in traces; evolved and non-evolved policies can win.
+- Capture: Foreman phase fixtures and one natural boss approach at 1280x800, Godot 4.5.1.
+- Limitation: motion readability still requires a human 1x session.
+- Exactly one next task: P12.5, make Results explain causes and suggest one grounded experiment.
+
+## P12.5 - causal Results and replay cue
+- Objective: understand what caused the outcome, which relic mattered, which repairs were chosen, and one useful next experiment.
+- Owner: simulation owns damage, kills, economy, repair, Blessing, evolution and failure classification; Results renders the authoritative summary.
+- Files: `game/simulation.gd`, `game/main.gd`, `tests/test_simulation.gd`, `tests/test_roaming_quality.gd`, `docs/runtime_status.md`.
+- Preserve: immediate same-seed restart, concise memory text and no campaign/dialogue expansion.
+- Acceptance: success and failure summaries differ from recorded events; primary cause uses the stable cause vocabulary; weapon contribution, repair reward, worst damage wave, fulfilment and evolution route are present; save/replay retains metrics.
+- Capture: one natural win and one deterministic failure Results at 1280x800, Godot 4.5.1.
+- Limitation: the route preview is a narrative stub until chapter routing exists.
+- Exactly one next task: conduct a focused uncoached human 1x playtest of the complete P12 gate.

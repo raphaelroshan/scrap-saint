@@ -13,11 +13,18 @@ func _initialize():
 	]
 	var failed = false
 	var results = []
+	var requested = ""
+	for arg in OS.get_cmdline_user_args():
+		if arg.begins_with("--scenario="): requested = arg.trim_prefix("--scenario=")
 	for scenario in scenarios:
+		if requested != "" and scenario.id != requested: continue
 		var sim = Sim.new()
 		sim.start(scenario.doctrine, 147, "optional")
 		sim.state.weapons = scenario.weapons.duplicate(true)
 		sim.state.gifts = scenario.gifts.duplicate()
+		if sim.state.weapons.any(func(w): return w.get("toll", false)):
+			sim.state.evolutions = ["evolution.great_toll"]
+			sim.state.evolved = true
 		while sim.state.phase not in ["won", "lost"] and sim.state.tick < sim.config.wave_ticks * sim.config.wave_count + 60:
 			if sim.state.phase == "shop":
 				if sim.state.hp < 70: sim.command("buy", 4)

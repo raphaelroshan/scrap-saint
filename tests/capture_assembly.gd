@@ -39,6 +39,8 @@ func capture():
 	game.sim.start(1, 147, "optional")
 	game.sim.state.position = Vector2(550, 530)
 	game.sim.state.weapons = [weapon("weapon.bell_last_shift", 3, true)]
+	game.sim.state.evolutions = ["evolution.great_toll"]
+	game.sim.state.evolved = true
 	for i in range(8):
 		game.sim.spawn("enemy.rivet_hound")
 		game.sim.state.enemies.back().p = game.sim.state.position + Vector2.from_angle(i * TAU / 8.0) * 145
