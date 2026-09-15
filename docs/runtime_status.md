@@ -29,7 +29,7 @@ The Crane copies rail geometry if an evolution exists and otherwise telegraphs a
 
 ## Evidence limits
 
-Screenshots are actual Godot renders. Most legacy captures are scripted fixtures with supplied positions or budgets. `artifacts/core-quality` additionally contains a normal-economy, seed-147 repair-policy trace at the repair decision, reward and naturally reached Results; it is labelled `NATURAL POLICY TRACE`, not human play. Passing policies establishes executable routes and regressions, not enjoyment or final balance. No human playtest, controller hardware session, or sustained performance benchmark has been claimed.
+Screenshots are actual Godot renders. Most legacy captures are scripted fixtures with supplied positions or budgets. `artifacts/core-quality` additionally contains a normal-economy, seed-147 repair-policy trace at the repair decision, reward and naturally reached Results; it is labelled `NATURAL POLICY TRACE`, not human play. Passing policies establishes executable routes and regressions, not enjoyment or final balance. The 65-threat headless benchmark reaches 329 simulation ticks/second (5.48× real time) on an Apple M1 Pro; it does not establish rendered Windows minimum-hardware performance. No human playtest or controller hardware session has been claimed.
 
 Art is original procedural placeholder geometry drawn by the renderer. Audio is original synthesized placeholder audio in `game/sound.gd`. Both were created on 2026-09-14, use no downloaded art/audio assets, and require later art direction/feel iteration. System fonts use installed fallbacks; no font files are redistributed.
 

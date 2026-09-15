@@ -24,7 +24,7 @@ The project uses local release builds. GitHub Actions is intentionally not requi
 - Content validation and every deterministic suite pass.
 - No known save-loss or progression blocker.
 - Natural-run captures are inspected at the declared viewport.
-- Peak-density performance is measured on declared minimum hardware.
+- Headless peak-density simulation throughput is recorded in `tests.log`; rendered performance still needs measurement on declared minimum Windows hardware.
 - Windows hardware smoke test is recorded; Wine-only testing is labelled as partial.
 - The release description advertises only implemented content.
 - Signing, store metadata, pricing, privacy, and support ownership are explicitly decided before a public commercial release.
