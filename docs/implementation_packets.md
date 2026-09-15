@@ -131,6 +131,16 @@
 - Limitation: compact four-wave destinations reuse the current roster and need human 1× pacing validation.
 - Exactly one next task: uncoached full-expedition testing of both routes at 1×.
 
+## SC-16 — authored destination-boss contracts
+- Objective: recognize and answer two different final tests: the Choir Regent changes weapon timing and pressures the three relay bells, while the Factory Heart pulses through the exposed pump, suspends work and calls a repairer.
+- Owner: boss content owns phase names, cadence, hazard geometry, damage, movement and rule parameters; `game/simulation.gd` owns phase selection, telegraphs, objective locks, weapon-cycle pressure, summons, damage and save state. Presentation only renders authoritative hazards and events.
+- Files: `content/bosses/first_slice.json`, `game/simulation.gd`, `game/main.gd`, `scripts/validate_content.py`, `scripts/write_provenance.py`, `tests/test_chapter.gd`, `tests/capture_chapter.gd`, `docs/runtime_status.md`, `docs/verification_0_1.md`.
+- Preserve: the Foreman and Memory Crane contracts, automatic combat, optional objectives, build carryover, boss-arrival-relative cadence, site:wave metrics, deterministic saves, two run currencies and the simulation/presentation boundary. No new weapons, frames, profiles, settings or packaging.
+- Acceptance: each destination boss has three data-owned named phases; the Regent applies phase-specific weapon cadence and changes from player-centred to distributed relay-ring hazards without calling Workshop workers; the Heart telegraphs through the visible pump, temporarily blocks pump work and calls a Rust Pilgrim only in its authored feed phase; phase cadence begins at boss spawn; phase state and timers survive save/restore; the two contracts produce different authoritative event/hazard traces; both natural route matrices still complete.
+- Evidence: deterministic chapter assertions plus actual 1280×800 Godot 4.5.1 fixture captures of the Regent and Heart boss states, labelled fixture-configured with seed 147 and inspected for goal/action clarity, hazard distinction and objective readability.
+- Limitation: automated traces and configured captures cannot establish reaction-time comfort or enjoyment at 1×.
+- Exactly one next task: run uncoached 1× sessions against both destination bosses and tune only the observed cadence/readability friction.
+
 ## P14 - replayable assembly package
 - Objective: choose a close-pressure, priority-control, or repair-roaming weapon, visibly evolve Bell into The Great Toll, and carry up to two Gifts that alter repair risk, threat information, or dismantling decisions.
 - Authorization: the owner explicitly requested the researched P14 package after the current roadmap update.

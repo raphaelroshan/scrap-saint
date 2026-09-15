@@ -217,6 +217,9 @@ func present(event):
 	if e.kind == "destination_arrived":
 		notification = "ROAD REST / %d structure restored" % int(e.arrival_repair)
 		notice_until = Time.get_ticks_msec() + 3500
+	if e.kind == "boss_contract":
+		notification = str(e.phase_name) + " / " + str(e.rule).replace("_", " ").to_upper()
+		notice_until = Time.get_ticks_msec() + 2600
 	if e.kind == "attack": sound.play(e.shape)
 	elif e.kind in ["hurt", "relay_hurt", "repair", "pickup"]: sound.play(e.kind)
 
@@ -593,7 +596,10 @@ func draw_world():
 		draw_circle(h.p, h.radius, Color(0.85, 0.3, 0.18, 0.13 + f * 0.1))
 		draw_arc(h.p, h.radius, 0, TAU, 40, RED, 2)
 		draw_arc(h.p, h.radius * f, 0, TAU, 40, GOLD, 2)
-		text_at("!", h.p + Vector2(-4, 6), 20, GOLD)
+		if h.get("kind", "") in ["pulse", "feed", "choice"]: draw_line(h.from, h.p, Color(0.89, 0.36, 0.24, 0.45), 3, true)
+		var hazard_labels = {"measure": "BEAT", "toll": "TOLL", "answer": "III", "pulse": "PULSE", "feed": "FEED", "choice": "CHOOSE"}
+		var hazard_label = hazard_labels.get(h.get("kind", ""), "!")
+		text_at(hazard_label, h.p + Vector2(-font.get_string_size(hazard_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 10).x * 0.5, 5), 10, GOLD)
 	for p in sim.state.pickups:
 		if p.kind == "scrap": draw_colored_polygon(PackedVector2Array([p.p + Vector2(0, -6), p.p + Vector2(6, 0), p.p + Vector2(0, 6), p.p + Vector2(-6, 0)]), GOLD)
 		else:
@@ -626,7 +632,7 @@ func draw_boss_hud():
 			var boss_names = {"boss.foreman_engine": "FOREMAN ENGINE", "boss.choir_regent": "CHOIR REGENT", "boss.factory_heart": "FACTORY HEART", "elite.memory_crane": "MEMORY CRANE"}
 			text_at(boss_names.get(e.type, str(e.type).trim_prefix("boss.").replace("_", " ").to_upper()), Vector2(309, 186), 12, GOLD)
 			if e.type == sim.current_boss_id():
-				var phase_name = "DEMOLITION" if not sim.is_destination() else sim.current_route().pressure.name
+				var phase_name = "DEMOLITION" if not sim.is_destination() else sim.boss_phase_name(e)
 				text_at(phase_name, Vector2(582, 186), 11, RED)
 			bar(Rect2(309, 196, 458, 6), e.hp / e.max_hp, RED)
 			if e.get("inspected", false): text_at("INSPECTED / " + sim.state.inspection, Vector2(309, 218), 10, Color("8edce0"))
@@ -660,7 +666,8 @@ func draw_destination_objective():
 		var node = sim.state.objective[i]
 		var data = objective.nodes[i]
 		var p = Vector2(data.position[0], data.position[1])
-		var color = GREEN if node.complete else GOLD
+		var locked = sim.state.tick < int(sim.state.get("objective_lock_until", 0))
+		var color = GREEN if node.complete else (RED if locked else GOLD)
 		draw_circle(p, 29, Color("1c3432"))
 		draw_arc(p, float(objective.radius), 0, TAU, 48, Color(color, 0.38), 2)
 		draw_arc(p, 38, -PI / 2, -PI / 2 + TAU * maxf(0.001, node.progress / float(objective.required_ticks)), 32, color, 4)
@@ -670,6 +677,8 @@ func draw_destination_objective():
 		if objective.type == "CALIBRATE_NODES" and not node.complete:
 			var unsafe = sim.state.enemies.any(func(enemy): return enemy.hp > 0 and enemy.p.distance_to(p) < float(objective.safety_radius))
 			if unsafe: text_at("CLEAR THE RING", p + Vector2(-49, 70), 10, RED)
+		elif locked and not node.complete:
+			text_at("PULSE LOCK · MOVE", p + Vector2(-58, 70), 10, RED)
 
 func draw_travel_background():
 	for y in range(160, 736, 54):

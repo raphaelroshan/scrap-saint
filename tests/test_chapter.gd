@@ -64,13 +64,29 @@ func _initialize():
 	sim.state.tick = int(sim.config.boss_rules.hazard_interval)
 	sim.update_enemies()
 	check(sim.state.hazards.is_empty(), "destination boss cadence ignores unrelated global tick multiple")
-	sim.state.tick = int(regent.spawn_tick) + int(sim.config.boss_rules.hazard_interval)
+	var regent_phases = sim.bosses[sim.current_boss_id()].phases
+	sim.state.tick = int(regent.spawn_tick) + int(regent_phases[0].interval)
 	sim.update_enemies()
-	check(not sim.state.hazards.is_empty(), "destination boss hazard starts relative to boss spawn")
+	check(sim.state.hazards.size() == 1 and sim.state.hazards[0].kind == "measure", "Regent measure begins with one player-centred warning relative to boss spawn")
+	check(sim.state.pressure_until > sim.state.tick and sim.state.pressure_multiplier == 1.2, "Regent measure applies its authored weapon-cycle pressure")
+	check(sim.events.any(func(event): return event.kind == "boss_contract" and event.phase_id == "measure"), "Regent measure emits its authoritative phase contract")
+	var legacy_pressure_save = sim.snapshot()
+	legacy_pressure_save.erase("pressure_multiplier")
+	check(restored.restore(legacy_pressure_save) and restored.state.pressure_multiplier == sim.current_route().pressure.cooldown_multiplier, "pre-contract destination saves migrate the active route pressure multiplier")
 	sim.state.hazards.clear()
-	sim.state.tick = int(regent.spawn_tick) + int(sim.current_route().pressure.interval)
+	sim.events.clear()
+	regent.hp = regent.max_hp * 0.5
+	sim.state.tick = int(regent.spawn_tick) + int(regent_phases[1].interval) * 2
 	sim.update_enemies()
-	check(sim.state.pressure_until > sim.state.tick, "destination pressure cadence starts relative to boss spawn")
+	check(regent.phase == 1 and sim.state.hazards.size() == 3 and sim.state.hazards.all(func(hazard): return hazard.kind == "toll"), "Regent toll rings all three authored relay nodes")
+	check(sim.events.any(func(event): return event.kind == "boss_phase" and event.name == "THE GRAND TOLL"), "Regent reports its data-owned second phase")
+	sim.state.hazards.clear()
+	sim.events.clear()
+	regent.hp = regent.max_hp * 0.2
+	sim.state.tick = int(regent.spawn_tick) + int(regent_phases[2].interval) * 3
+	sim.update_enemies()
+	check(regent.phase == 2 and sim.state.hazards.size() == 4 and sim.state.pressure_multiplier == 1.5, "Regent answer pressures the Saint and all three relay nodes at its strongest cadence")
+	check(not sim.state.enemies.any(func(enemy): return enemy.get("worker", false)), "Regent never inherits the Foreman's worker contract")
 	sim.state.enemies.clear()
 	sim.state.tick += 1000
 	sim.hurt_saint(3, "test.destination")
@@ -119,6 +135,35 @@ func _initialize():
 	var root_restored = Sim.new()
 	check(root_restored.restore(destination_save), "destination save restores")
 	check(root_restored.state_hash() == root.state_hash() and root_restored.arena.data.id == "arena.rootworks_pump", "destination save preserves route, arena and objective state")
+	root.state.enemies.clear()
+	root.state.hazards.clear()
+	root.spawn(root.current_boss_id())
+	var heart = root.state.enemies[-1]
+	var heart_phases = root.bosses[root.current_boss_id()].phases
+	root.state.tick = int(heart.spawn_tick) + int(heart_phases[0].interval)
+	root.update_enemies()
+	check(root.state.hazards.size() == 1 and root.state.hazards[0].kind == "pulse" and root.state.hazards[0].p == pump, "Factory Heart pulse travels through the visible pump")
+	check(root.state.objective_lock_until > root.state.tick and not root.destination_node_valid(0, pump, float(root_objective.radius)), "Factory Heart pulse temporarily suspends pump work")
+	root.state.tick = root.state.objective_lock_until
+	check(root.destination_node_valid(0, pump, float(root_objective.radius)), "pump work resumes at the authored lock boundary")
+	root.state.hazards.clear()
+	root.events.clear()
+	heart.hp = heart.max_hp * 0.5
+	root.state.tick = int(heart.spawn_tick) + int(heart_phases[1].interval) * 2
+	root.update_enemies()
+	check(heart.phase == 1 and root.state.enemies.any(func(enemy): return enemy.type == "enemy.rust_pilgrim" and enemy.worker), "Factory Heart graft-feed phase calls one trace-labelled repairer")
+	check(root.events.any(func(event): return event.kind == "boss_contract" and event.phase_id == "feed") and root.events.any(func(event): return event.kind == "worker_called"), "Factory Heart feed emits contract and summon events")
+	root.state.hazards.clear()
+	root.events.clear()
+	root.state.position = pump + Vector2(150, 0)
+	heart.hp = heart.max_hp * 0.2
+	root.state.tick = int(heart.spawn_tick) + int(heart_phases[2].interval) * 3
+	root.update_enemies()
+	check(heart.phase == 2 and root.state.hazards.size() == 2 and root.state.hazards.all(func(hazard): return hazard.kind == "choice"), "Factory Heart redline phase makes pump work compete with personal safety")
+	var boss_save = root.snapshot()
+	check(root_restored.restore(boss_save) and root_restored.state_hash() == root.state_hash(), "destination boss phase, objective lock and hazards save deterministically")
+	root.state.enemies.clear()
+	root.state.hazards.clear()
 	root.state.wave = root.current_wave_count()
 	root.state.boss_dead = true
 	root.step(Vector2.ZERO)
