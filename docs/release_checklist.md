@@ -7,7 +7,8 @@ The project uses local release builds. GitHub Actions is intentionally not requi
 1. Use the pinned Godot 4.5.1 executable with export templates installed.
 2. Start from a clean, reviewed commit.
 3. Run `GODOT_BIN=/path/to/godot ./scripts/build_release.sh windows`.
-4. Confirm the versioned directory contains `ScrapSaint.exe`, its `.pck`, `BUILD.txt`, `SHA256SUMS.txt`, and `tests.log`.
+4. Confirm the versioned directory contains `ScrapSaint.exe`, its `.pck`, `BUILD.txt`, `SHA256SUMS.txt`, `tests.log`, and the versioned Windows `.zip`.
+5. Confirm `SHA256SUMS.txt` covers both the executable and its required PCK.
 
 ## Smoke test
 

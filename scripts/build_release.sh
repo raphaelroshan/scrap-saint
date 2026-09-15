@@ -9,10 +9,12 @@ case "$TARGET" in
   windows)
     PRESET="Windows Desktop"
     ARTIFACT_NAME="ScrapSaint.exe"
+    COMPANION_NAME="ScrapSaint.pck"
     ;;
   macos)
     PRESET="macOS"
     ARTIFACT_NAME="Scrap Saint.zip"
+    COMPANION_NAME=""
     ;;
   *)
     echo "Usage: GODOT_BIN=/path/to/godot $0 [windows|macos]" >&2
@@ -38,6 +40,7 @@ OUTPUT_PATH="$OUTPUT_DIR/$ARTIFACT_NAME"
 mkdir -p "$OUTPUT_DIR"
 
 python3 scripts/validate_content.py | tee "$OUTPUT_DIR/tests.log"
+python3 tests/test_slice_manifest.py | tee -a "$OUTPUT_DIR/tests.log"
 
 for test_path in tests/test_*.gd; do
   "$GODOT_BIN" --headless --path . --script "$test_path" | tee -a "$OUTPUT_DIR/tests.log"
@@ -54,9 +57,22 @@ done
 } > "$OUTPUT_DIR/BUILD.txt"
 
 if command -v shasum >/dev/null 2>&1; then
-  (cd "$OUTPUT_DIR" && shasum -a 256 "$ARTIFACT_NAME" > SHA256SUMS.txt)
+  if [ -n "$COMPANION_NAME" ]; then
+    (cd "$OUTPUT_DIR" && shasum -a 256 "$ARTIFACT_NAME" "$COMPANION_NAME" > SHA256SUMS.txt)
+  else
+    (cd "$OUTPUT_DIR" && shasum -a 256 "$ARTIFACT_NAME" > SHA256SUMS.txt)
+  fi
 else
-  (cd "$OUTPUT_DIR" && sha256sum "$ARTIFACT_NAME" > SHA256SUMS.txt)
+  if [ -n "$COMPANION_NAME" ]; then
+    (cd "$OUTPUT_DIR" && sha256sum "$ARTIFACT_NAME" "$COMPANION_NAME" > SHA256SUMS.txt)
+  else
+    (cd "$OUTPUT_DIR" && sha256sum "$ARTIFACT_NAME" > SHA256SUMS.txt)
+  fi
+fi
+
+if [ "$TARGET" = "windows" ]; then
+  PACKAGE_NAME="ScrapSaint-${VERSION}-windows-x86_64.zip"
+  (cd "$OUTPUT_DIR" && zip -q "$PACKAGE_NAME" "$ARTIFACT_NAME" "$COMPANION_NAME" BUILD.txt SHA256SUMS.txt)
 fi
 
 echo "Release built: $OUTPUT_PATH"
