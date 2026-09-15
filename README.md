@@ -40,9 +40,10 @@ Astra should read the repository in this order before editing:
 5. [`design/shop_and_blessings.md`](design/shop_and_blessings.md) for the run economy, shop offers, controlled randomness, Blessing roles, and evolution support.
 6. [`docs/progression_map_weapons_metagame.md`](docs/progression_map_weapons_metagame.md) for the researched run pacing, arena topology, route graph, weapon catalogue, shop guarantees, metagame separation, failure rules, and first implementation milestones.
 7. [`docs/improvement_plan_2026-09-15.md`](docs/improvement_plan_2026-09-15.md) for the current repository audit, unresolved design decisions, weapon/Gift/shop/map/enemy recommendations, and prioritized execution packets.
-8. [`docs/art_direction.md`](docs/art_direction.md) for silhouettes, materials, palette, effects, audio, asset sourcing, and visual quality constraints.
-9. [`docs/first_vertical_slice.md`](docs/first_vertical_slice.md) and [`roadmap.md`](roadmap.md) for the dependency-ordered implementation sequence.
-10. Read only the smallest relevant source, content, and test files after stating the one player-facing objective.
+8. [`docs/weapons_merges_traits_expansion.md`](docs/weapons_merges_traits_expansion.md) for proposed weapons, Combine/Evolution/Confluence boundaries, future evolutions, Gifts, trait acquisition, and the staged implementation packets.
+9. [`docs/art_direction.md`](docs/art_direction.md) for silhouettes, materials, palette, effects, audio, asset sourcing, and visual quality constraints.
+10. [`docs/first_vertical_slice.md`](docs/first_vertical_slice.md) and [`roadmap.md`](roadmap.md) for the dependency-ordered implementation sequence.
+11. Read only the smallest relevant source, content, and test files after stating the one player-facing objective.
 
 Every implementation request should be converted into one bounded task packet containing the player promise, authoritative owner, exact files, deterministic acceptance tests, non-goals, screenshot/build provenance, remaining limitation, and exactly one next task.
 
@@ -108,6 +109,7 @@ If the Godot project is not yet present, the agent must not claim gameplay execu
 | [`design/shop_and_blessings.md`](design/shop_and_blessings.md) | Blessings, shop, currencies, offers, and evolution rules. |
 | [`docs/progression_map_weapons_metagame.md`](docs/progression_map_weapons_metagame.md) | Research-backed run pacing, map, weapons, economy, metagame, and acceptance gates. |
 | [`docs/improvement_plan_2026-09-15.md`](docs/improvement_plan_2026-09-15.md) | Current audit, unresolved decisions, system recommendations, and prioritized improvement plan. |
+| [`docs/weapons_merges_traits_expansion.md`](docs/weapons_merges_traits_expansion.md) | Proposed weapons, named evolutions, cross-weapon Confluences, Gifts, traits, and staged content packets. |
 | [`docs/first_vertical_slice.md`](docs/first_vertical_slice.md) | Executable first-slice sequence and acceptance evidence. |
 | [`roadmap.md`](roadmap.md) | Milestones from contracts to creative vertical and breadth. |
 | [`content/`](content/) | Data-driven first-slice catalogues. |
