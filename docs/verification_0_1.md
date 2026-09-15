@@ -148,4 +148,6 @@ All 842 focused Godot assertions pass on pinned Godot 4.5.1: acquisition94, aren
 
 The configured `P16_HONEST_SCALE_SHOP`, `P16_SPRING_FUSE_COMBAT` and `P16_CHOIR_FILTER_RECOVERY` fixtures use Godot 4.5.1, 1280×800, seed 147 and the Compatibility renderer on Apple M1 Pro. They verify layout and state visibility, not uncoached decision quality or minimum-hardware performance.
 
+Rendered-evidence rubric (5-point internal review): shop consequence clarity 4, Gift-state readability 4, combat cue separation 4, screen hierarchy 4, industrial attachment identity 4. Honest Scale exposes Combine and rejection outcomes without crowding the action row; Spring/Fuse and Filter states remain distinguishable from weapon geometry. The remaining visual limitation is that short-lived attachment motion and sound timing need observation in an uncoached real-time session.
+
 Exactly one next task: run uncoached 1× workshop sessions comparing the original three-Gift pool with the seven-Gift pool, then tune only observed card-comprehension and offer-quality failures.
