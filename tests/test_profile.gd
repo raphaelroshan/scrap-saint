@@ -39,7 +39,22 @@ func _initialize():
 	}
 	unlocked = profile.record_run(destination)
 	check("blessing.procession" in unlocked, "destination completion unlocks Procession")
-	check(profile.state.memory_fragments == 2 and "memory.rootworks" in profile.state.memories, "destination grants one authored memory")
+	check(profile.state.memory_fragments == 2 and "memory.borrowed_arm" in profile.state.memories, "destination grants one authored memory")
+	var expedition = Profile.new()
+	var expedition_unlocks = expedition.record_run({
+		"run_id": "chapter-149-brass",
+		"won": true,
+		"completed_site_ids": ["site.collapsed_workshop", "site.brass_choir_relay"],
+		"defeated_boss_ids": ["boss.foreman_engine", "boss.choir_regent"],
+		"optional_repairs": 2,
+		"route_id": "route.brass_choir",
+		"memory_ids": ["memory.borrowed_bell"],
+		"evolution_ids": ["evolution.great_toll"]
+	})
+	check(expedition.state.memory_fragments == 2, "complete expedition commits each site once")
+	check("frame.surveyor" in expedition_unlocks and "frame.keeper" in expedition_unlocks, "chapter result unlocks both earned frames")
+	check("site.brass_choir_relay" in expedition.state.unlocked_sites and "blessing.procession" in expedition.state.unlocked_blessings, "chapter result unlocks route and Procession")
+	check(expedition.record_run({"run_id": "chapter-149-brass"}).is_empty() and expedition.state.memory_fragments == 2, "chapter result recommit is idempotent")
 	var path = "user://profile_test.save"
 	check(profile.save_to(path), "profile saves")
 	var loaded = Profile.new()

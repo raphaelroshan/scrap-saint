@@ -33,23 +33,35 @@ func record_run(result: Dictionary) -> Array:
 	var unlocked: Array = []
 	var site_id = str(result.get("site_id", ""))
 	var won = bool(result.get("won", false))
-	if won and site_id != "" and site_id not in state.completed_sites:
-		state.completed_sites.append(site_id)
+	var completed_site_ids: Array = result.get("completed_site_ids", []).duplicate()
+	if won and site_id != "" and site_id not in completed_site_ids:
+		completed_site_ids.append(site_id)
+	for completed_site_id in completed_site_ids:
+		if completed_site_id in state.completed_sites: continue
+		state.completed_sites.append(completed_site_id)
 		state.memory_fragments += 1
 		for memory in definition.memories:
-			if memory.site_id == site_id and memory.id not in state.memories:
+			if memory.site_id == completed_site_id and memory.id not in state.memories:
 				state.memories.append(memory.id)
 				unlocked.append(memory.id)
+	for memory_id in result.get("memory_ids", []):
+		if memory_id not in state.memories:
+			state.memories.append(memory_id)
+			unlocked.append(memory_id)
 	for evolution_id in result.get("evolution_ids", []):
 		if evolution_id not in state.discovered_recipes:
 			state.discovered_recipes.append(evolution_id)
 			unlocked.append(evolution_id)
+	var defeated_boss_ids: Array = result.get("defeated_boss_ids", []).duplicate()
+	var boss_id = str(result.get("boss_id", ""))
+	if boss_id != "" and boss_id not in defeated_boss_ids:
+		defeated_boss_ids.append(boss_id)
 	var facts = {
 		"complete_optional_repair": int(result.get("optional_repairs", 0)) > 0,
-		"defeat_foreman": won and result.get("boss_id", "") == "boss.foreman_engine",
+		"defeat_foreman": "boss.foreman_engine" in defeated_boss_ids,
 		"choose_brass_route": result.get("route_id", "") == "route.brass_choir",
 		"choose_rootworks_route": result.get("route_id", "") == "route.rootworks",
-		"complete_destination": won and site_id in ["site.brass_choir_relay", "site.rootworks_pump"]
+		"complete_destination": completed_site_ids.any(func(id): return id in ["site.brass_choir_relay", "site.rootworks_pump"])
 	}
 	for rule in definition.unlocks:
 		if facts.get(rule.condition, false):
