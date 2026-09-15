@@ -139,3 +139,13 @@ All 761 focused Godot assertions pass on pinned Godot 4.5.1: acquisition92, aren
 All ten controlled-start Evolution policies complete full two-leg chapters at seed 147, covering every terminal family. `EVOLUTION_LEDGER.png` and `EVOLVED_GEOMETRIES_C.png` are configured 1280×800 captures rendered with Godot 4.5.1 stable, OpenGL compatibility on Apple M1 Pro. The Ledger fits ten recipes without clipping. The paired combat fixture shows the Parade's separate green/brass rings and four escorts alongside Lattice's blue triangular boundary without covering the objective or boss telegraphs. These prove executable presentation, not natural acquisition timing, human comprehension or final audio balance.
 
 Exactly one next task: run an uncoached 1× comparison of Maintenance Parade and Contrition Lattice, focusing on repair-extension comprehension and cable-edge readability.
+
+## P16 Gift decision breadth, 2026-09-16
+
+Seven data-owned Gifts now compete for two support slots. Loose Spring releases movement after completed work, Honest Scale previews purchase capacity and automatic Combine results, Choir Filter extends post-Quiet support suppression for reduced Hymn damage, and Brass Fuse trades Bell cadence for one wave-long Mark per site-wave. Conditional offer scopes prevent incompatible Filter/Fuse cards and exhausted repair cards from occupying the support role.
+
+All 842 focused Godot assertions pass on pinned Godot 4.5.1: acquisition94, arena27, assembly34, chapter131, development-speed7, Evolutions51, expedition-map36, flow-input51, frames/progression15, Gift-breadth74, optional17, profile19, relay18, roaming-quality49, save-flow46, settings14, shop25, simulation31, UI29, variety18 and weapon-ranks56. Thirty-one Python manifest/graph rejection checks pass with 25 items, seven Gifts, eight catalysts and ten Evolutions. The 12/12 normal-economy, 24/24 frame/Blessing/route, 4/4 assembly and 10/10 Evolution matrices remain green; four Gift-specific two-leg policies also win and exercise their causal rule.
+
+The configured `P16_HONEST_SCALE_SHOP`, `P16_SPRING_FUSE_COMBAT` and `P16_CHOIR_FILTER_RECOVERY` fixtures use Godot 4.5.1, 1280×800, seed 147 and the Compatibility renderer on Apple M1 Pro. They verify layout and state visibility, not uncoached decision quality or minimum-hardware performance.
+
+Exactly one next task: run uncoached 1× workshop sessions comparing the original three-Gift pool with the seven-Gift pool, then tune only observed card-comprehension and offer-quality failures.

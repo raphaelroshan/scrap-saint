@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "slice.first_shift",
-  "version": "0.4.0-preview",
+  "version": "0.5.0-preview",
   "tick_rate": 60,
   "wave_ticks": 4200,
   "wave_count": 8,
@@ -276,10 +276,27 @@
     "gift.black_ledger": {
       "short": "Black Ledger",
       "description": "Dismantle for less Scrap to guarantee one matching workshop lead."
+    },
+    "gift.loose_spring": {
+      "short": "Loose Spring",
+      "description": "Finish a repair to gain a 1.5-second movement burst; each repair winds it once."
+    },
+    "gift.honest_scale": {
+      "short": "Honest Scale",
+      "description": "Preview exact capacity and Combine results before buying; no combat benefit."
+    },
+    "gift.choir_filter": {
+      "short": "Choir Filter",
+      "description": "Quiet suppresses support recovery for 2 more seconds; beam damage falls 15%."
+    },
+    "gift.brass_fuse": {
+      "short": "Brass Fuse",
+      "description": "First Bell stagger each wave stays Marked for that wave; Bell cycles 15% slower."
     }
   },
   "gift_slots": 2,
   "gift_rules": {
+    "support_enemy_ids": ["enemy.choir_drone", "enemy.rust_pilgrim"],
     "inspection_properties": {
       "elite.memory_crane": "COPIES YOUR EVOLVED GEOMETRY",
       "boss.foreman_engine": "DEMOLITION CIRCLES / WORKER CALLS"

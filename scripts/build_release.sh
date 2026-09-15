@@ -53,6 +53,7 @@ done
 "$GODOT_BIN" --headless --path . --script tests/run_playthroughs.gd -- --optional --ea-matrix | tee -a "$OUTPUT_DIR/tests.log"
 "$GODOT_BIN" --headless --path . --script tests/run_assembly_playthroughs.gd | tee -a "$OUTPUT_DIR/tests.log"
 "$GODOT_BIN" --headless --path . --script tests/run_evolution_playthroughs.gd | tee -a "$OUTPUT_DIR/tests.log"
+"$GODOT_BIN" --headless --path . --script tests/run_gift_playthroughs.gd | tee -a "$OUTPUT_DIR/tests.log"
 
 # Godot can return zero after a script parse/load failure, so do not trust the
 # process status alone when certifying a release.

@@ -57,6 +57,23 @@ func run_checks():
 	game.build_ui()
 	var labels = game.ui.get_children().filter(func(child): return child is Button).map(func(child): return child.text)
 	check("EVOLUTION LEDGER · 10" in labels and "Dism." in labels, "shop exposes distinct Evolution and Gift management controls")
+	check(game.sim.config.gifts.size() == 7 and game.sim.config.gift_slots == 2, "shop presentation reads the seven-Gift pool while preserving two carried slots")
+	game.sim.state.gifts = ["gift.honest_scale"]
+	game.sim.state.weapons = [game.sim.make_weapon("weapon.nailer_small_mercies")]
+	game.sim.state.reserve = []
+	game.sim.state.scrap = 100
+	game.sim.state.offers[0] = "weapon.nailer_small_mercies"
+	var before_preview = game.sim.state_hash()
+	var scale_preview = game.honest_scale_preview_text(0)
+	check("2 ACTIVE" not in scale_preview and "1 ACTIVE" in scale_preview and "COMBINE Nailer II" in scale_preview, "Honest Scale renders exact capacity and automatic Combine result")
+	check(game.sim.state_hash() == before_preview, "rendering the Honest Scale preview cannot mutate the authoritative shop")
+	game.sim.state.tick = 50
+	game.sim.state.loose_spring_until = 110
+	game.sim.state.gifts = ["gift.loose_spring", "gift.brass_fuse"]
+	check(game.gift_activity_label("gift.loose_spring") == "BURST · 1.0s" and game.gift_activity_label("gift.brass_fuse") == "FUSE READY", "Gift HUD distinguishes active Spring timing from ready Fuse state")
+	game.sound.muted = true
+	game.present({"kind": "brass_fuse_lit", "gift": "gift.brass_fuse", "position": game.sim.state.position, "tick": game.sim.state.tick})
+	check(game.gift_fx_active("gift.brass_fuse") and "FIRST STAGGER MARKED" in game.notification, "Brass Fuse trigger receives a visible effect and plain-language notice")
 	for child in game.ui.get_children():
 		if child is Button and child.text == "EVOLUTION LEDGER · 10": child.pressed.emit(); break
 	labels = game.ui.get_children().filter(func(child): return child is Button).map(func(child): return child.text)

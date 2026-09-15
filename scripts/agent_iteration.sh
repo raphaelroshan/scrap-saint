@@ -3,6 +3,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 GODOT_BIN="${GODOT_BIN:-godot}"
 python3 scripts/validate_content.py
+python3 -m unittest tests/test_slice_manifest.py
 mkdir -p artifacts/agent-iteration
 "$GODOT_BIN" --headless --path . --script res://tests/test_relay.gd | tee artifacts/agent-iteration/relay.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_arena.gd | tee artifacts/agent-iteration/arena.log
@@ -20,9 +21,11 @@ mkdir -p artifacts/agent-iteration
 "$GODOT_BIN" --headless --path . --script res://tests/test_acquisition.gd | tee artifacts/agent-iteration/acquisition.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_evolutions.gd | tee artifacts/agent-iteration/evolutions.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_weapon_ranks.gd | tee artifacts/agent-iteration/weapon-ranks.log
+"$GODOT_BIN" --headless --path . --script res://tests/test_gift_breadth.gd | tee artifacts/agent-iteration/gift-breadth.log
 "$GODOT_BIN" --headless --path . --script res://tests/run_playthroughs.gd -- --optional | tee artifacts/agent-iteration/optional-playthroughs.log
 "$GODOT_BIN" --headless --path . --script res://tests/run_assembly_playthroughs.gd | tee artifacts/agent-iteration/assembly-playthroughs.log
 "$GODOT_BIN" --headless --path . --script res://tests/run_evolution_playthroughs.gd | tee artifacts/agent-iteration/evolution-playthroughs.log
+"$GODOT_BIN" --headless --path . --script res://tests/run_gift_playthroughs.gd | tee artifacts/agent-iteration/gift-playthroughs.log
 "$GODOT_BIN" --path . -- --capture-dir="$PWD/artifacts/agent-iteration" | tee artifacts/agent-iteration/capture.log
 "$GODOT_BIN" --path . --script res://tests/capture_chapter.gd -- --capture-dir="$PWD/artifacts/agent-iteration" | tee artifacts/agent-iteration/chapter-capture.log
 "$GODOT_BIN" --path . --script res://tests/capture_expedition_map.gd -- --capture-dir="$PWD/artifacts/agent-iteration" | tee artifacts/agent-iteration/expedition-map-capture.log
@@ -30,4 +33,5 @@ mkdir -p artifacts/agent-iteration
 "$GODOT_BIN" --path . --script res://tests/capture_assembly.gd | tee artifacts/agent-iteration/assembly-capture.log
 "$GODOT_BIN" --path . --script res://tests/capture_evolutions.gd | tee artifacts/agent-iteration/evolution-capture.log
 "$GODOT_BIN" --path . --script res://tests/capture_weapon_ranks.gd -- --capture-dir="$PWD/artifacts/agent-iteration" | tee artifacts/agent-iteration/weapon-rank-capture.log
+"$GODOT_BIN" --path . --script res://tests/capture_gift_breadth.gd | tee artifacts/agent-iteration/gift-breadth-capture.log
 python3 scripts/write_provenance.py "$GODOT_BIN"

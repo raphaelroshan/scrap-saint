@@ -311,6 +311,8 @@
       "effect_value": 1.25,
       "tradeoff": "movement_speed_multiplier_while_working",
       "tradeoff_value": 0.8,
+      "offer_scope": "unfinished_repair",
+      "compatible_weapon_ids": [],
       "stack_rule": "unique",
       "description": "Repairs finish 25% faster, but the Saint moves 20% slower inside an unfinished work circle."
     },
@@ -328,6 +330,8 @@
       "effect_value": 1,
       "tradeoff": "ordinary_scrap_pickup_tax",
       "tradeoff_value": 0.2,
+      "offer_scope": "always",
+      "compatible_weapon_ids": [],
       "stack_rule": "unique",
       "description": "Reveals the next elite rule and first priority target; every fifth ordinary Scrap is spent on inspection."
     },
@@ -338,15 +342,79 @@
       "tags": [
         "salvage",
         "shop",
-        "risk"
+        "risk",
+        "labour"
       ],
       "cost_scrap": 14,
       "effect": "dismantle_reveals_matching_shop_tag",
       "effect_value": 1,
       "tradeoff": "dismantle_refund_fraction",
       "tradeoff_value": 0.25,
+      "offer_scope": "always",
+      "compatible_weapon_ids": [],
       "stack_rule": "unique",
       "description": "Dismantling stamps a matching lead onto the workshop, but returns only 25% of the relic's Scrap value."
+    },
+    {
+      "id": "gift.loose_spring",
+      "kind": "gift",
+      "name": "Loose Spring",
+      "tags": ["repair", "movement", "risk"],
+      "cost_scrap": 14,
+      "effect": "repair_completion_movement_burst",
+      "effect_value": 1.35,
+      "duration_ticks": 90,
+      "tradeoff": "once_per_repair_source",
+      "tradeoff_value": 1,
+      "offer_scope": "unfinished_repair",
+      "compatible_weapon_ids": [],
+      "stack_rule": "unique",
+      "description": "Finishing a repair releases a 1.5-second movement burst. Each repaired machine can wind the spring only once."
+    },
+    {
+      "id": "gift.honest_scale",
+      "kind": "gift",
+      "name": "Honest Scale",
+      "tags": ["shop", "labour", "information", "combine"],
+      "cost_scrap": 12,
+      "effect": "shop_post_purchase_preview",
+      "effect_value": 1,
+      "tradeoff": "no_direct_combat_effect",
+      "tradeoff_value": 1,
+      "offer_scope": "always",
+      "compatible_weapon_ids": [],
+      "stack_rule": "unique",
+      "description": "Workshop cards show exact post-purchase capacity and automatic Combine results. It grants no combat benefit."
+    },
+    {
+      "id": "gift.choir_filter",
+      "kind": "gift",
+      "name": "Choir Filter",
+      "tags": ["silence", "mourn", "control"],
+      "cost_scrap": 15,
+      "effect": "quiet_support_recovery_lockout",
+      "effect_value": 120,
+      "tradeoff": "beam_silence_damage_multiplier",
+      "tradeoff_value": 0.85,
+      "offer_scope": "compatible_weapon",
+      "compatible_weapon_ids": ["weapon.hymn_coil"],
+      "stack_rule": "unique",
+      "description": "Quieted support machines stay suppressed for 2 seconds after Quiet ends, but beam and silence damage falls 15%."
+    },
+    {
+      "id": "gift.brass_fuse",
+      "kind": "gift",
+      "name": "Brass Fuse",
+      "tags": ["witness", "bell", "control"],
+      "cost_scrap": 15,
+      "effect": "first_bell_stagger_marks",
+      "effect_value": 180,
+      "tradeoff": "bell_cooldown_multiplier",
+      "tradeoff_value": 1.15,
+      "offer_scope": "compatible_weapon",
+      "compatible_weapon_ids": ["weapon.bell_last_shift"],
+      "stack_rule": "unique",
+      "description": "The first machine staggered by a Bell each wave stays Marked for that wave, but Bell mechanisms cycle 15% slower."
     }
   ],
   "evolutions": [

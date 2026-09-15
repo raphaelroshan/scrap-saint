@@ -1,4 +1,4 @@
-# First Shift runtime — 0.3.0 preview
+# First Shift runtime — 0.5.0 preview
 
 The project now contains a runnable Godot 4.5.1 desktop prototype. This is the first implementation, not a finished creative vertical. `content/slices/first_shift.json` is the authoritative enabled catalogue and tuning source; the larger catalogues also contain future concepts.
 
@@ -6,7 +6,7 @@ The project now contains a runnable Godot 4.5.1 desktop prototype. This is the f
 
 - A title screen, five-page field manual, three selectable Saint frames, persistent accessibility/settings controls, save/resume and profile unlocks.
 - Eight 70-second Workshop waves, followed by two selectable road legs, a four-wave mid-site and a three-wave terminal site. Each road has two unskippable authored decisions; shop, map and travel reading time is paused.
-- Four Blessings, ten automatic weapons with authored Rank II and Rank III behavior, eight catalysts, ten visible evolutions, four active slots, one reserve and two run-local Gift slots.
+- Four Blessings, ten automatic weapons with authored Rank II and Rank III behavior, eight catalysts, ten visible evolutions, four active slots, one reserve and seven run-local Gifts competing for two Gift slots.
 - Movement, three optional repair machines, pickups, seven ordinary enemy families, an elite and six distinct phased destination bosses. Relay defence remains a development comparison.
 - Purchases, automatic duplicate combining, explicit combine, sell/dismantle, reserve/equip, offer lock and one free/two paid refreshes.
 - Ten Rank III plus catalyst Evolutions with distinct geometry, target, control, repair or resource behaviour. Catalysts are consumed atomically, and every encounter supports unevolved runs.
@@ -68,6 +68,16 @@ Cable of Contrition Rank III plus Blue Wire from the Pump now becomes **Contriti
 Both forms use stable per-weapon Evolution IDs, survive version-3 save/restore, appear in the ten-entry Ledger and Results, and expose authored geometry/behaviour to the Archivist Prime copy. Ten controlled-start Evolution policies complete full two-leg chapters. Configured 1280×800 fixtures under `artifacts/evolutions` show the complete Ledger and the two new forms together at seed 147 on Godot 4.5.1; they are not human playtests.
 
 Exactly one next task: uncoached 1× comparison of the ten Evolution choices, focusing on Parade extension comprehension and Lattice edge readability.
+
+## P16 — Gift decision breadth
+
+The two support slots now draw from seven unique, rankless Gifts. **Loose Spring** turns each completed repair into one 90-tick movement release. **Honest Scale** previews exact post-purchase active/reserve capacity, rejection and automatic Combine results without mutating the shop. **Choir Filter** extends suppression of Choir and repair support after Quiet ends while reducing Hymn Coil and Quiet Sermon damage by 15%. **Brass Fuse** keeps the first Bell or Great Toll target Marked through its site-wave while making Bell mechanisms cycle 15% slower.
+
+Gift offers are now filtered by their authored scope: repair Gifts require unfinished work, Choir Filter requires Hymn Coil, Brass Fuse requires Last Shift Bell, and broad information/economy Gifts remain generally available. The simulation owns all timers, one-use keys, status recovery, purchase projection and causal metrics. Results snapshot ordered Gift IDs and activation counts; selling an attachment clears carried-only presentation state without undoing an already-applied enemy status.
+
+Current integrated evidence passes 842 Godot assertions plus thirty-one Python manifest checks on Godot 4.5.1. The normal-economy matrix wins 12/12, the three-frame × four-Blessing × two-first-route matrix wins 24/24, all four assembly paths and all ten Evolution paths remain complete, and all four Gift-specific two-leg policies win and exercise their rule. Configured 1280×800 fixtures cover the Honest Scale shop, Spring/Fuse combat and Choir Filter recovery; these are not human playtests.
+
+Exactly one next task: run uncoached 1× workshop sessions comparing the original three-Gift pool with the seven-Gift pool, then tune only observed card-comprehension and offer-quality failures.
 
 
 ## SC-02 — authored Collapsed Workshop

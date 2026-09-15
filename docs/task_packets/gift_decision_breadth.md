@@ -32,7 +32,7 @@ Let the Saint choose between seven legible run-local support rules, adding four 
 - **Loose Spring:** completing a repair gives a 90-tick movement burst; one trigger per completed machine or objective node.
 - **Honest Scale:** shop cards preview the exact post-purchase active/reserve count and any automatic Combine result; it grants no combat power.
 - **Choir Filter:** Quieted support enemies remain unable to use support actions for a short recovery window; Hymn Coil and Quiet Sermon deal less direct damage while carried.
-- **Brass Fuse:** the first enemy staggered by Bell or Great Toll each wave becomes Marked; Bell mechanisms cycle more slowly.
+- **Brass Fuse:** the first enemy staggered by Bell or Great Toll each wave stays Marked for that wave; Bell mechanisms cycle more slowly.
 
 ## Non-goals
 

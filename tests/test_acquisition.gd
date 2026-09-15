@@ -115,10 +115,14 @@ func _initialize():
 			if target in acquired_gifts: break
 			var s = Sim.new()
 			s.start(0, seed_value, "optional")
+			var compatible = s.catalogue[target].get("compatible_weapon_ids", [])
+			if not compatible.is_empty() and not (s.state.weapons + s.state.reserve).any(func(w): return w.id == compatible[0]):
+				s.state.weapons.append(s.make_weapon(compatible[0]))
 			for visit_index in range(1, 8):
 				visit(s)
 				for slot in [2, 3]:
 					if s.state.offers[slot] == target:
+						check(s.gift_offer_eligible(target), "%s is actionable when offered" % target)
 						if s.command("buy", slot) == "OK": acquired_gifts[target] = true
 						break
 					if s.state.offers[slot] in s.config.catalysts and s.catalogue[s.state.offers[slot]].cost_relic_shards <= s.state.shards:
@@ -131,7 +135,7 @@ func _initialize():
 						break
 				if target in acquired_gifts: break
 				s.command("continue")
-	check(acquired_gifts.size() == 3, "all three Gifts are discoverable and affordable through deterministic shop flow")
+	check(acquired_gifts.size() == Sim.new().config.gifts.size(), "all seven Gifts are discoverable and affordable through deterministic shop flow")
 
 	# Every recipe's named catalyst appears in the generated Evolution Path role once its base reaches Rank III.
 	for recipe_id in Sim.new().config.evolutions:

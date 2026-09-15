@@ -221,7 +221,8 @@ func load_run():
 
 func present(event):
 	var e = event.duplicate(true)
-	e.expires = Time.get_ticks_msec() + (480 if e.kind in ["repair", "death", "blast"] else 230)
+	var gift_id = gift_event_id(e)
+	e.expires = Time.get_ticks_msec() + (900 if gift_id != "" else (480 if e.kind in ["repair", "death", "blast"] else 230))
 	if fx.size() < (60 if reduced_fx else 160): fx.append(e)
 	if e.kind == "machine_restored":
 		notification = "RESTORED / " + e.reward
@@ -235,8 +236,27 @@ func present(event):
 	if e.kind == "boss_contract":
 		notification = str(e.phase_name) + " / " + str(e.rule).replace("_", " ").to_upper()
 		notice_until = Time.get_ticks_msec() + 2600
+	if gift_id != "":
+		var gift_name = sim.config.gifts.get(gift_id, {}).get("short", gift_id.trim_prefix("gift.").replace("_", " ").capitalize())
+		var cue = {
+			"gift.loose_spring": "RELEASED / MOVE",
+			"gift.choir_filter": "SUPPORT HELD QUIET",
+			"gift.brass_fuse": "FIRST STAGGER MARKED",
+		}.get(gift_id, "RULE ACTIVE")
+		notification = "%s / %s" % [str(gift_name).to_upper(), cue]
+		notice_until = Time.get_ticks_msec() + 1800
 	if e.kind == "attack": sound.play(e.shape)
 	elif e.kind in ["hurt", "relay_hurt", "repair", "pickup"]: sound.play(e.kind)
+	elif gift_id != "": sound.play("pickup")
+
+func gift_event_id(event: Dictionary) -> String:
+	var explicit = str(event.get("gift", event.get("gift_id", "")))
+	if explicit != "": return explicit
+	return {
+		"loose_spring_released": "gift.loose_spring",
+		"choir_filter_blocked": "gift.choir_filter",
+		"brass_fuse_lit": "gift.brass_fuse",
+	}.get(str(event.get("kind", "")), "")
 
 func button(label: String, rect: Rect2, callback: Callable, primary = false):
 	var b = Button.new()
@@ -341,8 +361,8 @@ func build_ui():
 				var row = int(i / 3)
 				var x = 94 + col * 302
 				var y = 208 + row * 192
-				button("BUY / COMBINE" if i < 2 else "ACQUIRE", Rect2(x + 14, y + 129, 182, 32), func(): act("buy", i))
-				button("◆" if sim.state.locked == sim.state.offers[i] and sim.state.offers[i] != "" else "Lock", Rect2(x + 205, y + 129, 66, 32), func(): act("lock", i))
+				button("BUY / COMBINE" if i < 2 else "ACQUIRE", Rect2(x + 14, y + 142, 182, 28), func(): act("buy", i))
+				button("◆" if sim.state.locked == sim.state.offers[i] and sim.state.offers[i] != "" else "Lock", Rect2(x + 205, y + 142, 66, 28), func(): act("lock", i))
 			var costs = sim.config.economy.reroll_costs
 			var refresh = "No refreshes left" if sim.state.rerolls >= costs.size() else ("Refresh · FREE" if costs[sim.state.rerolls] == 0 else "Refresh · %d Scrap" % costs[sim.state.rerolls])
 			button(refresh, Rect2(108, 613, 220, 40), func(): act("reroll"))
@@ -355,8 +375,8 @@ func build_ui():
 				button("Dism.", Rect2(1118, 243 + i * 79, 59, 26), func(): act("dismantle", i))
 				button("Store", Rect2(1183, 243 + i * 79, 65, 26), func(): act("reserve", i))
 			for i in range(sim.state.gifts.size()):
-				button("Sell", Rect2(1152, 665 + i * 30, 45, 24), func(): act("sell_gift", i))
-				button("Dism.", Rect2(1201, 665 + i * 30, 47, 24), func(): act("dismantle_gift", i))
+				button("Sell", Rect2(1068, 674 + i * 40, 78, 23), func(): act("sell_gift", i))
+				button("Dism.", Rect2(1151, 674 + i * 40, 81, 23), func(): act("dismantle_gift", i))
 	elif sim.state.phase in ["won", "lost"]:
 		button("RETURN TO THE WORKSHOP", Rect2(410, 655, 460, 44), func(): screen = "menu"; build_ui(), true).grab_focus()
 	elif sim.state.paused:
@@ -954,8 +974,39 @@ func draw_saint(p: Vector2, direction: Vector2, size_factor = 1.0):
 	if screen == "game" and sim.has_gift("gift.black_ledger"):
 		draw_rect(Rect2(13, 4, 10, 14), Color("17171b"))
 		draw_line(Vector2(16, 7), Vector2(21, 7), GOLD, 1)
+	if screen == "game" and sim.has_gift("gift.loose_spring"):
+		var spring_active = int(sim.state.get("loose_spring_until", 0)) > int(sim.state.tick)
+		var spring_color = GREEN if spring_active else Color("b99158")
+		var spring_points = PackedVector2Array([Vector2(-21, -2), Vector2(-13, 2), Vector2(-21, 7), Vector2(-13, 12), Vector2(-21, 18), Vector2(-14, 22)])
+		draw_polyline(spring_points, spring_color, 3 if spring_active else 2, true)
+		if spring_active:
+			for lane in [-1, 1]: draw_line(Vector2(lane * 13, 26), Vector2(lane * 20, 38), Color(0.56, 0.86, 0.72, 0.7), 2)
+	if screen == "game" and sim.has_gift("gift.honest_scale"):
+		var scale_tip = 0.22 if sim.state.phase == "shop" else 0.0
+		var scale_center = Vector2(-30, -10)
+		var scale_axis = Vector2.from_angle(scale_tip)
+		draw_line(scale_center + Vector2(0, -8), scale_center, Color("b99158"), 2)
+		draw_line(scale_center - scale_axis * 9, scale_center + scale_axis * 9, GOLD, 2)
+		for side in [-1, 1]:
+			var pan_anchor = scale_center + scale_axis * 9 * side
+			draw_line(pan_anchor, pan_anchor + Vector2(0, 6), Color("b99158"), 1)
+			draw_arc(pan_anchor + Vector2(0, 7), 4, 0, PI, 8, GOLD, 1)
+	if screen == "game" and sim.has_gift("gift.choir_filter"):
+		var filter_active = sim.state.enemies.any(func(enemy): return int(enemy.get("support_lock_until", 0)) > int(sim.state.tick))
+		var filter_color = Color("bdeff0") if filter_active else Color("b99158")
+		draw_arc(Vector2(3, -9), 8, -PI / 2, PI / 2, 10, filter_color, 3)
+		for hole_y in [-13, -9, -5]: draw_circle(Vector2(7, hole_y), 1.1, INK)
+	if screen == "game" and sim.has_gift("gift.brass_fuse"):
+		var fuse_lit = gift_fx_active("gift.brass_fuse")
+		var fuse_color = Color("ffd06b") if fuse_lit else Color("8e6f45")
+		var fuse_points = PackedVector2Array([Vector2(5, -18), Vector2(12, -25), Vector2(20, -22), Vector2(25, -28)])
+		draw_polyline(fuse_points, fuse_color, 3 if fuse_lit else 2, true)
+		draw_circle(Vector2(25, -28), 4 if fuse_lit else 2, Color("ffd06b") if fuse_lit else Color("574b3b"))
 	for bolt in [Vector2(-10, -15), Vector2(10, -15), Vector2(-10, 10), Vector2(10, 10)]: draw_circle(bolt, 1.4, PAPER)
 	draw_set_transform(camera_offset)
+
+func gift_fx_active(gift_id: String) -> bool:
+	return fx.any(func(effect): return gift_event_id(effect) == gift_id)
 
 func draw_ellipse_shadow(p: Vector2, radii: Vector2):
 	# Local circle shadow keeps the silhouette readable without physics ownership.
@@ -971,8 +1022,9 @@ func draw_enemy(e):
 		draw_rect(Rect2(p - Vector2(17, 12), Vector2(34, 24)), INK)
 		for i in range(3): draw_circle(p + Vector2(-10 + i * 10, 0), 3, RED)
 	elif e.type == "enemy.choir_drone":
-		draw_circle(p, sim.config.enemy_rules.drone_field_radius, Color(0.6, 0.5, 0.8, 0.035))
-		draw_arc(p, sim.config.enemy_rules.drone_field_radius, 0, TAU, 40, Color(0.6, 0.5, 0.8, 0.15), 1)
+		if sim.enemy_support_ready(e):
+			draw_circle(p, sim.config.enemy_rules.drone_field_radius, Color(0.6, 0.5, 0.8, 0.035))
+			draw_arc(p, sim.config.enemy_rules.drone_field_radius, 0, TAU, 40, Color(0.6, 0.5, 0.8, 0.15), 1)
 		draw_colored_polygon(PackedVector2Array([p + Vector2(0, -22), p + Vector2(19, 8), p + Vector2(0, 18), p + Vector2(-19, 8)]), color)
 		draw_circle(p, 9, INK)
 		draw_arc(p, 29, sim.state.tick * 0.03, sim.state.tick * 0.03 + PI, 20, color, 1.5)
@@ -1013,6 +1065,11 @@ func draw_enemy(e):
 	if e.get("quieted", 0) > sim.state.tick:
 		draw_arc(p, e.radius + 11, -PI * 0.75, PI * 0.75, 22, Color("8edce0"), 2)
 		draw_line(p + Vector2(-7, -e.radius - 14), p + Vector2(7, -e.radius - 14), Color("8edce0"), 2)
+	elif e.get("support_lock_until", 0) > sim.state.tick:
+		draw_arc(p, e.radius + 11, -PI * 0.72, PI * 0.72, 22, Color("8edce0"), 2)
+		draw_line(p + Vector2(-7, -e.radius - 15), p + Vector2(7, -e.radius - 9), Color("8edce0"), 2)
+		draw_line(p + Vector2(7, -e.radius - 15), p + Vector2(-7, -e.radius - 9), Color("8edce0"), 2)
+		text_at("FILTERED", p + Vector2(-24, -e.radius - 21), 8, Color("8edce0"))
 	if e.get("inspected", false):
 		draw_arc(p, e.radius + 14, 0, TAU, 28, Color("8edce0"), 2)
 		text_at("PRIORITY", p + Vector2(-25, -e.radius - 19), 9, Color("8edce0"))
@@ -1024,9 +1081,29 @@ func draw_enemy(e):
 	if e.hp < e.max_hp: bar(Rect2(p + Vector2(-15, -e.radius - 9), Vector2(30, 3)), e.hp / e.max_hp, color)
 
 func draw_effect(e):
-	var fade = clampf(float(e.expires - Time.get_ticks_msec()) / 230, 0, 1)
+	var gift_id = gift_event_id(e)
+	var fade = clampf(float(e.expires - Time.get_ticks_msec()) / (900.0 if gift_id != "" else 230.0), 0, 1)
 	var color = Color(e.get("color", "e9dec2"))
 	color.a = fade
+	if gift_id != "":
+		var position = e.get("position", sim.state.position)
+		if not position is Vector2: position = sim.state.position
+		match gift_id:
+			"gift.loose_spring":
+				for i in range(3):
+					var offset = Vector2(-24 + i * 12, 18 - i * 5)
+					draw_line(position + offset, position + offset + Vector2(-16, 8), Color(0.56, 0.86, 0.72, fade), 3, true)
+				draw_arc(position, 28 + (1.0 - fade) * 14, -PI * 0.1, PI * 1.1, 24, Color(0.56, 0.86, 0.72, fade), 2)
+			"gift.choir_filter":
+				draw_arc(position, 30 + (1.0 - fade) * 8, -PI * 0.72, PI * 0.72, 24, Color(0.56, 0.86, 0.88, fade), 3)
+				draw_line(position + Vector2(-9, -10), position + Vector2(9, 10), Color(0.74, 0.94, 0.95, fade), 3)
+				draw_line(position + Vector2(9, -10), position + Vector2(-9, 10), Color(0.74, 0.94, 0.95, fade), 3)
+			"gift.brass_fuse":
+				draw_line(sim.state.position, position, Color(1.0, 0.69, 0.25, fade * 0.5), 2, true)
+				for i in range(6):
+					var spark = Vector2.from_angle(i * TAU / 6.0 + e.tick) * (8 + (1.0 - fade) * 12)
+					draw_line(position + spark * 0.55, position + spark, Color(1.0, 0.75, 0.35, fade), 2)
+		return
 	match e.kind:
 		"attack":
 			match e.shape:
@@ -1130,13 +1207,36 @@ func draw_loadout():
 	text_at("RESERVE", Vector2(1068, 539), 11, GOLD)
 	if not sim.state.reserve.is_empty(): text_at(sim.config.weapons[sim.state.reserve[0].id].short, Vector2(1068, 558), 12)
 	else: text_at("One open place", Vector2(1068, 558), 12, MUTED)
-	var gifts_y = 658 if sim.state.phase == "shop" else 589
+	var gifts_y = 638 if sim.state.phase == "shop" else 589
 	text_at("GIFTS  %d / %d" % [sim.state.gifts.size(), sim.config.gift_slots], Vector2(1068, gifts_y), 11, GOLD)
-	for i in range(sim.state.gifts.size()): text_at(sim.config.gifts[sim.state.gifts[i]].short, Vector2(1068, gifts_y + 23 + i * 30), 10, Color("8edce0"))
+	for i in range(sim.state.gifts.size()):
+		var gift_id = str(sim.state.gifts[i])
+		var line_y = gifts_y + 21 + i * (40 if sim.state.phase == "shop" else 29)
+		text_at(sim.config.gifts[gift_id].short, Vector2(1068, line_y), 10, Color("8edce0"))
+		if sim.state.phase != "shop": text_at(gift_activity_label(gift_id), Vector2(1068, line_y + 12), 8, gift_activity_color(gift_id))
 	if sim.state.phase != "shop":
-		text_at("DOCTRINE / " + ("FULFILLED" if sim.state.fulfilled else "TAKING SHAPE"), Vector2(1068, 664), 10, GOLD)
-		if sim.state.inspection != "": wrapped("LENS / " + sim.state.inspection, Vector2(1068, 683), 170, 9, Color("8edce0"))
-		else: text_at("%d machines laid to rest" % sim.state.kills, Vector2(1068, 686), 10, MUTED)
+		text_at("DOCTRINE / " + ("FULFILLED" if sim.state.fulfilled else "TAKING SHAPE"), Vector2(1068, 674), 10, GOLD)
+		if sim.state.inspection != "": wrapped("LENS / " + sim.state.inspection, Vector2(1068, 691), 170, 9, Color("8edce0"))
+		else: text_at("%d machines laid to rest" % sim.state.kills, Vector2(1068, 695), 10, MUTED)
+
+func gift_activity_label(gift_id: String) -> String:
+	match gift_id:
+		"gift.loose_spring":
+			var remaining = maxi(0, int(sim.state.get("loose_spring_until", 0)) - int(sim.state.tick))
+			return "BURST · %.1fs" % (float(remaining) / float(sim.config.tick_rate)) if remaining > 0 else "WINDS ON REPAIR"
+		"gift.honest_scale": return "READING OFFERS" if sim.state.phase == "shop" else "WORKSHOP TOOL"
+		"gift.choir_filter":
+			var held = sim.state.enemies.any(func(enemy): return int(enemy.get("support_lock_until", 0)) > int(sim.state.tick))
+			return "SUPPORT HELD" if held else "FILTER READY"
+		"gift.brass_fuse":
+			return "FUSE SPENT" if str(sim.state.get("brass_fuse_segment", "")) == sim.site_wave_key() else "FUSE READY"
+	return "CARRIED"
+
+func gift_activity_color(gift_id: String) -> Color:
+	if gift_id == "gift.loose_spring" and int(sim.state.get("loose_spring_until", 0)) > int(sim.state.tick): return GREEN
+	if gift_id == "gift.choir_filter" and sim.state.enemies.any(func(enemy): return int(enemy.get("support_lock_until", 0)) > int(sim.state.tick)): return Color("8edce0")
+	if gift_id == "gift.brass_fuse" and str(sim.state.get("brass_fuse_segment", "")) != sim.site_wave_key(): return GOLD
+	return MUTED
 
 func wrapped(value: String, p: Vector2, width: float, size = 14, color = MUTED):
 	var line = ""
@@ -1149,6 +1249,46 @@ func wrapped(value: String, p: Vector2, width: float, size = 14, color = MUTED):
 			row += 1
 		else: line = proposed
 	if line != "": text_at(line, p + Vector2(0, row * 20), size, color)
+
+func wrapped_limited(value: String, p: Vector2, width: float, size: int, color: Color, max_rows: int, line_height: int):
+	var words = value.split(" ")
+	var line = ""
+	var row = 0
+	for index in range(words.size()):
+		var word = words[index]
+		var proposed = line + (" " if line != "" else "") + word
+		if font.get_string_size(proposed, HORIZONTAL_ALIGNMENT_LEFT, -1, int(size * ui_scale)).x <= width or line == "":
+			line = proposed
+			continue
+		text_at(line, p + Vector2(0, row * line_height), size, color)
+		row += 1
+		if row >= max_rows:
+			return
+		line = word
+		if row == max_rows - 1 and index < words.size() - 1:
+			while font.get_string_size(line + "…", HORIZONTAL_ALIGNMENT_LEFT, -1, int(size * ui_scale)).x > width and line.length() > 1:
+				line = line.substr(0, line.length() - 1)
+			text_at(line + "…", p + Vector2(0, row * line_height), size, color)
+			return
+	if line != "" and row < max_rows: text_at(line, p + Vector2(0, row * line_height), size, color)
+
+func honest_scale_preview_text(index: int) -> String:
+	if not sim.has_gift("gift.honest_scale") or not sim.has_method("purchase_preview"): return ""
+	var preview = sim.purchase_preview(index)
+	if not preview is Dictionary or preview.is_empty(): return ""
+	var result = str(preview.get("result", preview.get("result_code", "INVALID_OFFER")))
+	if result != "OK": return "AFTER / " + result.replace("_", " ")
+	var active = int(preview.get("active_count", preview.get("active", sim.state.weapons.size())))
+	var reserve = int(preview.get("reserve_count", preview.get("reserve", sim.state.reserve.size())))
+	var summary = "AFTER / %d ACTIVE · %d RESERVE" % [active, reserve]
+	var combines = preview.get("combines", preview.get("combine_results", []))
+	if combines is Array and not combines.is_empty():
+		var combined = combines.back()
+		var weapon_id = str(combined.get("weapon_id", combined.get("weapon", combined.get("id", "")))) if combined is Dictionary else ""
+		var rank = int(combined.get("rank", 0)) if combined is Dictionary else 0
+		var weapon_name = sim.config.weapons.get(weapon_id, {}).get("short", weapon_id)
+		summary += " · COMBINE %s %s" % [weapon_name, ["", "I", "II", "III"][clampi(rank, 0, 3)]]
+	return summary
 
 func draw_shop():
 	draw_rect(Rect2(60, 148, 980, 588), Color("14272b"))
@@ -1196,8 +1336,10 @@ func draw_shop():
 		text_at(sim.config.shop_rules.roles[i] + (" / LOCKED" if sim.state.locked == id else ""), Vector2(x + 16, y + 16), 9, MUTED)
 		text_at(price, Vector2(x + 16, y + 33), 10, GOLD)
 		text_at(name_text, Vector2(x + 16, y + 60), 19, PAPER, true)
-		wrapped(description, Vector2(x + 16, y + 82), 252, 12)
-	text_at("Combine raises rank. Evolution consumes one catalyst. Gifts occupy two separate slots.", Vector2(108, 685), 13, MUTED)
+		wrapped_limited(description, Vector2(x + 16, y + 80), 252, 10, MUTED, 3, 14)
+		var preview_text = honest_scale_preview_text(i)
+		if preview_text != "": text_at(preview_text, Vector2(x + 16, y + 125), 9, GREEN if sim.purchase_preview(i).get("result", "") == "OK" else RED)
+	text_at("Gifts are unique support rules · seven designs · carry two.", Vector2(108, 685), 13, MUTED)
 	text_at("Open the Evolution Ledger to inspect every recipe, ingredient and readiness state.", Vector2(108, 714), 11, GOLD)
 
 func draw_evolution_ledger():
@@ -1231,7 +1373,15 @@ func draw_results():
 	var top_name = sim.config.weapons[top].short if top in sim.config.weapons else "No relic recorded"
 	text_at("MOST WORK  %s · %d damage" % [top_name, int(summary.get("top_weapon_damage", 0))], Vector2(220, 440), 14, GOLD)
 	text_at("BLESSING  %s     EVOLUTION  %s" % ["FULFILLED" if summary.get("blessing_fulfilled", false) else "UNFULFILLED", str(summary.get("evolution", "")).replace("_", " ")], Vector2(220, 469), 13, MUTED)
-	text_at("GIFTS  " + ("NONE" if sim.state.gifts.is_empty() else ", ".join(sim.state.gifts.map(func(id): return sim.config.gifts[id].short))), Vector2(220, 492), 12, Color("8edce0"))
+	var result_gift_ids = summary.get("gift_ids", sim.state.gifts)
+	var gift_line = "GIFTS  " + ("NONE" if result_gift_ids.is_empty() else ", ".join(result_gift_ids.map(func(id): return sim.config.gifts[id].short)))
+	var gift_metrics = summary.get("gift_metrics", {})
+	var gift_actions: Array[String] = []
+	if int(gift_metrics.get("loose_spring_triggers", 0)) > 0: gift_actions.append("spring %d" % int(gift_metrics.loose_spring_triggers))
+	if int(gift_metrics.get("choir_filter_applications", 0)) > 0: gift_actions.append("filter %d" % int(gift_metrics.choir_filter_applications))
+	if int(gift_metrics.get("brass_fuse_triggers", 0)) > 0: gift_actions.append("fuse %d" % int(gift_metrics.brass_fuse_triggers))
+	if not gift_actions.is_empty(): gift_line += " · " + " · ".join(gift_actions)
+	text_at(gift_line, Vector2(220, 492), 12, Color("8edce0"))
 	var road = summary.get("road_totals", {})
 	if not summary.get("road_history", []).is_empty():
 		text_at("ROAD  %d decisions · %+d Scrap · %+d Structure" % [summary.road_history.size(), int(road.get("scrap_delta", 0)), int(road.get("structure_delta", 0))], Vector2(220, 515), 12, GREEN)
