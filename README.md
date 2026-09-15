@@ -15,7 +15,7 @@ For faster development, use **Play Scrap Saint 5x Dev.cmd**. Combat runs at 5× 
 - **Optional repairs is the main game.** The 5x development launcher retains the relay-defence comparison toggle. New runs use the displayed seed; change it on the title screen. Existing saves retain their mode.
 - WASD or arrows: move; weapons attack automatically. In Optional repairs, short repairs reward Scrap, healing or a stagger pulse. Machines cannot be destroyed and repairs are never required to win. In Relay defence, stay near the relay to repair it and keep it alive.
 - Escape: pause; F5: save; F9: load; M: mute; F3: diagnostic overlay.
-- Between waves: buy/combine, sell, store, equip, lock and refresh. Mercy Rail is optional.
+- Between waves: buy/combine, sell, store, equip, lock and refresh. Every weapon gains named behavior at Rank II and Rank III; Evolutions such as Mercy Rail remain optional.
 - Defeating the Foreman opens Brass Choir Relay and Rootworks Pump. Their memories open a second choice: Brass leads to Pale Archive or Red Foundry; Rootworks leads to Red Foundry or Null Assembly. The build, economy and Blessing persist through all three sites.
 - Controller: left stick movement, standard UI navigation/accept, Start to pause.
 
@@ -83,7 +83,7 @@ The transformation must change attack geometry, target rules, area control, obje
 
 ## Scope and quality bar
 
-The current early-access preview is a complete first-chapter vertical: three Saint frames, four Blessings, ten base weapons, seven catalysts, three run-local Gifts, eight visible Evolutions, a Workshop plus five destination sites, seven enemy families, an elite and six bosses. Runs carry their build and economy through a mid-site and one of three terminal objectives, bosses and Memories across four authored route chains. Combine, Evolution, and future Confluence recipes remain separate systems; no Confluence is enabled.
+The current early-access preview is a complete first-chapter vertical: three Saint frames, four Blessings, ten base weapons, eight catalysts, three run-local Gifts, ten visible Evolutions, a Workshop plus five destination sites, seven enemy families, an elite and six bosses. Runs carry their build and economy through a mid-site and one of three terminal objectives, bosses and Memories across four authored route chains. Combine, Evolution, and future Confluence recipes remain separate systems; no Confluence is enabled.
 
 The project is not complete when the content validator passes. Game quality requires a running build, readable combat, visible build transformation, causal Results, exact screenshot provenance, and evidence-led iteration. Technical tests establish simulation correctness; screenshots establish presentation evidence; neither is a substitute for the other.
 

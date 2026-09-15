@@ -53,7 +53,9 @@
       "cost_scrap": 16,
       "base_effect": "contact_damage_and_minor_knockback",
       "secondary_effect": "consecrate_after_elite_hit",
-      "evolution_ids": [],
+      "evolution_ids": [
+        "evolution.maintenance_parade"
+      ],
       "description": "A salvaged gear that follows the Saint like a solemn acolyte."
     },
     {
@@ -89,7 +91,9 @@
       "cost_scrap": 17,
       "base_effect": "bind_and_pull",
       "secondary_effect": "share_scoured_damage_along_line",
-      "evolution_ids": [],
+      "evolution_ids": [
+        "evolution.contrition_lattice"
+      ],
       "description": "A maintenance cable with a hooked sacramental plate."
     },
     {
@@ -151,7 +155,7 @@
       "evolution_ids": [
         "evolution.ashen_benediction"
       ],
-      "description": "A soot-black censer that slows close threats and remembers every third defeat as Scrap."
+      "description": "A soot-black censer that slows close threats and remembers repeated defeats as Scrap."
     },
     {
       "id": "weapon.penance_winch",
@@ -272,8 +276,17 @@
       "name": "Blue Wire from the Pump",
       "tags": ["tether", "repair", "catalyst"],
       "cost_relic_shards": 2,
-      "compatible_evolution_ids": ["evolution.long_hand"],
+      "compatible_evolution_ids": ["evolution.long_hand", "evolution.contrition_lattice"],
       "description": "A measured length of pump wire that remembers the safest route through pressure."
+    },
+    {
+      "id": "catalyst.pilgrim_spindle",
+      "kind": "catalyst",
+      "name": "Pilgrim Spindle",
+      "tags": ["procession", "orbit", "catalyst"],
+      "cost_relic_shards": 2,
+      "compatible_evolution_ids": ["evolution.maintenance_parade"],
+      "description": "A walking spindle wound with faded maintenance flags and the measured pace of a long road."
     },
     {
       "id": "catalyst.folded_maintenance_blueprint",
@@ -424,6 +437,26 @@
       "result_geometry": "blast_or_consecrated_repair_zone",
       "result_effects": ["cluster_blast", "objective_repair", "consecrated"],
       "transformation_event": "evolution.workshop_benediction_triggered"
+    },
+    {
+      "id": "evolution.maintenance_parade",
+      "name": "The Maintenance Parade",
+      "base_item_id": "weapon.procession_gear",
+      "required_rank": 3,
+      "required_catalyst_id": "catalyst.pilgrim_spindle",
+      "result_geometry": "dual_offset_escort_rings",
+      "result_effects": ["dual_contact", "counter_rotation", "repair_extends_outer_ring"],
+      "transformation_event": "evolution.maintenance_parade_triggered"
+    },
+    {
+      "id": "evolution.contrition_lattice",
+      "name": "Contrition Lattice",
+      "base_item_id": "weapon.cable_contrition",
+      "required_rank": 3,
+      "required_catalyst_id": "catalyst.blue_wire_from_pump",
+      "result_geometry": "triangular_tether_boundary",
+      "result_effects": ["multi_bind", "crossing_redirect", "cancel_objective_strike"],
+      "transformation_event": "evolution.contrition_lattice_triggered"
     }
   ]
 }

@@ -1,7 +1,7 @@
 # Scrap Saint — Weapons, Merges, Evolutions, and Traits Expansion
 
-**Status:** Expansion A, eight catalyst Evolutions, and the first three Gifts are enabled through P14.1; Confluences and all other entries remain design proposals.
-**Current runtime:** preview 0.3.0 with ten automatic weapons, seven catalysts, eight Evolutions, three Gifts, four Blessings, four active slots, one reserve slot, and two Gift slots.
+**Status:** Expansion A, all ten base-weapon catalyst Evolutions, and the first three Gifts are enabled through P15; Confluences and all other entries remain design proposals.
+**Current runtime:** preview 0.4.0 with ten automatic weapons, eight catalysts, ten Evolutions, three Gifts, four Blessings, four active slots, one reserve slot, and two Gift slots.
 **Purpose:** expand future build variety without weakening the current game’s readability, deterministic simulation boundary, or warm industrial devotional identity.
 
 ## Executive design decision

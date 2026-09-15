@@ -36,7 +36,7 @@ func evolve_fixture(recipe_id: String):
 
 func _initialize():
 	var catalogue = Sim.new()
-	check(catalogue.config.evolutions.size() == 8 and catalogue.evolution_recipes.size() == 8, "the enabled catalogue contains eight stable Evolutions")
+	check(catalogue.config.evolutions.size() == 10 and catalogue.evolution_recipes.size() == 10, "the enabled catalogue contains ten stable Evolutions")
 	for recipe_id in catalogue.config.evolutions:
 		var s = Sim.new()
 		s.start(0, 147, "optional")
@@ -130,6 +130,51 @@ func _initialize():
 	s.state.weapons[0].ready = 0
 	s.update_weapons()
 	check(mortar_target.hp < mortar_target.max_hp and s.events.any(func(e): return e.kind == "attack" and e.shape == "benediction"), "Workshop Benediction retains a distinct damaging cluster resolve when threats are present")
+
+	# The Maintenance Parade changes one contact into two counter-rotating pairs and extends after real repair work.
+	s = evolve_fixture("evolution.maintenance_parade")
+	s.command("continue")
+	s.state.position = Vector2(550, 530)
+	var parade_rule = s.config.evolution_rules["evolution.maintenance_parade"]
+	var inner_a = enemy(s, "enemy.rivet_hound", s.state.position + Vector2(parade_rule.inner_range, 0))
+	var inner_b = enemy(s, "enemy.rivet_hound", s.state.position - Vector2(parade_rule.inner_range, 0))
+	var outer_direction = Vector2.from_angle(PI / 3.0)
+	var outer_a = enemy(s, "enemy.rivet_hound", s.state.position + outer_direction * parade_rule.range)
+	var outer_b = enemy(s, "enemy.rivet_hound", s.state.position - outer_direction * parade_rule.range)
+	s.update_weapons()
+	check([inner_a, inner_b, outer_a, outer_b].all(func(target): return target.hp < target.max_hp), "Maintenance Parade resolves two distinct escort rings in one attack")
+	check(s.events.any(func(e): return e.kind == "attack" and e.shape == "parade" and e.points.size() == 2), "Maintenance Parade emits its four-contact geometry")
+	var repair_position = Vector2(s.config.optional_repairs.machines[0].position[0], s.config.optional_repairs.machines[0].position[1])
+	s.state.machines[0].progress = s.config.optional_repairs.required_ticks - 1
+	s.advance_optional_machine(0, 1, repair_position)
+	check(s.state.parade_until == s.state.tick + parade_rule.extension_ticks and s.events.any(func(e): return e.kind == "parade_extended"), "restoring a machine visibly extends the Parade's outer route")
+	s.state.enemies.clear()
+	s.state.weapons[0].ready = 0
+	var extended_target = enemy(s, "enemy.rivet_hound", s.state.position + outer_direction * parade_rule.extended_range)
+	s.update_weapons()
+	check(extended_target.hp < extended_target.max_hp and s.events.any(func(e): return e.kind == "attack" and e.shape == "parade" and e.extended), "the restored-machine window expands authoritative outer-ring contact")
+	var parade_restored = Sim.new()
+	check(parade_restored.restore(s.snapshot()) and parade_restored.state.parade_until == s.state.parade_until and parade_restored.weapon_evolution_id(parade_restored.state.weapons[0]) == "evolution.maintenance_parade", "Maintenance Parade and its active extension survive exact save restoration")
+
+	# Contrition Lattice replaces a loose cone with three authored cable edges.
+	s = evolve_fixture("evolution.contrition_lattice")
+	s.command("continue")
+	s.state.position = Vector2(550, 530)
+	var lattice_rule = s.config.evolution_rules["evolution.contrition_lattice"]
+	var apex = enemy(s, "enemy.forklift_brute", s.state.position + Vector2(250, 0))
+	var edge_crossing = enemy(s, "enemy.rivet_hound", s.state.position + Vector2(140, lattice_rule.half_width * 0.5))
+	var inside = enemy(s, "enemy.scrap_mite", s.state.position + Vector2(90, 0))
+	var apex_before = apex.p
+	var crossing_before = edge_crossing.p
+	s.update_weapons()
+	var lattice_attack = s.events.filter(func(e): return e.kind == "attack" and e.shape == "lattice")
+	check(apex.hp < apex.max_hp and edge_crossing.hp < edge_crossing.max_hp and inside.hp == inside.max_hp, "Contrition Lattice affects crossing edges rather than filling its triangle")
+	check(apex.bound > s.state.tick and edge_crossing.bound > s.state.tick and apex.p != apex_before and edge_crossing.p != crossing_before, "Contrition Lattice binds and laterally redirects every crossing threat")
+	check(not lattice_attack.is_empty() and lattice_attack[0].points.size() == 3, "Contrition Lattice emits a visible three-anchor boundary")
+
+	var final_snapshot = s.snapshot()
+	var final_restored = Sim.new()
+	check(final_restored.restore(final_snapshot) and final_restored.weapon_evolution_id(final_restored.state.weapons[0]) == "evolution.contrition_lattice", "Contrition Lattice survives exact save restoration")
 
 	# A feasible five-item loadout preserves independent identities through save and restore.
 	s.start(0, 147, "optional")

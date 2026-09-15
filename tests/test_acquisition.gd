@@ -27,6 +27,15 @@ func defeat_elite_for_shards(s):
 	s.update_weapons()
 	check(s.state.shards >= 2, "elite defeat awards its ordinary Relic Shards")
 
+func buy_rank_three_through_visits(s, weapon_id: String):
+	var copies = 0
+	for visit_index in range(8):
+		visit(s)
+		if s.state.scrap >= int(s.catalogue[weapon_id].cost_scrap) and buy_configured(s, weapon_id) == "OK": copies += 1
+		s.command("continue")
+		if copies == 4: break
+	check(copies == 4 and (s.state.weapons + s.state.reserve).any(func(w): return w.id == weapon_id and w.rank == 3), "%s reaches Rank III through ordinary shop visits" % weapon_id)
+
 func assemble_recipe_through_shop(recipe_id: String):
 	var probe = Sim.new()
 	var recipe = probe.evolution_recipes[recipe_id]
@@ -134,6 +143,22 @@ func _initialize():
 		check(path.state.offers[2] == recipe.required_catalyst_id, "%s exposes its named catalyst in the generated Evolution Path slot" % recipe_id)
 		var acquired = assemble_recipe_through_shop(recipe_id)
 		check(acquired.has_evolution(recipe_id), "%s remains recorded after ordinary-economy acquisition" % recipe_id)
+
+	# Blue Wire is deliberately shared: consuming it for Long Hand must not suppress
+	# the later Contrition Lattice path or provide a free second transformation.
+	var shared_wire = Sim.new()
+	shared_wire.start(0, 147, "optional")
+	buy_rank_three_through_visits(shared_wire, "weapon.penance_winch")
+	defeat_elite_for_shards(shared_wire)
+	visit(shared_wire)
+	check(shared_wire.state.offers[2] == "catalyst.blue_wire_from_pump" and buy_configured(shared_wire, "catalyst.blue_wire_from_pump") == "OK", "Long Hand receives Blue Wire through its generated path offer")
+	check(shared_wire.command("evolve", "evolution.long_hand") == "OK" and "catalyst.blue_wire_from_pump" not in shared_wire.state.catalysts, "Long Hand consumes its Blue Wire")
+	shared_wire.command("continue")
+	buy_rank_three_through_visits(shared_wire, "weapon.cable_contrition")
+	defeat_elite_for_shards(shared_wire)
+	visit(shared_wire)
+	check(shared_wire.state.offers[2] == "catalyst.blue_wire_from_pump" and buy_configured(shared_wire, "catalyst.blue_wire_from_pump") == "OK", "Contrition Lattice re-offers the consumed shared Blue Wire")
+	check(shared_wire.command("evolve", "evolution.contrition_lattice") == "OK" and shared_wire.has_evolution("evolution.long_hand") and shared_wire.has_evolution("evolution.contrition_lattice"), "both Blue Wire Evolutions coexist after separate public purchases")
 
 	var toll_first = assemble_two_evolutions("evolution.great_toll")
 	var mercy_first = assemble_two_evolutions("evolution.mercy_rail")

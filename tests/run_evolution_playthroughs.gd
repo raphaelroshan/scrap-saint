@@ -34,7 +34,9 @@ func _initialize():
 		{"id": "HALO_REPAIR_CIRCUIT", "recipe": "evolution.halo_of_repairs", "support": "weapon.nailer_small_mercies", "first_route": "route.rootworks", "terminal_route": "route.null_assembly"},
 		{"id": "UNRETURNED_EXECUTION", "recipe": "evolution.candle_unreturned", "support": "weapon.bell_last_shift", "first_route": "route.brass_choir", "terminal_route": "route.pale_archive"},
 		{"id": "QUIET_SUPPORT_LANE", "recipe": "evolution.quiet_sermon", "support": "weapon.altar_mortar", "first_route": "route.brass_choir", "terminal_route": "route.red_foundry"},
-		{"id": "WORKSHOP_BENEDICTION", "recipe": "evolution.workshop_benediction", "support": "weapon.bell_last_shift", "first_route": "route.rootworks", "terminal_route": "route.null_assembly"}
+		{"id": "WORKSHOP_BENEDICTION", "recipe": "evolution.workshop_benediction", "support": "weapon.bell_last_shift", "first_route": "route.rootworks", "terminal_route": "route.null_assembly"},
+		{"id": "MAINTENANCE_PARADE", "recipe": "evolution.maintenance_parade", "support": "weapon.nailer_small_mercies", "first_route": "route.brass_choir", "terminal_route": "route.pale_archive"},
+		{"id": "CONTRITION_LATTICE", "recipe": "evolution.contrition_lattice", "support": "weapon.altar_mortar", "first_route": "route.rootworks", "terminal_route": "route.red_foundry"}
 	]
 	var failed = false
 	var results = []

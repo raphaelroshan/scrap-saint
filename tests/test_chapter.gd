@@ -154,7 +154,9 @@ func _initialize():
 		{"id": "evolution.halo_of_repairs", "shape": "repair_halo", "behavior": "repair_on_contact"},
 		{"id": "evolution.candle_unreturned", "shape": "funeral_shots", "behavior": "seeking_volley"},
 		{"id": "evolution.quiet_sermon", "shape": "sermon", "behavior": "quiet_weapons"},
-		{"id": "evolution.workshop_benediction", "shape": "benediction", "behavior": "cluster_blast"}
+		{"id": "evolution.workshop_benediction", "shape": "benediction", "behavior": "cluster_blast"},
+		{"id": "evolution.maintenance_parade", "shape": "parade", "behavior": "slow_cycles"},
+		{"id": "evolution.contrition_lattice", "shape": "lattice", "behavior": "redirect"}
 	]
 	for copy_case in copy_cases:
 		sim.state.weapons = [equipped_evolution(sim, copy_case.id)]
@@ -184,10 +186,11 @@ func _initialize():
 		check(sim.state.hp < sim.saint_max_structure(), "%s copied geometry resolves against the Saint" % copy_case.id)
 		match copy_case.behavior:
 			"displace": check(sim.state.position.distance_to(archivist.p) > before_position.distance_to(archivist.p), "Great Toll copy displaces away from the Archivist")
-			"slow_cycles": check(sim.state.pressure_until > sim.state.tick and sim.state.pressure_multiplier > 1.0, "Ashen copy slows relic cycles")
+			"slow_cycles": check(sim.state.pressure_until > sim.state.tick and sim.state.pressure_multiplier > 1.0, "%s copy slows relic cycles" % copy_case.id)
 			"pull": check(sim.state.position.distance_to(archivist.p) < before_position.distance_to(archivist.p), "Long Hand copy pulls toward the Archivist")
 			"repair_on_contact": check(archivist.hp > before_boss_hp, "Halo copy closes its repair circuit through contact")
 			"quiet_weapons": check(sim.state.weapon_lock_until > sim.state.tick, "Quiet Sermon copy suspends relic cycles")
+			"redirect": check(sim.state.position != before_position, "Contrition Lattice copy redirects the Saint across its cable edge")
 	var first_slot = equipped_evolution(sim, "evolution.quiet_sermon")
 	var second_slot = equipped_evolution(sim, "evolution.mercy_rail")
 	sim.state.weapons = [first_slot, second_slot]

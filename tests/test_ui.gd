@@ -56,11 +56,11 @@ func run_checks():
 	game.sim.state.gifts = ["gift.spare_hand"]
 	game.build_ui()
 	var labels = game.ui.get_children().filter(func(child): return child is Button).map(func(child): return child.text)
-	check("EVOLUTION LEDGER · 8" in labels and "Dism." in labels, "shop exposes distinct Evolution and Gift management controls")
+	check("EVOLUTION LEDGER · 10" in labels and "Dism." in labels, "shop exposes distinct Evolution and Gift management controls")
 	for child in game.ui.get_children():
-		if child is Button and child.text == "EVOLUTION LEDGER · 8": child.pressed.emit(); break
+		if child is Button and child.text == "EVOLUTION LEDGER · 10": child.pressed.emit(); break
 	labels = game.ui.get_children().filter(func(child): return child is Button).map(func(child): return child.text)
-	check(labels.count("EVOLVE") == 8 and game.sim.evolution_recipes.size() == 8, "Evolution Ledger exposes all eight data-owned recipes")
+	check(labels.count("EVOLVE") == 10 and game.sim.evolution_recipes.size() == 10, "Evolution Ledger exposes all ten data-owned recipes")
 	game.evolution_ledger_open = false
 	game.build_ui()
 	game._unhandled_key_input(event)

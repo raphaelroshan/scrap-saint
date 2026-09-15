@@ -91,14 +91,14 @@ def validate_slice(manifest: dict, data: dict) -> None:
     blessings = {entry['id'] for entry in data['blessings']['blessings']}
     evolutions = {entry['id']: entry for entry in data['items']['evolutions']}
     assert len(manifest['weapons']) == 10, 'P14 slice must enable ten role-distinct weapons'
-    assert len(manifest['catalysts']) == 7, 'P14.1 slice must enable seven recipe-supporting catalysts'
+    assert len(manifest['catalysts']) == 8, 'P15 slice must enable eight recipe-supporting catalysts'
     assert len(manifest['gifts']) == 3 and manifest['gift_slots'] == 2, 'P14 slice needs three Gifts and two slots'
     assert len(manifest['enemies']) == 6, 'slice must enable six ordinary enemies'
     assert len(manifest['blessings']) == 4 and len(set(manifest['blessings'])) == 4
     assert set(manifest['blessings']) <= blessings
     assert manifest['elite'] in enemies and manifest['boss'] in bosses
     assert set(manifest['enemies']) <= enemies
-    assert len(manifest['evolutions']) == 8, 'P14.1 slice must expose eight meaningful Evolutions'
+    assert len(manifest['evolutions']) == 10, 'P15 slice must expose ten meaningful Evolutions'
     for kind in ('weapons', 'catalysts', 'gifts'):
         for item_id, settings in manifest[kind].items():
             assert item_id in items, f'unknown enabled item {item_id}'
@@ -112,16 +112,63 @@ def validate_slice(manifest: dict, data: dict) -> None:
     for item_id, settings in manifest['weapons'].items():
         for field in ('target_rule', 'role', 'weakness', 'counter_families'):
             assert settings.get(field), f'missing weapon role contract {item_id}.{field}'
+    rank_multipliers = manifest.get('rank_damage_multipliers', [])
+    assert rank_multipliers == [1.0, 1.6, 2.2], 'Rank I-III damage multipliers must remain explicit content'
+    rank_behavior_ids: set[str] = set()
+    rank_metadata = {'id', 'name', 'description', 'change_family'}
+    rank_change_families = {'geometry', 'targeting', 'cadence', 'control', 'repair', 'resource'}
+    rank_operational_fields = {
+        'pierce_targets', 'mark_counter_ticks', 'width', 'control_ticks', 'push_distance',
+        'orbit_contacts', 'range', 'target_count', 'seeking_motes', 'mote_seek_speed',
+        'bind_ticks', 'pull_distance', 'cancel_strikes', 'quiet_ticks', 'cooldown',
+        'slow_ticks', 'scrap_every', 'repair_progress', 'saint_repair',
+    }
+    for item_id, settings in manifest['weapons'].items():
+        rank_rules = settings.get('rank_rules', {})
+        assert set(rank_rules) == {'2', '3'}, f'{item_id}: needs explicit Rank II and Rank III rules'
+        for rank in ('2', '3'):
+            rule = rank_rules[rank]
+            assert all(rule.get(field) for field in rank_metadata), f'{item_id} Rank {rank}: incomplete authored identity'
+            assert rule['change_family'] in rank_change_families, f"{item_id} Rank {rank}: unsupported change family {rule['change_family']}"
+            assert rule['id'] not in rank_behavior_ids, f"duplicate rank behavior id {rule['id']}"
+            rank_behavior_ids.add(rule['id'])
+            operational_fields = set(rule) - rank_metadata
+            assert operational_fields, f'{item_id} Rank {rank}: needs behavior beyond damage scaling'
+            assert operational_fields <= rank_operational_fields, f'{item_id} Rank {rank}: unsupported behavior fields {operational_fields - rank_operational_fields}'
+    enabled_evolutions = set(manifest['evolutions'])
+    assert enabled_evolutions == set(evolutions), 'enabled Evolution recipes must exactly match the item catalogue'
+    evolution_rules = manifest.get('evolution_rules', {})
+    assert enabled_evolutions == set(evolution_rules), 'enabled Evolutions and simulation rules must have exact parity'
+    recipe_bases = {recipe['base_item_id'] for recipe in evolutions.values()}
+    assert recipe_bases == set(manifest['weapons']), 'every enabled weapon needs exactly one Evolution recipe'
+    supported_evolution_shapes = {
+        'rail', 'radial', 'ashen_censer', 'long_hand', 'repair_halo', 'funeral_shots',
+        'sermon', 'benediction', 'parade', 'lattice',
+    }
+    supported_copy_behaviors = {
+        'pierce_line', 'displace', 'slow_cycles', 'pull', 'repair_on_contact',
+        'seeking_volley', 'quiet_weapons', 'cluster_blast', 'redirect',
+    }
     for recipe_id in manifest['evolutions']:
-        assert recipe_id in evolutions
         recipe = evolutions[recipe_id]
         assert recipe['base_item_id'] in manifest['weapons']
         assert recipe['required_catalyst_id'] in manifest['catalysts']
         assert recipe_id in items[recipe['base_item_id']].get('evolution_ids', []), f'{recipe_id}: base does not advertise recipe'
         assert recipe_id in items[recipe['required_catalyst_id']].get('compatible_evolution_ids', []), f'{recipe_id}: catalyst does not advertise recipe'
-        rule = manifest.get('evolution_rules', {}).get(recipe_id, {})
+        rule = evolution_rules[recipe_id]
+        for field in ('shape', 'short', 'damage', 'cooldown', 'range', 'width'):
+            assert rule.get(field) not in (None, ''), f'{recipe_id}: incomplete simulation rule {field}'
+        assert rule['shape'] in supported_evolution_shapes, f"{recipe_id}: unsupported shape {rule['shape']}"
         copy = rule.get('archivist_copy', {})
         assert copy.get('shape') and copy.get('behavior'), f'{recipe_id}: missing Archivist copy contract'
+        assert copy['shape'] in supported_evolution_shapes, f"{recipe_id}: unsupported Archivist shape {copy['shape']}"
+        assert copy['behavior'] in supported_copy_behaviors, f"{recipe_id}: unsupported Archivist behavior {copy['behavior']}"
+    for item_id in manifest['weapons']:
+        expected = {recipe_id for recipe_id, recipe in evolutions.items() if recipe['base_item_id'] == item_id}
+        assert set(items[item_id].get('evolution_ids', [])) == expected, f'{item_id}: Evolution backlinks must exactly match recipes'
+    for item_id in manifest['catalysts']:
+        expected = {recipe_id for recipe_id, recipe in evolutions.items() if recipe['required_catalyst_id'] == item_id}
+        assert set(items[item_id].get('compatible_evolution_ids', [])) == expected, f'{item_id}: Evolution backlinks must exactly match recipes'
     assert manifest['economy']['reroll_costs'] == [0, 2, 4]
     assert manifest['wave_ticks'] > 0 and manifest['tick_rate'] == 60
     assert 'confluences' not in manifest, 'Confluences remain disabled for P14.1'
