@@ -1,0 +1,25 @@
+{
+  "id": "arena.rootworks_pump",
+  "name": "Rootworks Pump",
+  "pixels_per_metre": 40,
+  "bounds": [-100, -70, 1140, 850],
+  "start": [140, 650],
+  "relay": [470, 365],
+  "repair_radius": 86,
+  "obstacles": [
+    {"id": "machine.root_tank", "name": "GRAFT TANK", "rect": [260, 190, 100, 220]},
+    {"id": "machine.filter_bank", "name": "FILTER BANK", "rect": [590, 290, 190, 100]},
+    {"id": "machine.spill_gate", "name": "SPILL GATE", "rect": [320, 535, 250, 70]}
+  ],
+  "entries": [
+    {"id": "entry.root_west", "name": "DRAIN MOUTH", "from": [-30, 250], "to": [-30, 410]},
+    {"id": "entry.root_north", "name": "PIPE CROWN", "from": [430, 0], "to": [580, 0]},
+    {"id": "entry.root_east", "name": "GRAFT WALK", "from": [970, 380], "to": [970, 540]}
+  ],
+  "zones": [
+    {"id": "zone.cistern", "name": "LOW CISTERN", "rect": [20, 80, 220, 180]},
+    {"id": "zone.pump", "name": "PUMP CHAPEL", "rect": [380, 275, 180, 180]},
+    {"id": "zone.grafts", "name": "GRAFT WALK", "rect": [790, 100, 180, 420]},
+    {"id": "zone.road", "name": "LOW ROAD", "rect": [20, 570, 240, 130]}
+  ]
+}

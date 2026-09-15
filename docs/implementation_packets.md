@@ -120,3 +120,13 @@
 - Evidence: actual enlarged map, new weapon effects and enemy fixtures at 1280x800 with source/content provenance.
 - Limitation: wider content and camera pacing require human tuning.
 - Exactly one next task: playtest roaming density and weapon/enemy balance.
+
+## SC-15 — compact first-chapter pilgrimage
+- Objective: defeat the Foreman, choose a road, travel with the current build, complete a destination-specific objective and boss, and recover a route-specific memory.
+- Owner: simulation owns route validation/cost, travel progress, arena loading, carried state, objective progress, boss result, memory, save/restore and completion; UI renders state and sends explicit commands.
+- Files: content/chapter/first_chapter.json, two destination arenas, game/arena.gd, game/simulation.gd, game/main.gd, tests/test_chapter.gd, tests/capture_chapter.gd, runtime documentation.
+- Preserve: optional-repair Workshop, deterministic fixed ticks, existing build/economy rules, four active slots plus reserve, no presentation-authored outcomes.
+- Acceptance: two affordable routes; rejected choices do not mutate; travel and destination saves repeat; complete build carries; Brass and Rootworks objectives differ; boss cannot bypass objective; correct memory reaches Results.
+- Evidence: five actual 1280×800 Godot 4.5.1 fixtures under artifacts/chapter plus 30 deterministic chapter checks.
+- Limitation: compact four-wave destinations reuse the current roster and need human 1× pacing validation.
+- Exactly one next task: uncoached full-expedition testing of both routes at 1×.

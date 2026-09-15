@@ -59,6 +59,33 @@ def validate_slice(manifest: dict, data: dict) -> None:
     assert manifest['wave_ticks'] > 0 and manifest['tick_rate'] == 60
 
 
+def validate_chapter(data: dict) -> None:
+    chapter_path = ROOT / "content/chapter/first_chapter.json"
+    chapter = json.loads(chapter_path.read_text(encoding="utf-8"))
+    routes = chapter.get("routes", [])
+    assert len(routes) == 2, "first chapter must offer exactly two destination routes"
+    route_ids = unique_ids(routes, "chapter routes")
+    assert route_ids == {"route.brass_choir", "route.rootworks"}
+    boss_ids = {entry["id"] for entry in data["bosses"]["bosses"]}
+    site_ids: set[str] = set()
+    for route in routes:
+        for field in ("site_id", "name", "description", "news", "arena_path", "boss", "objective", "pressure", "travel", "memory"):
+            assert route.get(field), f"{route['id']}: missing {field}"
+        assert route["site_id"] not in site_ids, f"{route['id']}: duplicate site"
+        site_ids.add(route["site_id"])
+        assert route["boss"] in boss_ids, f"{route['id']}: unknown boss"
+        assert set(route["enemy_pool"]) <= set(data["enemies_by_id"]), f"{route['id']}: unknown enemy"
+        assert len(route["travel"]) >= 2, f"{route['id']}: travel needs more than one beat"
+        objective = route["objective"]
+        assert objective.get("id") and objective.get("description") and objective.get("nodes")
+        unique_ids(objective["nodes"], f"{route['id']} objective nodes")
+        arena_path = ROOT / route["arena_path"].removeprefix("res://")
+        assert arena_path.is_file(), f"{route['id']}: missing arena"
+        arena = json.loads(arena_path.read_text(encoding="utf-8"))
+        assert arena.get("id") and arena.get("bounds") and arena.get("start") and arena.get("entries")
+        assert route["memory"].get("id") and route["memory"].get("text") and route["memory"].get("conclusion")
+
+
 def main() -> int:
     data = {key: load(path) for key, path in FILES.items()}
     items = data["items"].get("items", [])
@@ -73,6 +100,8 @@ def main() -> int:
     boss_ids = unique_ids(bosses, "bosses")
     evolution_ids = unique_ids(evolutions, "evolutions")
     validate_slice(load(ROOT / 'content/slices/first_shift.json'), data)
+    data["enemies_by_id"] = enemy_ids
+    validate_chapter(data)
 
     if len(blessings) < 3:
         raise AssertionError("first slice needs at least three Blessings")
@@ -116,7 +145,7 @@ def main() -> int:
         if len(boss["phases"]) < 2:
             raise AssertionError(f"{boss['id']}: boss needs at least two rule phases")
 
-    print("PASS: Scrap Saint first-slice content contracts")
+    print("PASS: Scrap Saint first-slice and first-chapter content contracts")
     print(f"  items={len(items)} evolutions={len(evolutions)} blessings={len(blessings)} enemies={len(enemies)} bosses={len(bosses)}")
     return 0
 

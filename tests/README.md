@@ -6,10 +6,14 @@ The runtime tests now exist. Run the complete Windows loop with `scripts/agent_i
 
 - `python tests/test_slice_manifest.py`: four manifest acceptance/rejection tests.
 - `godot --headless --path . --script res://tests/test_simulation.gd`: 31 deterministic simulation checks.
+- `godot --headless --path . --script res://tests/test_chapter.gd`: deterministic route, travel, carryover, objective, memory, and chapter save checks.
 - `godot --headless --path . --script res://tests/test_ui.gd`: seven UI flow/save checks using actual button signals and a temporary save file.
 - `godot --headless --path . --script res://tests/run_playthroughs.gd`: four shared-seed normal-economy policies, including no-evolution Workshop. Results are saved separately from visual fixtures.
+- Add `-- --optional --quick` to smoke one normal-economy policy through each destination without running the full twelve-policy matrix.
 
 Rendered fixtures use explicit setup budgets/states, including a Results fixture. They are not screenshots of the full-run policies. The earlier list below remains a broader target, not a claim all planned mechanics are implemented. See `docs/runtime_status.md` for scope differences.
+
+SC-15 adds five rendered chapter fixtures: `ROUTE_CHOICE`, `TRAVEL_BRASS`, `BRASS_OBJECTIVE`, `ROOTWORKS_OBJECTIVE`, and `CHAPTER_MEMORY`. They are explicit deterministic presentation fixtures, not a natural completed expedition.
 
 Run:
 

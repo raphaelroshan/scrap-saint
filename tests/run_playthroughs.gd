@@ -3,16 +3,27 @@ const Sim = preload("res://game/simulation.gd")
 
 func _initialize():
 	var results = []
-	var optional = "--optional" in OS.get_cmdline_user_args()
+	var args = OS.get_cmdline_user_args()
+	var optional = "--optional" in args
+	var run_count = 2 if "--quick" in args else 12
 	var unfinished = false
-	for run_index in range(12):
+	for run_index in range(run_count):
 		var variant = run_index % 4
 		var seed_value = [147, 104729, 104730][int(run_index / 4)]
 		var doctrine = variant % 3
 		var sim = Sim.new()
 		sim.start(doctrine, seed_value, "optional" if optional else "relay")
 		var visits = 0
-		while sim.state.phase not in ["won", "lost"] and sim.state.tick < sim.config.wave_ticks * sim.config.wave_count + 60:
+		while sim.state.phase not in ["won", "lost"] and sim.state.tick < sim.config.wave_ticks * sim.config.wave_count + 16000:
+			if sim.state.phase == "route":
+				sim.command("choose_route", "route.brass_choir" if variant % 2 == 0 else "route.rootworks")
+				continue
+			if sim.state.phase == "travel":
+				sim.command("advance_travel")
+				continue
+			if sim.state.phase == "memory":
+				sim.command("accept_memory")
+				continue
 			if sim.state.phase == "shop":
 				visits += 1
 				if sim.state.hp < 65 or sim.state.relay_hp < 110: sim.command("buy", 4)
@@ -23,6 +34,12 @@ func _initialize():
 				sim.command("continue")
 			var s = sim.state
 			var desired = sim.relay_position() + Vector2.from_angle(s.tick * 0.013) * 62
+			if sim.is_destination() and not s.objective_complete:
+				for i in range(s.objective.size()):
+					if not s.objective[i].complete:
+						var node = sim.objective_data().nodes[i]
+						desired = Vector2(node.position[0], node.position[1])
+						break
 			# Shared policy: intercept attackers at the relay rather than orbiting blindly.
 			var nearest_threat = 170.0
 			for enemy in s.enemies:
@@ -44,7 +61,7 @@ func _initialize():
 				if diff.length() < hazard.radius + 28: move += diff.normalized() * 4.0
 			sim.step(move.limit_length())
 		unfinished = unfinished or sim.state.phase != "won"
-		results.append({"mode": sim.state.mode, "repairs_completed": sim.state.machines.filter(func(m): return m.complete).size(), "seed": seed_value, "backup_absorbed": sim.state.backup_absorbed, "relay_damage_sources": sim.state.relay_damage_sources, "doctrine": doctrine, "evolution_policy": variant == 0, "outcome": sim.state.phase, "wave": sim.state.wave, "seconds": sim.state.tick / 60.0, "hp": sim.state.hp, "relay": sim.state.relay_hp, "progress": sim.state.progress / sim.config.relay.required_ticks, "kills": sim.state.kills, "shops": visits, "reason": sim.state.last_reason})
+		results.append({"mode": sim.state.mode, "route": sim.state.route, "chapter_complete": sim.state.chapter_complete, "repairs_completed": sim.state.machines.filter(func(m): return m.complete).size(), "seed": seed_value, "backup_absorbed": sim.state.backup_absorbed, "relay_damage_sources": sim.state.relay_damage_sources, "doctrine": doctrine, "evolution_policy": variant == 0, "outcome": sim.state.phase, "wave": sim.state.wave, "seconds": sim.state.tick / 60.0, "hp": sim.state.hp, "relay": sim.state.relay_hp, "progress": sim.state.progress / sim.config.relay.required_ticks, "kills": sim.state.kills, "shops": visits, "reason": sim.state.last_reason})
 	print(JSON.stringify(results, "  "))
 	DirAccess.make_dir_recursive_absolute("res://artifacts/agent-iteration")
 	var file = FileAccess.open(("res://artifacts/agent-iteration/optional_playthroughs.json" if optional else "res://artifacts/agent-iteration/playthroughs.json"), FileAccess.WRITE)

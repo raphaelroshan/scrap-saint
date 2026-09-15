@@ -30,6 +30,20 @@
       "description": "A central engine that cannot tell a heartbeat from an order."
     },
     {
+      "id": "boss.choir_regent",
+      "name": "The Choir Regent",
+      "role": "resonance_controller",
+      "phases": [
+        {"id": "measure", "rule": "telegraph_resonance_cadence"},
+        {"id": "toll", "rule": "slow_weapon_cycles_during_announced_resonance"},
+        {"id": "answer", "rule": "pressure_distributed_relay_nodes"}
+      ],
+      "telegraph": "three_brass_rings_before_the_toll",
+      "counter_families": ["mobility", "control", "timed_burst"],
+      "reward_choices": ["memory", "witness_relic", "route_unlock"],
+      "description": "A signal authority that mistakes perfect timing for consent."
+    },
+    {
       "id": "boss.saint_no_repairs",
       "name": "The Saint of No Repairs",
       "role": "anti_healing_copy",

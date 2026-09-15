@@ -4,7 +4,7 @@ The project now contains a runnable Godot 4.5.1 desktop prototype. This is the f
 
 ## Implemented
 
-- Eight 70-second maximum waves, with the final boss ending the run early when defeated. Shop reading time is additional and paused.
+- Eight 70-second Workshop waves, followed after Foreman victory by one selected four-wave destination. Shop and travel reading time is additional and paused.
 - Three starting Blessings, five automatic weapon geometries, four catalysts, four active slots and one reserve.
 - Movement, relay work/structure, pickups, three enemy families, elite and phased boss attacks.
 - Purchases, automatic duplicate combining, explicit combine, sell/dismantle, reserve/equip, offer lock and one free/two paid refreshes.
@@ -108,3 +108,16 @@ The previous relay-defence policy suite produced 9 wins and 3 losses after roste
 
 Limitation: automated fixtures and policies do not establish human pacing, balance or audio quality. Capture teardown still reports an ObjectDB leak warning.
 Exactly one next task: playtest roaming density and weapon/enemy balance at 1x.
+
+
+## SC-15 — compact first-chapter pilgrimage
+
+Foreman victory now opens an authoritative two-route decision instead of ending the expedition. Eight Scrap recovered from the Foreman guarantees both roads remain affordable. Brass Choir Relay costs 8 Scrap and asks the Saint to clear and tune three distributed signal rings; Rootworks Pump costs 6 Scrap and asks it to finish one exposed, persistent pump repair while healer-heavy enemies sustain the crowd. Each destination runs four compact waves, uses a route-specific enemy pool and boss, and ends in its own memory and conclusion.
+
+Route choice, travel beat, selected arena, objective nodes, carried weapons/reserve/catalysts/currencies, boss result, memory and chapter completion are part of version-2 deterministic save state. Version-1 Workshop saves migrate to the expanded state without being rerolled. Presentation sends `choose_route`, `advance_travel` and `accept_memory`; it does not decide arrival, repair progress or completion.
+
+The implementation is a systems-complete chapter proof, not the full Early Access breadth target. It deliberately reuses the current combat roster and procedural visual/audio language. Destination pacing, boss differentiation in motion and the intended 25–35 minute commercial expedition still require human testing.
+
+Evidence: 30 deterministic chapter assertions plus the existing simulation/UI/arena/shop/optional/variety suites. Two seed-147 normal-economy automated policies completed the whole expedition: Workshop Gospel through Brass Choir at 659 simulated seconds and Bell Ward through Rootworks at 655.7 simulated seconds. Actual Godot 4.5.1 desktop fixture captures at 1280×800 cover route choice, Brass travel, both objectives and the Rootworks memory in `artifacts/chapter`. These policy wins are executable evidence, not human playtests.
+
+Exactly one next task: run an uncoached full-expedition playtest on both routes at 1× and tune destination wave pressure from observed comprehension and pacing evidence.
