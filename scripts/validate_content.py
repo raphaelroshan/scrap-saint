@@ -112,6 +112,19 @@ def validate_slice(manifest: dict, data: dict) -> None:
     for item_id, settings in manifest['weapons'].items():
         for field in ('target_rule', 'role', 'weakness', 'counter_families'):
             assert settings.get(field), f'missing weapon role contract {item_id}.{field}'
+    rank_multipliers = manifest.get('rank_damage_multipliers', [])
+    assert rank_multipliers == [1.0, 1.6, 2.2], 'Rank I-III damage multipliers must remain explicit content'
+    rank_behavior_ids: set[str] = set()
+    rank_metadata = {'id', 'name', 'description'}
+    for item_id, settings in manifest['weapons'].items():
+        rank_rules = settings.get('rank_rules', {})
+        assert set(rank_rules) == {'2', '3'}, f'{item_id}: needs explicit Rank II and Rank III rules'
+        for rank in ('2', '3'):
+            rule = rank_rules[rank]
+            assert all(rule.get(field) for field in rank_metadata), f'{item_id} Rank {rank}: incomplete authored identity'
+            assert rule['id'] not in rank_behavior_ids, f"duplicate rank behavior id {rule['id']}"
+            rank_behavior_ids.add(rule['id'])
+            assert set(rule) - rank_metadata, f'{item_id} Rank {rank}: needs behavior beyond damage scaling'
     for recipe_id in manifest['evolutions']:
         assert recipe_id in evolutions
         recipe = evolutions[recipe_id]

@@ -19,6 +19,7 @@ mkdir -p artifacts/agent-iteration
 "$GODOT_BIN" --headless --path . --script res://tests/test_assembly.gd | tee artifacts/agent-iteration/assembly.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_acquisition.gd | tee artifacts/agent-iteration/acquisition.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_evolutions.gd | tee artifacts/agent-iteration/evolutions.log
+"$GODOT_BIN" --headless --path . --script res://tests/test_weapon_ranks.gd | tee artifacts/agent-iteration/weapon-ranks.log
 "$GODOT_BIN" --headless --path . --script res://tests/run_playthroughs.gd -- --optional | tee artifacts/agent-iteration/optional-playthroughs.log
 "$GODOT_BIN" --headless --path . --script res://tests/run_assembly_playthroughs.gd | tee artifacts/agent-iteration/assembly-playthroughs.log
 "$GODOT_BIN" --headless --path . --script res://tests/run_evolution_playthroughs.gd | tee artifacts/agent-iteration/evolution-playthroughs.log
@@ -28,4 +29,5 @@ mkdir -p artifacts/agent-iteration
 "$GODOT_BIN" --path . --script res://tests/capture_core_quality.gd | tee artifacts/agent-iteration/core-quality-capture.log
 "$GODOT_BIN" --path . --script res://tests/capture_assembly.gd | tee artifacts/agent-iteration/assembly-capture.log
 "$GODOT_BIN" --path . --script res://tests/capture_evolutions.gd | tee artifacts/agent-iteration/evolution-capture.log
+"$GODOT_BIN" --path . --script res://tests/capture_weapon_ranks.gd -- --capture-dir="$PWD/artifacts/agent-iteration" | tee artifacts/agent-iteration/weapon-rank-capture.log
 python3 scripts/write_provenance.py "$GODOT_BIN"

@@ -151,7 +151,7 @@
       "evolution_ids": [
         "evolution.ashen_benediction"
       ],
-      "description": "A soot-black censer that slows close threats and remembers every third defeat as Scrap."
+      "description": "A soot-black censer that slows close threats and remembers repeated defeats as Scrap."
     },
     {
       "id": "weapon.penance_winch",

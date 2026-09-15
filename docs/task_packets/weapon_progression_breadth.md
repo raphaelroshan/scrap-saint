@@ -1,5 +1,7 @@
 # Task packet: P15 — complete weapon progression
 
+> Implementation note: P15-A in this change is intentionally bounded to differentiated Rank II/III behavior for the ten existing base weapons. The proposed additional Evolutions in this packet remain deferred; no Evolution, Gift, Confluence or base weapon is added.
+
 ## Player-facing objective
 
 Make every current weapon become meaningfully more expressive as it ranks up, and give the two remaining base weapons—Procession Gear and Cable of Contrition—their own visible Evolution endpoints.

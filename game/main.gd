@@ -667,13 +667,17 @@ func draw_world():
 	for e in sim.state.enemies: draw_enemy(e)
 	for w in sim.state.weapons:
 		if w.id == "weapon.procession_gear":
-			var p = sim.state.position + Vector2.from_angle(sim.state.tick * 0.045) * sim.config.weapons[w.id].range
-			draw_arc(sim.state.position, 80, 0, TAU, 48, Color(0.5, 0.75, 0.65, 0.12), 1)
-			draw_gear(p, 15, GREEN, sim.state.tick * 0.08)
+			var gear_data = sim.resolved_weapon_rule(w)
+			var gear_offset = Vector2.from_angle(sim.state.tick * 0.045) * float(gear_data.range)
+			draw_arc(sim.state.position, float(gear_data.range), 0, TAU, 48, Color(0.5, 0.75, 0.65, 0.12), 1)
+			draw_gear(sim.state.position + gear_offset, 15, GREEN, sim.state.tick * 0.08)
+			if int(gear_data.get("orbit_contacts", 1)) > 1:
+				draw_gear(sim.state.position - gear_offset, 15, GREEN, sim.state.tick * 0.08 + PI)
 		if w.id == "weapon.foundry_censer":
 			var ashen = sim.weapon_evolution_id(w) == "evolution.ashen_benediction"
+			var censer_data = sim.resolved_weapon_rule(w)
 			var ring_origin = sim.state.position + (Vector2.from_angle(sim.state.tick * 0.018) * 34 if ashen else Vector2.ZERO)
-			var ring_range = 52.0 if ashen else sim.config.weapons[w.id].range
+			var ring_range = 52.0 if ashen else float(censer_data.range)
 			var p = ring_origin + Vector2.from_angle(sim.state.tick * 0.055) * 62
 			draw_circle(ring_origin, ring_range, Color(0.25, 0.62, 0.55, 0.06))
 			draw_arc(ring_origin, ring_range, 0, TAU, 56, Color("b58ebd") if ashen else Color(0.32, 0.72, 0.63, 0.22), 2)
@@ -1005,7 +1009,9 @@ func draw_effect(e):
 		"attack":
 			match e.shape:
 				"line", "shot", "rail", "beam":
-					draw_line(e.from, e.to, color, 5 if e.shape in ["rail", "beam"] else 2, true)
+					var line_targets = e.get("targets", []) if e.shape == "shot" else [e.to]
+					for line_target in line_targets:
+						draw_line(e.from, line_target, color, 5 if e.shape in ["rail", "beam"] else 2, true)
 					if e.shape == "rail": draw_line(e.from, e.to, Color(1, 0.98, 0.85, fade), 2, true)
 				"blast":
 					draw_line(e.from, e.to, Color(color, fade * 0.4), 1)
@@ -1013,8 +1019,10 @@ func draw_effect(e):
 					draw_arc(e.to, e.range * (1.0 - fade * 0.35), 0, TAU, 32, color, 3)
 				"cone", "tether":
 					var angle = (e.to - e.from).angle()
-					draw_arc(e.from, e.range * (1 - fade * 0.4), angle - 0.8, angle + 0.8, 24, color, 3, true)
-				"orbit": draw_arc(e.to, 23 * (2 - fade), 0, TAU, 20, color, 2)
+					var half_width = float(e.get("width", 0.8))
+					draw_arc(e.from, e.range * (1 - fade * 0.4), angle - half_width, angle + half_width, 24, color, 3, true)
+				"orbit":
+					for contact in e.get("targets", [e.to]): draw_arc(contact, 23 * (2 - fade), 0, TAU, 20, color, 2)
 				"censer":
 					draw_circle(e.from, e.range, Color(color, fade * 0.06))
 					draw_arc(e.from, e.range * (1.0 - fade * 0.08), 0, TAU, 44, color, 3)
@@ -1086,6 +1094,8 @@ func draw_loadout():
 		var evolved_name = sim.config.evolution_rules[evolution_id].short if evolution_id in sim.config.evolution_rules else data.short
 		text_at(evolved_name, Vector2(1095, y), 14, Color(data.color))
 		text_at("RANK " + ["I", "II", "III"][w.rank - 1] + (" · EVOLVED" if sim.weapon_evolved(w) else ""), Vector2(1095, y + 20), 11, MUTED)
+		var rank_summary = sim.weapon_rank_summary(w)
+		if rank_summary != "": text_at(rank_summary, Vector2(1095, y + 37), 9, GREEN if w.rank == 2 else GOLD)
 	text_at("RESERVE", Vector2(1068, 539), 11, GOLD)
 	if not sim.state.reserve.is_empty(): text_at(sim.config.weapons[sim.state.reserve[0].id].short, Vector2(1068, 558), 12)
 	else: text_at("One open place", Vector2(1068, 558), 12, MUTED)

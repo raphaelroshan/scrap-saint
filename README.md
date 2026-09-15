@@ -15,7 +15,7 @@ For faster development, use **Play Scrap Saint 5x Dev.cmd**. Combat runs at 5× 
 - **Optional repairs is the main game.** The 5x development launcher retains the relay-defence comparison toggle. New runs use the displayed seed; change it on the title screen. Existing saves retain their mode.
 - WASD or arrows: move; weapons attack automatically. In Optional repairs, short repairs reward Scrap, healing or a stagger pulse. Machines cannot be destroyed and repairs are never required to win. In Relay defence, stay near the relay to repair it and keep it alive.
 - Escape: pause; F5: save; F9: load; M: mute; F3: diagnostic overlay.
-- Between waves: buy/combine, sell, store, equip, lock and refresh. Mercy Rail is optional.
+- Between waves: buy/combine, sell, store, equip, lock and refresh. Every weapon gains named behavior at Rank II and Rank III; Evolutions such as Mercy Rail remain optional.
 - Defeating the Foreman opens Brass Choir Relay and Rootworks Pump. Their memories open a second choice: Brass leads to Pale Archive or Red Foundry; Rootworks leads to Red Foundry or Null Assembly. The build, economy and Blessing persist through all three sites.
 - Controller: left stick movement, standard UI navigation/accept, Start to pause.
 

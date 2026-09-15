@@ -5,6 +5,7 @@
   "tick_rate": 60,
   "wave_ticks": 4200,
   "wave_count": 8,
+  "rank_damage_multipliers": [1.0, 1.6, 2.2],
   "arena_id": "arena.collapsed_workshop",
   "saint": {
     "speed": 225,
@@ -42,14 +43,18 @@
       "shape": "line",
       "target_rule": "priority",
       "role": "Priority damage against support and objective threats.",
-      "weakness": "Only pierces two targets and cannot clear a surrounding swarm.",
+      "weakness": "A narrow straight lane cannot clear a surrounding swarm.",
       "counter_families": ["enemy.choir_drone", "enemy.rust_pilgrim", "enemy.cinder_spitter"],
       "damage": 16,
       "cooldown": 30,
       "range": 330,
       "width": 10,
       "color": "efb966",
-      "description": "Piercing nails. Two targets in a straight line."
+      "description": "Piercing nails. Two targets in a straight line.",
+      "rank_rules": {
+        "2": {"id": "rank.nailer.triple_pin", "name": "TRIPLE-PIN MAGAZINE", "description": "The line can pierce one additional machine.", "pierce_targets": 3},
+        "3": {"id": "rank.nailer.foreman_notch", "name": "FOREMAN NOTCH", "description": "Hits mark support and major machines for a short follow-up window.", "mark_counter_ticks": 75}
+      }
     },
     "weapon.bell_last_shift": {
       "short": "Last Shift Bell",
@@ -63,7 +68,11 @@
       "range": 155,
       "width": 0.85,
       "color": "efcf83",
-      "description": "A broad cone. Staggers and pushes threats away."
+      "description": "A broad cone. Staggers and pushes threats away.",
+      "rank_rules": {
+        "2": {"id": "rank.bell.wider_mouth", "name": "WIDER MOUTH", "description": "A wider bell mouth catches threats farther off the centre line.", "width": 1.04},
+        "3": {"id": "rank.bell.double_clapper", "name": "DOUBLE-STRUCK CLAPPER", "description": "The second strike lengthens stagger and pushes threats farther.", "control_ticks": 72, "push_distance": 36}
+      }
     },
     "weapon.procession_gear": {
       "short": "Procession Gear",
@@ -77,7 +86,11 @@
       "range": 80,
       "width": 30,
       "color": "91c9b0",
-      "description": "An orbiting relic. Damages enemies on contact."
+      "description": "An orbiting relic. Damages enemies on contact.",
+      "rank_rules": {
+        "2": {"id": "rank.gear.twin_procession", "name": "TWIN PROCESSION", "description": "A second gear takes the opposite point of the orbit.", "orbit_contacts": 2},
+        "3": {"id": "rank.gear.long_chain", "name": "LONGER CHAIN", "description": "Both gears orbit on a wider close-defence route.", "range": 100}
+      }
     },
     "weapon.candle_nailer": {
       "short": "Candle-Nailer",
@@ -91,7 +104,11 @@
       "range": 390,
       "width": 8,
       "color": "cbb8ed",
-      "description": "Targets the weakest machine. Kills leave healing motes."
+      "description": "Targets the weakest machine. Kills leave healing motes.",
+      "rank_rules": {
+        "2": {"id": "rank.candle.paired_wicks", "name": "PAIRED WICKS", "description": "Two shots seek the two weakest reachable machines.", "target_count": 2},
+        "3": {"id": "rank.candle.returning_motes", "name": "RETURNING MOTES", "description": "Kill-motes seek the Saint instead of waiting where the target fell.", "seeking_motes": true, "mote_seek_speed": 3.5}
+      }
     },
     "weapon.cable_contrition": {
       "short": "Contrition Cable",
@@ -104,8 +121,13 @@
       "cooldown": 55,
       "range": 195,
       "width": 0.95,
+      "pull_distance": 12,
       "color": "81b8d0",
-      "description": "Sweeps a wide arc. Binds enemies and draws them inward."
+      "description": "Sweeps a wide arc. Binds enemies and draws them inward.",
+      "rank_rules": {
+        "2": {"id": "rank.cable.braided_line", "name": "BRAIDED LINE", "description": "The braid holds every caught machine for longer.", "bind_ticks": 126},
+        "3": {"id": "rank.cable.return_pulley", "name": "RETURN PULLEY", "description": "The return stroke pulls farther and cancels an announced objective strike.", "pull_distance": 28, "cancel_strikes": true}
+      }
     },
     "weapon.hymn_coil": {
       "short": "Hymn Coil",
@@ -119,7 +141,11 @@
       "range": 420,
       "width": 6,
       "color": "8edce0",
-      "description": "Rapid beam pulses pierce every machine in a narrow line."
+      "description": "Rapid beam pulses pierce every machine in a narrow line.",
+      "rank_rules": {
+        "2": {"id": "rank.coil.wide_winding", "name": "WIDE WINDING", "description": "A wider winding makes the piercing lane more reliable.", "width": 10},
+        "3": {"id": "rank.coil.rest_note", "name": "REST NOTE", "description": "Hits briefly quiet support actions inside the beam.", "quiet_ticks": 60}
+      }
     },
     "weapon.altar_mortar": {
       "short": "Altar Mortar",
@@ -133,7 +159,11 @@
       "range": 330,
       "width": 72,
       "color": "e89765",
-      "description": "Burst shells hit a cluster around the nearest enemy."
+      "description": "Burst shells hit a cluster around the nearest enemy.",
+      "rank_rules": {
+        "2": {"id": "rank.mortar.larger_font", "name": "LARGER FONT", "description": "The shell opens into a wider cluster-clearing blast.", "width": 90},
+        "3": {"id": "rank.mortar.echo_charge", "name": "ECHO CHARGE", "description": "A reset spring shortens the delay before the next shell.", "cooldown": 78}
+      }
     },
     "weapon.foundry_censer": {
       "short": "Foundry Censer",
@@ -149,7 +179,11 @@
       "slow_ticks": 42,
       "scrap_every": 3,
       "color": "74b9a6",
-      "description": "A close smoke ring. Slows nearby threats; every third close defeat leaves Scrap."
+      "description": "A close smoke ring. Slows nearby threats; repeated close defeats leave Scrap.",
+      "rank_rules": {
+        "2": {"id": "rank.censer.thicker_smoke", "name": "THICKER SMOKE", "description": "Threats remain slowed for longer after leaving the ring.", "slow_ticks": 63},
+        "3": {"id": "rank.censer.ember_sieve", "name": "EMBER SIEVE", "description": "Every second close defeat leaves one Scrap ember.", "scrap_every": 2}
+      }
     },
     "weapon.penance_winch": {
       "short": "Penance Winch",
@@ -164,7 +198,11 @@
       "width": 0,
       "pull_distance": 74,
       "color": "d6b16d",
-      "description": "Hooks one relay attacker or the farthest threat, cancels its strike, and pulls it off route."
+      "description": "Hooks one relay attacker or the farthest threat, cancels its strike, and pulls it off route.",
+      "rank_rules": {
+        "2": {"id": "rank.winch.longer_drum", "name": "LONGER DRUM", "description": "The hook reaches a farther priority machine.", "range": 610},
+        "3": {"id": "rank.winch.ratchet_lock", "name": "RATCHET LOCK", "description": "A locking tooth holds the pulled machine for longer.", "bind_ticks": 135}
+      }
     },
     "weapon.welded_halo": {
       "short": "Welded Halo",
@@ -181,7 +219,11 @@
       "repair_progress": 16,
       "saint_repair": 0.5,
       "color": "a9e0b1",
-      "description": "A rotating close guard. Near an unfinished repair objective, each contact adds a visible stitch."
+      "description": "A rotating close guard. Near an unfinished repair objective, each contact adds a visible stitch.",
+      "rank_rules": {
+        "2": {"id": "rank.halo.double_stitch", "name": "DOUBLE STITCH", "description": "Each contact adds a stronger stitch to the current repair.", "repair_progress": 24},
+        "3": {"id": "rank.halo.warm_circuit", "name": "WARM CIRCUIT", "description": "When no work accepts a stitch, the circuit repairs more Saint Structure.", "saint_repair": 1.5}
+      }
     }
   },
   "catalysts": {

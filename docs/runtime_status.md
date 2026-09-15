@@ -6,7 +6,7 @@ The project now contains a runnable Godot 4.5.1 desktop prototype. This is the f
 
 - A title screen, five-page field manual, three selectable Saint frames, persistent accessibility/settings controls, save/resume and profile unlocks.
 - Eight 70-second Workshop waves, followed by two selectable road legs, a four-wave mid-site and a three-wave terminal site. Each road has two unskippable authored decisions; shop, map and travel reading time is paused.
-- Four Blessings, ten automatic weapons, seven catalysts, eight visible evolutions, four active slots, one reserve and two run-local Gift slots.
+- Four Blessings, ten automatic weapons with authored Rank II and Rank III behavior, seven catalysts, eight visible evolutions, four active slots, one reserve and two run-local Gift slots.
 - Movement, three optional repair machines, pickups, seven ordinary enemy families, an elite and six distinct phased destination bosses. Relay defence remains a development comparison.
 - Purchases, automatic duplicate combining, explicit combine, sell/dismantle, reserve/equip, offer lock and one free/two paid refreshes.
 - Eight Rank III plus catalyst Evolutions with distinct geometry, target, control, repair or resource behaviour. Catalysts are consumed atomically, and every encounter supports unevolved runs.
@@ -23,7 +23,7 @@ Blessing fulfilment counts two distinct active weapon IDs sharing the doctrine's
 
 The three doctrine services are deliberately small: Workshop restores structure, Bell lengthens authored threat telegraphs by 50% for the next wave, and Mourner makes the next six defeats leave healing motes. Full rebuild/refund and elite-remnant services from the long-term bible are deferred. Every shop exposes the authored next-wave pressure and valid geometry families; Bell buys additional response time rather than hidden information.
 
-The ten weapons cover piercing priority, stagger, orbit, execution, binding, dense-line fire, clustered bombardment, close smoke control and repair contact. Shop cards state each relic's role and weakness. Eight Evolutions visibly alter geometry, targeting, control, objective interaction or resource behaviour; the in-game Ledger previews each recipe and its missing ingredients.
+The ten weapons cover piercing priority, stagger, orbit, execution, binding, dense-line fire, clustered bombardment, close smoke control and repair contact. Every base weapon has cumulative, content-owned Rank II and Rank III rules that change geometry, target count, cadence, control, repair or resource behavior beyond the shared damage increase. Combat events carry the stable active rank-behavior IDs, and the loadout identifies the current named rank behavior. Shop cards state each relic's role and weakness. Eight Evolutions visibly alter geometry, targeting, control, objective interaction or resource behaviour; the in-game Ledger previews each recipe and its missing ingredients.
 
 The Crane copies rail geometry if an evolution exists and otherwise telegraphs a circular attack. Foreman moves faster and closes distance across Demolition, Workers and Final Orders phases. Each phase uses a deterministic route-shaped hazard pattern; later phases summon trace-labelled workers and close one additional lane. The Choir Regent has its own Measure, Grand Toll and Answer in Threes contract: announced resonance slows weapon cycling, then shifts from the Saint's position to the three visible relay rings. The Factory Heart instead pulses through the visible pump, temporarily suspends repair work, calls a trace-labelled Rust Pilgrim during Graft Feed, and ends with a pump-versus-personal-safety hazard choice. Destination boss cadence, warning, damage, movement and stop distances are owned by boss content data. Mites return stolen Scrap on defeat.
 
@@ -38,6 +38,15 @@ Art is original procedural placeholder geometry drawn by the renderer. Audio is 
 Settings, volume, screen mode, reduced motion, high contrast and movement remapping persist locally. The fixed simulation is replay-tested within the pinned engine/platform, not certified cross-platform. Save files are local version-3 snapshots and migrate version-1 Workshop and version-2 chapter runs. Content tuning, shop breadth and secondary effects remain preview-level. Natural policies do not establish feel, preference, effect readability in motion or ideal 1x density.
 
 Exactly one next task: focused uncoached human playtest of the complete First Shift at 1x.
+
+
+## P15-A — differentiated base ranks
+
+All ten enabled weapons now resolve cumulative data-owned Rank II and Rank III overlays before simulation targeting, geometry, cadence, control, repair and resource effects. Explicit Combine and purchase auto-combine share one canonical assembly path, reset readiness identically and emit the same stable rank behavior IDs. Evolved weapons continue to resolve only their authored Evolution rule, so rank overlays do not leak into transformed behavior.
+
+Configured 1280×800 fixtures under `artifacts/weapon-ranks` compare the same precision, control, orbit and execution loadout at Ranks I, II and III. The focused table-driven suite exercises all twenty rank behaviors and validates the explicit/automatic combine equivalence. These deterministic fixtures are not evidence of player comprehension or preference.
+
+Exactly one next task: uncoached 1× comparison of Rank I/II/III readability during ordinary acquisition.
 
 
 ## P14.1 - eight visible Evolutions
