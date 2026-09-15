@@ -20,6 +20,12 @@ func finish_travel(sim):
 		var free_choice = node.choices.filter(func(choice): return int(choice.cost) == 0)[0]
 		check(sim.command("choose_road_option", free_choice.id) == "OK", "authored road choice advances")
 
+func equipped_evolution(sim, evolution_id: String):
+	var recipe = sim.evolution_recipes[evolution_id]
+	var weapon = sim.make_weapon(recipe.base_item_id, 3)
+	weapon.evolution = evolution_id
+	return weapon
+
 func _initialize():
 	var sim = Sim.new()
 	sim.start(0, 147, "optional")
@@ -136,14 +142,63 @@ func _initialize():
 	check(sim.state.objective[0].complete and sim.active_destination_node_index() == 1, "Archive advances to the next ordered record")
 	sim.state.enemies.clear()
 	sim.state.hazards.clear()
-	sim.state.evolutions = ["evolution.great_toll"]
 	sim.spawn(sim.current_boss_id())
 	var archivist = sim.state.enemies[-1]
 	archivist.hp = archivist.max_hp * 0.5
 	var archive_phase = sim.bosses[archivist.type].phases[1]
-	sim.state.tick = int(archivist.spawn_tick) + int(archive_phase.interval)
-	sim.update_enemies()
-	check(sim.state.hazards.size() == 1 and sim.state.hazards[0].copy and sim.state.hazards[0].copy_shape == "radial", "Archivist copies the latest explicit evolution geometry")
+	var copy_cases = [
+		{"id": "evolution.mercy_rail", "shape": "rail", "behavior": "pierce_line"},
+		{"id": "evolution.great_toll", "shape": "radial", "behavior": "displace"},
+		{"id": "evolution.ashen_benediction", "shape": "ashen_censer", "behavior": "slow_cycles"},
+		{"id": "evolution.long_hand", "shape": "long_hand", "behavior": "pull"},
+		{"id": "evolution.halo_of_repairs", "shape": "repair_halo", "behavior": "repair_on_contact"},
+		{"id": "evolution.candle_unreturned", "shape": "funeral_shots", "behavior": "seeking_volley"},
+		{"id": "evolution.quiet_sermon", "shape": "sermon", "behavior": "quiet_weapons"},
+		{"id": "evolution.workshop_benediction", "shape": "benediction", "behavior": "cluster_blast"}
+	]
+	for copy_case in copy_cases:
+		sim.state.weapons = [equipped_evolution(sim, copy_case.id)]
+		sim.state.reserve.clear()
+		# Deliberately retain every past Evolution in the ledger: only the equipped
+		# weapon is eligible for the Archivist's visible copy.
+		sim.state.evolutions = sim.config.evolutions.duplicate()
+		sim.state.hazards.clear()
+		sim.events.clear()
+		sim.state.tick += 200
+		sim.state.position = Vector2(420, 650)
+		sim.state.hp = sim.saint_max_structure()
+		sim.state.hurt_until = 0
+		sim.state.pressure_until = 0
+		sim.state.pressure_multiplier = 1.0
+		sim.state.weapon_lock_until = 0
+		archivist.p = Vector2(318, 650)
+		archivist.hp = archivist.max_hp - 100
+		var before_position = sim.state.position
+		var before_boss_hp = archivist.hp
+		sim.append_boss_hazard(archivist, archive_phase, sim.state.position)
+		var copied = sim.state.hazards[0]
+		check(copied.copy and copied.copy_evolution == copy_case.id and copied.copy_weapon == sim.state.weapons[0].id, "%s copies the currently equipped evolved relic" % copy_case.id)
+		check(copied.copy_shape == copy_case.shape and copied.copy_behavior == copy_case.behavior, "%s exposes its authored copy geometry and behavior" % copy_case.id)
+		sim.state.tick = copied.until
+		sim.update_hazards()
+		check(sim.state.hp < sim.saint_max_structure(), "%s copied geometry resolves against the Saint" % copy_case.id)
+		match copy_case.behavior:
+			"displace": check(sim.state.position.distance_to(archivist.p) > before_position.distance_to(archivist.p), "Great Toll copy displaces away from the Archivist")
+			"slow_cycles": check(sim.state.pressure_until > sim.state.tick and sim.state.pressure_multiplier > 1.0, "Ashen copy slows relic cycles")
+			"pull": check(sim.state.position.distance_to(archivist.p) < before_position.distance_to(archivist.p), "Long Hand copy pulls toward the Archivist")
+			"repair_on_contact": check(archivist.hp > before_boss_hp, "Halo copy closes its repair circuit through contact")
+			"quiet_weapons": check(sim.state.weapon_lock_until > sim.state.tick, "Quiet Sermon copy suspends relic cycles")
+	var first_slot = equipped_evolution(sim, "evolution.quiet_sermon")
+	var second_slot = equipped_evolution(sim, "evolution.mercy_rail")
+	sim.state.weapons = [first_slot, second_slot]
+	sim.state.evolutions = ["evolution.mercy_rail", "evolution.quiet_sermon"]
+	check(sim.equipped_archivist_copy().evolution_id == "evolution.quiet_sermon", "Archivist resolves multiple active Evolutions by visible slot order")
+	sim.state.weapons = [sim.make_weapon("weapon.nailer_small_mercies")]
+	sim.state.reserve = [equipped_evolution(sim, "evolution.great_toll")]
+	sim.state.evolutions = ["evolution.great_toll"]
+	check(sim.equipped_archivist_copy().is_empty(), "Archivist never copies a reserve-only Evolution")
+	sim.state.reserve.clear()
+	check(sim.equipped_archivist_copy().is_empty(), "Archivist never copies sold Evolution history")
 	for node in sim.state.objective: node.complete = true
 	sim.state.objective_complete = true
 	sim.state.enemies.clear()

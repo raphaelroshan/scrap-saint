@@ -52,8 +52,25 @@ done
 "$GODOT_BIN" --headless --path . --script tests/run_playthroughs.gd -- --optional | tee -a "$OUTPUT_DIR/tests.log"
 "$GODOT_BIN" --headless --path . --script tests/run_playthroughs.gd -- --optional --ea-matrix | tee -a "$OUTPUT_DIR/tests.log"
 "$GODOT_BIN" --headless --path . --script tests/run_assembly_playthroughs.gd | tee -a "$OUTPUT_DIR/tests.log"
+"$GODOT_BIN" --headless --path . --script tests/run_evolution_playthroughs.gd | tee -a "$OUTPUT_DIR/tests.log"
+
+# Godot can return zero after a script parse/load failure, so do not trust the
+# process status alone when certifying a release.
+if grep -Eq 'SCRIPT ERROR:|Failed to load script' "$OUTPUT_DIR/tests.log"; then
+  echo "Godot reported a script load failure; refusing to export." >&2
+  exit 1
+fi
 
 "$GODOT_BIN" --headless --path . --export-release "$PRESET" "$OUTPUT_PATH"
+
+if [ -n "$COMPANION_NAME" ]; then
+  SMOKE_LOG="$OUTPUT_DIR/BOOT_SMOKE.log"
+  "$GODOT_BIN" --headless --main-pack "$OUTPUT_DIR/$COMPANION_NAME" --quit-after 5 2>&1 | tee "$SMOKE_LOG"
+  if grep -Eq 'SCRIPT ERROR:|Failed to load script|Error loading resource' "$SMOKE_LOG"; then
+    echo "Exported package failed its boot smoke test; refusing to package." >&2
+    exit 1
+  fi
+fi
 
 {
   echo "version=$VERSION"
@@ -79,7 +96,7 @@ fi
 
 if [ "$TARGET" = "windows" ]; then
   PACKAGE_NAME="ScrapSaint-${VERSION}-windows-x86_64.zip"
-  (cd "$OUTPUT_DIR" && zip -q "$PACKAGE_NAME" "$ARTIFACT_NAME" "$COMPANION_NAME" BUILD.txt SHA256SUMS.txt)
+  (cd "$OUTPUT_DIR" && zip -q "$PACKAGE_NAME" "$ARTIFACT_NAME" "$COMPANION_NAME" BUILD.txt BOOT_SMOKE.log SHA256SUMS.txt)
 fi
 
 echo "Release built: $OUTPUT_PATH"

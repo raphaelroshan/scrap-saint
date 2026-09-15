@@ -121,8 +121,10 @@ func run_checks():
 	check(game.sim.state.phase == "memory" and memory_button != null, "completed destination exposes a focused memory action")
 	await activate(memory_button)
 	check(game.sim.state.phase == "route" and game.sim.state.memory_ids.size() == 1, "mid-site memory input reaches the terminal route choice")
-	check(root.gui_get_focus_owner() is Button and root.gui_get_focus_owner().text.begins_with("CHOOSE "), "terminal route selection has a controller focus target")
+	check(root.gui_get_focus_owner() is Button and root.gui_get_focus_owner().text in ["PALE ARCHIVE", "RED FOUNDRY", "NULL ASSEMBLY"], "terminal route selection has a controller focus target")
 	await activate(root.gui_get_focus_owner())
+	check(game.sim.state.phase == "route", "terminal route preview does not bypass assignment confirmation")
+	await activate(button_with(game, "ACCEPT ASSIGNMENT", true))
 	while game.sim.state.phase == "travel":
 		check(root.gui_get_focus_owner() is Button, "each terminal travel beat has a focused continuation")
 		await activate(root.gui_get_focus_owner())

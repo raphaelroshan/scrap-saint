@@ -84,5 +84,5 @@ func capture():
 
 	game.queue_free()
 	await process_frame
-	print("P14.1 fixtures: configured executable states, seed147, Godot 4.5.1, 1280x800; not human playtests")
+	print("P14.1 fixtures: configured executable states, seed147, Godot %s, 1280x800; not human playtests" % Engine.get_version_info().string)
 	quit()

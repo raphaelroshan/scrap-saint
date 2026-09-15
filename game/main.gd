@@ -529,7 +529,10 @@ func draw_header():
 		text_at("%d%% integrity · %d%% work" % [sim.state.relay_hp * 100 / sim.config.relay.structure, sim.state.progress * 100 / sim.config.relay.required_ticks], Vector2(568, 72), 13)
 	text_at("%02d  SCRAP" % sim.state.scrap, Vector2(800, 43), 19, GOLD)
 	text_at("%d  RELIC SHARDS" % sim.state.shards, Vector2(800, 69), 12, MUTED)
-	text_at("WAVE %02d / %02d" % [sim.state.wave, sim.current_wave_count()], Vector2(1070, 43), 18)
+	var stage_label = "WAVE %02d / %02d" % [sim.state.wave, sim.current_wave_count()]
+	if sim.state.phase == "route": stage_label = "ROUTE MAP"
+	elif sim.state.phase == "travel": stage_label = "ROAD %02d / %02d" % [sim.state.travel_step + 1, sim.road_nodes_for(sim.current_route()).size()]
+	text_at(stage_label, Vector2(1070, 43), 18)
 	text_at("%02d:%02d" % [int(sim.state.tick / 3600), int(sim.state.tick / 60) % 60], Vector2(1070, 70), 14, MUTED)
 	draw_line(Vector2(28, 89), Vector2(1252, 89), Color("3a4d48"))
 	var instruction = "Stay in the work circle to repair. Weapons fire automatically."
@@ -624,15 +627,30 @@ func draw_world():
 	for h in sim.state.hazards:
 		var f = 1.0 - float(h.until - sim.state.tick) / h.get("warning_ticks", sim.config.boss_rules.hazard_warning_ticks * sim.warning_multiplier())
 		if h.copy:
-			if h.get("copy_shape", "rail") == "radial":
-				draw_circle(h.from, sim.config.great_toll.range, Color(0.9, 0.4, 0.3, 0.08 + f * 0.12))
-				draw_arc(h.from, sim.config.great_toll.range, 0, TAU, 56, RED, 3)
-				text_at("COPIED TOLL", h.from + Vector2(-42, -48), 11, RED)
+			var copy_shape = str(h.get("copy_shape", "rail"))
+			var copy_range = float(h.get("copy_range", h.radius))
+			var copy_width = float(h.get("copy_width", h.radius))
+			var direction = (h.p - h.from).normalized()
+			if direction == Vector2.ZERO: direction = Vector2.RIGHT
+			if copy_shape == "radial":
+				draw_circle(h.from, copy_range, Color(0.9, 0.4, 0.3, 0.08 + f * 0.12))
+				draw_arc(h.from, copy_range, 0, TAU, 56, RED, 3)
+			elif copy_shape in ["rail", "sermon", "long_hand"]:
+				draw_line(h.from, h.from + direction * copy_range, Color(0.9, 0.4, 0.3, 0.15 + f * 0.3), maxf(8, copy_width * 2))
+				draw_line(h.from, h.from + direction * copy_range, RED, 2, true)
+			elif copy_shape == "repair_halo":
+				for contact in [h.from + direction * copy_range, h.from - direction * copy_range]:
+					draw_circle(contact, copy_width, Color(0.9, 0.4, 0.3, 0.08 + f * 0.12))
+					draw_arc(contact, copy_width, 0, TAU, 36, RED, 2)
+			elif copy_shape == "funeral_shots":
+				for target in h.get("copy_points", []):
+					draw_line(h.from, target, Color(0.9, 0.4, 0.3, 0.15 + f * 0.3), maxf(5, copy_width))
+					draw_circle(target, maxf(8, copy_width), Color(0.9, 0.4, 0.3, 0.12))
 			else:
-				var direction = (h.p - h.from).normalized()
-				draw_line(h.from, h.from + direction * sim.config.rail.range, Color(0.9, 0.4, 0.3, 0.15 + f * 0.3), sim.config.rail.width * 2)
-				draw_line(h.from, h.from + direction * sim.config.rail.range, RED, 2, true)
-				text_at("COPIED RAIL", h.from + Vector2(-40, -48), 11, RED)
+				var zone_radius = copy_width if copy_shape == "benediction" else copy_range
+				draw_circle(h.p, zone_radius, Color(0.9, 0.4, 0.3, 0.08 + f * 0.12))
+				draw_arc(h.p, zone_radius, 0, TAU, 48, RED, 3)
+			text_at("COPIED " + copy_shape.replace("_", " ").to_upper(), h.from + Vector2(-52, -48), 11, RED)
 			continue
 		draw_circle(h.p, h.radius, Color(0.85, 0.3, 0.18, 0.13 + f * 0.1))
 		draw_arc(h.p, h.radius, 0, TAU, 40, RED, 2)
@@ -751,7 +769,7 @@ func draw_travel_background():
 
 func draw_route_choice():
 	draw_rect(Rect2(60, 148, 980, 588), Color(0.035, 0.075, 0.08, 0.96))
-	text_at("PILGRIMAGE BOARD / WORKSHOP", Vector2(88, 187), 12, GOLD)
+	text_at(map_board_title(), Vector2(88, 187), 12, GOLD)
 	text_at("Choose the next repair.", Vector2(84, 225), 30, PAPER, true)
 	var map_data = sim.chapter.expedition_map
 	var sites_by_id = {}
@@ -759,9 +777,9 @@ func draw_route_choice():
 	for edge in map_data.edges:
 		var from = map_site_position(sites_by_id[edge.from_site_id])
 		var to = map_site_position(sites_by_id[edge.to_site_id])
-		var status = sim.assignment_status(str(edge.route_id))
-		var edge_color = GREEN if status == "accepted" else (GOLD if str(edge.route_id) == map_selection else Color(MUTED, 0.35))
-		draw_line(from, to, edge_color, 4 if status == "accepted" or str(edge.route_id) == map_selection else 2)
+		var emphasis = map_edge_emphasis(edge)
+		var edge_color = GREEN if emphasis == "accepted" else (GOLD if emphasis == "selected" else Color(MUTED, 0.35))
+		draw_line(from, to, edge_color, 4 if emphasis in ["accepted", "selected"] else 2)
 		for step in range(1, 4): draw_circle(from.lerp(to, step / 4.0), 3, edge_color)
 	for site in map_data.sites:
 		var p = map_site_position(site)
@@ -787,6 +805,29 @@ func draw_route_choice():
 	text_at("AVAILABLE", Vector2(88, 586), 9, MUTED)
 	text_at("SELECTED", Vector2(162, 586), 9, GOLD)
 	text_at("ACCEPTED", Vector2(232, 586), 9, GREEN)
+
+func map_board_title() -> String:
+	var current_site_id = str(sim.state.get("site_id", "site.collapsed_workshop"))
+	for site in sim.chapter.get("expedition_map", {}).get("sites", []):
+		if str(site.id) == current_site_id:
+			return "PILGRIMAGE BOARD / " + str(site.name).to_upper()
+	return "PILGRIMAGE BOARD / " + current_site_id.trim_prefix("site.").replace("_", " ").to_upper()
+
+func map_edge_emphasis(edge: Dictionary) -> String:
+	var route_id = str(edge.route_id)
+	var edge_origin = str(edge.from_site_id)
+	var current_origin = str(sim.state.get("site_id", "site.collapsed_workshop"))
+	if sim.assignment_status(route_id) == "accepted":
+		var accepted_origin = ""
+		var history: Array = sim.state.get("route_history", [])
+		var history_index = history.find(route_id)
+		if history_index == 0: accepted_origin = str(sim.chapter.expedition_map.origin_site_id)
+		elif history_index > 0 and sim.routes.has(str(history[history_index - 1])): accepted_origin = str(sim.routes[str(history[history_index - 1])].site_id)
+		if accepted_origin == "": accepted_origin = str(sim.state.get("route_origin_site_id", ""))
+		if accepted_origin == "": accepted_origin = current_origin
+		if edge_origin == accepted_origin: return "accepted"
+	if route_id == map_selection and edge_origin == current_origin: return "selected"
+	return "available"
 
 func map_site_position(site: Dictionary) -> Vector2:
 	return Vector2(100 + float(site.position[0]) * 525, 252 + float(site.position[1]) * 275)

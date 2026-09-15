@@ -128,7 +128,7 @@
       "phase_thresholds": [0.67, 0.34],
       "phases": [
         {"id": "index", "name": "INDEX THE ERROR", "rule": "pressure_next_record", "interval": 330, "warning_ticks": 110, "hazard_pattern": "active_objective", "hazard_radius": 60, "hazard_damage": 10, "speed": 20, "stop_distance": 220},
-        {"id": "duplicate", "name": "AUTHORIZED COPY", "rule": "copy_strongest_visible_evolution", "interval": 270, "warning_ticks": 105, "hazard_pattern": "player", "hazard_radius": 58, "hazard_damage": 11, "copy_evolution": true, "speed": 25, "stop_distance": 185},
+        {"id": "duplicate", "name": "AUTHORIZED COPY", "rule": "copy_first_equipped_evolution", "interval": 270, "warning_ticks": 105, "hazard_pattern": "player", "hazard_radius": 58, "hazard_damage": 11, "copy_evolution": true, "speed": 25, "stop_distance": 185},
         {"id": "redact", "name": "REDACT THE NAME", "rule": "copy_geometry_and_lock_next_record", "interval": 225, "warning_ticks": 90, "hazard_pattern": "player_and_active_objective", "hazard_radius": 56, "hazard_damage": 12, "copy_evolution": true, "objective_lock_ticks": 120, "summon_id": "enemy.choir_drone", "speed": 31, "stop_distance": 150}
       ],
       "telegraph": "violet_index_line_then_copied_geometry",

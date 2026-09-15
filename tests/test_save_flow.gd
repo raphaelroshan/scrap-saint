@@ -98,6 +98,26 @@ func _initialize():
 	var memory_copy = restored_copy(memory, "memory")
 	compare_command(memory, memory_copy, "accept_memory", null, "memory")
 
+	# Version-two saves could already contain the chapter's two-leg route history.
+	# Migrating the road-choice schema must not collapse that history to its last leg.
+	var legacy_chain = Sim.new()
+	legacy_chain.start(0, 147, "optional", "frame.pilgrim", "save-v2-chain")
+	reach_route(legacy_chain)
+	legacy_chain.command("choose_route", "route.brass_choir")
+	finish_travel(legacy_chain)
+	for node in legacy_chain.state.objective: node.complete = true
+	legacy_chain.state.objective_complete = true
+	legacy_chain.state.wave = legacy_chain.current_wave_count()
+	legacy_chain.state.boss_dead = true
+	legacy_chain.step(Vector2.ZERO)
+	legacy_chain.command("accept_memory")
+	legacy_chain.command("choose_route", "route.pale_archive")
+	legacy_chain.state.version = 2
+	var migrated_chain = Sim.new()
+	check(migrated_chain.restore(legacy_chain.snapshot()), "version-two second-leg save restores")
+	check(migrated_chain.state.route_history == ["route.brass_choir", "route.pale_archive"], "version-two migration preserves both authored route IDs")
+	check(migrated_chain.state.travel_step == 0 and migrated_chain.assignment_status("route.pale_archive") == "accepted", "version-two second-leg travel restarts at its first road node without losing assignment state")
+
 	# Version-one saves existed in both core-only and assembly forms. Missing fields must
 	# receive stable defaults while known Gifts and evolved weapon flags remain intact.
 	var legacy_source = Sim.new()

@@ -33,6 +33,57 @@ def unique_ids(entries: list[dict], label: str) -> set[str]:
     return set(ids)
 
 
+def validate_expedition_graph(chapter: dict) -> None:
+    """Require the rendered map and route command graph to describe one graph."""
+    routes = chapter.get("routes", [])
+    route_ids = unique_ids(routes, "chapter routes")
+    routes_by_id = {route["id"]: route for route in routes}
+    expedition_map = chapter.get("expedition_map", {})
+    origin_site_id = expedition_map.get("origin_site_id")
+    map_sites = expedition_map.get("sites", [])
+    map_site_ids = unique_ids(map_sites, "expedition map sites")
+
+    assert origin_site_id in map_site_ids, "expedition map origin must reference a map site"
+    route_site_ids = [route.get("site_id") for route in routes]
+    assert all(isinstance(site_id, str) and site_id for site_id in route_site_ids), "every route needs a destination site"
+    assert len(route_site_ids) == len(set(route_site_ids)), "chapter routes must have unique destination sites"
+    assert map_site_ids == {origin_site_id, *route_site_ids}, "expedition map contains an orphan or missing route site"
+
+    expected_edges: set[tuple[str, str, str]] = set()
+    expected_pairs: set[tuple[str, str]] = set()
+    for route in routes:
+        from_sites = route.get("from_sites", [])
+        assert from_sites, f"{route['id']}: missing graph parent"
+        assert len(from_sites) == len(set(from_sites)), f"{route['id']}: duplicate graph parent"
+        for from_site_id in from_sites:
+            assert from_site_id in map_site_ids, f"{route['id']}: unknown graph parent {from_site_id}"
+            pair = (from_site_id, route["id"])
+            assert pair not in expected_pairs, f"{route['id']}: duplicate authored graph pair {from_site_id}"
+            expected_pairs.add(pair)
+            expected_edges.add((from_site_id, route["site_id"], route["id"]))
+
+    edges = expedition_map.get("edges", [])
+    actual_edges: set[tuple[str, str, str]] = set()
+    actual_pairs: set[tuple[str, str]] = set()
+    for edge in edges:
+        source = edge.get("from_site_id")
+        destination = edge.get("to_site_id")
+        route_id = edge.get("route_id")
+        assert source in map_site_ids and destination in map_site_ids, "expedition map edge references an unknown site"
+        assert route_id in route_ids, f"expedition map edge references unknown route {route_id}"
+        route = routes_by_id[route_id]
+        assert source in route["from_sites"], f"{route_id}: map edge source is not an authored graph parent"
+        assert destination == route["site_id"], f"{route_id}: map edge destination does not match route site_id"
+        edge_key = (source, destination, route_id)
+        edge_pair = (source, route_id)
+        assert edge_key not in actual_edges, "expedition map edges must be unique"
+        assert edge_pair not in actual_pairs, f"{route_id}: multiple map edges for authored parent {source}"
+        actual_edges.add(edge_key)
+        actual_pairs.add(edge_pair)
+
+    assert actual_edges == expected_edges, "expedition map edges must exactly match authored route from_sites"
+
+
 def validate_slice(manifest: dict, data: dict) -> None:
     items = {entry['id']: entry for entry in data['items']['items']}
     enemies = {entry['id'] for entry in data['enemies']['enemies']}
@@ -68,6 +119,9 @@ def validate_slice(manifest: dict, data: dict) -> None:
         assert recipe['required_catalyst_id'] in manifest['catalysts']
         assert recipe_id in items[recipe['base_item_id']].get('evolution_ids', []), f'{recipe_id}: base does not advertise recipe'
         assert recipe_id in items[recipe['required_catalyst_id']].get('compatible_evolution_ids', []), f'{recipe_id}: catalyst does not advertise recipe'
+        rule = manifest.get('evolution_rules', {}).get(recipe_id, {})
+        copy = rule.get('archivist_copy', {})
+        assert copy.get('shape') and copy.get('behavior'), f'{recipe_id}: missing Archivist copy contract'
     assert manifest['economy']['reroll_costs'] == [0, 2, 4]
     assert manifest['wave_ticks'] > 0 and manifest['tick_rate'] == 60
     assert 'confluences' not in manifest, 'Confluences remain disabled for P14.1'
@@ -101,9 +155,9 @@ def validate_chapter(data: dict) -> None:
     for site in map_sites:
         assert site.get("name") and len(site.get("position", [])) == 2 and site.get("tier") in (0, 1, 2)
         assert all(0.0 <= float(value) <= 1.0 for value in site["position"]), f"{site['id']}: map position outside normalized viewport"
+    validate_expedition_graph(chapter)
     edges = expedition_map.get("edges", [])
     edge_keys = {(edge.get("from_site_id"), edge.get("to_site_id"), edge.get("route_id")) for edge in edges}
-    assert len(edge_keys) == len(edges), "expedition map edges must be unique"
     required_edges = {
         ("site.collapsed_workshop", "site.brass_choir_relay", "route.brass_choir"),
         ("site.collapsed_workshop", "site.rootworks_pump", "route.rootworks"),
@@ -113,8 +167,6 @@ def validate_chapter(data: dict) -> None:
         ("site.rootworks_pump", "site.null_assembly", "route.null_assembly"),
     }
     assert required_edges <= edge_keys, "expedition map must preserve the authored two-tier graph"
-    for source, destination, route_id in edge_keys:
-        assert source in map_site_ids and destination in map_site_ids and route_id, "invalid expedition map edge reference"
     bosses_by_id = {entry["id"]: entry for entry in data["bosses"]["bosses"]}
     boss_ids = set(bosses_by_id)
     site_ids: set[str] = set()

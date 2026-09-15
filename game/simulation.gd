@@ -130,6 +130,7 @@ func command(action: String, value = null) -> String:
 			emit("chapter_complete", {"memory_id": state.memory_id, "route": state.route, "route_history": state.route_history.duplicate()})
 		else:
 			state.phase = "route"
+			refresh_assignments()
 			state.last_reason = current_route().memory.conclusion
 			emit("routes_opened", {"routes": available_routes().map(func(route): return route.id), "travel_salvage": int(current_route().get("route_salvage", 0))})
 		return "OK"
@@ -205,12 +206,6 @@ func command(action: String, value = null) -> String:
 func current_route() -> Dictionary:
 	return routes.get(state.get("route", ""), {})
 
-func available_routes() -> Array:
-	var available: Array = []
-	for route in chapter.routes:
-		if state.site_id in route.get("from_sites", ["site.collapsed_workshop"]): available.append(route)
-	return available
-
 func is_destination() -> bool:
 	return state.get("site_id", "site.collapsed_workshop") != "site.collapsed_workshop"
 
@@ -270,8 +265,8 @@ func current_road_node() -> Dictionary:
 func choose_route(route_id: String) -> String:
 	if not routes.has(route_id): return "INVALID_ROUTE"
 	var route = routes[route_id]
-	if assignment_status(route_id) != "available": return "ROUTE_UNAVAILABLE"
 	if state.site_id not in route.get("from_sites", ["site.collapsed_workshop"]): return "ROUTE_NOT_CONNECTED"
+	if assignment_status(route_id) != "available": return "ROUTE_UNAVAILABLE"
 	if state.scrap < int(route.cost): return "INSUFFICIENT_SCRAP"
 	state.scrap -= int(route.cost)
 	state.route = route_id
@@ -1003,14 +998,40 @@ func boss_phase_name(enemy: Dictionary) -> String:
 	var data = boss_phase_data(enemy)
 	return str(data.get("name", data.get("id", "PRESSURE"))).to_upper()
 
+func equipped_archivist_copy() -> Dictionary:
+	# Active slot order is visible to the player and is therefore the deterministic
+	# tie-breaker when several equipped relics have evolved. Reserve weapons and the
+	# historical evolution ledger are intentionally not candidates.
+	for weapon in state.get("weapons", []):
+		var evolution_id = weapon_evolution_id(weapon)
+		if evolution_id == "" or not config.evolution_rules.has(evolution_id): continue
+		var rule = config.evolution_rules[evolution_id]
+		var copy = rule.get("archivist_copy", {}).duplicate(true)
+		if copy.is_empty(): continue
+		copy.evolution_id = evolution_id
+		copy.weapon_id = weapon.id
+		copy.range = float(copy.get("range", rule.get("range", 0)))
+		copy.width = float(copy.get("width", rule.get("width", 0)))
+		return copy
+	return {}
+
 func append_boss_hazard(boss: Dictionary, phase_data: Dictionary, position: Vector2):
 	var warning_ticks = int(float(phase_data.warning_ticks) * warning_multiplier())
-	var copy_evolution = ""
-	if phase_data.get("copy_evolution", false) and not state.evolutions.is_empty(): copy_evolution = str(state.evolutions[-1])
-	var copy_shape = "radial" if copy_evolution == "evolution.great_toll" else ("rail" if copy_evolution == "evolution.mercy_rail" else "")
+	var copy = equipped_archivist_copy() if phase_data.get("copy_evolution", false) else {}
+	var copy_shape = str(copy.get("shape", ""))
+	var copy_points: Array = []
+	if copy_shape == "funeral_shots":
+		var direction = (position - boss.p).normalized()
+		if direction == Vector2.ZERO: direction = Vector2.RIGHT
+		var spread = maxf(20.0, float(copy.get("width", 8)) * 3.0)
+		for index in range(int(copy.get("target_count", 3))):
+			copy_points.append(position + direction.orthogonal() * (index - (int(copy.get("target_count", 3)) - 1) * 0.5) * spread)
 	state.hazards.append({"p": position, "from": boss.p, "until": state.tick + warning_ticks, "warning_ticks": warning_ticks,
 		"radius": float(phase_data.hazard_radius), "damage": float(phase_data.hazard_damage), "source": boss.type, "source_id": boss.id,
-		"copy": copy_shape != "", "copy_evolution": copy_evolution, "copy_shape": copy_shape, "kind": str(phase_data.id), "phase": boss.phase})
+		"copy": not copy.is_empty(), "copy_evolution": str(copy.get("evolution_id", "")), "copy_weapon": str(copy.get("weapon_id", "")),
+		"copy_shape": copy_shape, "copy_behavior": str(copy.get("behavior", "")), "copy_range": float(copy.get("range", 0)),
+		"copy_width": float(copy.get("width", 0)), "copy_effect_ticks": int(copy.get("effect_ticks", 0)),
+		"copy_effect_value": float(copy.get("effect_value", 0)), "copy_points": copy_points, "kind": str(phase_data.id), "phase": boss.phase})
 
 func destination_hazard_points(pattern: String, phase_data: Dictionary, boss_elapsed: int) -> Array:
 	var points: Array = []
@@ -1478,24 +1499,81 @@ func collect_scrap(amount: int, source: String = "pickups"):
 		net -= spent
 	record_scrap(source, maxi(0, net))
 
+func copied_hazard_hits_point(hazard: Dictionary, point: Vector2, body_radius: float) -> bool:
+	var shape = str(hazard.get("copy_shape", ""))
+	var copy_rule = config.evolution_rules.get(str(hazard.get("copy_evolution", "")), {})
+	var copy_range = float(hazard.get("copy_range", copy_rule.get("range", hazard.get("radius", 0))))
+	var copy_width = float(hazard.get("copy_width", copy_rule.get("width", hazard.get("radius", 0))))
+	var direction = (hazard.p - hazard.from).normalized()
+	if direction == Vector2.ZERO: direction = Vector2.RIGHT
+	match shape:
+		"radial":
+			return point.distance_to(hazard.from) < copy_range + body_radius
+		"rail", "sermon", "long_hand":
+			var delta = point - hazard.from
+			return delta.dot(direction) >= 0 and delta.dot(direction) < copy_range and absf(delta.cross(direction)) < copy_width + body_radius
+		"ashen_censer":
+			return point.distance_to(hazard.p) < copy_range + body_radius
+		"benediction":
+			return point.distance_to(hazard.p) < copy_width + body_radius
+		"repair_halo":
+			var contact = hazard.from + direction * copy_range
+			var opposite = hazard.from - direction * copy_range
+			return minf(point.distance_to(contact), point.distance_to(opposite)) < copy_width + body_radius
+		"funeral_shots":
+			return hazard.get("copy_points", []).any(func(target): return point.distance_to(target) < copy_width + body_radius)
+	return point.distance_to(hazard.p) < hazard.radius + body_radius
+
+func emit_copied_hazard_attack(hazard: Dictionary):
+	var shape = str(hazard.get("copy_shape", ""))
+	var copy_rule = config.evolution_rules.get(str(hazard.get("copy_evolution", "")), {})
+	var copy_range = float(hazard.get("copy_range", copy_rule.get("range", hazard.get("radius", 0))))
+	var copy_width = float(hazard.get("copy_width", copy_rule.get("width", hazard.get("radius", 0))))
+	var direction = (hazard.p - hazard.from).normalized()
+	if direction == Vector2.ZERO: direction = Vector2.RIGHT
+	var payload = {"from": hazard.from, "to": hazard.p, "shape": shape, "weapon": hazard.get("source", "boss.archivist_prime"),
+		"evolution": hazard.get("copy_evolution", ""), "color": "e48b73", "range": copy_range, "width": copy_width}
+	if shape == "radial": payload.to = hazard.from
+	elif shape in ["rail", "sermon", "long_hand"]: payload.to = hazard.from + direction * copy_range
+	elif shape == "repair_halo":
+		payload.to = hazard.from + direction * copy_range
+		payload.to2 = hazard.from - direction * copy_range
+	elif shape == "funeral_shots": payload.targets = hazard.get("copy_points", [])
+	emit("attack", payload)
+
+func apply_copied_hazard_behavior(hazard: Dictionary):
+	match str(hazard.get("copy_behavior", "")):
+		"displace":
+			var away = (state.position - hazard.from).normalized()
+			if away == Vector2.ZERO: away = Vector2.RIGHT
+			state.position = arena.move_body(state.position, away * float(hazard.copy_effect_value), config.saint.radius)
+		"slow_cycles":
+			state.pressure_until = maxi(int(state.pressure_until), state.tick + int(hazard.copy_effect_ticks))
+			state.pressure_multiplier = maxf(float(state.pressure_multiplier), float(hazard.copy_effect_value))
+		"pull":
+			var toward = (hazard.from - state.position).normalized()
+			if toward != Vector2.ZERO: state.position = arena.move_body(state.position, toward * float(hazard.copy_effect_value), config.saint.radius)
+		"repair_on_contact":
+			for enemy in state.enemies:
+				if enemy.id != hazard.source_id: continue
+				var restored = minf(float(hazard.copy_effect_value), enemy.max_hp - enemy.hp)
+				enemy.hp += restored
+				if restored > 0: emit("repair", {"position": enemy.p, "amount": restored, "source": state.position})
+				break
+		"quiet_weapons":
+			state.weapon_lock_until = maxi(int(state.weapon_lock_until), state.tick + int(hazard.copy_effect_ticks))
+
 func update_hazards():
 	for h in state.hazards:
 		if h.until != state.tick: continue
 		var player_hit = state.position.distance_to(h.p) < h.radius
 		var relay_hit = relay_position().distance_to(h.p) < h.radius
 		if h.copy:
-			if h.get("copy_shape", "rail") == "radial":
-				player_hit = state.position.distance_to(h.from) < config.great_toll.range + config.saint.radius
-				relay_hit = relay_position().distance_to(h.from) < config.great_toll.range + 28
-				emit("attack", {"from": h.from, "to": h.from, "shape": "radial", "weapon": h.get("source", "elite.memory_crane"), "color": "e48b73", "range": config.great_toll.range})
-			else:
-				var direction = (h.p - h.from).normalized()
-				var player_delta = state.position - h.from
-				var relay_delta = relay_position() - h.from
-				player_hit = player_delta.dot(direction) >= 0 and player_delta.dot(direction) < config.rail.range and absf(player_delta.cross(direction)) < config.rail.width + config.saint.radius
-				relay_hit = relay_delta.dot(direction) >= 0 and relay_delta.dot(direction) < config.rail.range and absf(relay_delta.cross(direction)) < config.rail.width + 28
-				emit("attack", {"from": h.from, "to": h.from + direction * config.rail.range, "shape": "rail", "weapon": h.get("source", "elite.memory_crane"), "color": "e48b73", "range": config.rail.range})
+			player_hit = copied_hazard_hits_point(h, state.position, float(config.saint.radius))
+			relay_hit = copied_hazard_hits_point(h, relay_position(), 28.0)
+			emit_copied_hazard_attack(h)
 		if player_hit: hurt_saint(h.get("damage", config.boss_rules.hazard_damage), h.get("source", "demolition"))
+		if player_hit and h.copy: apply_copied_hazard_behavior(h)
 		if relay_hit:
 			damage_relay(config.boss_rules.hazard_damage * config.boss_rules.relay_damage_multiplier, h.get("source", "demolition"))
 		if not h.copy: emit("blast", {"position": h.p, "radius": h.radius})
@@ -1539,7 +1617,6 @@ func restore(saved: Dictionary) -> bool:
 		if state.phase == "travel": state.travel_step = 0
 		if state.route != "":
 			state.assignment_statuses[state.route] = "accepted"
-			state.route_history = [state.route]
 		elif state.phase == "route": refresh_assignments()
 	for machine in state.machines:
 		if not machine.has("deferred"): machine.deferred = ""
