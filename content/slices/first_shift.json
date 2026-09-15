@@ -204,6 +204,18 @@
       "short": "Quiet Gear",
       "description": "Weapon mechanisms cycle 10% faster.",
       "cooldown_multiplier": 0.9
+    },
+    "catalyst.mourners_wick": {
+      "short": "Mourner's Wick",
+      "description": "Rank III Candle-Nailer can become Candle for the Unreturned."
+    },
+    "catalyst.blue_wire_from_pump": {
+      "short": "Blue Pump Wire",
+      "description": "Rank III Penance Winch can become The Long Hand."
+    },
+    "catalyst.folded_maintenance_blueprint": {
+      "short": "Folded Blueprint",
+      "description": "Rank III Hymn Coil can become Quiet Sermon."
     }
   },
   "gifts": {
@@ -298,7 +310,13 @@
   "boss": "boss.foreman_engine",
   "evolutions": [
     "evolution.mercy_rail",
-    "evolution.great_toll"
+    "evolution.great_toll",
+    "evolution.ashen_benediction",
+    "evolution.long_hand",
+    "evolution.halo_of_repairs",
+    "evolution.candle_unreturned",
+    "evolution.quiet_sermon",
+    "evolution.workshop_benediction"
   ],
   "rail": {
     "damage": 70,
@@ -315,6 +333,89 @@
     "push_distance": 44,
     "mark_ticks": 150,
     "stun_ticks": 62
+  },
+  "evolution_rules": {
+    "evolution.mercy_rail": {
+      "shape": "rail",
+      "short": "Mercy Rail",
+      "damage": 70,
+      "cooldown": 95,
+      "range": 620,
+      "width": 19
+    },
+    "evolution.great_toll": {
+      "shape": "radial",
+      "short": "The Great Toll",
+      "damage": 25,
+      "cooldown": 118,
+      "range": 215,
+      "width": 0
+    },
+    "evolution.ashen_benediction": {
+      "shape": "ashen_censer",
+      "short": "Ashen Benediction",
+      "damage": 8,
+      "cooldown": 28,
+      "range": 112,
+      "width": 0,
+      "zone_offset": 105,
+      "slow_ticks": 72,
+      "mote_every": 2,
+      "mote_seek_speed": 3.5
+    },
+    "evolution.long_hand": {
+      "shape": "long_hand",
+      "short": "The Long Hand",
+      "damage": 16,
+      "cooldown": 118,
+      "range": 650,
+      "width": 34,
+      "pull_distance": 104,
+      "bind_ticks": 132
+    },
+    "evolution.halo_of_repairs": {
+      "shape": "repair_halo",
+      "short": "Halo of Repairs",
+      "damage": 10,
+      "cooldown": 42,
+      "range": 102,
+      "width": 32,
+      "machine_range": 175,
+      "repair_progress": 22,
+      "circuit_heal": 2
+    },
+    "evolution.candle_unreturned": {
+      "shape": "funeral_shots",
+      "short": "Candle for the Unreturned",
+      "damage": 21,
+      "cooldown": 58,
+      "range": 430,
+      "width": 8,
+      "target_count": 3,
+      "mote_healing": 3,
+      "marked_support_bonus": 1,
+      "mote_seek_speed": 4.5
+    },
+    "evolution.quiet_sermon": {
+      "shape": "sermon",
+      "short": "Quiet Sermon",
+      "damage": 7,
+      "cooldown": 18,
+      "range": 470,
+      "width": 24,
+      "quiet_ticks": 150
+    },
+    "evolution.workshop_benediction": {
+      "shape": "benediction",
+      "short": "Workshop Benediction",
+      "damage": 32,
+      "cooldown": 112,
+      "range": 360,
+      "width": 82,
+      "machine_range": 220,
+      "repair_progress": 28,
+      "saint_repair": 4
+    }
   },
   "combat": {
     "spawn_interval": 110,

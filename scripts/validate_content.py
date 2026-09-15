@@ -40,14 +40,14 @@ def validate_slice(manifest: dict, data: dict) -> None:
     blessings = {entry['id'] for entry in data['blessings']['blessings']}
     evolutions = {entry['id']: entry for entry in data['items']['evolutions']}
     assert len(manifest['weapons']) == 10, 'P14 slice must enable ten role-distinct weapons'
-    assert len(manifest['catalysts']) == 4, 'slice must enable four useful catalysts'
+    assert len(manifest['catalysts']) == 7, 'P14.1 slice must enable seven recipe-supporting catalysts'
     assert len(manifest['gifts']) == 3 and manifest['gift_slots'] == 2, 'P14 slice needs three Gifts and two slots'
     assert len(manifest['enemies']) == 6, 'slice must enable six ordinary enemies'
     assert len(manifest['blessings']) == 4 and len(set(manifest['blessings'])) == 4
     assert set(manifest['blessings']) <= blessings
     assert manifest['elite'] in enemies and manifest['boss'] in bosses
     assert set(manifest['enemies']) <= enemies
-    assert len(manifest['evolutions']) == 2
+    assert len(manifest['evolutions']) == 8, 'P14.1 slice must expose eight meaningful Evolutions'
     for kind in ('weapons', 'catalysts', 'gifts'):
         for item_id, settings in manifest[kind].items():
             assert item_id in items, f'unknown enabled item {item_id}'
@@ -66,9 +66,11 @@ def validate_slice(manifest: dict, data: dict) -> None:
         recipe = evolutions[recipe_id]
         assert recipe['base_item_id'] in manifest['weapons']
         assert recipe['required_catalyst_id'] in manifest['catalysts']
+        assert recipe_id in items[recipe['base_item_id']].get('evolution_ids', []), f'{recipe_id}: base does not advertise recipe'
+        assert recipe_id in items[recipe['required_catalyst_id']].get('compatible_evolution_ids', []), f'{recipe_id}: catalyst does not advertise recipe'
     assert manifest['economy']['reroll_costs'] == [0, 2, 4]
     assert manifest['wave_ticks'] > 0 and manifest['tick_rate'] == 60
-    assert 'confluences' not in manifest, 'Confluences remain disabled for P14'
+    assert 'confluences' not in manifest, 'Confluences remain disabled for P14.1'
     assert len(manifest.get('wave_profiles', [])) == manifest['wave_count']
     for profile in manifest['wave_profiles']:
         assert profile.get('name') and profile.get('pressure') and profile.get('counters')

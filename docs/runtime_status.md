@@ -6,7 +6,7 @@ The project now contains a runnable Godot 4.5.1 desktop prototype. This is the f
 
 - A title screen, five-page field manual, three selectable Saint frames, persistent accessibility/settings controls, save/resume and profile unlocks.
 - Eight 70-second Workshop waves, followed after Foreman victory by a three-beat road journey and one selected four-wave destination. Shop and travel reading time is additional and paused. Road rest restores full structure before the destination.
-- Four Blessings, ten automatic weapons, four catalysts, two visible evolutions, four active slots, one reserve and two run-local Gift slots.
+- Four Blessings, ten automatic weapons, seven catalysts, eight visible evolutions, four active slots, one reserve and two run-local Gift slots.
 - Movement, three optional repair machines, pickups, six ordinary enemy families, an elite and phased boss attacks. Relay defence remains a development comparison.
 - Purchases, automatic duplicate combining, explicit combine, sell/dismantle, reserve/equip, offer lock and one free/two paid refreshes.
 - Optional Rank III Nailer plus Saint's Rivet evolution and Rank III Bell plus Cracked Clapper evolution. Catalysts are consumed atomically. Every encounter supports unevolved runs.
@@ -38,6 +38,17 @@ Art is original procedural placeholder geometry drawn by the renderer. Audio is 
 Settings, volume, screen mode, reduced motion, high contrast and movement remapping persist locally. The fixed simulation is replay-tested within the pinned engine/platform, not certified cross-platform. Save files are local version-2 snapshots and migrate version-1 Workshop runs. Content tuning, shop breadth and secondary effects remain preview-level. Natural policies do not establish feel, preference, effect readability in motion or ideal 1x density.
 
 Exactly one next task: focused uncoached human playtest of the complete First Shift at 1x.
+
+
+## P14.1 - eight visible Evolutions
+
+The Evolution Ledger now exposes eight stable Rank III plus catalyst recipes. Mercy Rail and The Great Toll remain intact. Foundry Censer becomes **Ashen Benediction**, an offset Mourn smoke zone that seeks damaged work and creates seeking motes. Penance Winch becomes **The Long Hand**, a routed corridor that binds and pulls several aligned threats. Welded Halo becomes **Halo of Repairs**, with two opposed contacts and a machine-to-Saint repair circuit. Candle-Nailer becomes **Candle for the Unreturned**, which executes the three weakest reachable threats and sends its funeral motes toward the Saint. Hymn Coil becomes **Quiet Sermon**, a wider silence lane that delays healer, ranged and Choir support actions. Altar Mortar becomes **Workshop Benediction**, retaining clustered damage while gaining a consecrated objective shot when no threat occupies its reach.
+
+Recipe definitions, catalysts and combat values are content-owned. Each weapon stores its own Evolution ID, so feasible multi-Evolution loadouts, chapter carryover, Results and saves no longer depend on one shared evolved form. The ordinary-economy acquisition harness buys and combines every base, acquires its catalyst and evolves it through public commands. Memory Crane remains explicitly keyed to Mercy Rail geometry. Combine and Evolution remain separate and no Confluence is enabled.
+
+Configured 1280×800 renderer fixtures under `artifacts/evolutions` show the eight-entry Ledger and the six new geometries at seed 147 on Godot 4.5.1. Controlled-start policies establish executable chapter viability on both roads, not natural recipe timing or human preference.
+
+Exactly one next task: uncoached 1× comparison of all eight Evolution choices, with attention to Ledger comprehension and overlapping effect density.
 
 
 ## SC-02 — authored Collapsed Workshop

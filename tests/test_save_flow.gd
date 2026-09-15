@@ -56,6 +56,7 @@ func _initialize():
 	shop.state.evolutions = ["evolution.great_toll"]
 	shop.state.evolved = true
 	shop.state.weapons[0].toll = true
+	shop.state.weapons[0].evolution = "evolution.great_toll"
 	var shop_copy = restored_copy(shop, "shop")
 	compare_command(shop, shop_copy, "reroll", null, "shop")
 
@@ -104,17 +105,18 @@ func _initialize():
 	legacy_source.state.version = 1
 	legacy_source.state.gifts = ["gift.spare_hand"]
 	legacy_source.state.weapons[0].toll = true
+	legacy_source.state.weapons[0].erase("evolution")
 	for field in ["run_id", "frame_id", "max_hp", "move_speed", "repair_grace_ticks", "repair_grace_until", "knockback_multiplier", "keeper_shove_segment", "evolutions", "site_id", "route", "travel_step", "objective", "objective_complete", "memory_id", "chapter_complete", "pressure_until", "completed_site_ids", "defeated_boss_ids", "scrap_by_segment", "result_summary"]:
 		legacy_source.state.erase(field)
 	for machine in legacy_source.state.machines: machine.erase("deferred")
 	for enemy in legacy_source.state.enemies:
-		for field in ["worker", "phase", "spawn_tick", "slow", "inspected"]: enemy.erase(field)
+		for field in ["worker", "phase", "spawn_tick", "slow", "quieted", "inspected"]: enemy.erase(field)
 	var legacy = Sim.new()
 	check(legacy.restore(legacy_source.snapshot()), "version-one integrated legacy save restores")
 	check(legacy.state.version == 2 and legacy.state.frame_id == "frame.pilgrim", "legacy save receives current version and frame defaults")
 	check(legacy.state.gifts == ["gift.spare_hand"] and legacy.has_evolution("evolution.great_toll"), "legacy assembly state preserves Gifts and reconstructs evolution IDs")
 	check(legacy.state.machines.all(func(machine): return machine.has("deferred")), "legacy machines receive interruption defaults")
-	check(legacy.state.enemies.all(func(enemy): return enemy.has("worker") and enemy.has("phase") and enemy.has("spawn_tick") and enemy.has("slow") and enemy.has("inspected")), "legacy enemies receive integrated runtime defaults")
+	check(legacy.state.enemies.all(func(enemy): return enemy.has("worker") and enemy.has("phase") and enemy.has("spawn_tick") and enemy.has("slow") and enemy.has("quieted") and enemy.has("inspected")), "legacy enemies receive integrated runtime defaults")
 	var legacy_again = Sim.new()
 	check(legacy_again.restore(legacy_source.snapshot()) and legacy_again.state_hash() == legacy.state_hash(), "legacy migration is deterministic across repeated restores")
 

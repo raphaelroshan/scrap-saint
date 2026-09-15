@@ -56,7 +56,13 @@ func run_checks():
 	game.sim.state.gifts = ["gift.spare_hand"]
 	game.build_ui()
 	var labels = game.ui.get_children().filter(func(child): return child is Button).map(func(child): return child.text)
-	check("Mercy Rail" in labels and "Great Toll" in labels and "Dism." in labels, "shop exposes distinct Evolution and Gift management controls")
+	check("EVOLUTION LEDGER · 8" in labels and "Dism." in labels, "shop exposes distinct Evolution and Gift management controls")
+	for child in game.ui.get_children():
+		if child is Button and child.text == "EVOLUTION LEDGER · 8": child.pressed.emit(); break
+	labels = game.ui.get_children().filter(func(child): return child is Button).map(func(child): return child.text)
+	check(labels.count("EVOLVE") == 8 and game.sim.evolution_recipes.size() == 8, "Evolution Ledger exposes all eight data-owned recipes")
+	game.evolution_ledger_open = false
+	game.build_ui()
 	game._unhandled_key_input(event)
 	check(not game.sim.state.paused, "shop Escape cannot strand next combat paused")
 	var path = "user://ui_test.save"

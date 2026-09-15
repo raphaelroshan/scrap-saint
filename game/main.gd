@@ -44,6 +44,7 @@ var simulation_speed = 1
 var tutorial_page = 0
 var awaiting_binding = ""
 var recent_unlocks: Array = []
+var evolution_ledger_open = false
 
 func _ready():
 	title_font.font_names = PackedStringArray(["Georgia", "DejaVu Serif"])
@@ -114,6 +115,10 @@ func _unhandled_key_input(event):
 		screen = previous_screen
 		build_ui()
 		return
+	if event.keycode == KEY_ESCAPE and screen == "game" and evolution_ledger_open:
+		evolution_ledger_open = false
+		build_ui()
+		return
 	if event.keycode == KEY_F3: debug_visible = not debug_visible
 	if event.keycode == KEY_F6 and dev_mode:
 		simulation_speed = 1 if simulation_speed == 5 else 5
@@ -152,8 +157,9 @@ func act(action: String, value = null):
 		notification = result.replace("_", " ").capitalize()
 		notice_until = Time.get_ticks_msec() + 2500
 	if action == "evolve" and result == "OK":
-		notification = ("THE GREAT TOLL — every direction answers" if str(value) == "evolution.great_toll" else "MERCY RAIL — a new shape of mercy")
+		notification = sim.evolution_recipes[str(value)].name.to_upper() + " — the relic answers differently"
 		notice_until = Time.get_ticks_msec() + 4500
+		evolution_ledger_open = false
 	if sim.state.phase in ["won", "lost"]: commit_profile_result()
 	build_ui()
 
@@ -302,28 +308,34 @@ func build_ui():
 	elif sim.state.phase == "memory":
 		button("CARRY THIS MEMORY  →", Rect2(410, 615, 460, 48), func(): act("accept_memory"), true).grab_focus()
 	elif sim.state.phase == "shop":
-		for i in range(6):
-			var col = i % 3
-			var row = int(i / 3)
-			var x = 94 + col * 302
-			var y = 208 + row * 192
-			button("BUY / COMBINE" if i < 2 else "ACQUIRE", Rect2(x + 14, y + 129, 182, 32), func(): act("buy", i))
-			button("◆" if sim.state.locked == sim.state.offers[i] and sim.state.offers[i] != "" else "Lock", Rect2(x + 205, y + 129, 66, 32), func(): act("lock", i))
-		var costs = sim.config.economy.reroll_costs
-		var refresh = "No refreshes left" if sim.state.rerolls >= costs.size() else ("Refresh · FREE" if costs[sim.state.rerolls] == 0 else "Refresh · %d Scrap" % costs[sim.state.rerolls])
-		button(refresh, Rect2(108, 613, 220, 40), func(): act("reroll"))
-		button("Mercy Rail", Rect2(344, 613, 120, 40), func(): act("evolve", "evolution.mercy_rail"))
-		button("Great Toll", Rect2(470, 613, 128, 40), func(): act("evolve", "evolution.great_toll"))
-		button("NEXT WAVE  →", Rect2(734, 613, 250, 40), func(): act("continue"), true).grab_focus()
-		button("Combine pair", Rect2(1060, 573, 188, 32), func(): act("combine"))
-		button("Equip reserve", Rect2(1060, 613, 188, 32), func(): act("equip"))
-		for i in range(sim.state.weapons.size()):
-			button("Sell", Rect2(1060, 243 + i * 79, 52, 26), func(): act("sell", i))
-			button("Dism.", Rect2(1118, 243 + i * 79, 59, 26), func(): act("dismantle", i))
-			button("Store", Rect2(1183, 243 + i * 79, 65, 26), func(): act("reserve", i))
-		for i in range(sim.state.gifts.size()):
-			button("Sell", Rect2(1152, 665 + i * 30, 45, 24), func(): act("sell_gift", i))
-			button("Dism.", Rect2(1201, 665 + i * 30, 47, 24), func(): act("dismantle_gift", i))
+		if evolution_ledger_open:
+			for i in range(sim.config.evolutions.size()):
+				var recipe_id = sim.config.evolutions[i]
+				var evolve_button = button("EVOLVE", Rect2(408 + (i % 2) * 470, 234 + int(i / 2) * 108, 92, 28), func(): act("evolve", recipe_id))
+				evolve_button.disabled = sim.evolution_recipe_state(recipe_id) != "READY"
+			button("BACK TO WORKSHOP", Rect2(742, 678, 250, 38), func(): evolution_ledger_open = false; build_ui(), true).grab_focus()
+		else:
+			for i in range(6):
+				var col = i % 3
+				var row = int(i / 3)
+				var x = 94 + col * 302
+				var y = 208 + row * 192
+				button("BUY / COMBINE" if i < 2 else "ACQUIRE", Rect2(x + 14, y + 129, 182, 32), func(): act("buy", i))
+				button("◆" if sim.state.locked == sim.state.offers[i] and sim.state.offers[i] != "" else "Lock", Rect2(x + 205, y + 129, 66, 32), func(): act("lock", i))
+			var costs = sim.config.economy.reroll_costs
+			var refresh = "No refreshes left" if sim.state.rerolls >= costs.size() else ("Refresh · FREE" if costs[sim.state.rerolls] == 0 else "Refresh · %d Scrap" % costs[sim.state.rerolls])
+			button(refresh, Rect2(108, 613, 220, 40), func(): act("reroll"))
+			button("EVOLUTION LEDGER · 8", Rect2(344, 613, 250, 40), func(): evolution_ledger_open = true; build_ui())
+			button("NEXT WAVE  →", Rect2(734, 613, 250, 40), func(): act("continue"), true).grab_focus()
+			button("Combine pair", Rect2(1060, 573, 188, 32), func(): act("combine"))
+			button("Equip reserve", Rect2(1060, 613, 188, 32), func(): act("equip"))
+			for i in range(sim.state.weapons.size()):
+				button("Sell", Rect2(1060, 243 + i * 79, 52, 26), func(): act("sell", i))
+				button("Dism.", Rect2(1118, 243 + i * 79, 59, 26), func(): act("dismantle", i))
+				button("Store", Rect2(1183, 243 + i * 79, 65, 26), func(): act("reserve", i))
+			for i in range(sim.state.gifts.size()):
+				button("Sell", Rect2(1152, 665 + i * 30, 45, 24), func(): act("sell_gift", i))
+				button("Dism.", Rect2(1201, 665 + i * 30, 47, 24), func(): act("dismantle_gift", i))
 	elif sim.state.phase in ["won", "lost"]:
 		button("RETURN TO THE WORKSHOP", Rect2(410, 655, 460, 44), func(): screen = "menu"; build_ui(), true).grab_focus()
 	elif sim.state.paused:
@@ -390,7 +402,9 @@ func _draw():
 		draw_loadout()
 		draw_boss_hud()
 		if sim.state.phase == "combat": draw_minimap()
-		if sim.state.phase == "shop": draw_shop()
+		if sim.state.phase == "shop":
+			if evolution_ledger_open: draw_evolution_ledger()
+			else: draw_shop()
 		if sim.state.phase == "route": draw_route_choice()
 		if sim.state.phase == "travel": draw_travel()
 		if sim.state.phase == "memory": draw_memory()
@@ -416,7 +430,7 @@ func draw_title():
 	text_at("Turn scrap into miracles.", Vector2(124, 257), 25, MUTED, true)
 	wrapped("A small maintenance machine crosses ruined workshops, carries incompatible relics, and decides what deserves to work again.", Vector2(124, 292), 680, 17, PAPER)
 	draw_saint(Vector2(1035, 246), Vector2(-1, 0), 3.4)
-	text_at("FIRST CHAPTER · TWO ROADS · TEN WEAPONS · TWO EVOLUTIONS", Vector2(350, 585), 12, GOLD)
+	text_at("FIRST CHAPTER · TWO ROADS · TEN WEAPONS · EIGHT EVOLUTIONS", Vector2(340, 585), 12, GOLD)
 	text_at("Memory fragments: %d" % profile.state.memory_fragments, Vector2(550, 710), 12, MUTED)
 
 func draw_menu():
@@ -612,9 +626,12 @@ func draw_world():
 			draw_arc(sim.state.position, 80, 0, TAU, 48, Color(0.5, 0.75, 0.65, 0.12), 1)
 			draw_gear(p, 15, GREEN, sim.state.tick * 0.08)
 		if w.id == "weapon.foundry_censer":
-			var p = sim.state.position + Vector2.from_angle(sim.state.tick * 0.055) * 62
-			draw_circle(sim.state.position, sim.config.weapons[w.id].range, Color(0.25, 0.62, 0.55, 0.06))
-			draw_arc(sim.state.position, sim.config.weapons[w.id].range, 0, TAU, 56, Color(0.32, 0.72, 0.63, 0.22), 2)
+			var ashen = sim.weapon_evolution_id(w) == "evolution.ashen_benediction"
+			var ring_origin = sim.state.position + (Vector2.from_angle(sim.state.tick * 0.018) * 34 if ashen else Vector2.ZERO)
+			var ring_range = 52.0 if ashen else sim.config.weapons[w.id].range
+			var p = ring_origin + Vector2.from_angle(sim.state.tick * 0.055) * 62
+			draw_circle(ring_origin, ring_range, Color(0.25, 0.62, 0.55, 0.06))
+			draw_arc(ring_origin, ring_range, 0, TAU, 56, Color("b58ebd") if ashen else Color(0.32, 0.72, 0.63, 0.22), 2)
 			draw_line(sim.state.position, p, Color("6b5944"), 2)
 			draw_circle(p, 8, Color("273b38"))
 			draw_circle(p, 3, GOLD)
@@ -622,6 +639,9 @@ func draw_world():
 			var angle = sim.state.tick * 0.045
 			draw_arc(sim.state.position, 31, angle, angle + TAU * 0.82, 36, Color("9ac99d"), 3)
 			draw_circle(sim.state.position + Vector2.from_angle(angle) * 31, 4, PAPER)
+			if sim.weapon_evolution_id(w) == "evolution.halo_of_repairs":
+				draw_arc(sim.state.position, 40, -angle, -angle + TAU * 0.82, 36, Color("d6edbf"), 2)
+				draw_circle(sim.state.position - Vector2.from_angle(angle) * 40, 4, PAPER)
 	draw_saint(sim.state.position, sim.state.facing)
 	for e in fx: draw_effect(e)
 
@@ -854,6 +874,9 @@ func draw_enemy(e):
 		draw_line(p + Vector2(4, -e.radius - 17), p + Vector2(-4, -e.radius - 9), GOLD, 2)
 	if e.bound > sim.state.tick: draw_line(p, sim.state.position, Color("81b8d0"), 1.5)
 	if e.get("slow", 0) > sim.state.tick: draw_arc(p, e.radius + 10, 0, TAU, 24, Color("74b9a6"), 2)
+	if e.get("quieted", 0) > sim.state.tick:
+		draw_arc(p, e.radius + 11, -PI * 0.75, PI * 0.75, 22, Color("8edce0"), 2)
+		draw_line(p + Vector2(-7, -e.radius - 14), p + Vector2(7, -e.radius - 14), Color("8edce0"), 2)
 	if e.get("inspected", false):
 		draw_arc(p, e.radius + 14, 0, TAU, 28, Color("8edce0"), 2)
 		text_at("PRIORITY", p + Vector2(-25, -e.radius - 19), 9, Color("8edce0"))
@@ -901,6 +924,29 @@ func draw_effect(e):
 					draw_circle(e.from, e.range * (1.0 - fade * 0.2), Color(color, fade * 0.055))
 					draw_arc(e.from, e.range * (1.0 - fade * 0.2), 0, TAU, 64, color, 6, true)
 					for i in range(4): draw_arc(e.from + Vector2.from_angle(i * PI / 2) * e.range * 0.55, 13, 0, TAU, 18, PAPER, 2)
+				"ashen_censer":
+					draw_line(e.from, e.to, Color(color, fade * 0.25), 2, true)
+					draw_circle(e.to, e.range, Color(0.36, 0.20, 0.42, fade * 0.12))
+					draw_arc(e.to, e.range, 0, TAU, 48, Color(Color("b58ebd"), fade), 3)
+				"long_hand":
+					draw_line(e.from, e.to, Color(color, fade * 0.24), 13, true)
+					for segment in range(5): draw_line(e.from.lerp(e.to, segment / 5.0), e.from.lerp(e.to, (segment + 0.72) / 5.0), color, 4, true)
+				"repair_halo":
+					draw_arc(e.from, 39, 0, TAU, 32, Color(color, fade * 0.7), 3)
+					draw_line(e.to, e.to2, Color(0.78, 1.0, 0.8, fade), 3, true)
+					draw_circle(e.to, 8, Color(color, fade * 0.3))
+					draw_circle(e.to2, 8, Color(color, fade * 0.3))
+				"funeral_shots":
+					for target in e.get("targets", []):
+						draw_line(e.from, target, Color(Color("cbb8ed"), fade), 3, true)
+						draw_circle(target, 6 + 5 * (1.0 - fade), Color(0.64, 0.48, 0.78, fade * 0.25))
+				"sermon":
+					draw_line(e.from, e.to, Color(0.56, 0.86, 0.88, fade * 0.16), 18, true)
+					draw_line(e.from, e.to, Color(Color("bdeff0"), fade), 3, true)
+				"benediction", "consecrated":
+					draw_line(e.from, e.to, Color(color, fade * 0.35), 2, true)
+					draw_circle(e.to, e.range, Color(0.72, 0.85, 0.60, fade * 0.10))
+					draw_arc(e.to, e.range, 0, TAU, 40, GREEN if e.shape == "consecrated" else color, 4)
 		"charge": draw_line(e.from, e.to, Color(0.9, 0.8, 0.5, fade * 0.35), 1)
 		"hit", "death":
 			for i in range(4):
@@ -926,7 +972,8 @@ func draw_loadout():
 		var data = sim.config.weapons[w.id]
 		var y = 219 + i * 79
 		text_at("%02d" % (i + 1), Vector2(1068, y), 12, MUTED)
-		var evolved_name = "Mercy Rail" if w.get("rail", false) else ("The Great Toll" if w.get("toll", false) else data.short)
+		var evolution_id = sim.weapon_evolution_id(w)
+		var evolved_name = sim.config.evolution_rules[evolution_id].short if evolution_id in sim.config.evolution_rules else data.short
 		text_at(evolved_name, Vector2(1095, y), 14, Color(data.color))
 		text_at("RANK " + ["I", "II", "III"][w.rank - 1] + (" · EVOLVED" if sim.weapon_evolved(w) else ""), Vector2(1095, y + 20), 11, MUTED)
 	text_at("RESERVE", Vector2(1068, 539), 11, GOLD)
@@ -1000,12 +1047,24 @@ func draw_shop():
 		text_at(name_text, Vector2(x + 16, y + 60), 19, PAPER, true)
 		wrapped(description, Vector2(x + 16, y + 82), 252, 12)
 	text_at("Combine raises rank. Evolution consumes one catalyst. Gifts occupy two separate slots.", Vector2(108, 685), 13, MUTED)
-	var rank = 0
-	var bell_rank = 0
-	for w in sim.state.weapons:
-		if w.id == "weapon.nailer_small_mercies" and not sim.weapon_evolved(w): rank = maxi(rank, w.rank)
-		if w.id == "weapon.bell_last_shift" and not sim.weapon_evolved(w): bell_rank = maxi(bell_rank, w.rank)
-	text_at("MERCY RAIL  Nailer %s + Rivet %s    /    GREAT TOLL  Bell %s + Clapper %s" % ["—" if rank == 0 else ["I", "II", "III"][rank - 1], "✓" if "catalyst.saints_rivet" in sim.state.catalysts else "—", "—" if bell_rank == 0 else ["I", "II", "III"][bell_rank - 1], "✓" if "catalyst.cracked_bell_clapper" in sim.state.catalysts else "—"], Vector2(108, 714), 11, GOLD)
+	text_at("Open the Evolution Ledger to inspect every recipe, ingredient and readiness state.", Vector2(108, 714), 11, GOLD)
+
+func draw_evolution_ledger():
+	draw_rect(Rect2(60, 148, 980, 588), Color("101f24"))
+	text_at("Evolution Ledger", Vector2(88, 185), 30, PAPER, true)
+	text_at("Rank III + one named catalyst. Every higher form remains optional.", Vector2(365, 183), 13, MUTED)
+	for i in range(sim.config.evolutions.size()):
+		var recipe_id = sim.config.evolutions[i]
+		var recipe = sim.evolution_recipes[recipe_id]
+		var x = 82 + (i % 2) * 470
+		var y = 204 + int(i / 2) * 108
+		panel(Rect2(x, y, 448, 94), Color("203538"))
+		text_at(recipe.name.to_upper(), Vector2(x + 14, y + 22), 14, GOLD)
+		text_at(sim.config.weapons[recipe.base_item_id].short + " III  +  " + sim.config.catalysts[recipe.required_catalyst_id].short, Vector2(x + 14, y + 43), 11, PAPER)
+		var state_label = sim.evolution_recipe_state(recipe_id)
+		text_at(state_label, Vector2(x + 14, y + 69), 11, GREEN if state_label == "READY" or state_label == "COMPLETED" else MUTED)
+		wrapped(str(recipe.result_geometry).replace("_", " "), Vector2(x + 118, y + 65), 305, 10, MUTED)
+	text_at("The Ledger names transformations; it never commits one without the EVOLVE command.", Vector2(88, 662), 12, MUTED)
 
 func draw_results():
 	draw_rect(Rect2(60, 148, 1192, 588), Color(0.04, 0.08, 0.09, 0.97))

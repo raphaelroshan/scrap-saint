@@ -34,10 +34,14 @@ if ($LASTEXITCODE -ne 0) { throw 'Save flow tests failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Assembly tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_acquisition.gd 2>&1 | Tee-Object -FilePath "$bundlePath\acquisition.log"
 if ($LASTEXITCODE -ne 0) { throw 'Acquisition tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_evolutions.gd 2>&1 | Tee-Object -FilePath "$bundlePath\evolutions.log"
+if ($LASTEXITCODE -ne 0) { throw 'Evolution tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/run_playthroughs.gd -- --optional 2>&1 | Tee-Object -FilePath "$bundlePath\playthroughs.log"
 if ($LASTEXITCODE -ne 0) { throw 'Playthrough runner failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/run_assembly_playthroughs.gd 2>&1 | Tee-Object -FilePath "$bundlePath\assembly-playthroughs.log"
 if ($LASTEXITCODE -ne 0) { throw 'Assembly playthrough runner failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/run_evolution_playthroughs.gd 2>&1 | Tee-Object -FilePath "$bundlePath\evolution-playthroughs.log"
+if ($LASTEXITCODE -ne 0) { throw 'Evolution playthrough runner failed' }
 & $GodotBin --path $projectRoot -- --capture-dir=$bundlePath 2>&1 | Tee-Object -FilePath "$bundlePath\capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_chapter.gd -- --capture-dir=$bundlePath 2>&1 | Tee-Object -FilePath "$bundlePath\chapter-capture.log"
@@ -46,6 +50,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Chapter capture failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Core quality capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_assembly.gd 2>&1 | Tee-Object -FilePath "$bundlePath\assembly-capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Assembly capture failed' }
+& $GodotBin --path $projectRoot --script res://tests/capture_evolutions.gd 2>&1 | Tee-Object -FilePath "$bundlePath\evolution-capture.log"
+if ($LASTEXITCODE -ne 0) { throw 'Evolution capture failed' }
 $commitId = git -C $projectRoot rev-parse HEAD
 $godotVersion = & $GodotBin --version
 $files = Get-ChildItem -LiteralPath "$projectRoot\game" -Filter '*.gd' | ForEach-Object { @{ path = $_.Name; sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash } }
