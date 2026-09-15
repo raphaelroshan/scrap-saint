@@ -15,6 +15,9 @@ class ManifestTests(unittest.TestCase):
         self.manifest = validator.load(root / 'content/slices/first_shift.json')
         self.data = {key: validator.load(path) for key, path in validator.FILES.items()}
 
+    def gift(self, gift_id):
+        return next(item for item in self.data['items']['items'] if item['id'] == gift_id)
+
     def test_enabled_slice(self):
         validator.validate_slice(self.manifest, self.data)
 
@@ -67,6 +70,78 @@ class ManifestTests(unittest.TestCase):
 
     def test_reject_unsupported_evolution_shape(self):
         self.manifest['evolution_rules']['evolution.mercy_rail']['shape'] = 'unimplemented_shape'
+        with self.assertRaises(AssertionError):
+            validator.validate_slice(self.manifest, self.data)
+
+    def test_reject_inexact_gift_manifest(self):
+        self.manifest['gifts'].pop('gift.honest_scale')
+        with self.assertRaises(AssertionError):
+            validator.validate_slice(self.manifest, self.data)
+
+    def test_reject_extra_catalogue_gift(self):
+        extra = copy.deepcopy(self.gift('gift.honest_scale'))
+        extra['id'] = 'gift.unapproved'
+        self.data['items']['items'].append(extra)
+        with self.assertRaises(AssertionError):
+            validator.validate_slice(self.manifest, self.data)
+
+    def test_reject_wrong_gift_slot_count(self):
+        self.manifest['gift_slots'] = 3
+        with self.assertRaises(AssertionError):
+            validator.validate_slice(self.manifest, self.data)
+
+    def test_reject_unsupported_gift_effect(self):
+        self.gift('gift.loose_spring')['effect'] = 'unimplemented_effect'
+        with self.assertRaises(AssertionError):
+            validator.validate_slice(self.manifest, self.data)
+
+    def test_reject_mismatched_gift_tradeoff(self):
+        self.gift('gift.brass_fuse')['tradeoff'] = 'beam_silence_damage_multiplier'
+        with self.assertRaises(AssertionError):
+            validator.validate_slice(self.manifest, self.data)
+
+    def test_reject_non_numeric_gift_value(self):
+        self.gift('gift.choir_filter')['effect_value'] = '120'
+        with self.assertRaises(AssertionError):
+            validator.validate_slice(self.manifest, self.data)
+
+    def test_reject_boolean_gift_value(self):
+        self.gift('gift.honest_scale')['tradeoff_value'] = True
+        with self.assertRaises(AssertionError):
+            validator.validate_slice(self.manifest, self.data)
+
+    def test_reject_out_of_range_gift_value(self):
+        self.gift('gift.spare_hand')['tradeoff_value'] = 1.2
+        with self.assertRaises(AssertionError):
+            validator.validate_slice(self.manifest, self.data)
+
+    def test_reject_missing_gift_duration(self):
+        self.gift('gift.loose_spring').pop('duration_ticks')
+        with self.assertRaises(AssertionError):
+            validator.validate_slice(self.manifest, self.data)
+
+    def test_reject_incorrect_gift_offer_scope(self):
+        self.gift('gift.loose_spring')['offer_scope'] = 'always'
+        with self.assertRaises(AssertionError):
+            validator.validate_slice(self.manifest, self.data)
+
+    def test_reject_unknown_compatible_weapon(self):
+        self.gift('gift.choir_filter')['compatible_weapon_ids'] = ['weapon.missing']
+        with self.assertRaises(AssertionError):
+            validator.validate_slice(self.manifest, self.data)
+
+    def test_reject_incorrect_gift_compatibility(self):
+        self.gift('gift.brass_fuse')['compatible_weapon_ids'] = ['weapon.hymn_coil']
+        with self.assertRaises(AssertionError):
+            validator.validate_slice(self.manifest, self.data)
+
+    def test_reject_duplicate_gift_compatibility(self):
+        self.gift('gift.brass_fuse')['compatible_weapon_ids'].append('weapon.bell_last_shift')
+        with self.assertRaises(AssertionError):
+            validator.validate_slice(self.manifest, self.data)
+
+    def test_reject_unknown_choir_filter_support_family(self):
+        self.manifest['gift_rules']['support_enemy_ids'].append('enemy.missing')
         with self.assertRaises(AssertionError):
             validator.validate_slice(self.manifest, self.data)
 

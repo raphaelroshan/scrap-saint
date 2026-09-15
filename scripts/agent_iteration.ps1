@@ -8,6 +8,8 @@ $bundlePath = Join-Path $projectRoot 'artifacts\agent-iteration'
 New-Item -ItemType Directory -Path $bundlePath -Force | Out-Null
 & $PythonBin "$PSScriptRoot\validate_content.py"
 if ($LASTEXITCODE -ne 0) { throw 'Content validation failed' }
+& $PythonBin -m unittest tests/test_slice_manifest.py
+if ($LASTEXITCODE -ne 0) { throw 'Manifest tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_variety.gd 2>&1 | Tee-Object -FilePath "$bundlePath\variety.log"
 if ($LASTEXITCODE -ne 0) { throw 'Variety tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_optional_repairs.gd 2>&1 | Tee-Object -FilePath "$bundlePath\optional.log"
@@ -38,12 +40,16 @@ if ($LASTEXITCODE -ne 0) { throw 'Acquisition tests failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Evolution tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_weapon_ranks.gd 2>&1 | Tee-Object -FilePath "$bundlePath\weapon-ranks.log"
 if ($LASTEXITCODE -ne 0) { throw 'Weapon rank tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_gift_breadth.gd 2>&1 | Tee-Object -FilePath "$bundlePath\gift-breadth.log"
+if ($LASTEXITCODE -ne 0) { throw 'Gift breadth tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/run_playthroughs.gd -- --optional 2>&1 | Tee-Object -FilePath "$bundlePath\playthroughs.log"
 if ($LASTEXITCODE -ne 0) { throw 'Playthrough runner failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/run_assembly_playthroughs.gd 2>&1 | Tee-Object -FilePath "$bundlePath\assembly-playthroughs.log"
 if ($LASTEXITCODE -ne 0) { throw 'Assembly playthrough runner failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/run_evolution_playthroughs.gd 2>&1 | Tee-Object -FilePath "$bundlePath\evolution-playthroughs.log"
 if ($LASTEXITCODE -ne 0) { throw 'Evolution playthrough runner failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/run_gift_playthroughs.gd 2>&1 | Tee-Object -FilePath "$bundlePath\gift-playthroughs.log"
+if ($LASTEXITCODE -ne 0) { throw 'Gift playthrough runner failed' }
 & $GodotBin --path $projectRoot -- --capture-dir=$bundlePath 2>&1 | Tee-Object -FilePath "$bundlePath\capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_chapter.gd -- --capture-dir=$bundlePath 2>&1 | Tee-Object -FilePath "$bundlePath\chapter-capture.log"
@@ -56,8 +62,10 @@ if ($LASTEXITCODE -ne 0) { throw 'Assembly capture failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Evolution capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_weapon_ranks.gd -- --capture-dir="$bundlePath" 2>&1 | Tee-Object -FilePath "$bundlePath\weapon-rank-capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Weapon rank capture failed' }
+& $GodotBin --path $projectRoot --script res://tests/capture_gift_breadth.gd 2>&1 | Tee-Object -FilePath "$bundlePath\gift-breadth-capture.log"
+if ($LASTEXITCODE -ne 0) { throw 'Gift breadth capture failed' }
 $commitId = git -C $projectRoot rev-parse HEAD
 $godotVersion = & $GodotBin --version
 $files = Get-ChildItem -LiteralPath "$projectRoot\game" -Filter '*.gd' | ForEach-Object { @{ path = $_.Name; sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash } }
-@{ build = '0.4.0-preview'; base_commit = $commitId; dirty = [bool](git -C $projectRoot status --porcelain); godot = $godotVersion; viewport = @(1280,800); scaling = 'canvas_items'; seed = 147; timestamp_utc = [DateTime]::UtcNow.ToString('o'); capture_type = 'rendered simulation fixtures; includes explicit setup budgets and Results fixture'; source_hashes = @($files); limitation = 'No human playtest or rendered minimum-hardware benchmark'; next_task = 'Human playtest of the shared arena and build feedback' } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath "$bundlePath\provenance.json" -Encoding utf8
+@{ build = '0.5.0-preview'; base_commit = $commitId; dirty = [bool](git -C $projectRoot status --porcelain); godot = $godotVersion; viewport = @(1280,800); scaling = 'canvas_items'; seed = 147; timestamp_utc = [DateTime]::UtcNow.ToString('o'); capture_type = 'rendered simulation fixtures; includes explicit setup budgets, Results, weapon ranks, Evolutions, Gifts, and destination bosses'; source_hashes = @($files); limitation = 'No human playtest or rendered minimum-hardware benchmark'; next_task = 'Uncoached 1x comparison of the three-Gift and seven-Gift workshop pools' } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath "$bundlePath\provenance.json" -Encoding utf8
 Write-Output "Bundle ready for visual review: $bundlePath"

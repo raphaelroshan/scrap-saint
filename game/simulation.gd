@@ -45,7 +45,9 @@ func start(doctrine: int = 0, seed_value: int = 147, mode: String = "relay", fra
 		"damage_taken": {}, "damage_by_wave": {}, "last_damage_source": "", "scrap_sources": {"starting": int(config.economy.starting_scrap)},
 		"scrap_by_segment": {"site.collapsed_workshop:wave_1": int(config.economy.starting_scrap)}, "completed_site_ids": [], "defeated_boss_ids": [],
 		"metrics": {"first_contact_tick": -1, "longest_threat_gap": 0, "threat_gap_started": 0, "had_threat": false, "repairs_started": 0, "repairs_interrupted": 0, "useful_repairs": 0, "wasted_repairs": 0, "dead_shop_visits": 0},
-		"result_summary": {}, "component_tag": "", "inspection": "", "scrap_tax_progress": 0, "censer_defeats": 0, "ashen_defeats": 0, "parade_until": 0}
+		"result_summary": {}, "component_tag": "", "inspection": "", "scrap_tax_progress": 0, "censer_defeats": 0, "ashen_defeats": 0, "parade_until": 0,
+		"loose_spring_until": 0, "loose_spring_sources": [], "brass_fuse_segment": "",
+		"gift_metrics": {"loose_spring_triggers": 0, "choir_filter_applications": 0, "brass_fuse_triggers": 0}}
 	var starts = ["weapon.nailer_small_mercies", "weapon.bell_last_shift", "weapon.candle_nailer", "weapon.procession_gear"]
 	state.doctrine = clampi(doctrine, 0, starts.size() - 1)
 	state.weapons.append(make_weapon(starts[state.doctrine]))
@@ -125,7 +127,10 @@ func saint_max_structure() -> float:
 	return float(state.get("max_hp", config.saint.structure))
 
 func saint_speed() -> float:
-	return float(state.get("move_speed", config.saint.speed))
+	var speed = float(state.get("move_speed", config.saint.speed))
+	if has_gift("gift.loose_spring") and int(state.get("loose_spring_until", 0)) > state.tick:
+		speed *= float(catalogue["gift.loose_spring"].effect_value)
+	return speed
 
 func random_int(limit: int) -> int:
 	state.rng = (int(state.rng) * 48271) % 2147483647
@@ -212,6 +217,8 @@ func command(action: String, value = null) -> String:
 				var ledger_stamp = action == "dismantle_gift" and gift_id != "gift.black_ledger" and has_gift("gift.black_ledger")
 				if ledger_stamp: state.component_tag = component_tag_for(gift_id)
 				state.gifts.remove_at(index)
+				if gift_id == "gift.inspection_lens": state.inspection = ""
+				if gift_id == "gift.loose_spring": state.loose_spring_until = 0
 				if ledger_stamp: apply_component_lead()
 				result = "OK"
 		"reserve":
@@ -369,6 +376,7 @@ func enter_destination(route: Dictionary):
 	state.active_machine = ""
 	state.repair_blocked_until = 0
 	state.repair_grace_until = 0
+	state.loose_spring_until = 0
 	state.service_used = false
 	state.service_active = false
 	state.calibrated = false
@@ -441,6 +449,7 @@ func advance_destination_node(index: int, amount: float, source: Vector2):
 	emit("objective_repair_pulse", {"position": p, "source": source, "node_id": node.id, "amount": amount})
 	if node.progress >= float(objective.required_ticks):
 		node.complete = true
+		trigger_repair_completion_gifts("%s:%s" % [state.site_id, node.id], p)
 		extend_maintenance_parade(p, node.id)
 		emit("objective_node_complete", {"position": p, "node_id": node.id})
 		emit("repair", {"position": p, "source": source})
@@ -493,8 +502,65 @@ func evolve_weapon(requested: String = "") -> String:
 func component_tag_for(id: String) -> String:
 	var ignored = ["shot", "beam", "ground", "risk", "shop"]
 	for tag in catalogue[id].get("tags", []):
-		if tag not in ignored: return tag
+		if tag in ignored: continue
+		if config.weapons.keys().any(func(weapon_id): return tag in catalogue[weapon_id].get("tags", [])): return tag
 	return ""
+
+func projected_weapon_purchase(id: String) -> Dictionary:
+	var result = {"result": "OK", "active_count": state.weapons.size(), "reserve_count": state.reserve.size(), "destination": "", "combines": [], "weapons": [], "reserve": []}
+	if id not in config.weapons:
+		result.result = "INVALID_OFFER"
+		return result
+	if state.scrap < int(catalogue[id].cost_scrap):
+		result.result = "INSUFFICIENT_SCRAP"
+		return result
+	var all = (state.weapons + state.reserve).duplicate(true)
+	all.append(make_weapon(id))
+	while true:
+		var merged = combine_first(all, id)
+		if merged.is_empty(): break
+		result.combines.append({"weapon": merged.id, "rank": merged.rank})
+	if all.size() > int(config.economy.active_slots) + int(config.economy.reserve_slots):
+		result.result = "LOADOUT_FULL"
+		return result
+	result.weapons = all.slice(0, int(config.economy.active_slots))
+	result.reserve = all.slice(int(config.economy.active_slots))
+	result.active_count = result.weapons.size()
+	result.reserve_count = result.reserve.size()
+	var purchased_index = all.size() - 1 if result.combines.is_empty() else 0
+	result.destination = "ACTIVE" if purchased_index >= 0 and purchased_index < int(config.economy.active_slots) else "RESERVE"
+	return result
+
+func purchase_preview(index: int) -> Dictionary:
+	var preview = {"result": "INVALID_OFFER", "active_count": state.get("weapons", []).size(), "reserve_count": state.get("reserve", []).size(), "destination": "", "combines": [], "scrap_after": int(state.get("scrap", 0)), "shards_after": int(state.get("shards", 0))}
+	if index < 0 or index >= state.get("offers", []).size(): return preview
+	var id = str(state.offers[index])
+	if id == "":
+		preview.result = "SOLD"
+		return preview
+	if id in config.weapons:
+		var projection = projected_weapon_purchase(id)
+		for field in ["result", "active_count", "reserve_count", "destination", "combines"]: preview[field] = projection[field]
+		if preview.result == "OK": preview.scrap_after -= int(catalogue[id].cost_scrap)
+		return preview
+	if id in config.catalysts:
+		preview.result = "ALREADY_OWNED" if id in state.catalysts else ("INSUFFICIENT_SHARDS" if state.shards < int(catalogue[id].cost_relic_shards) else "OK")
+		if preview.result == "OK": preview.shards_after -= int(catalogue[id].cost_relic_shards)
+		return preview
+	if id in config.gifts:
+		preview.result = "ALREADY_OWNED" if id in state.gifts else ("GIFT_SLOTS_FULL" if state.gifts.size() >= int(config.gift_slots) else ("INACTIVE_GIFT" if not gift_offer_eligible(id) else ("INSUFFICIENT_SCRAP" if state.scrap < int(catalogue[id].cost_scrap) else "OK")))
+		if preview.result == "OK": preview.scrap_after -= int(catalogue[id].cost_scrap)
+		return preview
+	if id.begins_with("service."):
+		if id not in ["service.repair", "service.doctrine", "service.calibrate"]: return preview
+		var cost = int(config.shop_rules.services[state.doctrine].cost) if id == "service.doctrine" else int(config.economy.repair_cost)
+		if state.scrap < cost: preview.result = "INSUFFICIENT_SCRAP"
+		elif id == "service.repair" and state.hp >= saint_max_structure() and (optional_mode() or state.relay_hp >= config.relay.structure): preview.result = "ALREADY_REPAIRED"
+		elif id == "service.calibrate" and state.calibrated: preview.result = "SERVICE_USED"
+		elif id == "service.doctrine" and (state.service_used or (state.doctrine == 0 and state.hp >= saint_max_structure() and (optional_mode() or state.relay_hp >= config.relay.structure))): preview.result = "SERVICE_USED" if state.service_used else "ALREADY_REPAIRED"
+		else: preview.result = "OK"
+		if preview.result == "OK": preview.scrap_after -= cost
+	return preview
 
 func apply_component_lead():
 	if state.component_tag == "" or state.offers.size() < 2: return
@@ -566,27 +632,21 @@ func buy(index: int) -> String:
 	elif id in config.gifts:
 		if id in state.gifts: return "ALREADY_OWNED"
 		if state.gifts.size() >= int(config.gift_slots): return "GIFT_SLOTS_FULL"
+		if not gift_offer_eligible(id): return "INACTIVE_GIFT"
 		var cost = int(catalogue[id].cost_scrap)
 		if state.scrap < cost: return "INSUFFICIENT_SCRAP"
 		state.scrap -= cost
 		state.gifts.append(id)
 		emit("gift_acquired", {"gift": id, "position": state.position})
 	else:
-		var cost = int(catalogue[id].cost_scrap)
-		if state.scrap < cost: return "INSUFFICIENT_SCRAP"
-		var all = (state.weapons + state.reserve).duplicate(true)
-		all.append(make_weapon(id))
-		# A purchase explicitly includes any displayed duplicate combines.
-		var rank_ups: Array = []
-		while true:
-			var merged = combine_first(all, id)
-			if merged.is_empty(): break
-			rank_ups.append(merged)
-		if all.size() > config.economy.active_slots + config.economy.reserve_slots: return "LOADOUT_FULL"
-		state.scrap -= cost
-		state.weapons = all.slice(0, int(config.economy.active_slots))
-		state.reserve = all.slice(int(config.economy.active_slots))
-		for merged in rank_ups: emit("rank_up", {"weapon": merged.id, "rank": merged.rank, "behaviors": weapon_rank_behavior_ids(merged)})
+		var projection = projected_weapon_purchase(id)
+		if projection.result != "OK": return projection.result
+		state.scrap -= int(catalogue[id].cost_scrap)
+		state.weapons = projection.weapons
+		state.reserve = projection.reserve
+		for combined in projection.combines:
+			var merged = make_weapon(combined.weapon, int(combined.rank))
+			emit("rank_up", {"weapon": merged.id, "rank": merged.rank, "behaviors": weapon_rank_behavior_ids(merged)})
 		if state.component_tag != "" and state.component_tag in catalogue[id].tags: state.component_tag = ""
 	state.offers[index] = ""
 	if state.locked == id: state.locked = ""
@@ -609,6 +669,18 @@ func can_fit_weapon(id: String) -> bool:
 			all.erase(matches.pop_back())
 			all.append(make_weapon(id, rank + 1))
 	return all.size() <= config.economy.active_slots + config.economy.reserve_slots
+
+func gift_offer_eligible(id: String) -> bool:
+	if id not in config.gifts or id in state.gifts or state.gifts.size() >= int(config.gift_slots): return false
+	var item = catalogue[id]
+	match str(item.get("offer_scope", "always")):
+		"compatible_weapon":
+			var compatible = item.get("compatible_weapon_ids", [])
+			return (state.weapons + state.reserve).any(func(weapon): return weapon.id in compatible)
+		"unfinished_repair":
+			if is_destination(): return state.objective.any(func(node): return not node.complete)
+			return optional_mode() and state.machines.any(func(machine): return not machine.complete)
+	return true
 
 func shop_pick(ids: Array, slot: int) -> String:
 	if ids.is_empty(): return "service.calibrate"
@@ -657,7 +729,7 @@ func roll_shop():
 	for id in config.catalysts:
 		if id != "catalyst.saints_rivet" and id not in state.catalysts: support.append(id)
 	for id in config.gifts:
-		if id not in state.gifts and state.gifts.size() < int(config.gift_slots): support.append(id)
+		if gift_offer_eligible(id): support.append(id)
 	var path = evolution_path_offer()
 	var affordable_fresh = fresh.filter(func(id): return catalogue[id].cost_scrap <= state.scrap)
 	var current_offer = shop_pick(upgrades, 0) if not upgrades.is_empty() else shop_pick(affordable_fresh, 0)
@@ -674,7 +746,8 @@ func roll_shop():
 		if id != "": seen[id] = true
 	apply_component_lead()
 	if state.locked != "" and state.locked not in state.offers:
-		state.offers[1 if state.locked in config.weapons else 3] = state.locked
+		if state.locked in config.gifts and not gift_offer_eligible(state.locked): state.locked = ""
+		else: state.offers[1 if state.locked in config.weapons else 3] = state.locked
 
 func warning_multiplier() -> float:
 	return config.shop_rules.bell_warning_multiplier if state.service_active and state.doctrine == 1 else 1.0
@@ -877,6 +950,7 @@ func advance_optional_machine(index: int, amount: float, source = null, track_pr
 	if amount >= 2.0: emit("repair", {"position": p, "source": source, "amount": amount})
 	if machine.progress < config.optional_repairs.required_ticks: return
 	machine.complete = true
+	trigger_repair_completion_gifts("site.collapsed_workshop:%s" % machine.id, p)
 	extend_maintenance_parade(p, machine.id)
 	if state.active_machine == machine.id: state.active_machine = ""
 	state.metrics.useful_repairs += 1
@@ -897,6 +971,13 @@ func extend_maintenance_parade(position: Vector2, objective_id: String):
 	var duration = int(config.evolution_rules["evolution.maintenance_parade"].extension_ticks)
 	state.parade_until = maxi(int(state.get("parade_until", 0)), state.tick + duration)
 	emit("parade_extended", {"position": position, "objective_id": objective_id, "until": state.parade_until})
+
+func trigger_repair_completion_gifts(source_id: String, position: Vector2):
+	if not has_gift("gift.loose_spring") or source_id in state.loose_spring_sources: return
+	state.loose_spring_sources.append(source_id)
+	state.loose_spring_until = state.tick + int(catalogue["gift.loose_spring"].duration_ticks)
+	state.gift_metrics.loose_spring_triggers += 1
+	emit("loose_spring_released", {"gift": "gift.loose_spring", "position": position, "source_id": source_id, "until": state.loose_spring_until})
 
 func largest_entry(values: Dictionary) -> String:
 	var winner = ""
@@ -963,6 +1044,8 @@ func build_result_summary(won: bool) -> Dictionary:
 		"optional_repairs": completed.size(),
 		"memory_ids": result_memories,
 		"evolution_ids": state.evolutions.duplicate(),
+		"gift_ids": state.gifts.duplicate(),
+		"gift_metrics": state.gift_metrics.duplicate(true),
 		"failure_cause": cause,
 		"repairs": completed,
 		"top_weapon": top_weapon,
@@ -1015,7 +1098,7 @@ func spawn(id: String):
 	var initial_stun = state.tick + state.signal_reserve if state.signal_reserve > 0 else 0
 	state.enemies.append({"id": state.next_id, "type": id, "p": p, "hp": hp, "max_hp": hp, "radius": 35 if major else data.radius, "spawn_tick": state.tick,
 		"relay_strike_at": 0, "relay_ready": 0, "entry_id": entry.id, "major": major, "marked": 0, "stun": initial_stun, "bound": 0, "slow": 0, "attack": 0, "charge": Vector2.ZERO, "windup": 0, "flash": 0, "stolen": 0,
-		"worker": false, "phase": 0, "inspected": inspected, "quieted": 0})
+		"worker": false, "phase": 0, "inspected": inspected, "quieted": 0, "support_lock_until": 0})
 	if state.signal_reserve > 0:
 		emit("signal_reserve_released", {"position": p, "duration": state.signal_reserve})
 		state.signal_reserve = 0
@@ -1161,7 +1244,7 @@ func update_enemies():
 						e.stolen += p.amount
 						p.amount = 0
 					break
-		if e.type == "enemy.rust_pilgrim" and e.quieted <= state.tick:
+		if e.type == "enemy.rust_pilgrim" and enemy_support_ready(e):
 			var ally = null
 			var missing = 0.0
 			for other in state.enemies:
@@ -1174,7 +1257,7 @@ func update_enemies():
 					ally.hp = minf(ally.max_hp, ally.hp + data.heal_amount)
 					e.attack = state.tick + int(data.heal_interval)
 					emit("repair", {"position": ally.p, "source": e.p})
-		if e.type == "enemy.cinder_spitter" and e.quieted <= state.tick and state.tick >= e.attack:
+		if e.type == "enemy.cinder_spitter" and enemy_support_ready(e) and state.tick >= e.attack:
 			e.attack = state.tick + int(data.attack_interval)
 			state.hazards.append({"p": state.position, "from": e.p, "until": state.tick + int(data.warning_ticks * warning_multiplier()), "warning_ticks": data.warning_ticks * warning_multiplier(), "radius": data.blast_radius, "damage": data.damage, "copy": false, "source": e.type, "source_id": e.id})
 		var direction = arena.direction_to(e.p, target, e.radius)
@@ -1300,6 +1383,31 @@ func weapon_target_score(data: Dictionary, enemy: Dictionary) -> float:
 func enemy_special_active(enemy: Dictionary) -> bool:
 	return enemy.major or enemy.type in ["enemy.choir_drone", "enemy.rust_pilgrim", "enemy.cinder_spitter"] or enemy.get("windup", 0) > state.tick or enemy.get("relay_strike_at", 0) > state.tick
 
+func enemy_support_ready(enemy: Dictionary) -> bool:
+	if int(enemy.get("quieted", 0)) > state.tick: return false
+	if enemy.type in config.gift_rules.get("support_enemy_ids", []) and int(enemy.get("support_lock_until", 0)) > state.tick: return false
+	return true
+
+func apply_choir_filter(enemy: Dictionary, quiet_until: int, source_id: String):
+	if not has_gift("gift.choir_filter") or enemy.type not in config.gift_rules.get("support_enemy_ids", []): return
+	var lock_until = quiet_until + int(catalogue["gift.choir_filter"].effect_value)
+	if lock_until <= int(enemy.get("support_lock_until", 0)): return
+	var already_suppressed = int(enemy.get("support_lock_until", 0)) > state.tick
+	enemy.support_lock_until = lock_until
+	if already_suppressed: return
+	state.gift_metrics.choir_filter_applications += 1
+	emit("choir_filter_blocked", {"gift": "gift.choir_filter", "position": enemy.p, "target_id": enemy.id, "source": source_id, "until": lock_until})
+
+func apply_brass_fuse(enemy: Dictionary, weapon_id: String):
+	if not has_gift("gift.brass_fuse") or weapon_id != "weapon.bell_last_shift" or enemy.hp <= 0: return
+	var segment = site_wave_key()
+	if state.brass_fuse_segment == segment: return
+	state.brass_fuse_segment = segment
+	var remaining_wave_ticks = maxi(0, current_wave_ticks() - int(state.wave_tick))
+	enemy.marked = maxi(int(enemy.marked), state.tick + maxi(int(catalogue["gift.brass_fuse"].effect_value), remaining_wave_ticks))
+	state.gift_metrics.brass_fuse_triggers += 1
+	emit("brass_fuse_lit", {"gift": "gift.brass_fuse", "position": enemy.p, "target_id": enemy.id, "source": weapon_id, "until": enemy.marked, "segment": segment})
+
 func nearest_repair_target(source: Vector2, radius: float):
 	var best = null
 	var best_distance = INF
@@ -1362,10 +1470,11 @@ func update_weapons():
 		if state.tick < w.ready: continue
 		var cooldown = float(data.cooldown)
 		for enemy in state.enemies:
-			if enemy.type == "enemy.choir_drone" and enemy.hp > 0 and enemy.quieted <= state.tick and enemy.p.distance_to(state.position) < config.enemy_rules.drone_field_radius:
+			if enemy.type == "enemy.choir_drone" and enemy.hp > 0 and enemy_support_ready(enemy) and enemy.p.distance_to(state.position) < config.enemy_rules.drone_field_radius:
 				cooldown *= config.enemy_rules.drone_cooldown_multiplier
 				break
 		if "catalyst.quiet_gear" in state.catalysts: cooldown *= config.catalysts["catalyst.quiet_gear"].cooldown_multiplier
+		if has_gift("gift.brass_fuse") and w.id == "weapon.bell_last_shift": cooldown *= float(catalogue["gift.brass_fuse"].tradeoff_value)
 		if state.calibrated: cooldown *= config.shop_rules.calibration_multiplier
 		if is_destination() and state.pressure_until > state.tick: cooldown *= float(state.get("pressure_multiplier", current_route().pressure.cooldown_multiplier))
 		w.ready = state.tick + int(cooldown)
@@ -1375,6 +1484,8 @@ func update_weapons():
 		var end2 = end
 		var geometry_points: Array = []
 		var damage = float(data.damage) * float(config.rank_damage_multipliers[clampi(int(w.rank), 1, 3) - 1])
+		if has_gift("gift.choir_filter") and w.id in catalogue["gift.choir_filter"].compatible_weapon_ids:
+			damage *= float(catalogue["gift.choir_filter"].tradeoff_value)
 		if shape in ["blast", "benediction"] and target != null: end = target.p
 		if shape in ["winch", "long_hand"]: end = target.p
 		if shape in ["orbit", "halo", "repair_halo"]:
@@ -1465,6 +1576,7 @@ func update_weapons():
 				e.relay_strike_at = 0
 				e.p = arena.move_body(e.p, direction * float(data.get("push_distance", config.combat.push_distance)), e.radius)
 				if state.doctrine == 1 and state.fulfilled: e.marked = state.tick + int(config.combat.bind_ticks)
+				apply_brass_fuse(e, w.id)
 			if shape == "tether":
 				e.bound = state.tick + int(data.get("bind_ticks", config.combat.bind_ticks) * control)
 				e.p = arena.move_body(e.p, -direction * float(data.get("pull_distance", 12)), e.radius)
@@ -1482,10 +1594,12 @@ func update_weapons():
 			if shape == "sermon":
 				e.quieted = state.tick + int(data.quiet_ticks)
 				e.relay_strike_at = 0
+				apply_choir_filter(e, e.quieted, w.id)
 				emit("quieted", {"position": e.p, "target_id": e.id, "until": e.quieted})
 			if shape == "beam" and int(data.get("quiet_ticks", 0)) > 0:
 				e.quieted = state.tick + int(data.quiet_ticks)
 				e.relay_strike_at = 0
+				apply_choir_filter(e, e.quieted, w.id)
 				emit("quieted", {"position": e.p, "target_id": e.id, "until": e.quieted, "source": w.id, "rank_behaviors": rank_behaviors})
 			if int(data.get("mark_counter_ticks", 0)) > 0 and (e.major or e.type in data.counter_families):
 				e.marked = state.tick + int(data.mark_counter_ticks)
@@ -1499,6 +1613,7 @@ func update_weapons():
 				e.marked = state.tick + int(config.great_toll.mark_ticks)
 				e.relay_strike_at = 0
 				e.p = arena.move_body(e.p, delta.normalized() * config.great_toll.push_distance, e.radius)
+				apply_brass_fuse(e, w.id)
 			if shape == "rail" and e.major:
 				if optional_mode():
 					state.hp = minf(saint_max_structure(), state.hp + config.rail.repair_on_elite_hit)
@@ -1723,9 +1838,13 @@ func restore(saved: Dictionary) -> bool:
 		"scrap_sources": {"starting": int(config.economy.starting_scrap)}, "metrics": {"first_contact_tick": -1, "longest_threat_gap": 0, "threat_gap_started": state.get("tick", 0), "had_threat": false, "repairs_started": 0, "repairs_interrupted": 0, "useful_repairs": 0, "wasted_repairs": 0, "dead_shop_visits": 0}, "result_summary": {},
 		"scrap_by_segment": {}, "completed_site_ids": [], "defeated_boss_ids": [],
 		"site_id": "site.collapsed_workshop", "route": "", "route_history": [], "route_origin_site_id": "", "travel_step": 0, "assignment_statuses": {}, "road_history": [], "road_flags": [], "road_totals": {"route_cost": 0, "service_cost": 0, "scrap_delta": 0, "structure_delta": 0.0}, "objective": [], "objective_complete": false, "objective_lock_until": 0, "weapon_lock_until": 0, "memory_id": "", "memory_ids": [], "chapter_complete": false, "pressure_until": 0, "pressure_multiplier": legacy_pressure_multiplier,
-		"evolutions": [], "gifts": [], "component_tag": "", "inspection": "", "scrap_tax_progress": 0, "censer_defeats": 0, "ashen_defeats": 0, "parade_until": 0}
+		"evolutions": [], "gifts": [], "component_tag": "", "inspection": "", "scrap_tax_progress": 0, "censer_defeats": 0, "ashen_defeats": 0, "parade_until": 0,
+		"loose_spring_until": 0, "loose_spring_sources": [], "brass_fuse_segment": "",
+		"gift_metrics": {"loose_spring_triggers": 0, "choir_filter_applications": 0, "brass_fuse_triggers": 0}}
 	for field in defaults:
 		if not state.has(field): state[field] = defaults[field]
+	for metric in defaults.gift_metrics:
+		if not state.gift_metrics.has(metric): state.gift_metrics[metric] = defaults.gift_metrics[metric]
 	if state.route_history.is_empty() and state.route != "": state.route_history.append(state.route)
 	if state.memory_ids.is_empty() and state.memory_id != "": state.memory_ids.append(state.memory_id)
 	if saved_version < 3:
@@ -1753,6 +1872,7 @@ func restore(saved: Dictionary) -> bool:
 		if not enemy.has("spawn_tick"): enemy.spawn_tick = state.tick
 		if not enemy.has("slow"): enemy.slow = 0
 		if not enemy.has("quieted"): enemy.quieted = 0
+		if not enemy.has("support_lock_until"): enemy.support_lock_until = 0
 		if not enemy.has("inspected"): enemy.inspected = false
 	events.clear()
 	call_deferred_spawn = false

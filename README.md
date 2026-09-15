@@ -83,7 +83,7 @@ The transformation must change attack geometry, target rules, area control, obje
 
 ## Scope and quality bar
 
-The current early-access preview is a complete first-chapter vertical: three Saint frames, four Blessings, ten base weapons, eight catalysts, three run-local Gifts, ten visible Evolutions, a Workshop plus five destination sites, seven enemy families, an elite and six bosses. Runs carry their build and economy through a mid-site and one of three terminal objectives, bosses and Memories across four authored route chains. Combine, Evolution, and future Confluence recipes remain separate systems; no Confluence is enabled.
+The current early-access preview is a complete first-chapter vertical: three Saint frames, four Blessings, ten base weapons, eight catalysts, seven run-local Gifts, ten visible Evolutions, a Workshop plus five destination sites, seven enemy families, an elite and six bosses. Runs carry their build and economy through a mid-site and one of three terminal objectives, bosses and Memories across four authored route chains. Combine, Evolution, and future Confluence recipes remain separate systems; no Confluence is enabled.
 
 The project is not complete when the content validator passes. Game quality requires a running build, readable combat, visible build transformation, causal Results, exact screenshot provenance, and evidence-led iteration. Technical tests establish simulation correctness; screenshots establish presentation evidence; neither is a substitute for the other.
 

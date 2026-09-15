@@ -15,6 +15,145 @@ FILES = {
     "progression": ROOT / "content/progression/first_chapter.json",
 }
 
+EXPECTED_GIFT_IDS = {
+    "gift.spare_hand",
+    "gift.inspection_lens",
+    "gift.black_ledger",
+    "gift.loose_spring",
+    "gift.honest_scale",
+    "gift.choir_filter",
+    "gift.brass_fuse",
+}
+
+# These identifiers are executable simulation/UI contracts, not free-form copy.
+GIFT_CONTRACTS = {
+    "gift.spare_hand": {
+        "effect": "optional_repair_progress_multiplier",
+        "tradeoff": "movement_speed_multiplier_while_working",
+        "offer_scope": "unfinished_repair",
+        "compatible_weapon_ids": set(),
+    },
+    "gift.inspection_lens": {
+        "effect": "reveal_major_property_and_priority_target",
+        "tradeoff": "ordinary_scrap_pickup_tax",
+        "offer_scope": "always",
+        "compatible_weapon_ids": set(),
+    },
+    "gift.black_ledger": {
+        "effect": "dismantle_reveals_matching_shop_tag",
+        "tradeoff": "dismantle_refund_fraction",
+        "offer_scope": "always",
+        "compatible_weapon_ids": set(),
+    },
+    "gift.loose_spring": {
+        "effect": "repair_completion_movement_burst",
+        "tradeoff": "once_per_repair_source",
+        "offer_scope": "unfinished_repair",
+        "compatible_weapon_ids": set(),
+    },
+    "gift.honest_scale": {
+        "effect": "shop_post_purchase_preview",
+        "tradeoff": "no_direct_combat_effect",
+        "offer_scope": "always",
+        "compatible_weapon_ids": set(),
+    },
+    "gift.choir_filter": {
+        "effect": "quiet_support_recovery_lockout",
+        "tradeoff": "beam_silence_damage_multiplier",
+        "offer_scope": "compatible_weapon",
+        "compatible_weapon_ids": {"weapon.hymn_coil"},
+    },
+    "gift.brass_fuse": {
+        "effect": "first_bell_stagger_marks",
+        "tradeoff": "bell_cooldown_multiplier",
+        "offer_scope": "compatible_weapon",
+        "compatible_weapon_ids": {"weapon.bell_last_shift"},
+    },
+}
+
+
+def is_number(value: object) -> bool:
+    """JSON number check which deliberately rejects booleans."""
+    return type(value) in (int, float)
+
+
+def validate_gifts(manifest: dict, item_entries: list[dict]) -> None:
+    """Validate the complete P16 Gift catalogue and its executable metadata."""
+    enabled_gifts = manifest.get("gifts", {})
+    assert isinstance(enabled_gifts, dict), "slice gifts must be an object keyed by stable id"
+    assert set(enabled_gifts) == EXPECTED_GIFT_IDS, "P16 slice must enable exactly the seven approved Gifts"
+    assert type(manifest.get("gift_slots")) is int and manifest["gift_slots"] == 2, "P16 slice needs exactly two Gift slots"
+
+    catalogue_gifts = [entry for entry in item_entries if entry.get("kind") == "gift"]
+    catalogue_gift_ids = unique_ids(catalogue_gifts, "Gift catalogue")
+    assert catalogue_gift_ids == EXPECTED_GIFT_IDS, "Gift catalogue must contain exactly the seven approved Gifts"
+    gifts_by_id = {entry["id"]: entry for entry in catalogue_gifts}
+    enabled_weapon_ids = set(manifest.get("weapons", {}))
+    support_enemy_ids = manifest.get("gift_rules", {}).get("support_enemy_ids", [])
+    assert set(support_enemy_ids) == {"enemy.choir_drone", "enemy.rust_pilgrim"}, "Choir Filter support families must remain explicit"
+    assert len(support_enemy_ids) == len(set(support_enemy_ids)), "Choir Filter support families must be unique"
+    assert set(support_enemy_ids) <= set(manifest.get("enemies", {})), "Choir Filter references an unavailable enemy"
+    tick_rate = manifest.get("tick_rate")
+    assert type(tick_rate) is int and tick_rate > 0, "tick_rate must be a positive integer"
+
+    required_fields = {
+        "name", "description", "tags", "cost_scrap", "effect", "effect_value",
+        "tradeoff", "tradeoff_value", "offer_scope", "compatible_weapon_ids", "stack_rule",
+    }
+    for gift_id in sorted(EXPECTED_GIFT_IDS):
+        gift = gifts_by_id[gift_id]
+        settings = enabled_gifts[gift_id]
+        contract = GIFT_CONTRACTS[gift_id]
+        assert required_fields <= set(gift), f"{gift_id}: missing fields {required_fields - set(gift)}"
+        assert isinstance(gift["name"], str) and gift["name"], f"{gift_id}: name must be non-empty text"
+        assert isinstance(gift["description"], str) and gift["description"], f"{gift_id}: description must be non-empty text"
+        assert isinstance(settings, dict), f"{gift_id}: manifest settings must be an object"
+        assert isinstance(settings.get("short"), str) and settings["short"], f"{gift_id}: missing short label"
+        assert isinstance(settings.get("description"), str) and settings["description"], f"{gift_id}: missing playable description"
+        assert type(gift["cost_scrap"]) is int and gift["cost_scrap"] > 0, f"{gift_id}: cost_scrap must be a positive integer"
+        assert isinstance(gift["tags"], list) and gift["tags"], f"{gift_id}: tags must be a non-empty array"
+        assert all(isinstance(tag, str) and tag for tag in gift["tags"]), f"{gift_id}: tags must be non-empty strings"
+        assert len(gift["tags"]) == len(set(gift["tags"])), f"{gift_id}: tags must be unique"
+        assert gift["stack_rule"] == "unique", f"{gift_id}: unsupported stack rule"
+        assert gift["effect"] == contract["effect"], f"{gift_id}: unsupported effect id {gift['effect']}"
+        assert gift["tradeoff"] == contract["tradeoff"], f"{gift_id}: unsupported tradeoff id {gift['tradeoff']}"
+        assert gift["offer_scope"] == contract["offer_scope"], f"{gift_id}: incorrect offer scope"
+        assert is_number(gift["effect_value"]), f"{gift_id}: effect_value must be numeric"
+        assert is_number(gift["tradeoff_value"]), f"{gift_id}: tradeoff_value must be numeric"
+
+        compatible_ids = gift["compatible_weapon_ids"]
+        assert isinstance(compatible_ids, list), f"{gift_id}: compatible_weapon_ids must be an array"
+        assert all(isinstance(item_id, str) and item_id for item_id in compatible_ids), f"{gift_id}: compatible weapon ids must be non-empty strings"
+        assert len(compatible_ids) == len(set(compatible_ids)), f"{gift_id}: duplicate compatible weapon id"
+        assert set(compatible_ids) <= enabled_weapon_ids, f"{gift_id}: compatible weapon is not enabled"
+        assert set(compatible_ids) == contract["compatible_weapon_ids"], f"{gift_id}: incorrect weapon compatibility"
+
+        effect_value = gift["effect_value"]
+        tradeoff_value = gift["tradeoff_value"]
+        if gift_id == "gift.spare_hand":
+            assert 1.0 < effect_value <= 2.0 and 0.0 < tradeoff_value < 1.0, f"{gift_id}: multipliers outside supported range"
+        elif gift_id == "gift.inspection_lens":
+            assert effect_value == 1 and 0.0 < tradeoff_value < 1.0, f"{gift_id}: flag/tax values outside supported range"
+        elif gift_id == "gift.black_ledger":
+            sell_fraction = manifest.get("economy", {}).get("sell_fraction")
+            assert is_number(sell_fraction) and effect_value == 1, f"{gift_id}: reveal flag or economy sell fraction is invalid"
+            assert 0.0 < tradeoff_value < sell_fraction, f"{gift_id}: reduced refund must remain below ordinary sale value"
+        elif gift_id == "gift.loose_spring":
+            duration_ticks = gift.get("duration_ticks")
+            assert type(duration_ticks) is int and 0 < duration_ticks <= tick_rate * 10, f"{gift_id}: duration_ticks outside supported range"
+            assert 1.0 < effect_value <= 2.0 and tradeoff_value == 1, f"{gift_id}: burst/once-per-source values outside supported range"
+        elif gift_id == "gift.honest_scale":
+            assert effect_value == 1 and tradeoff_value == 1, f"{gift_id}: preview/no-combat flags must be enabled"
+        elif gift_id == "gift.choir_filter":
+            assert type(effect_value) is int and 0 < effect_value <= tick_rate * 10, f"{gift_id}: lockout ticks outside supported range"
+            assert 0.0 < tradeoff_value < 1.0, f"{gift_id}: damage multiplier outside supported range"
+        elif gift_id == "gift.brass_fuse":
+            assert type(effect_value) is int and 0 < effect_value <= tick_rate * 10, f"{gift_id}: mark ticks outside supported range"
+            assert 1.0 < tradeoff_value <= 2.0, f"{gift_id}: cooldown multiplier outside supported range"
+
+        if gift_id != "gift.loose_spring":
+            assert "duration_ticks" not in gift, f"{gift_id}: unsupported duration_ticks field"
+
 
 def load(path: Path) -> dict:
     with path.open(encoding="utf-8") as handle:
@@ -92,7 +231,7 @@ def validate_slice(manifest: dict, data: dict) -> None:
     evolutions = {entry['id']: entry for entry in data['items']['evolutions']}
     assert len(manifest['weapons']) == 10, 'P14 slice must enable ten role-distinct weapons'
     assert len(manifest['catalysts']) == 8, 'P15 slice must enable eight recipe-supporting catalysts'
-    assert len(manifest['gifts']) == 3 and manifest['gift_slots'] == 2, 'P14 slice needs three Gifts and two slots'
+    validate_gifts(manifest, data['items']['items'])
     assert len(manifest['enemies']) == 6, 'slice must enable six ordinary enemies'
     assert len(manifest['blessings']) == 4 and len(set(manifest['blessings'])) == 4
     assert set(manifest['blessings']) <= blessings
@@ -104,11 +243,6 @@ def validate_slice(manifest: dict, data: dict) -> None:
             assert item_id in items, f'unknown enabled item {item_id}'
             assert items[item_id]['kind'] == kind[:-1]
             assert settings.get('description'), f'missing playable description {item_id}'
-    for gift_id in manifest['gifts']:
-        gift = items[gift_id]
-        for field in ('effect', 'effect_value', 'tradeoff', 'tradeoff_value', 'stack_rule'):
-            assert gift.get(field) not in (None, ''), f'{gift_id}: missing {field}'
-        assert gift['stack_rule'] == 'unique'
     for item_id, settings in manifest['weapons'].items():
         for field in ('target_rule', 'role', 'weakness', 'counter_families'):
             assert settings.get(field), f'missing weapon role contract {item_id}.{field}'
