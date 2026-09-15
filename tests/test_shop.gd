@@ -30,6 +30,7 @@ func _initialize():
 	a.roll_shop()
 	check(a.state.offers.slice(0, 4).count("service.calibrate") <= 1, "fallback calibration is never duplicated")
 	check(a.state.offers.slice(0, 4).all(func(id): return id not in a.config.catalysts), "owned catalysts excluded")
+	check(a.state.offers.slice(0, 4).any(func(id): return id in a.config.gifts), "owned catalysts yield an unowned Gift instead of dead support")
 	a.start(2, 104729, "optional")
 	a.enter_shop()
 	check(a.state.offers[0] in a.catalogue and a.catalogue[a.state.offers[0]].get("cost_scrap", 999) <= a.state.scrap, "normal shop guarantees affordable build action")

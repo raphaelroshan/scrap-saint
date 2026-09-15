@@ -134,6 +134,54 @@
       "width": 72,
       "color": "e89765",
       "description": "Burst shells hit a cluster around the nearest enemy."
+    },
+    "weapon.foundry_censer": {
+      "short": "Foundry Censer",
+      "shape": "censer",
+      "target_rule": "nearest",
+      "role": "Slow surrounding close pressure while crossing the workshop.",
+      "weakness": "Cannot answer distant support or ranged threats.",
+      "counter_families": ["enemy.scrap_mite", "enemy.rivet_hound"],
+      "damage": 7,
+      "cooldown": 24,
+      "range": 96,
+      "width": 0,
+      "slow_ticks": 42,
+      "scrap_every": 3,
+      "color": "74b9a6",
+      "description": "A close smoke ring. Slows nearby threats; every third close defeat leaves Scrap."
+    },
+    "weapon.penance_winch": {
+      "short": "Penance Winch",
+      "shape": "winch",
+      "target_rule": "objective_attacker_then_farthest",
+      "role": "Cancel one urgent strike or pull a distant priority threat off route.",
+      "weakness": "Long cooldown and almost no swarm coverage.",
+      "counter_families": ["enemy.rivet_hound", "enemy.forklift_brute"],
+      "damage": 20,
+      "cooldown": 95,
+      "range": 520,
+      "width": 0,
+      "pull_distance": 74,
+      "color": "d6b16d",
+      "description": "Hooks one relay attacker or the farthest threat, cancels its strike, and pulls it off route."
+    },
+    "weapon.welded_halo": {
+      "short": "Welded Halo",
+      "shape": "halo",
+      "target_rule": "orbit_contact",
+      "role": "Convert a repair detour into close defence and machine progress.",
+      "weakness": "Low burst and poor reach against ranged threats.",
+      "counter_families": ["enemy.scrap_mite", "enemy.rivet_hound"],
+      "damage": 13,
+      "cooldown": 38,
+      "range": 84,
+      "width": 28,
+      "machine_range": 150,
+      "repair_progress": 16,
+      "saint_repair": 0.5,
+      "color": "a9e0b1",
+      "description": "A rotating close guard. Near an unfinished machine, each contact adds a visible repair stitch."
     }
   },
   "catalysts": {
@@ -144,7 +192,7 @@
     },
     "catalyst.cracked_bell_clapper": {
       "short": "Cracked Clapper",
-      "description": "Staggers and binds last 50% longer.",
+      "description": "Control lasts 50% longer. Rank III Bell can become The Great Toll.",
       "control_multiplier": 1.5
     },
     "catalyst.black_candle": {
@@ -157,6 +205,28 @@
       "description": "Weapon mechanisms cycle 10% faster.",
       "cooldown_multiplier": 0.9
     }
+  },
+  "gifts": {
+    "gift.spare_hand": {
+      "short": "Spare Hand",
+      "description": "Repair 25% faster; move 20% slower while working."
+    },
+    "gift.inspection_lens": {
+      "short": "Inspection Lens",
+      "description": "Reveal major rules and priority targets; lose every fifth ordinary Scrap."
+    },
+    "gift.black_ledger": {
+      "short": "Black Ledger",
+      "description": "Dismantle for less Scrap to guarantee one matching workshop lead."
+    }
+  },
+  "gift_slots": 2,
+  "gift_rules": {
+    "inspection_properties": {
+      "elite.memory_crane": "COPIES YOUR EVOLVED GEOMETRY",
+      "boss.foreman_engine": "DEMOLITION CIRCLES / WORKER CALLS"
+    },
+    "ordinary_scrap_tax_interval": 5
   },
   "blessings": [
     "blessing.workshop_gospel",
@@ -226,7 +296,8 @@
   "elite": "elite.memory_crane",
   "boss": "boss.foreman_engine",
   "evolutions": [
-    "evolution.mercy_rail"
+    "evolution.mercy_rail",
+    "evolution.great_toll"
   ],
   "rail": {
     "damage": 70,
@@ -235,6 +306,14 @@
     "width": 19,
     "charge_ticks": 18,
     "repair_on_elite_hit": 6
+  },
+  "great_toll": {
+    "damage": 25,
+    "cooldown": 118,
+    "range": 215,
+    "push_distance": 44,
+    "mark_ticks": 150,
+    "stun_ticks": 62
   },
   "combat": {
     "spawn_interval": 110,

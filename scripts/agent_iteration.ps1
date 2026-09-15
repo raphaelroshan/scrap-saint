@@ -24,10 +24,16 @@ if ($LASTEXITCODE -ne 0) { throw 'Simulation tests failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Roaming quality tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_ui.gd 2>&1 | Tee-Object -FilePath "$bundlePath\ui.log"
 if ($LASTEXITCODE -ne 0) { throw 'UI tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_assembly.gd 2>&1 | Tee-Object -FilePath "$bundlePath\assembly.log"
+if ($LASTEXITCODE -ne 0) { throw 'Assembly tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/run_playthroughs.gd -- --optional 2>&1 | Tee-Object -FilePath "$bundlePath\playthroughs.log"
 if ($LASTEXITCODE -ne 0) { throw 'Playthrough runner failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/run_assembly_playthroughs.gd 2>&1 | Tee-Object -FilePath "$bundlePath\assembly-playthroughs.log"
+if ($LASTEXITCODE -ne 0) { throw 'Assembly playthrough runner failed' }
 & $GodotBin --path $projectRoot -- --capture-dir=$bundlePath 2>&1 | Tee-Object -FilePath "$bundlePath\capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Capture failed' }
+& $GodotBin --path $projectRoot --script res://tests/capture_assembly.gd 2>&1 | Tee-Object -FilePath "$bundlePath\assembly-capture.log"
+if ($LASTEXITCODE -ne 0) { throw 'Assembly capture failed' }
 $commitId = git -C $projectRoot rev-parse HEAD
 $godotVersion = & $GodotBin --version
 $files = Get-ChildItem -LiteralPath "$projectRoot\game" -Filter '*.gd' | ForEach-Object { @{ path = $_.Name; sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash } }

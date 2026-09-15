@@ -125,6 +125,69 @@
       "description": "A chapel font rebuilt to burst shells among clustered machines."
     },
     {
+      "id": "weapon.foundry_censer",
+      "kind": "weapon",
+      "name": "Foundry Censer",
+      "rank": 1,
+      "geometry": "orbit_smoke_zone",
+      "target_rule": "all_close_threats",
+      "primary_question": "Can I survive close pressure while moving between machines?",
+      "tags": [
+        "mourn",
+        "orbit",
+        "control"
+      ],
+      "counter_family": "close_swarm_pressure",
+      "weakness": "Low value against distant support enemies.",
+      "cost_scrap": 18,
+      "base_effect": "slow_enemies_inside_ring",
+      "secondary_effect": "every_third_close_defeat_drops_scrap_ember",
+      "evolution_ids": [],
+      "description": "A soot-black censer that slows close threats and remembers every third defeat as Scrap."
+    },
+    {
+      "id": "weapon.penance_winch",
+      "kind": "weapon",
+      "name": "Penance Winch",
+      "rank": 1,
+      "geometry": "telescoping_priority_tether",
+      "target_rule": "objective_attacker_then_farthest",
+      "primary_question": "Which enemy should I pull out of position?",
+      "tags": [
+        "tether",
+        "labour",
+        "control"
+      ],
+      "counter_family": "charger_and_objective_attacker",
+      "weakness": "Long cooldown and almost no swarm coverage.",
+      "cost_scrap": 20,
+      "base_effect": "bind_and_pull_priority_target",
+      "secondary_effect": "cancel_relay_strike_windup",
+      "evolution_ids": [],
+      "description": "A telescoping maintenance arm that hooks one dangerous machine and drags it off schedule."
+    },
+    {
+      "id": "weapon.welded_halo",
+      "kind": "weapon",
+      "name": "Welded Halo",
+      "rank": 1,
+      "geometry": "rotating_repair_contact",
+      "target_rule": "orbit_contact_then_nearest_damaged_machine",
+      "primary_question": "Can I turn a repair detour into close defence?",
+      "tags": [
+        "repair",
+        "orbit",
+        "labour"
+      ],
+      "counter_family": "repair_route_close_pressure",
+      "weakness": "Low burst and poor reach against ranged threats.",
+      "cost_scrap": 19,
+      "base_effect": "rotating_contact_damage",
+      "secondary_effect": "nearby_optional_machine_repair_pulse",
+      "evolution_ids": [],
+      "description": "A crooked welding ring whose bright cardinal arc stitches nearby machines while it guards the Saint."
+    },
+    {
       "id": "catalyst.saints_rivet",
       "kind": "catalyst",
       "name": "Saint's Rivet",
@@ -177,6 +240,57 @@
       "cost_relic_shards": 2,
       "compatible_evolution_ids": [],
       "description": "A gear whose teeth move without permitting a sound."
+    },
+    {
+      "id": "gift.spare_hand",
+      "kind": "gift",
+      "name": "Spare Hand",
+      "tags": [
+        "repair",
+        "labour",
+        "risk"
+      ],
+      "cost_scrap": 16,
+      "effect": "optional_repair_progress_multiplier",
+      "effect_value": 1.25,
+      "tradeoff": "movement_speed_multiplier_while_working",
+      "tradeoff_value": 0.8,
+      "stack_rule": "unique",
+      "description": "Repairs finish 25% faster, but the Saint moves 20% slower inside an unfinished work circle."
+    },
+    {
+      "id": "gift.inspection_lens",
+      "kind": "gift",
+      "name": "Inspection Lens",
+      "tags": [
+        "witness",
+        "forecast",
+        "risk"
+      ],
+      "cost_scrap": 15,
+      "effect": "reveal_major_property_and_priority_target",
+      "effect_value": 1,
+      "tradeoff": "ordinary_scrap_pickup_tax",
+      "tradeoff_value": 0.2,
+      "stack_rule": "unique",
+      "description": "Reveals the next elite rule and first priority target; every fifth ordinary Scrap is spent on inspection."
+    },
+    {
+      "id": "gift.black_ledger",
+      "kind": "gift",
+      "name": "Black Ledger",
+      "tags": [
+        "salvage",
+        "shop",
+        "risk"
+      ],
+      "cost_scrap": 14,
+      "effect": "dismantle_reveals_matching_shop_tag",
+      "effect_value": 1,
+      "tradeoff": "dismantle_refund_fraction",
+      "tradeoff_value": 0.25,
+      "stack_rule": "unique",
+      "description": "Dismantling stamps a matching lead onto the workshop, but returns only 25% of the relic's Scrap value."
     }
   ],
   "evolutions": [

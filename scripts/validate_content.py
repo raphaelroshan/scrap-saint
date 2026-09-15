@@ -37,22 +37,28 @@ def validate_slice(manifest: dict, data: dict) -> None:
     bosses = {entry['id'] for entry in data['bosses']['bosses']}
     blessings = {entry['id'] for entry in data['blessings']['blessings']}
     evolutions = {entry['id']: entry for entry in data['items']['evolutions']}
-    assert len(manifest['weapons']) == 7, 'slice must enable seven weapons'
+    assert len(manifest['weapons']) == 10, 'P14 slice must enable ten role-distinct weapons'
     assert len(manifest['catalysts']) == 4, 'slice must enable four useful catalysts'
+    assert len(manifest['gifts']) == 3 and manifest['gift_slots'] == 2, 'P14 slice needs three Gifts and two slots'
     assert len(manifest['enemies']) == 6, 'slice must enable six ordinary enemies'
     assert len(manifest['blessings']) == 3 and len(set(manifest['blessings'])) == 3
     assert set(manifest['blessings']) <= blessings
     assert manifest['elite'] in enemies and manifest['boss'] in bosses
     assert set(manifest['enemies']) <= enemies
-    assert len(manifest['evolutions']) == 1
-    for kind in ('weapons', 'catalysts'):
+    assert len(manifest['evolutions']) == 2
+    for kind in ('weapons', 'catalysts', 'gifts'):
         for item_id, settings in manifest[kind].items():
             assert item_id in items, f'unknown enabled item {item_id}'
             assert items[item_id]['kind'] == kind[:-1]
             assert settings.get('description'), f'missing playable description {item_id}'
-            if kind == 'weapons':
-                for field in ('target_rule', 'role', 'weakness', 'counter_families'):
-                    assert settings.get(field), f'missing weapon role contract {item_id}.{field}'
+    for gift_id in manifest['gifts']:
+        gift = items[gift_id]
+        for field in ('effect', 'effect_value', 'tradeoff', 'tradeoff_value', 'stack_rule'):
+            assert gift.get(field) not in (None, ''), f'{gift_id}: missing {field}'
+        assert gift['stack_rule'] == 'unique'
+    for item_id, settings in manifest['weapons'].items():
+        for field in ('target_rule', 'role', 'weakness', 'counter_families'):
+            assert settings.get(field), f'missing weapon role contract {item_id}.{field}'
     for recipe_id in manifest['evolutions']:
         assert recipe_id in evolutions
         recipe = evolutions[recipe_id]
@@ -60,6 +66,7 @@ def validate_slice(manifest: dict, data: dict) -> None:
         assert recipe['required_catalyst_id'] in manifest['catalysts']
     assert manifest['economy']['reroll_costs'] == [0, 2, 4]
     assert manifest['wave_ticks'] > 0 and manifest['tick_rate'] == 60
+    assert 'confluences' not in manifest, 'Confluences remain disabled for P14'
     assert len(manifest.get('wave_profiles', [])) == manifest['wave_count']
     for profile in manifest['wave_profiles']:
         assert profile.get('name') and profile.get('pressure') and profile.get('counters')

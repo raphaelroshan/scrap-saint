@@ -5,10 +5,10 @@ The project now contains a runnable Godot 4.5.1 desktop prototype. This is the f
 ## Implemented
 
 - Eight 70-second maximum waves, with the final boss ending the run early when defeated. Shop reading time is additional and paused.
-- Three starting Blessings, seven automatic weapon geometries, four catalysts, four active slots and one reserve.
+- Three starting Blessings, ten automatic weapons, four catalysts, two visible evolutions, four active slots, one reserve and two run-local Gift slots.
 - Movement, three optional repair machines, pickups, six ordinary enemy families, an elite and phased boss attacks. Relay defence remains a development comparison.
 - Purchases, automatic duplicate combining, explicit combine, sell/dismantle, reserve/equip, offer lock and one free/two paid refreshes.
-- Optional Rank III Nailer plus Saint's Rivet evolution. The catalyst is consumed once. Every encounter supports runs without it.
+- Optional Rank III Nailer plus Saint's Rivet evolution and Rank III Bell plus Cracked Clapper evolution. Catalysts are consumed atomically. Every encounter supports unevolved runs.
 - Procedural weapon effects and synthesized audio, title/selection/shop/pause/Results, keyboard and basic controller navigation, local save/resume.
 - Deterministic simulation tests and full-run scripted policies; real rendered fixture captures with provenance.
 
@@ -109,13 +109,27 @@ The previous relay-defence policy suite produced 9 wins and 3 losses after roste
 Limitation: automated fixtures and policies do not establish human pacing, balance or audio quality. Capture teardown still reports an ObjectDB leak warning.
 Exactly one next task: playtest roaming density and weapon/enemy balance at 1x.
 
-## P12.1-P12.5 - core-quality gate (current)
+## P14 - replayable assembly
+
+Foundry Censer, Penance Winch and Welded Halo are enabled in the ordinary weapon pool. Censer is a close smoke ring that slows threats and drops one deterministic Scrap ember per three close defeats. Winch selects an announced relay attacker before the farthest eligible threat, cancels its strike and pulls that single target toward the Saint. Halo uses a rotating contact point and adds a repair stitch to a nearby unfinished optional machine, falling back to a small Saint repair when no eligible machine is near. Their roles, target rules, weaknesses, tags and prices remain data-owned.
+
+The Great Toll is the second enabled Evolution: Bell Rank III plus Cracked Bell Clapper. It replaces the Bell cone with a radial marked stagger and outward displacement. Its catalyst is consumed only on successful transformation. Failed eligibility leaves inventory and currency unchanged apart from the normal visible rejection reason. Same-rank Combine remains unchanged, and no Confluence is enabled.
+
+Spare Hand, Inspection Lens and Black Ledger are enabled as unique, rankless Gifts in two dedicated slots. Spare Hand increases optional work by 25% while reducing movement by 20% inside an unfinished work circle. Inspection Lens labels the next elite or boss property and priority target while spending every fifth ordinary Scrap pickup. Black Ledger reduces dismantle return to 25% and stamps one matching tag onto a deterministic shop lead until that matching weapon is purchased. Gifts use Scrap and never introduce another currency.
+
+Focused deterministic coverage includes attack geometry, target priority, status/control, machine repair, evolution consumption/rejection, unique Gift capacity, save restoration and each Gift trade-off. Fixture captures at `artifacts/assembly` use Godot 4.5.1, Apple M1 Pro OpenGL compatibility, 1280x800, seed 147. They are configured executable states, not human playtests.
+
+Limitation: the larger pool changes shop probabilities, and deterministic viability does not establish human comprehension or enjoyment. The three new weapon fixtures overlap intentionally to show authorship, but final art, effect timing and audio mixing remain deferred.
+
+Exactly one next task: run uncoached 1x sessions comparing close-control, priority-control and repair-roaming builds.
+
+## P12.1-P12.5 - core-quality foundation included in P14
 
 The eight waves now use authored primary/support profiles instead of selecting from an uncontrolled growing enemy pool. Positions remain seeded, but each wave states one pressure question and valid geometry families. Optional-mode spawns arrive 390 pixels around the Saint where walkable. Automated traces record first contact and longest no-threat gap; after counting short-lived threats at spawn, the representative opening contact is tick 96 (1.6 seconds).
 
 Optional repairs now expose reward and remaining work time. Leaving the circle or taking a direct hit emits a stable interruption reason and preserves progress; a hit pauses work for 45 ticks. The Coolant Pump defers at full integrity rather than consuming a wasted heal. If the Warning Bell finishes with no living enemies, its three-second stagger is banked for the next arrival. Scrap, repair starts, interruptions and useful completions are source-recorded. The repair/explorer policy completes the west Salvage Sorter on all three representative seeds while ordinary policies remain free to ignore every repair.
 
-All seven weapons carry data-authored role, weakness, target rule and counter-family descriptions. Nailer prioritises enabled support threats, Candle executes the weakest reachable target, Hymn Coil chooses the densest line and Altar Mortar chooses a cluster. Controlled tests preserve Gear's range weakness, Cable's low burst and Bell's control role. This is matchup evidence, not a claim that final human balance is complete.
+All ten weapons carry data-authored role, weakness, target rule and counter-family descriptions. Nailer prioritises enabled support threats, Candle executes the weakest reachable target, Hymn Coil chooses a dense piercing line and Altar Mortar chooses a cluster. Controlled tests preserve Gear's range weakness, Cable's low burst, Bell's control role and the three P14 roles. This is matchup evidence, not a claim that final human balance is complete.
 
 The workshop preserves six roles and guarantees an affordable normal-economy build action. Owned or exhausted paths are de-duplicated rather than showing repeated calibration cards. The next authored wave name, pressure and counter geometries are visible. Workshop healing, Bell warning time and Mourner kill-mote service mutate distinct authoritative state.
 
@@ -125,4 +139,4 @@ The prior Mourner seed-104729 loss was an uncontrolled mixed-wave composition fa
 
 Current local evidence: 185 focused Godot assertions across relay, arena, simulation, optional repair, shop, variety, roaming quality and UI suites; 12/12 normal-economy main-mode policies; natural policy captures at 1280x800 in `artifacts/core-quality`. Godot is pinned to 4.5.1. The shell loop was once externally terminated while the long playthrough process was active; the same playthrough command passed independently and generated the recorded JSON. This is not human enjoyment evidence.
 
-Exactly one next task: focused uncoached human playtest of the complete First Shift at 1x.
+Exactly one next task: uncoached 1x comparison of close-control, priority-control and repair-roaming builds.
