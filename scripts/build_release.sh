@@ -39,7 +39,7 @@ mkdir -p "$OUTPUT_DIR"
 
 python3 scripts/validate_content.py | tee "$OUTPUT_DIR/tests.log"
 
-for test_script in test_variety.gd test_optional_repairs.gd test_shop.gd test_relay.gd test_arena.gd test_simulation.gd test_ui.gd test_dev_speed.gd; do
+for test_script in test_variety.gd test_optional_repairs.gd test_shop.gd test_relay.gd test_arena.gd test_simulation.gd test_ui.gd test_dev_speed.gd test_profile.gd test_settings.gd; do
   "$GODOT_BIN" --headless --path . --script "tests/$test_script" | tee -a "$OUTPUT_DIR/tests.log"
 done
 
