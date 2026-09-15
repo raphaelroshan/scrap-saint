@@ -123,7 +123,202 @@ The first post-P12 catalogue should not enable all proposals. The recommended or
 
 Expansion A should be the only weapon-content goal in the first weapon task. The other ideas should remain design records until the automated viability suite shows that the current seven weapons and three Blessings are understandable and successful.
 
-## 3. Merge and evolution system
+## 3. Visual design and animation bible
+
+The distinctive visual promise is that every weapon looks like a **repaired industrial implement performing a small sacred ceremony**. The player should recognise the weapon from its silhouette and motion before reading its name. The effect should then explain the mechanical result through shape, timing, material, and sound.
+
+### 3.1 The four-part visual grammar
+
+Every attack and upgrade should be designed as four linked beats:
+
+| Beat | Visual question | Implementation rule |
+|---|---|---|
+| **Prepare** | What is about to happen? | Use a short mechanical movement, light-up, recoil, or targeting mark. |
+| **Commit** | What object is acting? | Show the physical relic, arm, cable, bell, lens, or altar making the attack. |
+| **Resolve** | What area or target is affected? | Use a readable line, cone, ring, tether, zone, or impact shape. |
+| **Aftermath** | What changed? | Leave a brief status mark, stagger pose, repair stitch, smoke residue, scrap ember, or altered silhouette. |
+
+The current renderer already uses line, shot, rail, beam, blast, cone, tether, and orbit effects. Future art should preserve those readable geometry classes while giving each weapon a more physical source object [1]. A large particle burst is not a substitute for showing the mechanism that caused it.
+
+### 3.2 Material and colour assignment
+
+Material should communicate doctrine and function without turning the screen into a rainbow.
+
+| Function | Primary material | Accent | Motion language |
+|---|---|---|---|
+| Repair and Labour | Warm brass, solder, pale green enamel | Cream sparks | Deliberate extension, welding, stitching, and ratcheting. |
+| Witness and Bell | Copper, bronze, cracked glass | Gold and cream rings | Resonance, vibration, concentric expansion, and recoil. |
+| Orbit and Procession | Dark iron, cloth ties, painted arrows | Oxidised green | Rhythmic rotation, escorting, circling, and marching. |
+| Mourn and Remnant | Ivory ceramic, black wax, bone-white plates | Violet and soft lilac | Slow drift, candle flicker, rising motes, and lingering afterimages. |
+| Quiet and Archive | Pale enamel, glass, blue wire | Cold cyan | Focus, scanning, straight beams, muted sound, and suppressed motion. |
+| Tether and Threshold | Woven cable, hooks, paper seals | Desaturated blue | Snap, pull, tension, route lines, and hinged barriers. |
+| Wrath and Furnace | Red-painted iron, heat-blackened steel | Orange and warning yellow | Pressure build, valve release, venting, and ground impact. |
+
+Use one dominant material and one accent per weapon. The accent should brighten only during the resolve beat. The background remains soot black, deep blue, oxidised green, and low-contrast machinery so that gold, cream, red, cyan, and violet retain authority.
+
+### 3.3 Current weapon visual concepts
+
+These are the visual targets for the seven enabled weapons. They should guide placeholder geometry now and commissioned or generated art later.
+
+| Weapon | Silhouette | Attack choreography | Hit and aftermath |
+|---|---|---|---|
+| **Nailer of Small Mercies** | A squat brass rivet gun bolted to a telescoping shoulder bracket. | The bracket snaps forward, a bright nail travels as a straight gold streak, and the gun recoils with one visible loose washer. | A tiny cross-shaped repair mark appears on a marked target; the Saint’s shoulder gives one satisfied click. |
+| **Bell of the Last Shift** | A cracked bronze bell suspended from a short piston arm. | The piston compresses, the bell swings once, and the whole bell briefly becomes the brightest object before a cream resonance ring expands through the cone. | Enemies show a circular vibration mark and lean backward as if struck by sound pressure; the cracked bell continues to wobble after the hit. |
+| **Procession Gear** | A large uneven gear with a small candle bracket and two mismatched teeth. | The gear rolls out from behind the Saint, circles at a steady pace, and pauses for one solemn half-beat when it hits a target. | A green mechanical arc marks its orbit; enemies struck shed two brass filings and rotate slightly away from the Saint. |
+| **Candle-Nailer** | A flare pistol with a black wax candle fused along its barrel. | The candle flame bends toward the lowest-health target, the pistol raises itself, and a violet shot travels with a thin smoke ribbon. | A defeated target leaves a small floating candle wick; healing motes rise from it like fireflies and drift toward the Saint. |
+| **Cable of Contrition** | A maintenance spool mounted on the Saint’s side with a hooked sacramental plate. | The spool spins rapidly, a cable lashes outward, hooks the target, then visibly tightens between the two machines. | The target’s movement leaves short blue tension ticks; when the bind ends, the hook snaps back and the target is pulled one final step. |
+| **Hymn Coil** | A copper coil and two tuning forks mounted above the Saint’s sensor. | The forks align, the coil fills with cold cyan light, and a thin beam fires in repeated clean pulses rather than one noisy continuous laser. | Quieted targets lose their support-field ring and display a muted cyan bar; the coil hum drops to near silence during suppression. |
+| **Altar Mortar** | A small chapel font on a swivelling iron base, with a shell visibly loaded from a side drawer. | A lid opens, a shell arcs with a cream prayer strip tied to it, and a large ground seal appears just before impact. | The impact leaves a square-edged orange-and-cream scorch seal; clustered enemies are pushed outward while the seal slowly fades like cooling metal. |
+
+The visual goal is not maximal spectacle. It is **recognisable mechanical authorship**. A player should be able to identify a Bell pulse, Cable bind, or Mortar landing even when several effects overlap.
+
+### 3.4 Expansion A visual concepts
+
+The first three new weapons should be visually distinct from the current catalogue and should advertise their mechanical role immediately.
+
+| Weapon | Visual concept | Signature moment | Readability constraint |
+|---|---|---|---|
+| **Foundry Censer** | A soot-black censer hangs from a short chain and swings around the Saint. Its lid opens and emits layered teal smoke. | On a close enemy defeat, the censer snaps toward the body, inhales a spark, and drops a single gold Scrap ember. | The smoke ring must stay translucent enough to show enemies and the Saint inside it. |
+| **Penance Winch** | A **telescoping brass maintenance arm** unfolds from the Saint’s back, reaches across the arena, and drives a spear-shaped hook into a selected enemy before retracting. | The arm extends in three visible segments, the hook pins the enemy for a beat, and the winch drum spins backward as the target is pulled from its route. | The target line and endpoint must be visible before the hook commits; no invisible long-range displacement. |
+| **Welded Halo** | A crooked brass ring is held by a small three-axis gimbal above the Saint. One bright welding arc travels around the ring. | The arc pauses at a cardinal point, projects a narrow repair beam, then the ring rotates to continue the circuit. | The repair beam must be distinct from damage rays through cream-green colour and a stitch-like endpoint. |
+
+Penance Winch is the clearest example of the desired character animation. It should feel like an overextended repair arm doing a slightly alarming job, not like a generic tentacle or a copied superhero weapon. The brass arm can have one mismatched elbow, a dangling inspection lamp, and a visible cable spool. Its spear-hook should look like a repurposed alignment tool.
+
+### 3.5 Additional weapon visual concepts
+
+| Weapon | Distinctive visual design | Mechanical result shown visually |
+|---|---|---|
+| **Door of Two Exits** | Two small iron doors unfold from a floor seal, each with a different painted arrow. They close, rotate ninety degrees, and reopen facing the chosen route. | Redirected enemies visibly turn toward the longer arrow; `WITNESSED` appears as a paper inspection stamp. |
+| **Gatekeeper’s Hinge** | A huge rusted hinge swings out from the Saint’s side like a folding gate. | A heavy charge hits the hinge, stops, and leaves a clear sideways skid mark. |
+| **Blue Wire Benediction** | Three blue wires emerge from brass sockets and form a temporary triangular loom between nearby enemies. | When two bound enemies overlap, the loom flashes yellow and releases a small pulse. |
+| **Foreman’s Chalk** | A chalk-box turret rolls beside the Saint and draws a straight white line with a red warning tick at its end. | The line becomes a safe corridor for the Saint while enemies crossing it are pushed away. |
+| **Archive Eye** | A glass inspection lens unfolds on a stalk and sweeps a pale cyan cone like a lighthouse. | The selected support enemy receives a bright lens-shaped mark and its next action appears as a small icon. |
+| **Loose Bolt Communion** | One brass bolt ricochets between targets, leaving a dotted thread of tiny stamped circles. | Each successful bounce adds one visible stamp; the third stamp returns a Scrap ember to the Saint. |
+| **Receipt of Mercy** | A paper maintenance receipt shoots from a side slot and sticks to a weakened machine. | The receipt folds itself into a seal as the target reaches execution range, then becomes a small violet remnant. |
+| **Hymnal Lens** | A glass lens slides over the Hymn Coil and narrows its beam to a hard-edged scanning line. | The beam visibly pauses on a special-action enemy and cuts its support animation short. |
+| **Boiler Psalm** | Three pressure valves inflate on the Saint before releasing a fan of white steam and orange rivets. | The steam cone leaves a safe pale route for the Saint and a hot red strip for enemies. |
+| **Ashen Censer** | A thrown censer bounces once, cracks open, and spreads a low black-violet smoke pool. | Healing pulses visibly stop inside the pool; defeated enemies leave slow violet embers. |
+| **Furnace Psalter** | Small red pressure gauges around the Saint fill one by one like organ stops. | The fifth filled gauge slams shut and releases the radial burst; an interrupted charge vents harmlessly. |
+| **Spare-Part Mortar** | The mortar’s shell is visibly assembled from three mismatched parts before launch. | A miss lands as a small salvage crate instead of silently wasting the shot. |
+
+### 3.6 Rank-up visual progression
+
+Ranks should communicate **more mechanism**, not merely a larger number or more particles.
+
+| Rank | Visual change | Animation change | UI language |
+|---|---|---|---|
+| **Rank I** | One clear tool silhouette with one repair seam. | Short preparation and simple resolve. | “This is what the relic does.” |
+| **Rank II** | A second moving part, new brace, or added material accent appears. | A secondary beat becomes visible, such as a mark, bounce, tether, or delayed seal. | “This is how the relic is becoming reliable.” |
+| **Rank III** | The object looks overworked and ready to transform: extra bolts, glowing seam, exposed coil, or unstable balance. | The attack has a recognisable signature pause or charge. | “This relic is ready for a higher form.” |
+| **Evolved** | The silhouette changes category, not just scale. | A short transformation sequence reconfigures the object and immediately demonstrates the new geometry. | “This is a different machine now.” |
+
+The Rank II change should appear in the first few seconds of combat after the combine. The Rank III change should be visible in the loadout panel and on the Saint. The evolution should use a brief freeze of approximately 0.25–0.4 seconds, a mechanism-reconfiguration sound, and one showcase attack before full control resumes.
+
+## 4. Evolution and Confluence visual transformations
+
+### 4.1 Catalyst evolutions
+
+| Evolution | Transformation sequence | New attack image | Persistent silhouette change |
+|---|---|---|---|
+| **Mercy Rail** | Nailer’s small barrel splits into two rails; the shoulder bracket unfolds into a long alignment arm; the Saint braces with one foot. | A gold-white rail fires through a whole lane and leaves tiny green repair stitches on major targets. | A long pale rail remains mounted beside the Saint’s sensor. |
+| **The Great Toll** | Bell cracks open along a hidden seam; its piston detaches and becomes a central striker. | A full cream-and-gold ring expands in every direction, with four brief bell silhouettes at the cardinal points. | The bell hangs above the Saint like a small moving shrine. |
+| **The Maintenance Parade** | Procession Gear separates into two offset rings; a strip of faded cloth and tiny maintenance flags unfurl. | The two rings rotate at different speeds and briefly align into a marching path when a machine is restored. | Two gears escort the Saint rather than one. |
+| **Candle for the Unreturned** | Candle-Nailer’s wax melts upward into three small candles; the flare barrel becomes a black ceramic reliquary. | Kills release violet motes that curve toward the Saint rather than floating randomly. | Three faint candle flames orbit the Saint when the weapon is ready. |
+| **Contrition Lattice** | Cable spool splits into three smaller drums; hooks connect into a triangular frame. | Three blue lines form a lane or triangle, binding enemies that cross its edges. | A faint triangular cable frame follows the Saint. |
+| **Quiet Sermon** | Hymn Coil’s tuning forks close around the beam and the copper turns pale enamel. | A narrow cyan lane removes sound and motion from support actions before they restart. | A pale lens sits over the Saint’s sensor. |
+| **Workshop Benediction** | Mortar font opens into a small altar; the shell drawer becomes a repair compartment. | A damaging shell or a missed shell creates a visible choice between scorch and repair/salvage zone. | A tiny altar plate rotates behind the Saint. |
+| **Ashen Benediction** | Foundry Censer’s lid breaks into a second orbiting lid and black smoke gains violet sparks. | The ring drifts toward the nearest damaged machine after enough defeats. | A small soot plume remains attached to the Saint’s trail. |
+| **The Long Hand** | Penance Winch unfolds a second brass elbow and a longer cable spool. | The hook visibly travels along a marked route before pulling a far objective attacker. | The brass arm remains extended in a folded resting pose. |
+| **Halo of Repairs** | Welded Halo becomes a two-ring gimbal with a bright solder point on each ring. | The repair beam chains from machine to Saint and back, forming a temporary moving circuit. | The halo floats higher and casts a cream reflection on nearby floor. |
+
+### 4.2 Cross-weapon Confluences
+
+Confluences should feel like two tools agreeing to become an institution. The transformation should show both source silhouettes before revealing the hybrid result.
+
+| Confluence | Transformation staging | Result silhouette and attack |
+|---|---|---|
+| **The Line That Rings** | Nailer rail and Bell piston detach, rotate around one another, and lock with a visible bronze collar. | A long gold rail fires first; its terminal end folds into a bell-shaped pulse that marks and staggers the survivors. |
+| **Procession Harness** | Procession Gear’s orbit slows while Cable’s hook wraps the gear’s rim and becomes a moving harness. | The gear rolls outward on a cable ring, pulls enemies inward, then snaps back to the Saint with repair filings. |
+| **Requiem Coil** | Candle flame is drawn into Hymn Coil’s copper loops, leaving three purple sparks between the turns. | The beam jumps from low-health target to low-health target; a final kill releases one audible, visible mote. |
+| **Incense Engine** | Mortar font seals onto the underside of the Censer, which becomes a floating smoke furnace. | Shells create smoke zones, then a hot burst occurs only when a second attack enters the zone. |
+| **Threshold Toll** | Bell’s striker becomes the pin of Door of Two Exits; the two doors acquire bronze bell faces. | Every crossing enemy triggers a contained toll that turns the group toward the longer route. |
+| **Demolition Liturgy** | Winch hooks a mortar shell and pulls it through a visible arc before releasing it at the gathered target point. | The winch creates the cluster and the mortar resolves the delayed impact as a single setup/payoff event. |
+
+The source objects should remain recognisable for the first two attacks after a Confluence. This gives the player a visual explanation of the merge rather than presenting an unrelated new icon.
+
+## 5. Gift and trait presentation
+
+Gifts should attach to the Saint as small visible modifications. They should look like an item the Saint has chosen to carry, not a floating stat icon detached from the world.
+
+| Gift | Physical attachment | Activation cue |
+|---|---|---|
+| **Spare Hand** | A folded brass tool arm rests on the Saint’s back and extends beside the normal repair arm. | It unfolds with two quick clicks when optional repair begins. |
+| **Loose Spring** | A large spring is strapped to one leg with mismatched leather. | The spring visibly compresses during repair and releases on completion. |
+| **Mended Spine** | A stitched iron brace runs up the Saint’s back. | It flashes green at the first reduced knockback each wave. |
+| **Last Safe Step** | A chalk ring is painted beneath one foot. | The ring remains for the short repair grace window after leaving. |
+| **Cooling Mantle** | A small cloth-and-copper mantle vents pale steam. | The mantle opens whenever a hazard warning is extended. |
+| **Inspection Lens** | A folding glass monocle rotates over the Saint’s sensor. | It locks onto the next elite property and projects a small cyan diagram. |
+| **Brass Fuse** | A short fuse runs from the Bell mount to the Saint’s main relay. | It lights on the first valid stagger and burns down visibly. |
+| **Tether Spool** | A secondary blue spool hangs under the main Cable mount. | A faint line trails behind every Bound enemy. |
+| **Choir Filter** | A perforated brass filter covers one side of the sensor. | Quieted enemies emit no support chime when their field attempts to return. |
+| **Black Ledger** | A folded black book is clipped to the Saint’s side. | When dismantling, a component stamp appears on the page and then in the next shop card. |
+| **Pilgrim’s Map** | A rolled paper map is tied to the back with red thread. | The map unrolls briefly when the next pressure lane is forecast. |
+| **Honest Scale** | A tiny balance hangs from the Saint’s arm. | It tips toward the post-purchase loadout result before a shop confirmation. |
+| **Mourner’s Thread** | A violet thread connects the Saint’s sensor to the nearest healing mote. | The thread knots when the mote intercepts a hit, then unravels between waves. |
+| **Saint’s Debt** | A brass receipt is pinned beneath the sensor. | The receipt gains a red unpaid mark when the deferred cost is accepted. |
+
+The trait UI should show the physical attachment in the loadout panel. On acquisition, the Saint should perform a short inspection tilt, the item should visibly attach, and the panel should state both the benefit and the trade-off in plain language.
+
+## 6. Animation, audio, and camera budget
+
+Visual identity is most valuable when it survives the current procedural renderer and later asset replacement. Every proposed effect should be implementable with simple shapes first and refined art later.
+
+| Event | Target timing | Required readable cue | Audio cue |
+|---|---:|---|---|
+| Ordinary weapon prepare | 0.08–0.18 seconds | One physical part moves or brightens. | Short mechanism tick. |
+| Ordinary resolve | 0.05–0.20 seconds | Geometry shape is visible at the target or area. | Weapon-specific impact. |
+| Charge or delayed attack | 0.5–1.2 seconds | Target line, landing marker, or pressure gauge grows. | Rising tension with a clear end point. |
+| Repair start | 0.15 seconds | Work ring and mechanism engage. | Click, weld spark, low hum. |
+| Repair interruption | Immediate | Ring stops and one segment remains incomplete. | Cut-off weld and short warning chirp. |
+| Gift acquisition | 0.3–0.5 seconds | Physical attachment appears on the Saint. | Small material-specific fastening sound. |
+| Catalyst evolution | 0.25–0.4 seconds | Source object separates, reconfigures, and returns. | Resonance, mechanism lock, signature tone. |
+| Confluence | 0.4–0.6 seconds | Both source objects are visible before the hybrid locks. | Two source notes resolve into one lower chord. |
+| Boss phase change | 0.4 seconds maximum | Arena route or hazard rule changes. | Concise title hit, not a long cutscene. |
+
+The camera should not zoom or shake for ordinary hits. Use a very small recoil offset for the Saint and a short camera impulse only for evolution, boss phase, or a large Confluence resolve. The player must retain control quickly. Any effect that obscures the Saint, enemy telegraph, repair machine, or minimap route fails the visual gate.
+
+### 6.1 Procedural placeholder implementation
+
+The first implementation can use:
+
+- Lines and arcs for rails, beams, cables, rings, and pulses.
+- Rectangles and polygons for doors, mortar shells, seals, and machine arms.
+- Small circles for sparks, motes, lenses, and scrap embers.
+- Scale, rotation, and alpha animation for preparation and aftermath.
+- One material colour plus one accent colour per effect.
+
+The placeholder must still include the signature motion. A golden line alone is not a Penance Winch; a brass arm extending, hooking, pulling, and retracting is the identity. A circle alone is not The Great Toll; the bell striker, wobble, ring, and stagger pose are the identity.
+
+## 7. Visual acceptance checklist for new content
+
+Every new weapon, evolution, Confluence, or Gift should pass the following checklist before entering the runtime pool:
+
+1. Its silhouette is recognisable at 1280×800 gameplay scale.
+2. The prepare beat identifies the acting relic before resolution.
+3. The resolve geometry communicates its target or area.
+4. The aftermath explains damage, control, repair, economy, or status.
+5. The effect uses the assigned material and colour language.
+6. It remains distinguishable when two existing weapon effects overlap.
+7. The attack does not hide the Saint, threat telegraph, optional machine, or boss hazard.
+8. The rank-up changes a visible mechanism, not only a number.
+9. The evolution or Confluence visibly contains both the source and result identity.
+10. A Gift’s physical attachment and activation state are visible in the loadout or arena.
+11. Audio has a distinct onset and does not mask boss or repair warnings.
+12. A real capture records build, viewport, seed, state, and whether it was natural or fixture-configured.
+
+The visual target is not photorealism or particle density. It is a small machine performing understandable, characterful acts of maintenance under pressure.
+
+## 8. Merge and evolution system
 
 ### 3.1 Use three kinds of merge deliberately
 
@@ -188,7 +383,7 @@ Confluence rules:
 - The Results screen records both source lineages and the resulting geometry.
 - The first implementation should contain only two Confluences, preferably **The Line That Rings** and **Procession Harness**.
 
-## 4. Gifts and traits to acquire
+## 9. Gifts and traits to acquire
 
 ### 4.1 Terminology and slot rules
 
@@ -258,7 +453,7 @@ The first shop Gift should be **Honest Scale**, because it improves comprehensio
 
 These Gifts are later content. They should not be used to patch weak boss design or make missed repairs feel mandatory.
 
-## 5. Blessing interactions
+## 10. Blessing interactions
 
 Gifts and evolutions should reinforce Blessings without becoming Blessing-exclusive. The following pairings are recommended as **biases**, not requirements.
 
@@ -273,7 +468,7 @@ Gifts and evolutions should reinforce Blessings without becoming Blessing-exclus
 
 A Blessing should bias offers toward these pairings, but the shop must still expose at least one viable off-doctrine counter in each important visit.
 
-## 6. Acquisition and shop pacing
+## 11. Acquisition and shop pacing
 
 ### 6.1 Proposed sources
 
@@ -300,7 +495,7 @@ After the Gift layer is implemented, a normal shop should contain:
 
 The generator must replace an unaffordable or capacity-invalid mandatory role with a deterministic fallback. It should not make every offer affordable. Tension comes from choosing between good options, not from six unusable cards.
 
-## 7. Data and simulation extension
+## 12. Data and simulation extension
 
 The current item catalogue can evolve with a small schema extension.
 
@@ -382,7 +577,7 @@ The current item catalogue can evolve with a small schema extension.
 
 The simulation must validate ingredient identity, rank, capacity, recipe state, and trigger window atomically. A rejected merge must not mutate inventory, consume currencies, or advance an RNG cursor. The event trace should record source instance IDs, source definitions, result definition, geometry delta, status delta, and resulting slot count.
 
-## 8. Implementation sequence
+## 13. Implementation sequence
 
 ### Packet W-01 — catalogue and role audit
 
@@ -432,7 +627,7 @@ The simulation must validate ingredient identity, rank, capacity, recipe state, 
 
 Add further weapons, evolutions, and Gifts only after the P12.1 density gate, Blessing viability gate, and shop-decision gate pass. Each new item must include one deterministic fixture and one documented weakness before it enters the runtime pool.
 
-## 9. Quality gates
+## 14. Quality gates
 
 The expansion is successful only if it improves decision quality rather than catalogue size.
 
@@ -448,7 +643,7 @@ The expansion is successful only if it improves decision quality rather than cat
 | Evidence | Real 1× captures include build, viewport, seed, state, and whether the state was natural or fixture-configured. |
 | Scope honesty | Proposed content remains disabled until its packet and tests pass. |
 
-## 10. Recommended first build after the current balance work
+## 15. Recommended first build after the current balance work
 
 The first practical content release should be:
 
