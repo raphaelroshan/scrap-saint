@@ -13,6 +13,8 @@ mkdir -p artifacts/agent-iteration
 "$GODOT_BIN" --headless --path . --script res://tests/test_variety.gd | tee artifacts/agent-iteration/variety.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_roaming_quality.gd | tee artifacts/agent-iteration/roaming-quality.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_ui.gd | tee artifacts/agent-iteration/ui.log
+"$GODOT_BIN" --headless --path . --script res://tests/test_flow_input.gd | tee artifacts/agent-iteration/flow-input.log
+"$GODOT_BIN" --headless --path . --script res://tests/test_save_flow.gd | tee artifacts/agent-iteration/save-flow.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_assembly.gd | tee artifacts/agent-iteration/assembly.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_acquisition.gd | tee artifacts/agent-iteration/acquisition.log
 "$GODOT_BIN" --headless --path . --script res://tests/run_playthroughs.gd -- --optional | tee artifacts/agent-iteration/optional-playthroughs.log

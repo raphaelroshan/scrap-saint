@@ -69,5 +69,12 @@ func _initialize():
 	check(migrated.state.version == Profile.CURRENT_VERSION and "frame.pilgrim" in migrated.state.unlocked_frames, "migration restores required defaults")
 	check(migrated.state.memory_fragments == 3 and "memory.first_shift" in migrated.state.memories, "migration preserves progress")
 	DirAccess.remove_absolute(legacy_path)
+	var explicit_empty_path = "user://profile_empty_recipes_test.save"
+	file = FileAccess.open(explicit_empty_path, FileAccess.WRITE)
+	file.store_var({"version": 1, "discovered_recipes": []})
+	file = null
+	var recipe_migrated = Profile.new()
+	check(recipe_migrated.load_from(explicit_empty_path) and "evolution.mercy_rail" in recipe_migrated.state.discovered_recipes, "migration restores required starting recipes")
+	DirAccess.remove_absolute(explicit_empty_path)
 	print("PROFILE: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

@@ -116,4 +116,6 @@ func _migrate(loaded: Dictionary) -> Dictionary:
 		if required not in fresh.unlocked_blessings: fresh.unlocked_blessings.append(required)
 	for required in definition.starting_unlocks.sites:
 		if required not in fresh.unlocked_sites: fresh.unlocked_sites.append(required)
+	for required in definition.starting_unlocks.recipes:
+		if required not in fresh.discovered_recipes: fresh.discovered_recipes.append(required)
 	return fresh

@@ -7,7 +7,9 @@ The runtime tests now exist. Run the complete Windows loop with `scripts/agent_i
 - `python tests/test_slice_manifest.py`: four manifest acceptance/rejection tests.
 - `godot --headless --path . --script res://tests/test_simulation.gd`: 31 deterministic simulation checks.
 - `godot --headless --path . --script res://tests/test_chapter.gd`: deterministic route, travel, carryover, objective, memory, and chapter save checks.
-- `godot --headless --path . --script res://tests/test_ui.gd`: seven UI flow/save checks using actual button signals and a temporary save file.
+- `godot --headless --path . --script res://tests/test_ui.gd`: direct UI state and button-signal coverage with temporary local files.
+- `godot --headless --path . --script res://tests/test_flow_input.gd`: controller-style focus/action traversal across settings, setup, shop, route, travel, memory, Results, and replay.
+- `godot --headless --path . --script res://tests/test_save_flow.gd`: exact state-hash and next-event restoration across every expedition phase plus version-one migration coverage.
 - `godot --headless --path . --script res://tests/run_playthroughs.gd`: four shared-seed normal-economy policies, including no-evolution Workshop. Results are saved separately from visual fixtures.
 - `godot --headless --path . --script res://tests/benchmark_peak_density.gd`: records deterministic simulation throughput with 65 persistent threats and four Rank III weapons. It is not a rendered-frame benchmark.
 - Add `-- --optional --quick` to smoke one normal-economy policy through each destination without running the full twelve-policy matrix.

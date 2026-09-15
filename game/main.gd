@@ -290,7 +290,8 @@ func build_ui():
 	elif sim.state.phase == "route":
 		for i in range(sim.chapter.routes.size()):
 			var route = sim.chapter.routes[i]
-			button("CHOOSE " + route.name.to_upper(), Rect2(96 + i * 470, 585, 430, 48), func(): act("choose_route", route.id), i == 0)
+			var route_button = button("CHOOSE " + route.name.to_upper(), Rect2(96 + i * 470, 585, 430, 48), func(): act("choose_route", route.id), i == 0)
+			if i == 0: route_button.grab_focus()
 	elif sim.state.phase == "travel":
 		var route = sim.current_route()
 		var final_beat = sim.state.travel_step >= route.travel.size() - 1

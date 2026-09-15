@@ -26,6 +26,10 @@ if ($LASTEXITCODE -ne 0) { throw 'Chapter tests failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Roaming quality tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_ui.gd 2>&1 | Tee-Object -FilePath "$bundlePath\ui.log"
 if ($LASTEXITCODE -ne 0) { throw 'UI tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_flow_input.gd 2>&1 | Tee-Object -FilePath "$bundlePath\flow-input.log"
+if ($LASTEXITCODE -ne 0) { throw 'Flow input tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_save_flow.gd 2>&1 | Tee-Object -FilePath "$bundlePath\save-flow.log"
+if ($LASTEXITCODE -ne 0) { throw 'Save flow tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_assembly.gd 2>&1 | Tee-Object -FilePath "$bundlePath\assembly.log"
 if ($LASTEXITCODE -ne 0) { throw 'Assembly tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_acquisition.gd 2>&1 | Tee-Object -FilePath "$bundlePath\acquisition.log"
