@@ -13,9 +13,9 @@ data = {
     'godot': subprocess.check_output([sys.argv[1], '--version'], text=True).strip(),
     'viewport': [1280, 800], 'scaling': 'canvas_items', 'seed': 147,
     'timestamp_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
-    'capture_type': 'rendered simulation fixtures; includes explicit setup budgets and Results fixture',
+    'capture_type': 'rendered simulation fixtures; includes explicit setup budgets, Results, and P14 assembly fixtures',
     'source_hashes': {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root / 'game').glob('*')) if p.is_file()},
     'limitation': 'No human playtest or performance benchmark',
-    'next_task': 'Human playtest of the shared arena and build feedback',
+    'next_task': 'Uncoached 1x comparison of close-control, priority-control and repair-roaming builds',
 }
 (root / 'artifacts/agent-iteration/provenance.json').write_text(json.dumps(data, indent=2), encoding='utf-8')

@@ -29,7 +29,7 @@ func _initialize():
 	for id in a.config.catalysts: a.state.catalysts.append(id)
 	a.roll_shop()
 	check(a.state.offers[0] == "service.calibrate" and a.state.offers[2] == "service.calibrate", "completed rank/evolution have useful fallback")
-	check(a.state.offers[3] == "service.calibrate", "owned catalysts excluded")
+	check(a.state.offers[3] in a.config.gifts, "owned catalysts yield an unowned Gift instead of dead support")
 	for doctrine in range(3):
 		a.start(doctrine)
 		a.enter_shop()

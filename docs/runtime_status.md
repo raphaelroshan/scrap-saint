@@ -5,10 +5,10 @@ The project now contains a runnable Godot 4.5.1 desktop prototype. This is the f
 ## Implemented
 
 - Eight 70-second maximum waves, with the final boss ending the run early when defeated. Shop reading time is additional and paused.
-- Three starting Blessings, five automatic weapon geometries, four catalysts, four active slots and one reserve.
+- Three starting Blessings, ten automatic weapons, four catalysts, two visible evolutions, four active slots, one reserve and two run-local Gift slots.
 - Movement, relay work/structure, pickups, three enemy families, elite and phased boss attacks.
 - Purchases, automatic duplicate combining, explicit combine, sell/dismantle, reserve/equip, offer lock and one free/two paid refreshes.
-- Optional Rank III Nailer plus Saint's Rivet evolution. The catalyst is consumed once. Every encounter supports runs without it.
+- Optional Rank III Nailer plus Saint's Rivet evolution and Rank III Bell plus Cracked Clapper evolution. Catalysts are consumed atomically. Every encounter supports unevolved runs.
 - Procedural weapon effects and synthesized audio, title/selection/shop/pause/Results, keyboard and basic controller navigation, local save/resume.
 - Deterministic simulation tests and full-run scripted policies; real rendered fixture captures with provenance.
 
@@ -108,3 +108,18 @@ The previous relay-defence policy suite produced 9 wins and 3 losses after roste
 
 Limitation: automated fixtures and policies do not establish human pacing, balance or audio quality. Capture teardown still reports an ObjectDB leak warning.
 Exactly one next task: playtest roaming density and weapon/enemy balance at 1x.
+
+
+## P14 - replayable assembly
+
+Foundry Censer, Penance Winch and Welded Halo are enabled in the ordinary weapon pool. Censer is a close smoke ring that slows threats and drops one deterministic Scrap ember per three close defeats. Winch selects an announced relay attacker before the farthest eligible threat, cancels its strike and pulls that single target toward the Saint. Halo uses a rotating contact point and adds a repair stitch to a nearby unfinished optional machine, falling back to a small Saint repair when no eligible machine is near. Their roles, target rules, weaknesses, tags and prices remain data-owned.
+
+The Great Toll is the second enabled Evolution: Bell Rank III plus Cracked Bell Clapper. It replaces the Bell cone with a radial marked stagger and outward displacement. Its catalyst is consumed only on successful transformation. Failed eligibility leaves inventory and currency unchanged apart from the normal visible rejection reason. Same-rank Combine remains unchanged, and no Confluence is enabled.
+
+Spare Hand, Inspection Lens and Black Ledger are enabled as unique, rankless Gifts in two dedicated slots. Spare Hand increases optional work by 25% while reducing movement by 20% inside an unfinished work circle. Inspection Lens labels the next elite or boss property and priority target while spending every fifth ordinary Scrap pickup. Black Ledger reduces dismantle return to 25% and stamps one matching tag onto a deterministic shop lead until that matching weapon is purchased. Gifts use Scrap and never introduce another currency.
+
+Focused deterministic coverage includes attack geometry, target priority, status/control, machine repair, evolution consumption/rejection, unique Gift capacity, save restoration and each Gift trade-off. Fixture captures at `artifacts/assembly` use Godot 4.5.1, Apple M1 Pro OpenGL compatibility, 1280x800, seed 147. They are configured executable states, not human playtests.
+
+Limitation: the larger pool changes shop probabilities, and deterministic viability does not establish human comprehension or enjoyment. The three new weapon fixtures overlap intentionally to show authorship, but final art, effect timing and audio mixing remain deferred.
+
+Exactly one next task: run uncoached 1x sessions comparing close-control, priority-control and repair-roaming builds.

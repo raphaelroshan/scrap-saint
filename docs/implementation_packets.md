@@ -120,3 +120,14 @@
 - Evidence: actual enlarged map, new weapon effects and enemy fixtures at 1280x800 with source/content provenance.
 - Limitation: wider content and camera pacing require human tuning.
 - Exactly one next task: playtest roaming density and weapon/enemy balance.
+
+## P14 - replayable assembly package
+- Objective: choose a close-pressure, priority-control, or repair-roaming weapon, visibly evolve Bell into The Great Toll, and carry up to two Gifts that alter repair risk, threat information, or dismantling decisions.
+- Authorization: the owner explicitly requested the researched P14 package after the current roadmap update.
+- Owner: content data defines roles, costs, effects and trade-offs; `game/simulation.gd` owns target selection, damage, control, repair progress, Gift slots, economy, evolution eligibility and save state; presentation renders authoritative events and loadout state.
+- Files: `content/items/first_slice.json`, `content/slices/first_shift.json`, `game/simulation.gd`, `game/main.gd`, `game/sound.gd`, `scripts/validate_content.py`, `tests/test_assembly.gd`, `tests/test_slice_manifest.py`, `tests/capture_assembly.gd`, `scripts/agent_iteration.sh`, `scripts/agent_iteration.ps1`, `docs/runtime_status.md`, `docs/verification_0_1.md`, `roadmap.md`.
+- Preserve: four active weapon slots plus one reserve, two run currencies, deterministic fixed ticks and isolated shop rolls, existing Combine semantics, catalyst-based Evolution semantics, optional repairs, viable unevolved builds and all P12 content. Confluences remain disabled.
+- Acceptance: Censer slows close threats and earns only deterministic close-defeat embers; Winch selects a relay attacker before the farthest eligible target and visibly pulls one threat; Halo damages on its rotating contact point and advances a nearby optional machine or repairs the Saint; Bell Rank III plus Cracked Clapper atomically becomes radial Great Toll while failed evolution does not mutate state; two unique Gift slots persist through saves; Spare Hand changes work rate and movement exposure; Inspection Lens reveals the next major property with a deterministic ordinary-Scrap tax; Black Ledger reduces dismantle refund and guarantees a matching temporary shop lead; shop offers, active effects, Results and captures identify weapons, evolutions and Gifts distinctly.
+- Capture: Godot 4.5.1, 1280x800, seed 147, fixture-configured states `P14_EXPANSION_A`, `P14_GREAT_TOLL`, and `P14_GIFTS`; inspect all captures and record renderer/build provenance. These are executable fixtures, not human playtests.
+- Limitation: deterministic viability and screenshots do not establish whether the expanded pool is enjoyable or correctly weighted for human players.
+- Exactly one next task: run uncoached 1x sessions comparing a close-control, route-control and repair-roaming build.

@@ -81,7 +81,7 @@ The transformation must change attack geometry, target rules, area control, obje
 
 ## Scope and quality bar
 
-The first playable is intentionally small: one arena, one Saint frame, seven base weapons, four catalysts, three Blessings, six enemy families, one elite, one boss, one repair objective, one shop, one visible evolution, and a deterministic eight-to-ten-minute run.
+The current replayable-assembly prototype remains deliberately bounded: one arena, one Saint frame, ten base weapons, four catalysts, three run-local Gifts, three Blessings, six enemy families, one elite, one boss, optional repair objectives, one shop, two visible evolutions, and a deterministic eight-to-ten-minute run. Combine, Evolution, and future Confluence recipes remain separate systems; no Confluence is enabled.
 
 The project is not complete when the content validator passes. Game quality requires a running build, readable combat, visible build transformation, causal Results, exact screenshot provenance, and evidence-led iteration. Technical tests establish simulation correctness; screenshots establish presentation evidence; neither is a substitute for the other.
 

@@ -84,3 +84,16 @@ Actual warning and interrupt captures in artifacts/foreman-counterplay use Godot
 
 Limitation: risk/reward timing still needs human play, and boss-adjacent labels can overlap.
 Exactly one next task: causal Results showing damage sources, build contribution and optional-repair rewards.
+
+
+## P14 - replayable assembly, 2026-09-15
+
+Content validation and 156 focused Godot assertions pass on pinned Godot 4.5.1: assembly27, variety12, optional12, shop22, relay18, arena27, simulation31 and UI7. The P14 tests cover Censer close slow and deterministic ember cadence; Winch priority selection, strike cancellation and pull; Halo contact geometry and machine repair; Great Toll rejection/consumption/radial control; two unique Gift slots; save restoration; Gift sale/dismantle; and the explicit downside of every enabled Gift. Python manifest validation also confirms ten enabled weapons, four catalysts, three Gifts, two Gift slots, two Evolutions and no enabled Confluence.
+
+Four seed-147 assembly policies complete the optional-mode shift using configured starting build identities followed by ordinary movement and shop commands: Censer close-control wins at 510.9s with 81 structure; Winch priority-control wins at 516.28s with 63 structure; Halo/Spare Hand repair-roaming wins at 508.27s with 100 structure and two optional repairs; Great Toll/Inspection Lens/Black Ledger wins at 501.93s with 100 structure. These controlled-start policies establish executable viability, not natural acquisition rates or human balance.
+
+The broader existing twelve-policy matrix remains 11/12. Bell Ward seed 104729 now reaches the final wave but loses at 530.75s with a Rank III Bell and Rank III Procession Gear; the other eleven policies win. This is recorded as a remaining balance failure, not suppressed as a pass. All baseline policies still skip optional repairs.
+
+Three actual 1280x800 renderer fixtures were captured and inspected at seed147 using Godot 4.5.1 stable, OpenGL compatibility on Apple M1 Pro. `P14_EXPANSION_A` shows separate teal Censer smoke, segmented brass Winch arm/hook, and cream-green Halo stitch. `P14_GREAT_TOLL` shows the evolved loadout label, physical Bell shrine and full radial ring. `P14_GIFTS` shows Gift pricing/descriptions, both evolution buttons and two active Gift names. The fixtures use configured loadouts, targets and shop offers and are not natural runs. Visual polish remains procedural: simultaneous close rings overlap, the Winch lacks a full prepare/retract animation, and audio has not been human-mixed.
+
+Exactly one next task: uncoached 1x comparison of close-control, priority-control and repair-roaming builds, with attention to shop-pool comprehension and Bell seed104729 final-wave survival.

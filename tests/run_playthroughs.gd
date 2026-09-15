@@ -44,7 +44,8 @@ func _initialize():
 				if diff.length() < hazard.radius + 28: move += diff.normalized() * 4.0
 			sim.step(move.limit_length())
 		unfinished = unfinished or sim.state.phase != "won"
-		results.append({"mode": sim.state.mode, "repairs_completed": sim.state.machines.filter(func(m): return m.complete).size(), "seed": seed_value, "backup_absorbed": sim.state.backup_absorbed, "relay_damage_sources": sim.state.relay_damage_sources, "doctrine": doctrine, "evolution_policy": variant == 0, "outcome": sim.state.phase, "wave": sim.state.wave, "seconds": sim.state.tick / 60.0, "hp": sim.state.hp, "relay": sim.state.relay_hp, "progress": sim.state.progress / sim.config.relay.required_ticks, "kills": sim.state.kills, "shops": visits, "reason": sim.state.last_reason})
+		results.append({"mode": sim.state.mode, "repairs_completed": sim.state.machines.filter(func(m): return m.complete).size(), "seed": seed_value, "backup_absorbed": sim.state.backup_absorbed, "relay_damage_sources": sim.state.relay_damage_sources, "doctrine": doctrine, "evolution_policy": variant == 0, "outcome": sim.state.phase, "wave": sim.state.wave, "seconds": sim.state.tick / 60.0, "hp": sim.state.hp, "relay": sim.state.relay_hp, "progress": sim.state.progress / sim.config.relay.required_ticks, "kills": sim.state.kills, "shops": visits, "reason": sim.state.last_reason,
+			"build": sim.state.weapons.map(func(w): return {"id": w.id, "rank": w.rank, "evolved": "mercy_rail" if w.get("rail", false) else ("great_toll" if w.get("toll", false) else "")}), "gifts": sim.state.gifts.duplicate(), "damage": sim.state.damage.duplicate()})
 	print(JSON.stringify(results, "  "))
 	DirAccess.make_dir_recursive_absolute("res://artifacts/agent-iteration")
 	var file = FileAccess.open(("res://artifacts/agent-iteration/optional_playthroughs.json" if optional else "res://artifacts/agent-iteration/playthroughs.json"), FileAccess.WRITE)
