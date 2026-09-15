@@ -1,4 +1,4 @@
-# First Shift runtime — 0.2.0 preview
+# First Shift runtime — 0.2.1 preview
 
 The project now contains a runnable Godot 4.5.1 desktop prototype. This is the first implementation, not a finished creative vertical. `content/slices/first_shift.json` is the authoritative enabled catalogue and tuning source; the larger catalogues also contain future concepts.
 
@@ -29,7 +29,7 @@ The Crane copies rail geometry if an evolution exists and otherwise telegraphs a
 
 ## Evidence limits
 
-Screenshots are actual Godot renders. Most legacy captures are scripted fixtures with supplied positions or budgets. `artifacts/core-quality` additionally contains a normal-economy, seed-147 repair-policy trace at the repair decision, reward and naturally reached Results; it is labelled `NATURAL POLICY TRACE`, not human play. Passing policies establishes executable routes and regressions, not enjoyment or final balance. The 65-threat headless benchmark reaches 329 simulation ticks/second (5.48× real time) on an Apple M1 Pro; it does not establish rendered Windows minimum-hardware performance. No human playtest or controller hardware session has been claimed.
+Screenshots are actual Godot renders. Most legacy captures are scripted fixtures with supplied positions or budgets. `artifacts/core-quality` additionally contains a normal-economy, seed-147 repair-policy trace at the repair decision, reward and naturally reached Results; it is labelled `NATURAL POLICY TRACE`, not human play. Passing policies establishes executable routes and regressions, not enjoyment or final balance. The integrated 65-threat headless benchmark reaches 319 simulation ticks/second (5.31× real time) on an Apple M1 Pro; it does not establish rendered Windows minimum-hardware performance. No human playtest or controller hardware session has been claimed.
 
 Art is original procedural placeholder geometry drawn by the renderer. Audio is original synthesized placeholder audio in `game/sound.gd`. Both were created on 2026-09-14, use no downloaded art/audio assets, and require later art direction/feel iteration. System fonts use installed fallbacks; no font files are redistributed.
 
@@ -138,7 +138,7 @@ Foreman phases now change movement speed, stop distance and route-shaped demolit
 
 The prior Mourner seed-104729 loss was an uncontrolled mixed-wave composition failure, not evidence that Mourner required a global damage bonus. The authored wave-five Pilgrim repair line isolates healer priority with Hound/Mite support. On the same seed, the non-evolved Mourner policy now reaches and defeats Foreman with Rank III Candle, Rank III Bell and Rank I Cable. The full main-mode matrix is 12/12 wins across seeds 147, 104729 and 104730; each seed includes an evolution policy, Bell survival policy, non-evolved Mourner policy and repair/explorer policy. No shop visit in that matrix lacks an affordable action, and all three repair policies complete one useful machine.
 
-Current integrated evidence: 341 focused Godot assertions plus four Python manifest checks. The normal-economy chapter matrix wins 12/12, the three-frame × four-Blessing × two-route matrix wins 24/24, and assembly-specialist policies win 4/4. Natural policy captures live at 1280x800 in `artifacts/core-quality`; product-shell fixtures cover title, setup, tutorial, settings and Results. Godot is pinned to 4.5.1. This is deterministic viability evidence, not human enjoyment evidence.
+Current integrated evidence: 469 focused Godot assertions plus four Python manifest checks. The normal-economy chapter matrix wins 12/12, the three-frame × four-Blessing × two-route matrix wins 24/24, and assembly-specialist policies win 4/4. Natural policy captures live at 1280x800 in `artifacts/core-quality`; product-shell and destination-boss fixtures cover the complete flow. Godot is pinned to 4.5.1. This is deterministic viability evidence, not human enjoyment evidence.
 
 Exactly one next task: uncoached 1x comparison of close-control, priority-control and repair-roaming builds across both chapter routes.
 
