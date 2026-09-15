@@ -33,7 +33,7 @@ func start(doctrine: int = 0, seed_value: int = 147, mode: String = "relay", fra
 	arena.load_file("res://content/arenas/collapsed_workshop.json")
 	if not frames.has(frame_id): frame_id = "frame.pilgrim"
 	var frame = frames[frame_id]
-	state = {"mode": "optional" if mode == "optional" else "relay", "machines": [], "version": 2, "run_id": run_id if run_id != "" else "test-%d-%d-%s" % [seed_value, doctrine, frame_id], "frame_id": frame_id, "max_hp": float(frame.structure), "move_speed": float(frame.speed), "repair_grace_ticks": int(frame.repair_grace_ticks), "knockback_multiplier": float(frame.knockback_multiplier), "keeper_shove_segment": "", "repair_grace_until": 0, "arena_id": arena.data.id, "site_id": "site.collapsed_workshop", "route": "", "travel_step": 0, "objective": [], "objective_complete": false, "objective_lock_until": 0, "memory_id": "", "chapter_complete": false, "pressure_until": 0, "pressure_multiplier": 1.0, "seed": seed_value, "rng": maxi(1, seed_value), "tick": 0, "phase": "combat", "paused": false,
+	state = {"mode": "optional" if mode == "optional" else "relay", "machines": [], "version": 2, "run_id": run_id if run_id != "" else "test-%d-%d-%s" % [seed_value, doctrine, frame_id], "frame_id": frame_id, "max_hp": float(frame.structure), "move_speed": float(frame.speed), "repair_grace_ticks": int(frame.repair_grace_ticks), "knockback_multiplier": float(frame.knockback_multiplier), "keeper_shove_segment": "", "repair_grace_until": 0, "arena_id": arena.data.id, "site_id": "site.collapsed_workshop", "route": "", "route_history": [], "travel_step": 0, "objective": [], "objective_complete": false, "objective_lock_until": 0, "weapon_lock_until": 0, "memory_id": "", "memory_ids": [], "chapter_complete": false, "pressure_until": 0, "pressure_multiplier": 1.0, "seed": seed_value, "rng": maxi(1, seed_value), "tick": 0, "phase": "combat", "paused": false,
 		"wave": 1, "wave_tick": 0, "doctrine": doctrine, "position": arena.point(arena.data.start), "facing": Vector2.UP,
 		"hp": float(frame.structure), "relay_hp": float(config.relay.structure * config.relay.starting_fraction), "progress": 0.0,
 		"scrap": int(config.economy.starting_scrap), "shards": 0, "kills": 0, "next_id": 1,
@@ -125,9 +125,14 @@ func command(action: String, value = null) -> String:
 		return travel_result
 	if state.phase == "memory":
 		if action != "accept_memory": return "OUTSIDE_WINDOW"
-		state.chapter_complete = true
-		finish(true, current_route().memory.conclusion)
-		emit("chapter_complete", {"memory_id": state.memory_id, "route": state.route})
+		if bool(current_route().get("terminal", true)):
+			state.chapter_complete = true
+			finish(true, current_route().memory.conclusion)
+			emit("chapter_complete", {"memory_id": state.memory_id, "route": state.route, "route_history": state.route_history.duplicate()})
+		else:
+			state.phase = "route"
+			state.last_reason = current_route().memory.conclusion
+			emit("routes_opened", {"routes": available_routes().map(func(route): return route.id), "travel_salvage": int(current_route().get("route_salvage", 0))})
 		return "OK"
 	if state.phase != "shop":
 		return "OUTSIDE_WINDOW"
@@ -201,6 +206,12 @@ func command(action: String, value = null) -> String:
 func current_route() -> Dictionary:
 	return routes.get(state.get("route", ""), {})
 
+func available_routes() -> Array:
+	var available: Array = []
+	for route in chapter.routes:
+		if state.site_id in route.get("from_sites", ["site.collapsed_workshop"]): available.append(route)
+	return available
+
 func is_destination() -> bool:
 	return state.get("site_id", "site.collapsed_workshop") != "site.collapsed_workshop"
 
@@ -219,9 +230,11 @@ func current_enemy_pool() -> Array:
 func choose_route(route_id: String) -> String:
 	if not routes.has(route_id): return "INVALID_ROUTE"
 	var route = routes[route_id]
+	if state.site_id not in route.get("from_sites", ["site.collapsed_workshop"]): return "ROUTE_NOT_CONNECTED"
 	if state.scrap < int(route.cost): return "INSUFFICIENT_SCRAP"
 	state.scrap -= int(route.cost)
 	state.route = route_id
+	state.route_history.append(route_id)
 	state.travel_step = 0
 	state.phase = "travel"
 	state.enemies.clear()
@@ -267,6 +280,8 @@ func enter_destination(route: Dictionary):
 		state.objective.append({"id": node.id, "progress": 0.0, "complete": false})
 	state.objective_complete = false
 	state.objective_lock_until = 0
+	state.weapon_lock_until = 0
+	state.memory_id = ""
 	state.pressure_until = 0
 	state.pressure_multiplier = 1.0
 	emit("destination_arrived", {"route": state.route, "site_id": state.site_id, "arrival_repair": arrival_repair})
@@ -291,9 +306,32 @@ func destination_node_valid(index: int, source: Vector2, radius: float) -> bool:
 	var node_data = objective.nodes[index]
 	var p = Vector2(node_data.position[0], node_data.position[1])
 	if source.distance_to(p) >= radius: return false
+	if objective.type == "RECOVER_SEQUENCE":
+		for earlier in range(index):
+			if not state.objective[earlier].complete: return false
+	if objective.type == "VENT_ROTATION" and index != active_destination_node_index(): return false
 	if objective.type == "CALIBRATE_NODES":
 		return not state.enemies.any(func(enemy): return enemy.hp > 0 and enemy.p.distance_to(p) < float(objective.safety_radius))
 	return true
+
+func active_destination_node_index() -> int:
+	if state.objective.is_empty(): return -1
+	var objective = objective_data()
+	if objective.get("type", "") != "VENT_ROTATION":
+		for i in range(state.objective.size()):
+			if not state.objective[i].complete: return i
+		return -1
+	var start = int(state.wave_tick / int(objective.get("active_interval", 240))) % state.objective.size()
+	for offset in range(state.objective.size()):
+		var index = (start + offset) % state.objective.size()
+		if not state.objective[index].complete: return index
+	return -1
+
+func working_quiet_objective() -> bool:
+	if not is_destination() or objective_data().get("type", "") != "QUIET_REPAIR": return false
+	for i in range(state.objective.size()):
+		if destination_node_valid(i, state.position, float(objective_data().radius)): return true
+	return false
 
 func advance_destination_node(index: int, amount: float, source: Vector2):
 	var objective = objective_data()
@@ -319,17 +357,19 @@ func complete_workshop():
 	state.pickups.clear()
 	if "site.collapsed_workshop" not in state.completed_site_ids: state.completed_site_ids.append("site.collapsed_workshop")
 	if str(config.boss) not in state.defeated_boss_ids: state.defeated_boss_ids.append(str(config.boss))
-	emit("routes_opened", {"routes": routes.keys(), "travel_salvage": 8})
+	emit("routes_opened", {"routes": available_routes().map(func(route): return route.id), "travel_salvage": 8})
 
 func open_memory():
 	state.phase = "memory"
 	state.memory_id = current_route().memory.id
+	if state.memory_id not in state.memory_ids: state.memory_ids.append(state.memory_id)
 	state.last_reason = current_route().memory.text
 	state.enemies.clear()
 	state.hazards.clear()
 	state.pickups.clear()
 	if state.site_id not in state.completed_site_ids: state.completed_site_ids.append(state.site_id)
 	if current_boss_id() not in state.defeated_boss_ids: state.defeated_boss_ids.append(current_boss_id())
+	if not bool(current_route().get("terminal", true)): record_scrap("route_salvage", int(current_route().get("route_salvage", 0)))
 	emit("memory_recovered", {"memory_id": state.memory_id, "route": state.route})
 
 func evolve_weapon(requested: String = "") -> String:
@@ -790,6 +830,8 @@ func build_result_summary(won: bool) -> Dictionary:
 	var top_weapon = largest_entry(state.damage)
 	var worst_wave = largest_entry(state.damage_by_wave)
 	var cause = "" if won else classify_failure()
+	var result_memories: Array = state.memory_ids.duplicate()
+	if result_memories.is_empty() and state.memory_id != "": result_memories.append(state.memory_id)
 	var cue = "Try another doctrine and compare its workshop service."
 	if not won:
 		match cause:
@@ -798,7 +840,7 @@ func build_result_summary(won: bool) -> Dictionary:
 			"BUILD_GEOMETRY": cue = "Add a relic whose geometry answers the wave that stopped this build."
 			"ECONOMY": cue = "Spend earlier on an affordable current-build improvement."
 			"OBJECTIVE_NEGLECT": cue = "Break announced objective strikes before returning to repair work."
-	elif state.chapter_complete: cue = "Take the other road with this build and compare the work, pressure and recovered memory."
+	elif state.chapter_complete: cue = "Repeat the pilgrimage through a different chain of sites and compare what this build preserves."
 	elif completed.is_empty(): cue = "Try one optional machine when its visible reward solves the next decision."
 	elif not state.evolved: cue = "Compare this reliable build with a visible evolution route next shift."
 	return {
@@ -806,9 +848,11 @@ func build_result_summary(won: bool) -> Dictionary:
 		"won": won,
 		"site_id": state.site_id,
 		"boss_id": current_boss_id(),
-		"route_id": state.route,
+		"route_id": state.route_history[0] if not state.route_history.is_empty() else state.route,
+		"terminal_route_id": state.route,
+		"route_ids": state.route_history.duplicate(),
 		"optional_repairs": completed.size(),
-		"memory_ids": [state.memory_id] if state.memory_id != "" else [],
+		"memory_ids": result_memories,
 		"evolution_ids": state.evolutions.duplicate(),
 		"failure_cause": cause,
 		"repairs": completed,
@@ -882,35 +926,53 @@ func boss_phase_name(enemy: Dictionary) -> String:
 
 func append_boss_hazard(boss: Dictionary, phase_data: Dictionary, position: Vector2):
 	var warning_ticks = int(float(phase_data.warning_ticks) * warning_multiplier())
+	var copy_evolution = ""
+	if phase_data.get("copy_evolution", false) and not state.evolutions.is_empty(): copy_evolution = str(state.evolutions[-1])
+	var copy_shape = "radial" if copy_evolution == "evolution.great_toll" else ("rail" if copy_evolution == "evolution.mercy_rail" else "")
 	state.hazards.append({"p": position, "from": boss.p, "until": state.tick + warning_ticks, "warning_ticks": warning_ticks,
 		"radius": float(phase_data.hazard_radius), "damage": float(phase_data.hazard_damage), "source": boss.type, "source_id": boss.id,
-		"copy": false, "kind": str(phase_data.id), "phase": boss.phase})
+		"copy": copy_shape != "", "copy_evolution": copy_evolution, "copy_shape": copy_shape, "kind": str(phase_data.id), "phase": boss.phase})
 
-func destination_hazard_points(pattern: String) -> Array:
+func destination_hazard_points(pattern: String, phase_data: Dictionary, boss_elapsed: int) -> Array:
 	var points: Array = []
-	if pattern in ["player", "player_and_objective_nodes", "objective_and_player"]:
+	if pattern in ["player", "player_and_objective_nodes", "objective_and_player", "player_and_active_objective", "player_and_arena_anchors"]:
 		points.append(state.position)
 	if pattern in ["objective", "objective_nodes", "player_and_objective_nodes", "objective_and_player"]:
 		for node in objective_data().get("nodes", []):
 			var point = Vector2(node.position[0], node.position[1])
 			if not points.any(func(existing): return existing.distance_to(point) < 1.0): points.append(point)
+	if pattern in ["active_objective", "player_and_active_objective"]:
+		var active_index = active_destination_node_index()
+		if active_index >= 0:
+			var node = objective_data().nodes[active_index]
+			var point = Vector2(node.position[0], node.position[1])
+			if not points.any(func(existing): return existing.distance_to(point) < 1.0): points.append(point)
+	if pattern in ["arena_anchors", "player_and_arena_anchors", "active_arena_anchor"]:
+		var anchors = arena.data.get("boss_anchors", [])
+		var active_anchor = maxi(0, int(boss_elapsed / int(phase_data.interval)) - 1) % maxi(1, anchors.size())
+		for i in range(anchors.size()):
+			if pattern == "active_arena_anchor" and i != active_anchor: continue
+			var point = Vector2(anchors[i][0], anchors[i][1])
+			if not points.any(func(existing): return existing.distance_to(point) < 1.0): points.append(point)
 	return points
 
 func update_destination_boss(boss: Dictionary, boss_elapsed: int, phase_data: Dictionary):
 	if phase_data.is_empty() or boss_elapsed <= 0 or boss_elapsed % int(phase_data.interval) != 0: return
-	for point in destination_hazard_points(str(phase_data.hazard_pattern)):
+	for point in destination_hazard_points(str(phase_data.hazard_pattern), phase_data, boss_elapsed):
 		append_boss_hazard(boss, phase_data, point)
-	if boss.type == "boss.choir_regent":
+	if int(phase_data.get("pressure_duration", 0)) > 0:
 		state.pressure_until = state.tick + int(phase_data.pressure_duration)
 		state.pressure_multiplier = float(phase_data.cooldown_multiplier)
-	if boss.type == "boss.factory_heart":
+	if int(phase_data.get("objective_lock_ticks", 0)) > 0:
 		state.objective_lock_until = maxi(int(state.objective_lock_until), state.tick + int(phase_data.objective_lock_ticks))
-		var summon_id = str(phase_data.get("summon_id", ""))
-		if summon_id != "" and state.enemies.size() < int(config.combat.enemy_limit):
-			call_deferred_spawn = true
-			deferred_spawn_id = summon_id
+	if int(phase_data.get("weapon_lock_ticks", 0)) > 0:
+		state.weapon_lock_until = maxi(int(state.weapon_lock_until), state.tick + int(phase_data.weapon_lock_ticks))
+	var summon_id = str(phase_data.get("summon_id", ""))
+	if summon_id != "" and state.enemies.size() < int(config.combat.enemy_limit):
+		call_deferred_spawn = true
+		deferred_spawn_id = summon_id
 	emit("boss_contract", {"position": boss.p, "boss_id": boss.type, "phase_id": phase_data.id, "phase_name": phase_data.name,
-		"rule": phase_data.rule, "pressure_until": state.pressure_until, "objective_lock_until": state.objective_lock_until})
+		"rule": phase_data.rule, "pressure_until": state.pressure_until, "objective_lock_until": state.objective_lock_until, "weapon_lock_until": state.weapon_lock_until})
 
 func update_enemies():
 	for e in state.enemies:
@@ -1117,6 +1179,7 @@ func nearest_repair_target(source: Vector2, radius: float):
 	return best
 
 func update_weapons():
+	if state.tick < int(state.get("weapon_lock_until", 0)) or working_quiet_objective(): return
 	for w in state.weapons:
 		var data = config.weapons[w.id]
 		var evolution_id = weapon_evolution_id(w)
@@ -1345,14 +1408,14 @@ func update_hazards():
 			if h.get("copy_shape", "rail") == "radial":
 				player_hit = state.position.distance_to(h.from) < config.great_toll.range + config.saint.radius
 				relay_hit = relay_position().distance_to(h.from) < config.great_toll.range + 28
-				emit("attack", {"from": h.from, "to": h.from, "shape": "radial", "weapon": "elite.memory_crane", "color": "e48b73", "range": config.great_toll.range})
+				emit("attack", {"from": h.from, "to": h.from, "shape": "radial", "weapon": h.get("source", "elite.memory_crane"), "color": "e48b73", "range": config.great_toll.range})
 			else:
 				var direction = (h.p - h.from).normalized()
 				var player_delta = state.position - h.from
 				var relay_delta = relay_position() - h.from
 				player_hit = player_delta.dot(direction) >= 0 and player_delta.dot(direction) < config.rail.range and absf(player_delta.cross(direction)) < config.rail.width + config.saint.radius
 				relay_hit = relay_delta.dot(direction) >= 0 and relay_delta.dot(direction) < config.rail.range and absf(relay_delta.cross(direction)) < config.rail.width + 28
-				emit("attack", {"from": h.from, "to": h.from + direction * config.rail.range, "shape": "rail", "weapon": "elite.memory_crane", "color": "e48b73", "range": config.rail.range})
+				emit("attack", {"from": h.from, "to": h.from + direction * config.rail.range, "shape": "rail", "weapon": h.get("source", "elite.memory_crane"), "color": "e48b73", "range": config.rail.range})
 		if player_hit: hurt_saint(h.get("damage", config.boss_rules.hazard_damage), h.get("source", "demolition"))
 		if relay_hit:
 			damage_relay(config.boss_rules.hazard_damage * config.boss_rules.relay_damage_multiplier, h.get("source", "demolition"))
@@ -1378,10 +1441,12 @@ func restore(saved: Dictionary) -> bool:
 		"spawn_count": 0, "active_machine": "", "repair_blocked_until": 0, "signal_reserve": 0, "kills_by_weapon": {}, "damage_taken": {}, "damage_by_wave": {}, "last_damage_source": "",
 		"scrap_sources": {"starting": int(config.economy.starting_scrap)}, "metrics": {"first_contact_tick": -1, "longest_threat_gap": 0, "threat_gap_started": state.get("tick", 0), "had_threat": false, "repairs_started": 0, "repairs_interrupted": 0, "useful_repairs": 0, "wasted_repairs": 0, "dead_shop_visits": 0}, "result_summary": {},
 		"scrap_by_segment": {}, "completed_site_ids": [], "defeated_boss_ids": [],
-		"site_id": "site.collapsed_workshop", "route": "", "travel_step": 0, "objective": [], "objective_complete": false, "objective_lock_until": 0, "memory_id": "", "chapter_complete": false, "pressure_until": 0, "pressure_multiplier": legacy_pressure_multiplier,
+		"site_id": "site.collapsed_workshop", "route": "", "route_history": [], "travel_step": 0, "objective": [], "objective_complete": false, "objective_lock_until": 0, "weapon_lock_until": 0, "memory_id": "", "memory_ids": [], "chapter_complete": false, "pressure_until": 0, "pressure_multiplier": legacy_pressure_multiplier,
 		"evolutions": [], "gifts": [], "component_tag": "", "inspection": "", "scrap_tax_progress": 0, "censer_defeats": 0, "ashen_defeats": 0}
 	for field in defaults:
 		if not state.has(field): state[field] = defaults[field]
+	if state.route_history.is_empty() and state.route != "": state.route_history.append(state.route)
+	if state.memory_ids.is_empty() and state.memory_id != "": state.memory_ids.append(state.memory_id)
 	for machine in state.machines:
 		if not machine.has("deferred"): machine.deferred = ""
 	for w in state.weapons + state.reserve:

@@ -122,6 +122,51 @@
       "description": "A signal authority that mistakes perfect timing for consent."
     },
     {
+      "id": "boss.archivist_prime",
+      "name": "The Archivist Prime",
+      "role": "evolution_copy_controller",
+      "phase_thresholds": [0.67, 0.34],
+      "phases": [
+        {"id": "index", "name": "INDEX THE ERROR", "rule": "pressure_next_record", "interval": 330, "warning_ticks": 110, "hazard_pattern": "active_objective", "hazard_radius": 60, "hazard_damage": 10, "speed": 20, "stop_distance": 220},
+        {"id": "duplicate", "name": "AUTHORIZED COPY", "rule": "copy_strongest_visible_evolution", "interval": 270, "warning_ticks": 105, "hazard_pattern": "player", "hazard_radius": 58, "hazard_damage": 11, "copy_evolution": true, "speed": 25, "stop_distance": 185},
+        {"id": "redact", "name": "REDACT THE NAME", "rule": "copy_geometry_and_lock_next_record", "interval": 225, "warning_ticks": 90, "hazard_pattern": "player_and_active_objective", "hazard_radius": 56, "hazard_damage": 12, "copy_evolution": true, "objective_lock_ticks": 120, "summon_id": "enemy.choir_drone", "speed": 31, "stop_distance": 150}
+      ],
+      "telegraph": "violet_index_line_then_copied_geometry",
+      "counter_families": ["movement", "witness", "timed_burst"],
+      "reward_choices": ["memory", "recipe_discovery", "route_unlock"],
+      "description": "A catalogue authority that can copy every approved shape and still cannot file the Saint."
+    },
+    {
+      "id": "boss.red_cardinal",
+      "name": "The Red Cardinal",
+      "role": "furnace_hazard_controller",
+      "phase_thresholds": [0.67, 0.34],
+      "phases": [
+        {"id": "kindling", "name": "KINDLING RITE", "rule": "ignite_one_furnace_anchor", "interval": 330, "warning_ticks": 105, "hazard_pattern": "active_arena_anchor", "hazard_radius": 68, "hazard_damage": 11, "speed": 22, "stop_distance": 210},
+        {"id": "overheat", "name": "THE FLOOR OVERHEATS", "rule": "ignite_all_furnace_anchors", "interval": 270, "warning_ticks": 100, "hazard_pattern": "arena_anchors", "hazard_radius": 64, "hazard_damage": 12, "speed": 28, "stop_distance": 175},
+        {"id": "quota", "name": "FINAL QUOTA", "rule": "ignite_player_and_furnaces_then_call_cinder", "interval": 225, "warning_ticks": 90, "hazard_pattern": "player_and_arena_anchors", "hazard_radius": 60, "hazard_damage": 14, "summon_id": "enemy.cinder_spitter", "speed": 35, "stop_distance": 140}
+      ],
+      "telegraph": "amber_furnace_seal_then_red_ignition",
+      "counter_families": ["movement", "area_control", "priority"],
+      "reward_choices": ["memory", "red_relic", "route_unlock"],
+      "description": "A furnace prelate that measures every living thing against the final quota."
+    },
+    {
+      "id": "boss.null_auditor",
+      "name": "The Null Auditor",
+      "role": "relic_suppression_controller",
+      "phase_thresholds": [0.67, 0.34],
+      "phases": [
+        {"id": "inventory", "name": "INVENTORY OF ERRORS", "rule": "mark_player_and_suspend_relic_cycles", "interval": 330, "warning_ticks": 110, "hazard_pattern": "player", "hazard_radius": 62, "hazard_damage": 9, "weapon_lock_ticks": 60, "speed": 20, "stop_distance": 220},
+        {"id": "reject", "name": "REJECT THE PARTS", "rule": "mark_both_erasure_anchors", "interval": 270, "warning_ticks": 100, "hazard_pattern": "objective_nodes", "hazard_radius": 60, "hazard_damage": 11, "weapon_lock_ticks": 75, "speed": 25, "stop_distance": 180},
+        {"id": "blank", "name": "LEAVE NO NAME", "rule": "lock_anchors_and_suspend_relic_cycles", "interval": 225, "warning_ticks": 90, "hazard_pattern": "player_and_objective_nodes", "hazard_radius": 56, "hazard_damage": 12, "objective_lock_ticks": 105, "weapon_lock_ticks": 90, "speed": 32, "stop_distance": 145}
+      ],
+      "telegraph": "white_erasure_ring_then_silent_cycle",
+      "counter_families": ["movement", "timed_burst", "orbit"],
+      "reward_choices": ["memory", "quiet_relic", "route_unlock"],
+      "description": "An inspection machine that can approve every component except the choice to keep them together."
+    },
+    {
       "id": "boss.saint_no_repairs",
       "name": "The Saint of No Repairs",
       "role": "anti_healing_copy",

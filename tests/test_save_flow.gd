@@ -106,7 +106,7 @@ func _initialize():
 	legacy_source.state.gifts = ["gift.spare_hand"]
 	legacy_source.state.weapons[0].toll = true
 	legacy_source.state.weapons[0].erase("evolution")
-	for field in ["run_id", "frame_id", "max_hp", "move_speed", "repair_grace_ticks", "repair_grace_until", "knockback_multiplier", "keeper_shove_segment", "evolutions", "site_id", "route", "travel_step", "objective", "objective_complete", "memory_id", "chapter_complete", "pressure_until", "completed_site_ids", "defeated_boss_ids", "scrap_by_segment", "result_summary"]:
+	for field in ["run_id", "frame_id", "max_hp", "move_speed", "repair_grace_ticks", "repair_grace_until", "knockback_multiplier", "keeper_shove_segment", "evolutions", "site_id", "route", "route_history", "travel_step", "objective", "objective_complete", "objective_lock_until", "weapon_lock_until", "memory_id", "memory_ids", "chapter_complete", "pressure_until", "completed_site_ids", "defeated_boss_ids", "scrap_by_segment", "result_summary"]:
 		legacy_source.state.erase(field)
 	for machine in legacy_source.state.machines: machine.erase("deferred")
 	for enemy in legacy_source.state.enemies:
@@ -114,6 +114,7 @@ func _initialize():
 	var legacy = Sim.new()
 	check(legacy.restore(legacy_source.snapshot()), "version-one integrated legacy save restores")
 	check(legacy.state.version == 2 and legacy.state.frame_id == "frame.pilgrim", "legacy save receives current version and frame defaults")
+	check(legacy.state.route_history.is_empty() and legacy.state.memory_ids.is_empty() and legacy.state.weapon_lock_until == 0, "legacy saves receive deterministic chapter-chain defaults")
 	check(legacy.state.gifts == ["gift.spare_hand"] and legacy.has_evolution("evolution.great_toll"), "legacy assembly state preserves Gifts and reconstructs evolution IDs")
 	check(legacy.state.machines.all(func(machine): return machine.has("deferred")), "legacy machines receive interruption defaults")
 	check(legacy.state.enemies.all(func(enemy): return enemy.has("worker") and enemy.has("phase") and enemy.has("spawn_tick") and enemy.has("slow") and enemy.has("quieted") and enemy.has("inspected")), "legacy enemies receive integrated runtime defaults")

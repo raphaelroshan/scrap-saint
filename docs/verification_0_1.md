@@ -119,3 +119,13 @@ Focused evidence passes 538 Godot assertions, including 36 Evolution, 76 acquisi
 Three configured 1280×800 captures under `artifacts/evolutions` were rendered with Godot 4.5.1 stable, OpenGL compatibility on Apple M1 Pro, seed 147. `EVOLUTION_LEDGER` exposes all eight recipes, ingredients, readiness and geometry in one readable screen. `EVOLVED_GEOMETRIES_A` distinguishes the violet Ashen zone, brass tether corridor and dual cream-green Halo contacts. `EVOLVED_GEOMETRIES_B` distinguishes the three execution rays, wide cyan silence lane and orange consecrated Mortar area. The fixtures intentionally overlap effects more densely than a normal run; animation timing, audio mix and uncoached comprehension remain unverified.
 
 Exactly one next task: run uncoached 1× comparisons of all eight Evolution decisions and tune recipe pacing and overlapping effects from observed choices.
+
+## SC-17 three-site chapter expansion, 2026-09-15
+
+Content validation and 522 focused Godot assertions pass on pinned Godot 4.5.1: acquisition44, arena27, assembly34, chapter94, development-speed7, flow-input51, frames/progression15, optional17, profile19, relay18, roaming-quality49, save-flow42, settings14, shop25, simulation31, UI17 and variety18. Tests cover graph-valid route offers, shared Red Foundry access, disconnected-route rejection, ordered/rotating/quiet objective rules, distinct three-phase terminal bosses, terminal memory conclusions, version-one save defaults and complete three-site route/result history.
+
+The optional-repair twelve-policy matrix completes all four route chains, and the four controlled assembly identities each complete a different chain or parent route into shared Red Foundry. Policy guards now derive the longest duration from the authored graph instead of assuming one destination. This is executable viability evidence, not human balance evidence.
+
+Three new fixture-configured captures, `PALE_ARCHIVE_INDEX`, `RED_FOUNDRY_VENTS`, and `NULL_ASSEMBLY_QUIET`, were rendered and inspected at 1280×800, seed 147, Godot 4.5.1 stable, OpenGL Compatibility on Apple M1 Pro. Each image exposes the objective rule, phase name, boss silhouette and spatial pressure. The procedural machinery remains visually repetitive, and the lower arena edge can crowd labels; motion comprehension and road-choice pacing remain untested by a human.
+
+Exactly one next task: run uncoached 1× sessions through all four route chains and record objective comprehension, road-choice preference and boss readability.

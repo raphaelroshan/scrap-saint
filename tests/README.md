@@ -12,11 +12,11 @@ The runtime tests now exist. Run the complete Windows loop with `scripts/agent_i
 - `godot --headless --path . --script res://tests/test_save_flow.gd`: exact state-hash and next-event restoration across every expedition phase plus version-one migration coverage.
 - `godot --headless --path . --script res://tests/run_playthroughs.gd`: four shared-seed normal-economy policies, including no-evolution Workshop. Results are saved separately from visual fixtures.
 - `godot --headless --path . --script res://tests/benchmark_peak_density.gd`: records deterministic simulation throughput with 65 persistent threats and four Rank III weapons. It is not a rendered-frame benchmark.
-- Add `-- --optional --quick` to smoke one normal-economy policy through each destination without running the full twelve-policy matrix.
+- Add `-- --optional --quick` to smoke the Brass-to-Pale and Brass-to-Red chains. The full twelve-policy matrix covers all four authored chains; `-- --optional --ea-matrix` crosses three frames, four Blessings and both opening routes.
 
 Rendered fixtures use explicit setup budgets/states, including a Results fixture. They are not screenshots of the full-run policies. The earlier list below remains a broader target, not a claim all planned mechanics are implemented. See `docs/runtime_status.md` for scope differences.
 
-SC-15/SC-16 add seven rendered chapter fixtures: `ROUTE_CHOICE`, `TRAVEL_BRASS`, `BRASS_OBJECTIVE`, `CHOIR_REGENT_TOLL`, `ROOTWORKS_OBJECTIVE`, `FACTORY_HEART_FEED`, and `CHAPTER_MEMORY`. They are explicit deterministic presentation fixtures, not a natural completed expedition.
+SC-15/SC-17 add ten rendered chapter fixtures: the seven opening/mid-site states plus `PALE_ARCHIVE_INDEX`, `RED_FOUNDRY_VENTS`, and `NULL_ASSEMBLY_QUIET`. They are explicit deterministic presentation fixtures, not a natural completed expedition.
 
 Run:
 

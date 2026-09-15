@@ -153,7 +153,7 @@ Current integrated evidence: 469 focused Godot assertions plus four Python manif
 
 Exactly one next task: uncoached 1x comparison of close-control, priority-control and repair-roaming builds across both chapter routes.
 
-## SC-15 — compact first-chapter pilgrimage (current)
+## SC-15 — compact first-chapter pilgrimage foundation
 
 Foreman victory now opens an authoritative two-route decision instead of ending the expedition. Eight Scrap recovered from the Foreman guarantees both roads remain affordable. Brass Choir Relay costs 8 Scrap and asks the Saint to clear and tune three distributed signal rings; Rootworks Pump costs 6 Scrap and asks it to finish one exposed, persistent pump repair while healer-heavy enemies sustain the crowd. Each destination runs four compact waves, uses a route-specific authored pressure profile and boss, and ends in its own memory and causal Results.
 
@@ -162,3 +162,13 @@ Route choice, travel beat, selected arena, objective nodes, carried weapons/rese
 The implementation is a systems-complete chapter proof layered on the P12 core-quality gate, not the full Early Access breadth target. It deliberately reuses the current combat roster and procedural visual/audio language. The two destination bosses now have distinct three-phase authoritative contracts and labelled fixture evidence; reaction-time comfort, boss enjoyment and the intended 25–35 minute commercial expedition still require human testing.
 
 Exactly one next task: run uncoached full-expedition playtests of the expanded builds on both routes at 1× and tune destination pressure from observed comprehension and pacing evidence.
+
+## SC-17 — complete three-site chapter graph (current)
+
+Each expedition now crosses the Collapsed Workshop, one mid-site and one terminal site. Brass Choir opens Pale Archive or the shared Red Foundry; Rootworks opens Red Foundry or Null Assembly. Pale asks for three ordered records while Archivist Prime copies the latest visible Evolution geometry. Red rotates one active furnace vent while the Red Cardinal marks arena anchors and calls cinder pressure. Null silences automatic relics only while the Saint works an anchor, and the Null Auditor temporarily locks both work and weapon cycles. Each site has its own arena, wave profiles, boss contract, memory, assignment ID, route risk and authored encounter plus merchant/service road nodes ready for the expedition-map command layer.
+
+Route eligibility, two-leg history, objective state, transient boss locks, completed sites, defeated bosses and recovered memories are deterministic simulation/save data. Terminal memories end the chapter; mid-site memories preserve the build and return to the next valid route choice. Policy timeouts derive the longest authored graph path rather than assuming one destination.
+
+Current focused evidence passes 522 Godot assertions plus four Python manifest checks on Godot 4.5.1. The optional-repair twelve-policy matrix and all four controlled assembly paths complete all three sites; the combined frame/Blessing matrix remains an integration gate. Ten chapter fixtures include all three terminal objective/boss states at 1280×800, seed 147, Compatibility renderer on Apple M1 Pro. These are deterministic policies and configured captures, not human enjoyment evidence.
+
+Exactly one next task: run uncoached 1× sessions through all four route chains and tune only observed objective comprehension, road-choice value and boss reaction-time friction.

@@ -87,9 +87,10 @@ def validate_chapter(data: dict) -> None:
     chapter_path = ROOT / "content/chapter/first_chapter.json"
     chapter = json.loads(chapter_path.read_text(encoding="utf-8"))
     routes = chapter.get("routes", [])
-    assert len(routes) == 2, "first chapter must offer exactly two destination routes"
+    assert len(routes) == 5, "first chapter must contain two mid-sites and three terminal sites"
     route_ids = unique_ids(routes, "chapter routes")
-    assert route_ids == {"route.brass_choir", "route.rootworks"}
+    expected_routes = {"route.brass_choir", "route.rootworks", "route.pale_archive", "route.red_foundry", "route.null_assembly"}
+    assert route_ids == expected_routes
     bosses_by_id = {entry["id"]: entry for entry in data["bosses"]["bosses"]}
     boss_ids = set(bosses_by_id)
     site_ids: set[str] = set()
@@ -98,6 +99,25 @@ def validate_chapter(data: dict) -> None:
             assert route.get(field), f"{route['id']}: missing {field}"
         assert route["site_id"] not in site_ids, f"{route['id']}: duplicate site"
         site_ids.add(route["site_id"])
+        assert route.get("from_sites"), f"{route['id']}: missing graph parent"
+        assert all(next_id in route_ids for next_id in route.get("next_routes", [])), f"{route['id']}: unknown child route"
+        assert bool(route.get("terminal", False)) == (len(route.get("next_routes", [])) == 0), f"{route['id']}: terminal/child mismatch"
+        if route.get("terminal", False):
+            assert route.get("assignment_id") and route.get("risk"), f"{route['id']}: terminal route needs map metadata"
+            road_nodes = route.get("road_nodes", [])
+            assert road_nodes, f"{route['id']}: terminal route needs authored road nodes"
+            unique_ids(road_nodes, f"{route['id']} road nodes")
+            choice_ids: set[str] = set()
+            for road_node in road_nodes:
+                assert road_node.get("kind") in {"encounter", "merchant", "service", "passage"}
+                assert road_node.get("name") and road_node.get("news") and road_node.get("risk") and road_node.get("choices")
+                assert any(int(choice.get("cost", 0)) == 0 for choice in road_node["choices"]), f"{road_node['id']}: needs a free continuation"
+                for choice in road_node["choices"]:
+                    assert choice.get("id") and choice["id"] not in choice_ids, f"{road_node['id']}: duplicate choice ID"
+                    choice_ids.add(choice["id"])
+                    assert choice.get("label") and choice.get("description") and choice.get("result") and choice.get("flag")
+                    assert int(choice.get("cost", -1)) >= 0
+                    assert isinstance(choice.get("scrap_delta"), int) and isinstance(choice.get("structure_delta"), (int, float))
         assert route["boss"] in boss_ids, f"{route['id']}: unknown boss"
         boss = bosses_by_id[route["boss"]]
         assert len(boss.get("phase_thresholds", [])) == 2, f"{boss['id']}: missing phase thresholds"
@@ -118,12 +138,21 @@ def validate_chapter(data: dict) -> None:
             assert profile.get("primary_weight", 0) > 0 and profile.get("spawn_interval", 0) > 0
         objective = route["objective"]
         assert objective.get("id") and objective.get("description") and objective.get("nodes")
+        assert objective.get("type") in {"CALIBRATE_NODES", "REPAIR_PUMP", "RECOVER_SEQUENCE", "VENT_ROTATION", "QUIET_REPAIR"}
+        if objective["type"] == "VENT_ROTATION":
+            assert objective.get("active_interval", 0) > 0
         unique_ids(objective["nodes"], f"{route['id']} objective nodes")
         arena_path = ROOT / route["arena_path"].removeprefix("res://")
         assert arena_path.is_file(), f"{route['id']}: missing arena"
         arena = json.loads(arena_path.read_text(encoding="utf-8"))
         assert arena.get("id") and arena.get("bounds") and arena.get("start") and arena.get("entries")
+        if any("arena_anchor" in phase["hazard_pattern"] for phase in boss["phases"]):
+            assert arena.get("boss_anchors"), f"{route['id']}: boss needs arena anchors"
         assert route["memory"].get("id") and route["memory"].get("text") and route["memory"].get("conclusion")
+
+    by_id = {route["id"]: route for route in routes}
+    assert set(by_id["route.brass_choir"]["next_routes"]) == {"route.pale_archive", "route.red_foundry"}
+    assert set(by_id["route.rootworks"]["next_routes"]) == {"route.red_foundry", "route.null_assembly"}
 
 
 def validate_progression(data: dict) -> None:

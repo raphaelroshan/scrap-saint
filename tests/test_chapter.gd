@@ -25,7 +25,7 @@ func _initialize():
 	sim.record_scrap("test_income", 1)
 	check(sim.command("choose_route", "route.brass_choir") == "OUTSIDE_WINDOW", "route choice rejected before Foreman victory")
 	reach_route(sim)
-	check(sim.state.phase == "route" and sim.routes.size() == 2 and sim.state.scrap >= 8, "Foreman victory opens exactly two affordable routes")
+	check(sim.state.phase == "route" and sim.routes.size() == 5 and sim.available_routes().map(func(route): return route.id) == ["route.brass_choir", "route.rootworks"] and sim.state.scrap >= 8, "Foreman victory opens exactly the two affordable mid-site routes")
 	var before_invalid = sim.snapshot()
 	check(sim.command("choose_route", "route.unknown") == "INVALID_ROUTE", "unknown route rejected")
 	check(sim.snapshot() == before_invalid, "invalid route does not mutate state")
@@ -112,9 +112,46 @@ func _initialize():
 	check(sim.state.phase == "memory" and sim.state.memory_id == "memory.borrowed_bell", "Brass completion opens its authored memory")
 	var brass_memory_save = sim.snapshot()
 	check(restored.restore(brass_memory_save) and restored.state.phase == "memory", "memory state saves and restores")
-	check(sim.command("accept_memory") == "OK" and sim.state.phase == "won" and sim.state.chapter_complete, "accepting memory completes chapter")
-	check(sim.state.result_summary.completed_site_ids == ["site.collapsed_workshop", "site.brass_choir_relay"] and sim.state.result_summary.defeated_boss_ids == ["boss.foreman_engine", "boss.choir_regent"], "Results expose completed sites and defeated bosses")
-	check("other road" in sim.state.result_summary.replay_cue, "chapter Results proposes the alternate route")
+	var scrap_before_mid_memory = sim.state.scrap
+	check(sim.command("accept_memory") == "OK" and sim.state.phase == "route" and not sim.state.chapter_complete, "accepting a mid-site memory continues the pilgrimage")
+	check(sim.state.memory_ids == ["memory.borrowed_bell"] and sim.state.scrap == scrap_before_mid_memory, "mid-site memory and previously granted road salvage persist")
+	check(sim.available_routes().map(func(route): return route.id) == ["route.pale_archive", "route.red_foundry"], "Brass Choir opens only Pale Archive and Red Foundry")
+	var before_disconnected = sim.snapshot()
+	check(sim.command("choose_route", "route.null_assembly") == "ROUTE_NOT_CONNECTED" and sim.snapshot() == before_disconnected, "disconnected terminal route rejects without mutation")
+	check(sim.command("choose_route", "route.pale_archive") == "OK", "Pale Archive accepts the Brass road")
+	finish_travel(sim)
+	check(sim.state.site_id == "site.pale_archive" and sim.arena.data.id == "arena.pale_archive" and sim.current_boss_id() == "boss.archivist_prime", "Pale Archive arrival loads authored site and boss")
+	var archive_objective = sim.objective_data()
+	var origin_record = Vector2(archive_objective.nodes[0].position[0], archive_objective.nodes[0].position[1])
+	var purpose_record = Vector2(archive_objective.nodes[1].position[0], archive_objective.nodes[1].position[1])
+	sim.state.position = purpose_record
+	sim.update_destination_objective()
+	check(sim.state.objective[1].progress == 0, "Archive rejects a record recovered out of order")
+	sim.state.position = origin_record
+	for i in range(int(archive_objective.required_ticks)): sim.update_destination_objective()
+	check(sim.state.objective[0].complete and sim.active_destination_node_index() == 1, "Archive advances to the next ordered record")
+	sim.state.enemies.clear()
+	sim.state.hazards.clear()
+	sim.state.evolutions = ["evolution.great_toll"]
+	sim.spawn(sim.current_boss_id())
+	var archivist = sim.state.enemies[-1]
+	archivist.hp = archivist.max_hp * 0.5
+	var archive_phase = sim.bosses[archivist.type].phases[1]
+	sim.state.tick = int(archivist.spawn_tick) + int(archive_phase.interval)
+	sim.update_enemies()
+	check(sim.state.hazards.size() == 1 and sim.state.hazards[0].copy and sim.state.hazards[0].copy_shape == "radial", "Archivist copies the latest explicit evolution geometry")
+	for node in sim.state.objective: node.complete = true
+	sim.state.objective_complete = true
+	sim.state.enemies.clear()
+	sim.state.hazards.clear()
+	sim.state.wave = sim.current_wave_count()
+	sim.state.boss_dead = true
+	sim.step(Vector2.ZERO)
+	check(sim.state.phase == "memory" and sim.state.memory_id == "memory.borrowed_lens", "Pale Archive opens its terminal memory")
+	check(sim.command("accept_memory") == "OK" and sim.state.phase == "won" and sim.state.chapter_complete, "accepting a terminal memory completes the chapter")
+	check(sim.state.result_summary.completed_site_ids == ["site.collapsed_workshop", "site.brass_choir_relay", "site.pale_archive"] and sim.state.result_summary.defeated_boss_ids == ["boss.foreman_engine", "boss.choir_regent", "boss.archivist_prime"], "Results expose all three completed sites and bosses")
+	check(sim.state.result_summary.memory_ids == ["memory.borrowed_bell", "memory.borrowed_lens"] and sim.state.result_summary.route_ids == ["route.brass_choir", "route.pale_archive"], "Results preserve the complete route and memory history")
+	check(sim.state.result_summary.route_id == "route.brass_choir" and sim.state.result_summary.terminal_route_id == "route.pale_archive", "Results retain the profile-compatible first route and explicit terminal route")
 
 	var root = Sim.new()
 	root.start(2, 104729, "optional")
@@ -172,6 +209,94 @@ func _initialize():
 	root.state.objective_complete = true
 	root.step(Vector2.ZERO)
 	check(root.state.phase == "memory" and root.state.memory_id == "memory.borrowed_arm", "Rootworks completion opens its authored memory")
+	check(root.command("accept_memory") == "OK" and root.state.phase == "route", "Rootworks memory continues to a terminal route choice")
+	check(root.available_routes().map(func(route): return route.id) == ["route.red_foundry", "route.null_assembly"], "Rootworks opens only Red Foundry and Null Assembly")
+	check(root.command("choose_route", "route.pale_archive") == "ROUTE_NOT_CONNECTED", "Pale Archive rejects the disconnected Rootworks road")
+	check(root.command("choose_route", "route.null_assembly") == "OK", "Null Assembly accepts the Rootworks road")
+	finish_travel(root)
+	check(root.state.site_id == "site.null_assembly" and root.arena.data.id == "arena.null_assembly" and root.current_boss_id() == "boss.null_auditor", "Null Assembly arrival loads authored site and boss")
+	var null_objective = root.objective_data()
+	var null_anchor = Vector2(null_objective.nodes[0].position[0], null_objective.nodes[0].position[1])
+	root.state.position = null_anchor
+	root.state.weapons[0].ready = 0
+	root.spawn("enemy.scrap_mite")
+	root.state.enemies[-1].p = null_anchor + Vector2(35, 0)
+	var mite_hp = root.state.enemies[-1].hp
+	root.update_weapons()
+	check(root.state.enemies[-1].hp == mite_hp and root.state.weapons[0].ready == 0, "Null anchor work authoritatively quiets relic weapons")
+	root.state.position = null_anchor + Vector2(float(null_objective.radius) + 30, 0)
+	root.update_weapons()
+	check((root.state.enemies.is_empty() or root.state.enemies[-1].hp < mite_hp) and root.state.weapons[0].ready > root.state.tick, "leaving the Null work ring immediately restores automatic weapons")
+	root.state.enemies.clear()
+	root.state.hazards.clear()
+	root.spawn(root.current_boss_id())
+	var auditor = root.state.enemies[-1]
+	auditor.hp = auditor.max_hp * 0.2
+	var auditor_phase = root.bosses[auditor.type].phases[2]
+	root.state.tick = int(auditor.spawn_tick) + int(auditor_phase.interval)
+	root.update_enemies()
+	check(root.state.hazards.size() == 3 and root.state.weapon_lock_until > root.state.tick and root.state.objective_lock_until > root.state.tick, "Null Auditor final phase marks player and anchors while locking work and relic cycles")
+	for node in root.state.objective: node.complete = true
+	root.state.objective_complete = true
+	root.state.enemies.clear()
+	root.state.hazards.clear()
+	root.state.wave = root.current_wave_count()
+	root.state.boss_dead = true
+	root.step(Vector2.ZERO)
+	check(root.state.phase == "memory" and root.state.memory_id == "memory.unwritten_instruction", "Null Assembly opens its terminal memory")
+	check(root.command("accept_memory") == "OK" and root.state.phase == "won" and root.state.memory_ids == ["memory.borrowed_arm", "memory.unwritten_instruction"], "Null terminal memory completes the full route history")
+
+	var red = Sim.new()
+	red.start(0, 147, "optional")
+	red.state.phase = "route"
+	red.state.site_id = "site.brass_choir_relay"
+	red.state.route_history = ["route.brass_choir"]
+	red.state.memory_ids = ["memory.borrowed_bell"]
+	red.state.completed_site_ids = ["site.collapsed_workshop", "site.brass_choir_relay"]
+	red.state.defeated_boss_ids = ["boss.foreman_engine", "boss.choir_regent"]
+	red.state.scrap = 30
+	check(red.command("choose_route", "route.red_foundry") == "OK", "Red Foundry accepts the Brass road")
+	finish_travel(red)
+	var red_destination_save = red.snapshot()
+	var red_restored = Sim.new()
+	check(red_restored.restore(red_destination_save) and red_restored.state_hash() == red.state_hash(), "terminal destination and full route history save deterministically")
+	check(red.state.site_id == "site.red_foundry" and red.arena.data.id == "arena.red_foundry" and red.current_boss_id() == "boss.red_cardinal", "Red Foundry arrival loads authored site and boss")
+	var foundry_objective = red.objective_data()
+	var first_vent = Vector2(foundry_objective.nodes[0].position[0], foundry_objective.nodes[0].position[1])
+	var second_vent = Vector2(foundry_objective.nodes[1].position[0], foundry_objective.nodes[1].position[1])
+	red.state.position = second_vent
+	red.update_destination_objective()
+	check(red.state.objective[1].progress == 0 and red.active_destination_node_index() == 0, "Foundry accepts work only at the active vent")
+	red.state.position = first_vent
+	for i in range(int(foundry_objective.required_ticks)): red.update_destination_objective()
+	red.state.wave_tick = int(foundry_objective.active_interval)
+	check(red.state.objective[0].complete and red.active_destination_node_index() == 1, "Foundry rotation advances to the next unfinished vent")
+	red.state.enemies.clear()
+	red.state.hazards.clear()
+	red.state.position = Vector2(470, 650)
+	red.spawn(red.current_boss_id())
+	var cardinal = red.state.enemies[-1]
+	cardinal.hp = cardinal.max_hp * 0.2
+	var cardinal_phase = red.bosses[cardinal.type].phases[2]
+	red.state.tick = int(cardinal.spawn_tick) + int(cardinal_phase.interval)
+	red.update_enemies()
+	check(red.state.hazards.size() == 4 and red.state.hazards.all(func(hazard): return hazard.kind == "quota"), "Red Cardinal final quota ignites the Saint and three authored furnace anchors")
+	check(red.state.enemies.any(func(enemy): return enemy.type == "enemy.cinder_spitter" and enemy.worker), "Red Cardinal calls a trace-labelled Cinder Spitter")
+	for node in red.state.objective: node.complete = true
+	red.state.objective_complete = true
+	red.state.enemies.clear()
+	red.state.hazards.clear()
+	red.state.wave = red.current_wave_count()
+	red.state.boss_dead = true
+	red.step(Vector2.ZERO)
+	check(red.state.phase == "memory" and red.state.memory_id == "memory.borrowed_shell", "Red Foundry opens its authored terminal memory")
+	check(red.command("accept_memory") == "OK" and red.state.phase == "won" and red.state.result_summary.route_ids == ["route.brass_choir", "route.red_foundry"], "Red Foundry completes with deterministic route history")
+	var red_from_root = Sim.new()
+	red_from_root.start(0, 147, "optional")
+	red_from_root.state.phase = "route"
+	red_from_root.state.site_id = "site.rootworks_pump"
+	red_from_root.state.scrap = 30
+	check(red_from_root.command("choose_route", "route.red_foundry") == "OK", "shared Red Foundry node also accepts the Rootworks road")
 
 	print("CHAPTER TESTS: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

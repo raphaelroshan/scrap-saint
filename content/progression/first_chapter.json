@@ -58,6 +58,21 @@
       "id": "memory.borrowed_arm",
       "site_id": "site.rootworks_pump",
       "text": "The pump did not know who deserved water. It only knew that something downstream was thirsty."
+    },
+    {
+      "id": "memory.borrowed_lens",
+      "site_id": "site.pale_archive",
+      "text": "The lens kept what its owners chose to notice, even when the index rejected their names."
+    },
+    {
+      "id": "memory.borrowed_shell",
+      "site_id": "site.red_foundry",
+      "text": "The armour was condemned for protecting a worker instead of the production quota."
+    },
+    {
+      "id": "memory.unwritten_instruction",
+      "site_id": "site.null_assembly",
+      "text": "Before the first command, four incompatible machines chose to keep one another working."
     }
   ]
 }

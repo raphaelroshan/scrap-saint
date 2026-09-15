@@ -297,8 +297,8 @@ func build_ui():
 		button("BEGIN THE FIRST SHIFT  →", Rect2(436, 613, 408, 52), begin, true).grab_focus()
 		if FileAccess.file_exists(save_path): button("Resume saved expedition", Rect2(436, 678, 408, 36), load_run)
 	elif sim.state.phase == "route":
-		for i in range(sim.chapter.routes.size()):
-			var route = sim.chapter.routes[i]
+		for i in range(sim.available_routes().size()):
+			var route = sim.available_routes()[i]
 			var route_button = button("CHOOSE " + route.name.to_upper(), Rect2(96 + i * 470, 585, 430, 48), func(): act("choose_route", route.id), i == 0)
 			if i == 0: route_button.grab_focus()
 	elif sim.state.phase == "travel":
@@ -430,7 +430,7 @@ func draw_title():
 	text_at("Turn scrap into miracles.", Vector2(124, 257), 25, MUTED, true)
 	wrapped("A small maintenance machine crosses ruined workshops, carries incompatible relics, and decides what deserves to work again.", Vector2(124, 292), 680, 17, PAPER)
 	draw_saint(Vector2(1035, 246), Vector2(-1, 0), 3.4)
-	text_at("FIRST CHAPTER · TWO ROADS · TEN WEAPONS · EIGHT EVOLUTIONS", Vector2(340, 585), 12, GOLD)
+	text_at("FIRST CHAPTER · FIVE SITES · TEN WEAPONS · EIGHT EVOLUTIONS", Vector2(330, 585), 12, GOLD)
 	text_at("Memory fragments: %d" % profile.state.memory_fragments, Vector2(550, 710), 12, MUTED)
 
 func draw_menu():
@@ -466,7 +466,7 @@ func draw_tutorial():
 		"Move with your chosen keys or a controller stick. Weapons fire automatically. Positioning decides which geometry reaches which threat.",
 		"Workshop machines are optional. Their reward and work time are shown before you commit. Leave when the risk stops being worth it; progress is preserved.",
 		"Spend Scrap on weapons and services. Relic Shards buy catalysts. Combine matching ranks; evolve a Rank III relic with its named catalyst. Gifts change one rule and occupy separate slots.",
-		"Defeat the Foreman, choose Brass Choir or Rootworks, and carry the same build onward. Results explain the cause; Memory unlocks choices, never permanent damage."
+		"Defeat the Foreman, choose Brass Choir or Rootworks, then follow one final authored road. Results explain the full route; Memory unlocks choices, never permanent damage."
 	]
 	text_at("FIELD MANUAL %d / 5" % (tutorial_page + 1), Vector2(220, 190), 12, GOLD)
 	text_at(titles[tutorial_page], Vector2(215, 260), 38, PAPER, true)
@@ -513,7 +513,7 @@ func draw_header():
 	if sim.state.phase == "combat" and sim.optional_mode(): instruction = sim.wave_profile().pressure
 	if sim.state.wave == 8 and not sim.is_destination(): instruction = "FOREMAN / Keep moving. Avoid the demolition zones."
 	if sim.is_destination(): instruction = sim.objective_data().description
-	if sim.state.phase == "route": instruction = "The Workshop is safe. Choose which need receives your build."
+	if sim.state.phase == "route": instruction = "Choose the next need. Your build and recovered memories travel with you."
 	if sim.state.phase == "travel": instruction = "Your weapons, Scrap and Blessing travel with you."
 	if sim.state.phase == "memory": instruction = "A repaired machine returns one borrowed purpose."
 	if sim.state.phase in ["won", "lost"]: instruction = "SHIFT RECORDED / Read the cause. Choose one change. Return quickly."
@@ -610,8 +610,8 @@ func draw_world():
 		draw_circle(h.p, h.radius, Color(0.85, 0.3, 0.18, 0.13 + f * 0.1))
 		draw_arc(h.p, h.radius, 0, TAU, 40, RED, 2)
 		draw_arc(h.p, h.radius * f, 0, TAU, 40, GOLD, 2)
-		if h.get("kind", "") in ["pulse", "feed", "choice"]: draw_line(h.from, h.p, Color(0.89, 0.36, 0.24, 0.45), 3, true)
-		var hazard_labels = {"measure": "BEAT", "toll": "TOLL", "answer": "III", "pulse": "PULSE", "feed": "FEED", "choice": "CHOOSE"}
+		if h.get("source", "") == "boss.factory_heart": draw_line(h.from, h.p, Color(0.89, 0.36, 0.24, 0.45), 3, true)
+		var hazard_labels = {"measure": "BEAT", "toll": "TOLL", "answer": "III", "pulse": "PULSE", "feed": "FEED", "choice": "CHOOSE", "index": "INDEX", "duplicate": "COPY", "redact": "REDACT", "kindling": "HEAT", "overheat": "VENT", "quota": "QUOTA", "inventory": "LIST", "reject": "REJECT", "blank": "NULL"}
 		var hazard_label = hazard_labels.get(h.get("kind", ""), "!")
 		text_at(hazard_label, h.p + Vector2(-font.get_string_size(hazard_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 10).x * 0.5, 5), 10, GOLD)
 	for p in sim.state.pickups:
@@ -649,7 +649,7 @@ func draw_boss_hud():
 	for e in sim.state.enemies:
 		if e.major:
 			panel(Rect2(293, 167, 490, 46), Color("152428"))
-			var boss_names = {"boss.foreman_engine": "FOREMAN ENGINE", "boss.choir_regent": "CHOIR REGENT", "boss.factory_heart": "FACTORY HEART", "elite.memory_crane": "MEMORY CRANE"}
+			var boss_names = {"boss.foreman_engine": "FOREMAN ENGINE", "boss.choir_regent": "CHOIR REGENT", "boss.factory_heart": "FACTORY HEART", "boss.archivist_prime": "ARCHIVIST PRIME", "boss.red_cardinal": "RED CARDINAL", "boss.null_auditor": "NULL AUDITOR", "elite.memory_crane": "MEMORY CRANE"}
 			text_at(boss_names.get(e.type, str(e.type).trim_prefix("boss.").replace("_", " ").to_upper()), Vector2(309, 186), 12, GOLD)
 			if e.type == sim.current_boss_id():
 				var phase_name = "DEMOLITION" if not sim.is_destination() else sim.boss_phase_name(e)
@@ -687,7 +687,9 @@ func draw_destination_objective():
 		var data = objective.nodes[i]
 		var p = Vector2(data.position[0], data.position[1])
 		var locked = sim.state.tick < int(sim.state.get("objective_lock_until", 0))
-		var color = GREEN if node.complete else (RED if locked else GOLD)
+		var active_index = sim.active_destination_node_index()
+		var waiting = objective.type in ["RECOVER_SEQUENCE", "VENT_ROTATION"] and i != active_index and not node.complete
+		var color = GREEN if node.complete else (RED if locked else (MUTED if waiting else GOLD))
 		draw_circle(p, 29, Color("1c3432"))
 		draw_arc(p, float(objective.radius), 0, TAU, 48, Color(color, 0.38), 2)
 		draw_arc(p, 38, -PI / 2, -PI / 2 + TAU * maxf(0.001, node.progress / float(objective.required_ticks)), 32, color, 4)
@@ -699,6 +701,12 @@ func draw_destination_objective():
 			if unsafe: text_at("CLEAR THE RING", p + Vector2(-49, 70), 10, RED)
 		elif locked and not node.complete:
 			text_at("PULSE LOCK · MOVE", p + Vector2(-58, 70), 10, RED)
+		elif objective.type == "VENT_ROTATION" and not node.complete:
+			text_at("ACTIVE VENT" if i == active_index else "STANDBY", p + Vector2(-43, 70), 10, GOLD if i == active_index else MUTED)
+		elif objective.type == "RECOVER_SEQUENCE" and waiting:
+			text_at("AWAIT PRIOR RECORD", p + Vector2(-58, 70), 10, MUTED)
+		elif objective.type == "QUIET_REPAIR" and not node.complete and sim.state.position.distance_to(p) < float(objective.radius):
+			text_at("RELICS QUIET · WORKING", p + Vector2(-68, 70), 10, RED)
 
 func draw_travel_background():
 	for y in range(160, 736, 54):
@@ -707,7 +715,8 @@ func draw_travel_background():
 		var x = 105 + i * 116
 		draw_line(Vector2(x, 736), Vector2(505 + (x - 505) * 0.22, 158), Color("304344"), 2)
 	var route = sim.current_route()
-	var accent = GOLD if sim.state.route == "route.brass_choir" else GREEN
+	var route_colors = {"route.brass_choir": GOLD, "route.rootworks": GREEN, "route.pale_archive": Color("cbb8ed"), "route.red_foundry": RED, "route.null_assembly": Color("8edce0")}
+	var accent = route_colors.get(sim.state.route, GREEN)
 	for i in range(6):
 		var p = Vector2(145 + i * 165, 570 - (i % 2) * 70)
 		draw_circle(p, 15 + i * 2, Color(accent, 0.16))
@@ -715,11 +724,11 @@ func draw_travel_background():
 
 func draw_route_choice():
 	draw_rect(Rect2(60, 148, 980, 588), Color(0.035, 0.075, 0.08, 0.96))
-	text_at("THE WORKSHOP ANSWERS", Vector2(118, 205), 13, GOLD)
+	text_at("THE ROAD ANSWERS", Vector2(118, 205), 13, GOLD)
 	text_at("Two roads need the same small saint.", Vector2(114, 255), 34, PAPER, true)
-	wrapped("Your relics, ranks, catalysts, Scrap and Blessing will carry forward. Eight Scrap from the Foreman is reserved for the road.", Vector2(118, 292), 840, 15, MUTED)
-	for i in range(sim.chapter.routes.size()):
-		var route = sim.chapter.routes[i]
+	wrapped("Your relics, ranks, catalysts, Scrap, Blessing and recovered memories carry forward.", Vector2(118, 292), 840, 15, MUTED)
+	for i in range(sim.available_routes().size()):
+		var route = sim.available_routes()[i]
 		var x = 88 + i * 470
 		panel(Rect2(x, 360, 448, 196), Color("213638"))
 		text_at(route.direction, Vector2(x + 22, 392), 11, GOLD)
