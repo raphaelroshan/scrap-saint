@@ -33,6 +33,17 @@
       "fulfilment_reward": "elite_defeat_leaves_temporary_spirit",
       "weakness": "needs_kills_to_compound",
       "description": "Not every broken thing should be restarted. Some should be remembered."
+    },
+    {
+      "id": "blessing.procession",
+      "name": "The Procession",
+      "starting_guarantees": ["weapon.procession_gear"],
+      "shop_bias_tags": ["procession", "orbit", "labour"],
+      "unique_service_id": "service.carry_the_spares",
+      "fulfilment": {"required_tags": ["procession", "orbit"], "required_count": 2},
+      "fulfilment_reward": "restored_machines_extend_orbit_effects",
+      "weakness": "vulnerable_to_distant_support",
+      "description": "Nothing crosses the ruins alone. Even a loose gear may join the procession."
     }
   ]
 }
