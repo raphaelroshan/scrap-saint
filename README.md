@@ -114,6 +114,7 @@ If the Godot project is not yet present, the agent must not claim gameplay execu
 | [`docs/improvement_plan_2026-09-15.md`](docs/improvement_plan_2026-09-15.md) | Current audit, unresolved decisions, system recommendations, and prioritized improvement plan. |
 | [`docs/agent_completion_prompt.md`](docs/agent_completion_prompt.md) | Paste-ready lead-agent role, production method, quality bar, and completion definition. |
 | [`docs/weapons_merges_traits_expansion.md`](docs/weapons_merges_traits_expansion.md) | Proposed weapons, named evolutions, cross-weapon Confluences, Gifts, traits, and staged content packets. |
+| [`docs/weapon_evolution_trait_animation_map.md`](docs/weapon_evolution_trait_animation_map.md) | Implemented weapon-to-rank-to-Evolution links, Gift/catalyst interactions, and target attack choreography for all ten relic families. |
 | [`docs/first_vertical_slice.md`](docs/first_vertical_slice.md) | Executable first-slice sequence and acceptance evidence. |
 | [`roadmap.md`](roadmap.md) | Milestones from contracts to creative vertical and breadth. |
 | [`content/`](content/) | Data-driven first-slice catalogues. |
