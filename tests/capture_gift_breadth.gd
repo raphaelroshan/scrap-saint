@@ -35,7 +35,7 @@ func capture():
 	game.sim.state.weapons = [weapon("weapon.nailer_small_mercies"), weapon("weapon.bell_last_shift"), weapon("weapon.hymn_coil")]
 	game.sim.state.reserve = []
 	game.sim.state.gifts = ["gift.honest_scale"]
-	game.sim.state.offers = ["weapon.nailer_small_mercies", "weapon.foundry_censer", "catalyst.saints_rivet", "gift.choir_filter", "service.repair", "service.doctrine"]
+	game.sim.state.offers = ["weapon.nailer_small_mercies", "weapon.foundry_censer", "catalyst.saints_rivet", "gift.choir_filter", "weapon.altar_mortar", "weapon.welded_halo"]
 	game.capture_label = "FIXTURE / P16 / VALID OFFERS"
 	await save_frame(game, "P16_HONEST_SCALE_SHOP.png")
 

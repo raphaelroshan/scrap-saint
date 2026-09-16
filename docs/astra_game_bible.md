@@ -1,5 +1,7 @@
 # Scrap Saint — Astra game bible
 
+The user's selected [sacred origin](saint_of_freely_given_repairs.md) is authoritative for the world premise: devastation and corruption have spread through a machine world, and repairs given freely have caused the Scrap Saint to manifest. This supersedes the secular origin in the evaluated world variants and the older secretly engineered origin. Detailed new histories remain proposals; runtime status governs executable behaviour.
+
 ## One-sentence promise
 
 **Scrap Saint is a warm industrial arena roguelite about a small devotional machine that repairs a ruined world while assembling relic weapons, receiving competing Blessings, and discovering what kind of machine it chooses to become.**
@@ -16,9 +18,9 @@ The game should create three recurring feelings:
 
 ## Canonical story
 
-The Saint awakens beneath a collapsed workshop with one instruction intact: **Restore the First Engine**. It travels through industrial ruins, broken settlements, and contested machine districts, repairing relays, pumps, workshops, and shrines while searching for evidence of its own origin.
+The Saint manifests beneath a collapsed workshop in a machine world wounded by devastation and spreading corruption. Repairs freely given across many lives have left an enduring grace in discarded components; that grace takes a small, living body. Its pilgrimage leads toward the First Engine, which different traditions regard as a possible source of healing or of the world's wound.
 
-The Saint was assembled incorrectly from incompatible machines. Its bell was taken from a factory, its maintenance arm from a waterworks, its memory lens from an archive, and its protective shell from a combat platform. The old machine order calls this an error. The Saint gradually decides that being assembled from many purposes may be a strength rather than a defect.
+The Saint's body holds incompatible histories: a factory bell, a waterworks arm, an archive lens and a protective shell. No single maker planned the whole. Their freely given repairs caused something new to manifest. The Saint gradually learns what responsibility comes with the care that made it; it is not the First Engine's secretly designed exception.
 
 The First Engine can be restored, repurposed for the surviving settlements, or dismantled so the world is no longer controlled by one central authority. These endings should emerge from the player’s Blessings, repairs, faction choices, and final decisions rather than from a late dialogue quiz.
 

@@ -1,5 +1,13 @@
 # Scrap Saint — Improvement Plan and Design Resolution Backlog
 
+## Current direction — 2026-09-17
+
+This document retains historical planning below. The enabled 0.5 preview now has ten weapons, ten Evolutions, seven Gifts, four Blessings, three frames and a branching three-site expedition. The old seven-weapon count and Mourner wave-five failure describe earlier builds, not the current gate. Current verification and limitations are recorded in docs/runtime_status.md (runtime_status.md from this folder).
+
+User decisions govern integration: the Saint manifests through repairs freely given; main-mode shops contain six relics with healing supplied by drops and optional work; destination work is optional too. Preserve upstream rank, chapter and animation systems. Commit and push completed validated changes so collaborators share the same build.
+
+The next task after this integration is reducing evolved-effect overlap around the Saint. Historical next-task paragraphs below do not supersede this order.
+
 **Date:** 2026-09-15
 **Status:** P12 runtime audit and prioritized game-quality plan.
 **Current build:** Godot 4.5.1 desktop prototype, version 0.1.0.

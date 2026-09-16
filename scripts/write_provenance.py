@@ -17,6 +17,6 @@ data = {
     'source_hashes': {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root / 'game').glob('*')) if p.is_file()},
     'content_hashes': {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root / 'content').rglob('*.json'))},
     'limitation': 'No human playtest or rendered minimum-hardware benchmark',
-    'next_task': 'Uncoached 1x comparison of the three-Gift and seven-Gift workshop pools',
+    'next_task': 'Reduce overlapping evolved effects around the Saint without changing authoritative attacks',
 }
 (root / 'artifacts/agent-iteration/provenance.json').write_text(json.dumps(data, indent=2), encoding='utf-8')

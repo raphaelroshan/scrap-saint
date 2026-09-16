@@ -1,5 +1,13 @@
 # Scrap Saint agent rules
 
+## Current user decisions and repository sync
+
+The Saint manifests from the grace of repairs freely given in a devastated machine world. See docs/saint_of_freely_given_repairs.md. This supersedes older engineered-origin passages.
+
+Main-mode shop slots contain relics (weapons, catalysts and eligible Gifts), never repair or service cards. Recovery comes from field drops and optional machines. Site work remains optional throughout the chapter; surviving and defeating the site's boss is sufficient to advance. Relay defence and its services remain a development comparison.
+
+The user requests ongoing repository synchronization: fetch before integration, preserve dirty work, commit and push completed validated changes, and report the delivered branch/commit. Never force-push shared history. Keep the working delivery branch synchronized with the remote. Runtime status and the enabled slice supersede historical roster limits below.
+
 ## Read first
 
 Before editing, read [`README.md`](README.md), [`docs/agent_completion_prompt.md`](docs/agent_completion_prompt.md), [`docs/astra_game_bible.md`](docs/astra_game_bible.md), [`docs/story_and_acts.md`](docs/story_and_acts.md), [`design/gameplay_contract.md`](design/gameplay_contract.md), [`design/shop_and_blessings.md`](design/shop_and_blessings.md), and [`docs/progression_map_weapons_metagame.md`](docs/progression_map_weapons_metagame.md). Then select the smallest relevant roadmap and source/test files.

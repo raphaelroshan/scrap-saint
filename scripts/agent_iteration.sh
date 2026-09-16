@@ -5,6 +5,8 @@ GODOT_BIN="${GODOT_BIN:-godot}"
 python3 scripts/validate_content.py
 python3 -m unittest tests/test_slice_manifest.py
 mkdir -p artifacts/agent-iteration
+"$GODOT_BIN" --headless --path . --script res://tests/test_sync_contract.gd | tee artifacts/agent-iteration/sync-contract.log
+"$GODOT_BIN" --path . --script res://tests/capture_sync_contract.gd | tee artifacts/agent-iteration/sync-capture.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_relay.gd | tee artifacts/agent-iteration/relay.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_arena.gd | tee artifacts/agent-iteration/arena.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_simulation.gd | tee artifacts/agent-iteration/simulation.log

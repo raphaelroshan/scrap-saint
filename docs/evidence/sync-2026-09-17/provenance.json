@@ -1,0 +1,56 @@
+{
+  "scaling": "canvas_items",
+  "capture_type": "Configured integration fixtures rendered in Godot; not natural play or human testing",
+  "dirty": true,
+  "next_task": "Uncoached 1x comparison of the three-Gift and seven-Gift workshop pools",
+  "source_hashes": {
+    "game/arena.gd": "c805bbb93c984937d4a3d2eb134c1c4656917bd223c9dabbab7ff4b5359ffd27",
+    "game/main.gd": "cada1050e1ed7bb08c9c450c5b5c38f31fe3d874aedaf8822c30853193f802a9",
+    "game/profile.gd": "2ba771a76f6f1eedec211f179f39b21ef1f26a1fdf5d4763e2e215357f20a9ad",
+    "game/settings.gd": "39257d6d8fbc6ab1e40bc0ff1e888489b476b9041c5ef1945a1cad1abf4f7b0a",
+    "game/simulation.gd": "2ec43e3f6ca3a92aba483a805c8c133d236b5ebadbb695c143155113474db5b9",
+    "game/sound.gd": "b31480b7f3a1f6f94c4d48bb954577d76e7d2f7e00386af00581bfa5b4505a0b",
+    "content/arenas/brass_choir_relay.json": "505b6ecb0f51f288fc3a4e56e53061116a6bab862c8d61d3b3896b22ddcfebc0",
+    "content/arenas/collapsed_workshop.json": "700a63f2e4e9c617ac10da6b99fd9b44989a051d59fbab7cc0fd0443527a3e52",
+    "content/arenas/null_assembly.json": "11ff4a279b18d810ac9f5ed057cb2362b822e65a9bc3838f1903de0c0bd7e4a5",
+    "content/arenas/pale_archive.json": "37dd4206a0155aaad87d96386605a694b97f69fd64a99f3150f8468698d33782",
+    "content/arenas/red_foundry.json": "d89842f3a40232f77a868fc963160441ddd421b3a671dcf45d54f702ca2150b7",
+    "content/arenas/rootworks_pump.json": "d1e48a7a7fedacf5fc349b4790bf272db717b7b405c1c954da4b0e8c688e1ce9",
+    "content/blessings/first_slice.json": "883dfb498b6ec3e77adbace25e5edad59d67a6455015794f260c629e6a8a5b0b",
+    "content/bosses/first_slice.json": "d33bc229b3b67c07f1599f56bd3e19fcd94d5af3729fdb9300afddbc5a50762b",
+    "content/chapter/first_chapter.json": "690f075c25ee2d43c7d4dc22a2fd189d9e7c07e964b50c1adecb2f1774e314df",
+    "content/enemies/first_slice.json": "8b31ff7a34be93d53dde7f0773b736cf75448284f11ddfc703e83e85802a67a6",
+    "content/frames/first_chapter.json": "d7973edfe1de70d160971efac0d9b04d5d7b2ce446c8532463c82803f21275bf",
+    "content/items/first_slice.json": "f5e1f035d98430bb3484f009554922fded995e041099ab7fbfb6c7341acb8944",
+    "content/lore/first_shift.json": "ed378beea3327c14e9df2f132313f86db91cd0b4e97163c84db3c329665b6351",
+    "content/progression/first_chapter.json": "62f6c7eddad0782d35db07401c9a236e25bc74509661acc64976b5acf7b59689",
+    "content/slices/first_shift.json": "5417ac266be1376f3518f5dab540c8ff291979f03b4d7f74689097170a45212a",
+    "tests/capture_sync_contract.gd": "07e141ce465f77571aa18b735330ca3455c42208e270417d847992b375b79737",
+    "tests/test_sync_contract.gd": "35c22acd6b9301224861fe6aec6325c10da6f6e82f649fd296272d4f8e27f628"
+  },
+  "timestamp_utc": "2026-09-16T16:20:23.2272128Z",
+  "seed": 147,
+  "viewport": [
+    1280,
+    800
+  ],
+  "limitation": "No human playtest or rendered minimum-hardware benchmark",
+  "base_commit": "3a3808bf8466111b17788ef6e13c52bdc69db7dc",
+  "build": "0.5.0-preview",
+  "godot": "4.5.1.stable.official.f62fdbde1",
+  "screenshots": {
+    "FIELD_KIT.png": "af1d80cb516656e139efeefa3a93d3cdddad5be1fbd46b5e283f7aa252d9a80d",
+    "ORIGIN.png": "18a3e2991ff12c1e1d970c250960d5f35f31de251a18f11918ac29109e1c3328",
+    "SHOP.png": "2b968f1be606b39d01e06603b62d3ed366b5e466a457516c592ae5d55f799348",
+    "SHOP_LARGE.png": "1743df76e8adbad55dd9b30e62e67eeea954606d90dbf0786209c280faab1705"
+  },
+  "verification": {
+    "chapter_scenarios": 30,
+    "chapter_wins": 30,
+    "sync_contract_checks": 64,
+    "ledger_page_scale_checks": 34,
+    "manifest_tests": 31,
+    "full_runner_exit": 0,
+    "warning": "Core quality capture reports ObjectDB instances leaked at exit; capture completes and natural policy wins. Resource cleanup remains unproven."
+  }
+}

@@ -1,5 +1,13 @@
 # Scrap Saint — Completion Agent Prompt
 
+## Current direction — 2026-09-17
+
+This document retains historical planning below. The enabled 0.5 preview now has ten weapons, ten Evolutions, seven Gifts, four Blessings, three frames and a branching three-site expedition. The old seven-weapon count and Mourner wave-five failure describe earlier builds, not the current gate. Current verification and limitations are recorded in docs/runtime_status.md (runtime_status.md from this folder).
+
+User decisions govern integration: the Saint manifests through repairs freely given; main-mode shops contain six relics with healing supplied by drops and optional work; destination work is optional too. Preserve upstream rank, chapter and animation systems. Commit and push completed validated changes so collaborators share the same build.
+
+The next task after this integration is reducing evolved-effect overlap around the Saint. Historical next-task paragraphs below do not supersede this order.
+
 **Purpose:** Paste the prompt below into the primary development agent that will own Scrap Saint’s implementation and push it from the current prototype toward a credible commercial Early Access first chapter.
 
 **Repository status at prompt creation:** Godot 4.5.1 desktop prototype, version 0.1.0, private repository. The prototype has free movement, automatic weapons, optional repair machines, eight waves, seven weapons, three Blessings, a shop, rank combining, catalysts, optional Mercy Rail, Memory Crane, Foreman Engine, save/resume, controller navigation, synthesized audio, and automated evidence. The current main-mode evidence is 11/12 policy wins. Mourner seed `104729` fails on wave five. All automated optional-repair policies currently skip repairs. Human testing and sustained performance benchmarking remain outstanding.
