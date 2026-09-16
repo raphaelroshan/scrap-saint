@@ -151,3 +151,15 @@ The configured `P16_HONEST_SCALE_SHOP`, `P16_SPRING_FUSE_COMBAT` and `P16_CHOIR_
 Rendered-evidence rubric (5-point internal review): shop consequence clarity 4, Gift-state readability 4, combat cue separation 4, screen hierarchy 4, industrial attachment identity 4. Honest Scale exposes Combine and rejection outcomes without crowding the action row; Spring/Fuse and Filter states remain distinguishable from weapon geometry. The remaining visual limitation is that short-lived attachment motion and sound timing need observation in an uncoached real-time session.
 
 Exactly one next task: run uncoached 1× workshop sessions comparing the original three-Gift pool with the seven-Gift pool, then tune only observed card-comprehension and offer-quality failures.
+
+## P18 weapon-animation foundation, 2026-09-16
+
+Nailer/Mercy Rail and Bell/Great Toll now render through authored event-driven presentation phases while the deterministic simulation retains ownership of cooldowns, targets, geometry, damage, status and Evolution state. Eleven new presentation checks cover simulation-hash isolation, exact durations, deterministic fixture progress/fade, correct mount selection, Evolution timing and expiry cleanup.
+
+The complete pinned-engine loop passes 853 Godot assertions plus thirty-one Python manifest checks. Full-run evidence remains 12/12 normal-economy routes, 24/24 frame/Blessing/first-route combinations, 4/4 assembly identities, 10/10 Evolution routes and 4/4 Gift-specific routes. No script-load, resource-load or assertion errors appear in the iteration logs.
+
+Six configured executable captures in `artifacts/weapon-animation` were rendered from clean commit `1fe4efd991429b29aff2e0973a70cc6920fb3ce5` with Godot 4.5.1 stable, OpenGL Compatibility on Apple M1 Pro, at 1280×800 and seed 147. Inspection confirms that Mercy Rail's split lane is materially heavier than base Nailer, Great Toll's full radial boundary is materially different from Bell's cone, overlapping families retain separate silhouettes, and reduced effects preserves core combat information.
+
+Rendered-evidence rubric (5-point internal review): physical authorship 4, base/Evolution distinction 5, geometry readability 5, overlap hierarchy 4, reduced-effects parity 4, palette/coherence 4. This is still-image and deterministic-policy evidence, not a human assessment of feel. The principal limitation is unverified 1× anticipation/recovery timing; eight other weapon families retain their earlier presentation treatment.
+
+Exactly one next task: run a human-controlled 1× Nailer/Bell session across Ranks I–III and both Evolutions, then tune anticipation and persistence only from observed motion readability.

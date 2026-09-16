@@ -46,6 +46,14 @@ var awaiting_binding = ""
 var recent_unlocks: Array = []
 var evolution_ledger_open = false
 var map_selection = ""
+var visual_clock_override = -1
+
+const WEAPON_FX_DURATION_MS = {
+	"line": 380,
+	"rail": 560,
+	"cone": 460,
+	"radial": 620,
+}
 
 func _ready():
 	title_font.font_names = PackedStringArray(["Georgia", "DejaVu Serif"])
@@ -87,7 +95,7 @@ func _physics_process(_delta):
 			last_phase = sim.state.phase
 			if last_phase in ["won", "lost"]: commit_profile_result()
 			build_ui()
-	fx = fx.filter(func(e): return Time.get_ticks_msec() < e.expires)
+	fx = fx.filter(func(e): return visual_now_ms() < int(e.expires))
 	queue_redraw()
 
 func advance_simulation(movement: Vector2):
@@ -222,7 +230,10 @@ func load_run():
 func present(event):
 	var e = event.duplicate(true)
 	var gift_id = gift_event_id(e)
-	e.expires = Time.get_ticks_msec() + (900 if gift_id != "" else (480 if e.kind in ["repair", "death", "blast"] else 230))
+	var duration = presentation_duration_ms(e)
+	e.presented_at = visual_now_ms()
+	e.duration_ms = duration
+	e.expires = int(e.presented_at) + duration
 	if fx.size() < (60 if reduced_fx else 160): fx.append(e)
 	if e.kind == "machine_restored":
 		notification = "RESTORED / " + e.reward
@@ -248,6 +259,34 @@ func present(event):
 	if e.kind == "attack": sound.play(e.shape)
 	elif e.kind in ["hurt", "relay_hurt", "repair", "pickup"]: sound.play(e.kind)
 	elif gift_id != "": sound.play("pickup")
+
+func visual_now_ms() -> int:
+	return visual_clock_override if visual_clock_override >= 0 else Time.get_ticks_msec()
+
+func presentation_duration_ms(event: Dictionary) -> int:
+	if gift_event_id(event) != "": return 900
+	if event.get("kind", "") == "evolution": return 760
+	if event.get("kind", "") == "attack": return int(WEAPON_FX_DURATION_MS.get(str(event.get("shape", "")), 230))
+	if event.get("kind", "") == "hit" and str(event.get("weapon", "")) == "weapon.nailer_small_mercies": return 420
+	if event.get("kind", "") == "hit" and str(event.get("weapon", "")) == "weapon.bell_last_shift": return 500
+	return 480 if event.get("kind", "") in ["repair", "death", "blast"] else 230
+
+func presentation_progress(event: Dictionary) -> float:
+	var duration = maxi(1, int(event.get("duration_ms", presentation_duration_ms(event))))
+	var started = int(event.get("presented_at", int(event.get("expires", visual_now_ms() + duration)) - duration))
+	return clampf(float(visual_now_ms() - started) / float(duration), 0.0, 1.0)
+
+func presentation_fade(event: Dictionary) -> float:
+	var progress = presentation_progress(event)
+	if progress < 0.12: return smoothstep(0.0, 0.12, progress)
+	return 1.0 - smoothstep(0.68, 1.0, progress)
+
+func latest_weapon_attack(weapon_id: String):
+	for index in range(fx.size() - 1, -1, -1):
+		var effect = fx[index]
+		if effect.get("kind", "") == "attack" and str(effect.get("weapon", "")) == weapon_id:
+			return effect
+	return null
 
 func gift_event_id(event: Dictionary) -> String:
 	var explicit = str(event.get("gift", event.get("gift_id", "")))
@@ -734,6 +773,7 @@ func draw_world():
 			var points = [sim.state.position + Vector2.from_angle(angle) * 58, sim.state.position + Vector2.from_angle(angle + TAU / 3.0) * 58, sim.state.position + Vector2.from_angle(angle + TAU * 2.0 / 3.0) * 58]
 			for index in range(3): draw_line(points[index], points[(index + 1) % 3], Color(0.5, 0.72, 0.82, 0.28), 2, true)
 	draw_saint(sim.state.position, sim.state.facing)
+	draw_set_transform(camera_offset)
 	for e in fx: draw_effect(e)
 
 func draw_boss_hud():
@@ -942,7 +982,7 @@ func draw_saint(p: Vector2, direction: Vector2, size_factor = 1.0):
 		for effect in fx:
 			if effect.kind == "attack" and effect.shape in ["line", "shot", "rail"]:
 				direction = (effect.to - effect.from).normalized()
-				recoil = clampf(float(effect.expires - Time.get_ticks_msec()) / 230, 0, 1) * (5 if effect.shape == "rail" else 2)
+				recoil = presentation_fade(effect) * (5 if effect.shape == "rail" else 2)
 	draw_set_transform(p + camera_offset, 0, Vector2.ONE * size_factor)
 	draw_ellipse_shadow(Vector2(0, 12), Vector2(25, 12))
 	draw_rect(Rect2(-19, -8, 10, 31), Color("0e191e"))
@@ -957,14 +997,12 @@ func draw_saint(p: Vector2, direction: Vector2, size_factor = 1.0):
 	draw_rect(Rect2(-8, 4, 16, 5), Color("74664d"))
 	draw_line(Vector2(12, 0), direction * (29 - recoil), Color("8b9b86"), 7)
 	draw_line(direction * (24 - recoil), direction * (39 - recoil), GOLD, 5)
-	if screen == "game" and sim.state.get("evolved", false):
-		draw_line(direction * 21 + direction.orthogonal() * 5, direction * 45 + direction.orthogonal() * 5, PAPER, 3)
-	if screen == "game" and sim.state.weapons.any(func(w): return w.get("toll", false)):
-		draw_line(Vector2(0, -20), Vector2(0, -34), Color("9e8150"), 4)
-		draw_colored_polygon(PackedVector2Array([Vector2(-11, -34), Vector2(11, -34), Vector2(15, -23), Vector2(-15, -23)]), Color("b58645"))
-		draw_circle(Vector2(0, -21), 3, PAPER)
 	draw_line(Vector2(-13, 2), Vector2(-25, 9), Color("ac7455"), 4)
 	draw_circle(Vector2(-25, 9), 4, GOLD)
+	if screen == "game":
+		for weapon in sim.state.weapons:
+			if weapon.id == "weapon.nailer_small_mercies": draw_nailer_mount(weapon, direction)
+			elif weapon.id == "weapon.bell_last_shift": draw_bell_mount(weapon)
 	if screen == "game" and sim.has_gift("gift.spare_hand"):
 		draw_line(Vector2(-10, -1), Vector2(-28, -9), Color("a99160"), 5)
 		draw_line(Vector2(-28, -9), Vector2(-35, 2), PAPER, 3)
@@ -1003,10 +1041,155 @@ func draw_saint(p: Vector2, direction: Vector2, size_factor = 1.0):
 		draw_polyline(fuse_points, fuse_color, 3 if fuse_lit else 2, true)
 		draw_circle(Vector2(25, -28), 4 if fuse_lit else 2, Color("ffd06b") if fuse_lit else Color("574b3b"))
 	for bolt in [Vector2(-10, -15), Vector2(10, -15), Vector2(-10, 10), Vector2(10, 10)]: draw_circle(bolt, 1.4, PAPER)
+
+func weapon_ready_amount(weapon: Dictionary, lead_ticks: int) -> float:
+	if sim.state.is_empty() or int(weapon.get("ready", 0)) <= int(sim.state.tick): return 0.0
+	var remaining = int(weapon.ready) - int(sim.state.tick)
+	if remaining > lead_ticks: return 0.0
+	return 1.0 - float(remaining) / float(maxi(1, lead_ticks))
+
+func draw_nailer_mount(weapon: Dictionary, fallback_direction: Vector2):
+	var effect = latest_weapon_attack("weapon.nailer_small_mercies")
+	var direction = fallback_direction.normalized()
+	var progress = 0.0
+	if effect != null:
+		direction = (effect.to - effect.from).normalized()
+		progress = presentation_progress(effect)
+	if direction == Vector2.ZERO: direction = Vector2.RIGHT
+	var side = direction.orthogonal()
+	var evolved = sim.weapon_evolution_id(weapon) == "evolution.mercy_rail"
+	var readiness = weapon_ready_amount(weapon, 14 if evolved else 8)
+	var commit = smoothstep(0.08, 0.34, progress) * (1.0 - smoothstep(0.62, 1.0, progress)) if effect != null else 0.0
+	var extension = (13.0 if evolved else 7.0) * maxf(readiness, commit)
+	var mount = direction * 11 + side * 9
+	var rear = mount - direction * 8
+	var tip = mount + direction * (24 + extension)
+	draw_line(Vector2(8, -1), rear, Color("786e58"), 5, true)
+	draw_line(rear, tip, Color("b08b50"), 7 if evolved else 6, true)
+	draw_line(rear + side * 3, tip + side * 3, Color("ead8a5"), 2, true)
+	if evolved:
+		draw_line(rear - side * 5, tip - side * 5, Color("d7d2b2"), 3, true)
+		for brace in [0.28, 0.62]: draw_line(rear.lerp(tip, brace) - side * 5, rear.lerp(tip, brace) + side * 4, Color("6e775f"), 2, true)
+	elif int(weapon.rank) >= 2:
+		draw_line(rear - side * 4, tip - direction * 5 - side * 4, Color("806c48"), 2, true)
+	if int(weapon.rank) >= 3:
+		draw_colored_polygon(PackedVector2Array([tip - direction * 6 + side * 4, tip - direction * 1, tip - direction * 6 - side * 4]), GOLD)
+	draw_circle(tip, 2.5 + readiness * 2.0, Color(1.0, 0.88, 0.58, 0.5 + readiness * 0.5))
+
+func draw_bell_mount(weapon: Dictionary):
+	var effect = latest_weapon_attack("weapon.bell_last_shift")
+	var progress = presentation_progress(effect) if effect != null else 0.0
+	var evolved = sim.weapon_evolution_id(weapon) == "evolution.great_toll"
+	var readiness = weapon_ready_amount(weapon, 16 if evolved else 10)
+	var strike = sin(clampf((progress - 0.12) / 0.38, 0.0, 1.0) * PI) if effect != null else 0.0
+	var anchor = Vector2(0, -28 if evolved else -24)
+	var width = 16.0 if evolved else (13.0 if int(weapon.rank) >= 2 else 11.0)
+	draw_line(Vector2(0, -17), anchor + Vector2(0, -8 + readiness * 3), Color("796348"), 4, true)
+	var bell_color = Color("d4a85b").lightened(0.18 * maxf(readiness, strike))
+	draw_colored_polygon(PackedVector2Array([anchor + Vector2(-width * 0.45, -7), anchor + Vector2(width * 0.45, -7), anchor + Vector2(width, 7), anchor + Vector2(-width, 7)]), bell_color)
+	draw_line(anchor + Vector2(-width, 7), anchor + Vector2(width, 7), PAPER if strike > 0.4 else Color("7d633d"), 2, true)
+	var clapper = anchor + Vector2(strike * (7 if int(weapon.rank) >= 3 else 4), 10)
+	draw_line(anchor, clapper, Color("5c4934"), 2, true)
+	draw_circle(clapper, 3.5, PAPER if strike > 0.5 else GOLD)
+	if evolved:
+		draw_arc(anchor, 22 + readiness * 3, -PI * 0.82, -PI * 0.18, 18, Color(0.88, 0.72, 0.42, 0.5), 2)
+		for cardinal in range(4):
+			var marker = anchor + Vector2.from_angle(cardinal * PI / 2.0) * 20
+			draw_line(marker - Vector2(0, 3), marker + Vector2(0, 3), Color(PAPER, 0.55 + strike * 0.45), 2)
 	draw_set_transform(camera_offset)
 
 func gift_fx_active(gift_id: String) -> bool:
 	return fx.any(func(effect): return gift_event_id(effect) == gift_id)
+
+func draw_nailer_attack(effect: Dictionary, color: Color, progress: float, fade: float):
+	var origin: Vector2 = effect.from
+	var target: Vector2 = effect.to
+	var direction = (target - origin).normalized()
+	if direction == Vector2.ZERO: direction = Vector2.RIGHT
+	var side = direction.orthogonal()
+	var is_rail = effect.shape == "rail"
+	var guide_alpha = (1.0 - smoothstep(0.0, 0.32, progress)) * (0.34 if is_rail else 0.22)
+	for segment in range(6):
+		if segment % 2 == 0:
+			var a = origin.lerp(target, segment / 6.0)
+			var b = origin.lerp(target, (segment + 1) / 6.0)
+			draw_line(a, b, Color(color, guide_alpha), 1, true)
+	var travel = clampf((progress - 0.14) / (0.26 if is_rail else 0.20), 0.0, 1.0)
+	if travel <= 0.0: return
+	var head = origin.lerp(target, travel)
+	var resolve_alpha = fade * smoothstep(0.14, 0.28, progress)
+	if is_rail:
+		draw_line(origin + side * 5, head + side * 5, Color(color, resolve_alpha * 0.5), 4, true)
+		draw_line(origin - side * 5, head - side * 5, Color(color, resolve_alpha * 0.5), 4, true)
+		draw_line(origin, head, Color(1.0, 0.98, 0.85, resolve_alpha), 3, true)
+	else:
+		draw_line(origin, head, Color(color, resolve_alpha), 3, true)
+	if int(effect.get("rank", 1)) >= 2:
+		for marker in [0.32, 0.62, 0.9]:
+			if travel >= marker:
+				var pin = origin.lerp(target, marker)
+				draw_line(pin - side * 4, pin + side * 4, Color(PAPER, resolve_alpha * 0.75), 2, true)
+	if travel >= 0.96:
+		draw_circle(target, 5 + (1.0 - fade) * 6, Color(color, resolve_alpha * 0.22))
+		draw_line(target - direction * 7, target + direction * 5, Color(PAPER, resolve_alpha), 2, true)
+		if not reduced_fx:
+			var particle_count = 8 if is_rail else 5
+			for index in range(particle_count):
+				var spread = -1.2 + index * (2.4 / maxf(1.0, particle_count - 1.0))
+				var spark_direction = Vector2.from_angle(direction.angle() + PI + spread)
+				var spark_length = (8 + index % 3 * 4) * (0.5 + fade * 0.5)
+				draw_line(target + spark_direction * 3, target + spark_direction * spark_length, Color(GOLD, resolve_alpha), 2, true)
+
+func draw_bell_attack(effect: Dictionary, color: Color, progress: float, fade: float):
+	var origin: Vector2 = effect.from
+	var radial = effect.shape == "radial"
+	var direction = (effect.to - origin).normalized()
+	if direction == Vector2.ZERO: direction = Vector2.RIGHT
+	var commit = clampf((progress - 0.16) / 0.52, 0.0, 1.0)
+	var radius = float(effect.range) * ease(commit, -1.8)
+	var alpha = fade * smoothstep(0.12, 0.28, progress)
+	var preparation_radius = 22.0 - minf(progress / 0.16, 1.0) * 7.0
+	if progress < 0.24:
+		draw_arc(origin, preparation_radius, -PI * 0.8, -PI * 0.2, 18, Color(PAPER, 0.35 + progress), 3, true)
+		draw_line(origin + Vector2(0, -28), origin + Vector2(0, -15 + progress * 18), Color(GOLD, 0.75), 4, true)
+	if radial:
+		draw_circle(origin, radius, Color(color, alpha * 0.055))
+		draw_arc(origin, radius, 0, TAU, 64, Color(color, alpha), 6, true)
+		if not reduced_fx:
+			for cardinal in range(4):
+				var marker = origin + Vector2.from_angle(cardinal * PI / 2.0) * radius * 0.72
+				draw_arc(marker, 10 + 6 * commit, 0, TAU, 16, Color(PAPER, alpha * 0.8), 2, true)
+	else:
+		var half_width = float(effect.get("width", 0.8))
+		var angle = direction.angle()
+		draw_arc(origin, radius, angle - half_width, angle + half_width, 28, Color(color, alpha), 4, true)
+		draw_line(origin, origin + Vector2.from_angle(angle - half_width) * radius, Color(color, alpha * 0.34), 1, true)
+		draw_line(origin, origin + Vector2.from_angle(angle + half_width) * radius, Color(color, alpha * 0.34), 1, true)
+		if int(effect.get("rank", 1)) >= 3:
+			var second_radius = maxf(0.0, radius - 18.0)
+			draw_arc(origin, second_radius, angle - half_width, angle + half_width, 28, Color(PAPER, alpha * 0.58), 2, true)
+	if not reduced_fx and commit > 0.35:
+		var count = 8 if radial else 5
+		for index in range(count):
+			var particle_angle = index * TAU / count if radial else direction.angle() - float(effect.get("width", 0.8)) + index * float(effect.get("width", 0.8)) * 2.0 / maxf(1.0, count - 1.0)
+			var particle = origin + Vector2.from_angle(particle_angle) * radius
+			draw_line(particle, particle + Vector2.from_angle(particle_angle) * (5 + index % 3 * 3), Color(GOLD, alpha * 0.85), 2, true)
+
+func draw_evolution_reconfiguration(effect: Dictionary, progress: float, fade: float):
+	var position: Vector2 = effect.get("position", sim.state.position)
+	var recipe = str(effect.get("recipe", ""))
+	var radius = 24.0 + 36.0 * smoothstep(0.0, 0.72, progress)
+	draw_arc(position, radius, -PI / 2, -PI / 2 + TAU * minf(1.0, progress * 1.7), 48, Color(GOLD, fade), 4, true)
+	if recipe == "evolution.mercy_rail":
+		for side in [-1, 1]: draw_line(position + Vector2(-18, side * 6), position + Vector2(38 + progress * 24, side * 6), Color(PAPER, fade * 0.9), 3, true)
+	elif recipe == "evolution.great_toll":
+		for cardinal in range(4):
+			var marker = position + Vector2.from_angle(cardinal * PI / 2.0) * radius * 0.68
+			draw_arc(marker, 7, 0, TAU, 14, Color(PAPER, fade * 0.85), 2, true)
+	if not reduced_fx:
+		for index in range(10):
+			var spark_direction = Vector2.from_angle(index * TAU / 10.0 + progress)
+			draw_circle(position + spark_direction * (12 + progress * 40), 2, Color(GOLD, fade * 0.8))
 
 func draw_ellipse_shadow(p: Vector2, radii: Vector2):
 	# Local circle shadow keeps the silhouette readable without physics ownership.
@@ -1082,7 +1265,8 @@ func draw_enemy(e):
 
 func draw_effect(e):
 	var gift_id = gift_event_id(e)
-	var fade = clampf(float(e.expires - Time.get_ticks_msec()) / (900.0 if gift_id != "" else 230.0), 0, 1)
+	var progress = presentation_progress(e)
+	var fade = presentation_fade(e)
 	var color = Color(e.get("color", "e9dec2"))
 	color.a = fade
 	if gift_id != "":
@@ -1107,16 +1291,26 @@ func draw_effect(e):
 	match e.kind:
 		"attack":
 			match e.shape:
-				"line", "shot", "rail", "beam":
+				"line", "rail":
+					if str(e.get("weapon", "")) == "weapon.nailer_small_mercies": draw_nailer_attack(e, color, progress, fade)
+					else:
+						draw_line(e.from, e.to, color, 5 if e.shape == "rail" else 2, true)
+						if e.shape == "rail": draw_line(e.from, e.to, Color(1, 0.98, 0.85, fade), 2, true)
+				"shot", "beam":
 					var line_targets = e.get("targets", []) if e.shape == "shot" else [e.to]
 					for line_target in line_targets:
-						draw_line(e.from, line_target, color, 5 if e.shape in ["rail", "beam"] else 2, true)
-					if e.shape == "rail": draw_line(e.from, e.to, Color(1, 0.98, 0.85, fade), 2, true)
+						draw_line(e.from, line_target, color, 5 if e.shape == "beam" else 2, true)
 				"blast":
 					draw_line(e.from, e.to, Color(color, fade * 0.4), 1)
 					draw_circle(e.to, e.range * (1.0 - fade * 0.35), Color(color, fade * 0.2))
 					draw_arc(e.to, e.range * (1.0 - fade * 0.35), 0, TAU, 32, color, 3)
-				"cone", "tether":
+				"cone":
+					if str(e.get("weapon", "")) == "weapon.bell_last_shift": draw_bell_attack(e, color, progress, fade)
+					else:
+						var angle = (e.to - e.from).angle()
+						var half_width = float(e.get("width", 0.8))
+						draw_arc(e.from, e.range * (1 - fade * 0.4), angle - half_width, angle + half_width, 24, color, 3, true)
+				"tether":
 					var angle = (e.to - e.from).angle()
 					var half_width = float(e.get("width", 0.8))
 					draw_arc(e.from, e.range * (1 - fade * 0.4), angle - half_width, angle + half_width, 24, color, 3, true)
@@ -1138,9 +1332,11 @@ func draw_effect(e):
 					draw_line(e.from, e.to, Color(0.75, 1.0, 0.78, fade), 2, true)
 					draw_arc(e.to, 11, 0, TAU, 16, color, 2)
 				"radial":
-					draw_circle(e.from, e.range * (1.0 - fade * 0.2), Color(color, fade * 0.055))
-					draw_arc(e.from, e.range * (1.0 - fade * 0.2), 0, TAU, 64, color, 6, true)
-					for i in range(4): draw_arc(e.from + Vector2.from_angle(i * PI / 2) * e.range * 0.55, 13, 0, TAU, 18, PAPER, 2)
+					if str(e.get("weapon", "")) == "weapon.bell_last_shift": draw_bell_attack(e, color, progress, fade)
+					else:
+						draw_circle(e.from, e.range * (1.0 - fade * 0.2), Color(color, fade * 0.055))
+						draw_arc(e.from, e.range * (1.0 - fade * 0.2), 0, TAU, 64, color, 6, true)
+						for i in range(4): draw_arc(e.from + Vector2.from_angle(i * PI / 2) * e.range * 0.55, 13, 0, TAU, 18, PAPER, 2)
 				"ashen_censer":
 					draw_line(e.from, e.to, Color(color, fade * 0.25), 2, true)
 					draw_circle(e.to, e.range, Color(0.36, 0.20, 0.42, fade * 0.12))
@@ -1175,9 +1371,16 @@ func draw_effect(e):
 						for point in points: draw_circle(point, 6, Color(PAPER, fade * 0.7))
 		"charge": draw_line(e.from, e.to, Color(0.9, 0.8, 0.5, fade * 0.35), 1)
 		"hit", "death":
-			for i in range(4):
-				var d = Vector2.from_angle(i * TAU / 4 + e.tick)
+			var particle_count = 2 if reduced_fx else (7 if str(e.get("weapon", "")) in ["weapon.nailer_small_mercies", "weapon.bell_last_shift"] else 4)
+			for i in range(particle_count):
+				var d = Vector2.from_angle(i * TAU / particle_count + e.tick)
 				draw_line(e.position + d * 3, e.position + d * (7 + (1 - fade) * 13), color, 2)
+			if e.kind == "hit" and str(e.get("weapon", "")) == "weapon.nailer_small_mercies" and progress > 0.35:
+				draw_line(e.position + Vector2(-5, 0), e.position + Vector2(5, 0), Color(PAPER, fade), 2, true)
+				draw_line(e.position + Vector2(0, -5), e.position + Vector2(0, 5), Color(PAPER, fade), 2, true)
+			if e.kind == "hit" and str(e.get("weapon", "")) == "weapon.bell_last_shift" and progress > 0.28:
+				draw_arc(e.position, 8 + progress * 9, 0, TAU, 18, Color(GOLD, fade * 0.8), 2, true)
+		"evolution": draw_evolution_reconfiguration(e, progress, fade)
 		"repair":
 			draw_arc(e.position, 37 + (1 - fade) * 10, 0, TAU, 24, Color(0.6, 0.9, 0.7, fade), 2)
 			if e.get("source") != null: draw_line(e.source, e.position, Color(0.6, 0.9, 0.7, fade), 2, true)
