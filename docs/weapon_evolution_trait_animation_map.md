@@ -2,7 +2,7 @@
 
 **Runtime reference:** `0.5.0-preview`
 
-**Status:** all mechanics in the relationship map are enabled; animation descriptions marked **target** are presentation direction, not claims about current art.
+**Status:** all mechanics in the relationship map are enabled. P18/P19 implement the described procedural four-beat presentation for all ten base/Evolution families; final asset art, audio feel and human timing validation remain open.
 
 **Authoritative data:** [`content/items/first_slice.json`](../content/items/first_slice.json) and [`content/slices/first_shift.json`](../content/slices/first_shift.json).
 
@@ -138,6 +138,8 @@ Ordinary attacks should not shake or zoom the camera. Mercy Rail, Great Toll, an
 
 The acceptance bar is recognition under overlap: at 1280×800 and normal play speed, a reviewer should identify the acting relic, attack area, affected target, and resulting status without reading a debug label.
 
-## Current presentation gap
+## Current presentation state and gap
 
-The 0.5.0 procedural renderer already communicates all base and Evolution resolve geometries, persistent Gear/Censer/Halo attachments, Marked/Bound/Quieted states, repair lines, and Gift attachments. It does **not** yet supply a complete pre-fire animation for most weapons, physical Rank II/III silhouette changes, projectile travel for instant shots, full Evolution reconfiguration, or authored stagger poses. Those are the next presentation pass, not shipped claims.
+The 0.5.0 procedural renderer now supplies presentation-only prepare, commit, resolve and aftermath phases for every enabled base weapon and Evolution. All ten families have a physical Saint-mounted mechanism, authored attack duration, base/Evolution geometry distinction, deterministic particles or residue, and a reduced-effects rendering path. Rank II/III changes appear through added contacts, tines, flames, braces, reach, width or reset hardware where the rank rule affects presentation. Evolution events display family-specific reconfiguration geometry.
+
+This is a complete code-native visual language pass, not final asset art. Configured stills and deterministic tests do not establish human recognition in motion, audio impact, animation comfort at 1×, or rendered minimum-hardware performance. Those questions require an observed real-time session before further timing or density changes.

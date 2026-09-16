@@ -213,3 +213,15 @@ Six configured executable fixtures under `artifacts/weapon-animation` were captu
 Rendered-evidence rubric (5-point internal review): physical authorship 4, base/Evolution distinction 5, geometry readability 5, overlap hierarchy 4, reduced-effects parity 4, palette/coherence 4. Configured stills establish visual structure and layering, not normal-speed responsiveness. The other eight weapon families still need the same full prepare/commit/resolve/recover treatment.
 
 Exactly one next task: run a human-controlled 1× Nailer/Bell session across Ranks I–III and both Evolutions, then tune anticipation and persistence only from observed motion readability.
+
+## P19 — complete weapon animation catalogue
+
+The eight remaining families now use the P18 presentation-only prepare/commit/resolve/recover pattern. Procession Gear and Maintenance Parade use physical gear contacts, counter-rotating paths and extension flags. Candle-Nailer and Candle for the Unreturned use curving flame shots and wick residue. Contrition Cable and Lattice use a sweeping hook or staged triangular anchors. Hymn Coil and Quiet Sermon use converging forks and separated cyan pulse lanes. Altar Mortar and Workshop Benediction use a visible shell arc and square ground seals. Foundry Censer and Ashen Benediction use chain tension and layered smoke. Penance Winch and Long Hand unfold segmented arms before retracting. Welded Halo and Halo of Repairs close their gimbals and return visible stitch circuits.
+
+All ten base/Evolution families now have a persistent physical mechanism on the Saint, authored effect lifetime, deterministic particles or residue, Evolution-specific reconfiguration, and reduced-effects parity. Presentation consumes existing authoritative events and does not change cooldowns, targets, damage, repair, control, resources, RNG or saves.
+
+The full suite passes 878 Godot assertions and thirty-one Python checks on pinned Godot 4.5.1. The 12/12 normal-economy, 24/24 frame/Blessing/first-route, 4/4 assembly, 10/10 Evolution and 4/4 Gift-specific matrices remain green. Eight P19 fixtures were captured from clean commit `0209b7efd73131f6ac4a417915a826ca33dda5d7` at 1280×800, seed 147, using OpenGL Compatibility on Apple M1 Pro.
+
+Rendered-evidence rubric (5-point internal review): family recognition 4, base/Evolution distinction 4, target/area readability 4, overlap hierarchy 4, reduced-effects parity 4, palette coherence 4. The visual language is complete at the procedural prototype level. Normal-speed response, audio impact and player recognition remain unverified by a human.
+
+Exactly one next task: run an uncoached human 1× combat session using two four-weapon builds spanning all ten families, then tune only observed timing, overlap and recognition failures.
