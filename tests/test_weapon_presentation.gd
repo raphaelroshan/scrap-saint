@@ -45,6 +45,33 @@ func run_checks():
 	game._physics_process(0.0)
 	check(game.fx.is_empty(), "expired presentation effects are removed against the same visual clock")
 
+	game.visual_clock_override = 3000
+	var catalogue_hash = game.sim.state_hash()
+	var family_cases = [
+		["weapon.procession_gear", "orbit", 420],
+		["weapon.procession_gear", "parade", 680],
+		["weapon.candle_nailer", "shot", 420],
+		["weapon.candle_nailer", "funeral_shots", 620],
+		["weapon.cable_contrition", "tether", 500],
+		["weapon.cable_contrition", "lattice", 680],
+		["weapon.hymn_coil", "beam", 320],
+		["weapon.hymn_coil", "sermon", 560],
+		["weapon.altar_mortar", "blast", 620],
+		["weapon.altar_mortar", "benediction", 700],
+		["weapon.foundry_censer", "censer", 520],
+		["weapon.foundry_censer", "ashen_censer", 680],
+		["weapon.penance_winch", "winch", 580],
+		["weapon.penance_winch", "long_hand", 720],
+		["weapon.welded_halo", "halo", 480],
+		["weapon.welded_halo", "repair_halo", 680],
+	]
+	for family_case in family_cases:
+		game.present({"kind": "attack", "shape": family_case[1], "weapon": family_case[0], "from": Vector2.ZERO, "to": Vector2.RIGHT * 100, "to2": Vector2.LEFT * 100, "targets": [Vector2.RIGHT * 100], "points": [Vector2(100, 0), Vector2(-50, 80), Vector2(-50, -80)], "range": 100, "inner_range": 60, "width": 12, "rank": 3, "color": "efb966"})
+		check(game.fx[-1].duration_ms == family_case[2], "%s uses its authored four-beat duration" % family_case[1])
+	check(game.sim.state_hash() == catalogue_hash, "presenting all remaining base and Evolution families preserves simulation state")
+	for weapon_id in ["weapon.procession_gear", "weapon.candle_nailer", "weapon.cable_contrition", "weapon.hymn_coil", "weapon.altar_mortar", "weapon.foundry_censer", "weapon.penance_winch", "weapon.welded_halo"]:
+		check(game.latest_weapon_attack(weapon_id) != null and str(game.latest_weapon_attack(weapon_id).weapon) == weapon_id, "%s mount reads only its own latest attack" % weapon_id)
+
 	game.queue_free()
 	await process_frame
 	print("WEAPON PRESENTATION: %d checks, %d failures" % [checks, failures])

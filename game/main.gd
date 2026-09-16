@@ -53,6 +53,23 @@ const WEAPON_FX_DURATION_MS = {
 	"rail": 560,
 	"cone": 460,
 	"radial": 620,
+	"orbit": 420,
+	"parade": 680,
+	"shot": 420,
+	"funeral_shots": 620,
+	"tether": 500,
+	"lattice": 680,
+	"beam": 320,
+	"sermon": 560,
+	"blast": 620,
+	"benediction": 700,
+	"consecrated": 700,
+	"censer": 520,
+	"ashen_censer": 680,
+	"winch": 580,
+	"long_hand": 720,
+	"halo": 480,
+	"repair_halo": 680,
 }
 
 func _ready():
@@ -267,8 +284,7 @@ func presentation_duration_ms(event: Dictionary) -> int:
 	if gift_event_id(event) != "": return 900
 	if event.get("kind", "") == "evolution": return 760
 	if event.get("kind", "") == "attack": return int(WEAPON_FX_DURATION_MS.get(str(event.get("shape", "")), 230))
-	if event.get("kind", "") == "hit" and str(event.get("weapon", "")) == "weapon.nailer_small_mercies": return 420
-	if event.get("kind", "") == "hit" and str(event.get("weapon", "")) == "weapon.bell_last_shift": return 500
+	if event.get("kind", "") == "hit" and str(event.get("weapon", "")) != "": return 500
 	return 480 if event.get("kind", "") in ["repair", "death", "blast"] else 230
 
 func presentation_progress(event: Dictionary) -> float:
@@ -1003,6 +1019,7 @@ func draw_saint(p: Vector2, direction: Vector2, size_factor = 1.0):
 		for weapon in sim.state.weapons:
 			if weapon.id == "weapon.nailer_small_mercies": draw_nailer_mount(weapon, direction)
 			elif weapon.id == "weapon.bell_last_shift": draw_bell_mount(weapon)
+			else: draw_weapon_mount(weapon)
 	if screen == "game" and sim.has_gift("gift.spare_hand"):
 		draw_line(Vector2(-10, -1), Vector2(-28, -9), Color("a99160"), 5)
 		draw_line(Vector2(-28, -9), Vector2(-35, 2), PAPER, 3)
@@ -1096,7 +1113,73 @@ func draw_bell_mount(weapon: Dictionary):
 		for cardinal in range(4):
 			var marker = anchor + Vector2.from_angle(cardinal * PI / 2.0) * 20
 			draw_line(marker - Vector2(0, 3), marker + Vector2(0, 3), Color(PAPER, 0.55 + strike * 0.45), 2)
-	draw_set_transform(camera_offset)
+
+func draw_weapon_mount(weapon: Dictionary):
+	var effect = latest_weapon_attack(str(weapon.id))
+	var progress = presentation_progress(effect) if effect != null else 0.0
+	var pulse = presentation_fade(effect) if effect != null else 0.0
+	var readiness = weapon_ready_amount(weapon, 12)
+	var rank = int(weapon.get("rank", 1))
+	var evolution = sim.weapon_evolution_id(weapon)
+	match str(weapon.id):
+		"weapon.procession_gear":
+			var anchor = Vector2(-23, -2)
+			draw_line(Vector2(-12, 1), anchor, Color("6e775f"), 4, true)
+			draw_gear(anchor, 7 + (2 if rank >= 3 else 0), Color("91c9b0"), progress * TAU)
+			if rank >= 2: draw_circle(anchor + Vector2(0, 11), 3, PAPER)
+			if evolution == "evolution.maintenance_parade": draw_line(anchor + Vector2(-7, -8), anchor + Vector2(8, -12), GOLD, 3, true)
+		"weapon.candle_nailer":
+			var anchor = Vector2(-18, -18)
+			draw_line(Vector2(-9, -9), anchor, Color("6d6269"), 4, true)
+			draw_rect(Rect2(anchor - Vector2(8, 4), Vector2(16, 10)), Color("393039"))
+			var flame_count = 3 if evolution == "evolution.candle_unreturned" else (2 if rank >= 2 else 1)
+			for index in range(flame_count):
+				var x = (index - (flame_count - 1) * 0.5) * 6.0
+				var flame = anchor + Vector2(x, -7 - readiness * 3)
+				draw_circle(flame, 2.5 + pulse, Color("cbb8ed"))
+		"weapon.cable_contrition":
+			var anchor = Vector2(-24, 11)
+			draw_line(Vector2(-12, 7), anchor, Color("576a6d"), 4, true)
+			draw_circle(anchor, 8, Color("496979"))
+			draw_arc(anchor, 5, progress * TAU, progress * TAU + PI * 1.5, 14, Color("9bd7e5"), 2, true)
+			if evolution == "evolution.contrition_lattice":
+				for index in range(3): draw_circle(anchor + Vector2.from_angle(index * TAU / 3.0) * 11, 2.5, PAPER)
+			elif rank >= 3: draw_line(anchor, anchor + Vector2(11, 4), GOLD, 3, true)
+		"weapon.hymn_coil":
+			var anchor = Vector2(21, -17)
+			draw_line(Vector2(10, -8), anchor, Color("76684f"), 4, true)
+			for offset in [-5, 0, 5]: draw_arc(anchor + Vector2(0, offset), 6, -PI * 0.65, PI * 0.65, 10, Color("8edce0"), 2 + (1 if rank >= 2 else 0))
+			var fork_gap = 3.0 - 2.0 * maxf(readiness, pulse)
+			for side in [-1, 1]: draw_line(anchor + Vector2(side * fork_gap, -9), anchor + Vector2(side * (fork_gap + 2), -17), PAPER if pulse > 0.3 else Color("8edce0"), 2, true)
+			if evolution == "evolution.quiet_sermon": draw_arc(anchor, 13, -PI * 0.7, PI * 0.7, 18, Color("d7f2ef"), 3, true)
+		"weapon.altar_mortar":
+			var anchor = Vector2(23, -4)
+			draw_line(Vector2(11, 1), anchor, Color("7d674f"), 5, true)
+			draw_rect(Rect2(anchor - Vector2(7, 9), Vector2(15, 18)), Color("9b5f43"))
+			draw_arc(anchor + Vector2(0, -8), 7 + readiness * 3, PI, TAU, 14, PAPER if pulse > 0.5 else Color("e89765"), 3, true)
+			if rank >= 3: draw_line(anchor + Vector2(-6, 7), anchor + Vector2(8, 7), GOLD, 2, true)
+			if evolution == "evolution.workshop_benediction": draw_rect(Rect2(anchor - Vector2(11, 12), Vector2(22, 3)), GREEN)
+		"weapon.foundry_censer":
+			var anchor = Vector2(-28, -10)
+			draw_line(Vector2(-12, -7), anchor + Vector2(0, -8), Color("77634a"), 2, true)
+			draw_line(anchor + Vector2(0, -8), anchor + Vector2(sin(progress * PI) * 4, 0), Color("77634a"), 2, true)
+			draw_colored_polygon(PackedVector2Array([anchor + Vector2(-7, 0), anchor + Vector2(7, 0), anchor + Vector2(5, 9), anchor + Vector2(-5, 9)]), Color("344842") if evolution == "" else Color("4b384c"))
+			for vent in [-4, 0, 4]: draw_circle(anchor + Vector2(vent, -2), 1.5 + pulse, Color("b58ebd") if evolution != "" else Color("74b9a6"))
+		"weapon.penance_winch":
+			var anchor = Vector2(24, 10)
+			draw_line(Vector2(11, 7), anchor, Color("74664d"), 5, true)
+			draw_circle(anchor, 8, Color("8a7048"))
+			draw_circle(anchor, 3, INK)
+			var extension = 7.0 * maxf(readiness, pulse)
+			draw_line(anchor, anchor + Vector2(9 + extension, -5), Color("d6b16d"), 4, true)
+			if rank >= 3: draw_colored_polygon(PackedVector2Array([anchor + Vector2(3, -8), anchor + Vector2(8, -5), anchor + Vector2(2, -2)]), PAPER)
+			if evolution == "evolution.long_hand": draw_line(anchor + Vector2(8, -5), anchor + Vector2(15 + extension, 3), GOLD, 4, true)
+		"weapon.welded_halo":
+			var anchor = Vector2(0, -27)
+			draw_line(Vector2(0, -16), anchor, Color("71806a"), 3, true)
+			draw_arc(anchor, 12, progress * PI, progress * PI + TAU * 0.82, 24, Color("a9e0b1"), 3, true)
+			draw_circle(anchor + Vector2.from_angle(progress * PI) * 12, 3 + pulse, PAPER)
+			if evolution == "evolution.halo_of_repairs": draw_arc(anchor, 17, -progress * PI, -progress * PI + TAU * 0.82, 24, Color("d6edbf"), 2, true)
 
 func gift_fx_active(gift_id: String) -> bool:
 	return fx.any(func(effect): return gift_event_id(effect) == gift_id)
@@ -1175,6 +1258,209 @@ func draw_bell_attack(effect: Dictionary, color: Color, progress: float, fade: f
 			var particle = origin + Vector2.from_angle(particle_angle) * radius
 			draw_line(particle, particle + Vector2.from_angle(particle_angle) * (5 + index % 3 * 3), Color(GOLD, alpha * 0.85), 2, true)
 
+func quadratic_point(start: Vector2, control: Vector2, finish: Vector2, amount: float) -> Vector2:
+	var first = start.lerp(control, amount)
+	var second = control.lerp(finish, amount)
+	return first.lerp(second, amount)
+
+func draw_procession_attack(effect: Dictionary, color: Color, progress: float, fade: float):
+	var origin: Vector2 = effect.from
+	var contacts: Array = [effect.to]
+	if effect.shape == "parade": contacts = [effect.to, effect.to2] + effect.get("points", [])
+	elif effect.get("targets", []).size() > 1: contacts = effect.targets
+	var commit = clampf((progress - 0.10) / 0.44, 0.0, 1.0)
+	var ring_alpha = fade * smoothstep(0.05, 0.24, progress)
+	var inner_range = float(effect.get("inner_range", effect.range))
+	draw_arc(origin, inner_range, -PI / 2, -PI / 2 + TAU * maxf(0.04, commit), 48, Color(color, ring_alpha * 0.35), 2, true)
+	if effect.shape == "parade":
+		draw_arc(origin, float(effect.range), PI / 2, PI / 2 - TAU * maxf(0.04, commit), 64, Color(GOLD if effect.get("extended", false) else color, ring_alpha * 0.42), 3, true)
+	for index in range(contacts.size()):
+		var contact: Vector2 = origin.lerp(contacts[index], ease(commit, -1.6))
+		draw_gear(contact, 10 if effect.shape == "parade" else 8, GOLD if index >= 2 else color, progress * TAU * (-1 if index % 2 else 1))
+		if progress > 0.38:
+			draw_arc(contact, 9 + progress * 9, 0, TAU, 18, Color(PAPER, fade * 0.65), 2, true)
+		if not reduced_fx and progress > 0.42:
+			for filing in range(2):
+				var d = Vector2.from_angle(index + filing * PI) * (7 + progress * 12)
+				draw_line(contact + d * 0.5, contact + d, Color(GOLD, fade), 2, true)
+	if effect.shape == "parade" and effect.get("extended", false):
+		for flag_angle in [0.0, PI]:
+			var pole = origin + Vector2.from_angle(flag_angle) * float(effect.range)
+			draw_line(pole, pole + Vector2(0, -16), Color(PAPER, fade), 2, true)
+			draw_colored_polygon(PackedVector2Array([pole + Vector2(0, -16), pole + Vector2(11, -12), pole + Vector2(0, -8)]), Color(GOLD, fade * 0.75))
+
+func draw_candle_attack(effect: Dictionary, color: Color, progress: float, fade: float):
+	var targets: Array = effect.get("targets", [])
+	if targets.is_empty(): targets = [effect.to]
+	var travel = clampf((progress - 0.12) / (0.42 if effect.shape == "funeral_shots" else 0.30), 0.0, 1.0)
+	for index in range(targets.size()):
+		var target: Vector2 = targets[index]
+		var direction = (target - effect.from).normalized()
+		var side = direction.orthogonal()
+		var control = effect.from.lerp(target, 0.5) + side * ((index - (targets.size() - 1) * 0.5) * 24.0 - 18.0)
+		var points = PackedVector2Array()
+		for step in range(9):
+			var amount = minf(travel, step / 8.0)
+			points.append(quadratic_point(effect.from, control, target, amount))
+			if amount >= travel: break
+		if points.size() > 1: draw_polyline(points, Color(color, fade * 0.65), 2 if effect.shape == "shot" else 3, true)
+		var head = quadratic_point(effect.from, control, target, travel)
+		draw_circle(head, 4 + (2 if effect.shape == "funeral_shots" else 0), Color(PAPER, fade))
+		draw_circle(head - direction * 5, 3, Color(color, fade * 0.72))
+		if not reduced_fx and travel > 0.1:
+			for ember in range(3):
+				var trail_amount = maxf(0.0, travel - 0.05 * (ember + 1))
+				draw_circle(quadratic_point(effect.from, control, target, trail_amount), 2, Color("7f628e", fade * (0.75 - ember * 0.16)))
+		if travel >= 0.98:
+			draw_arc(target, 7 + progress * 10, -PI * 0.75, PI * 0.75, 16, Color(color, fade), 2, true)
+
+func draw_cable_attack(effect: Dictionary, color: Color, progress: float, fade: float):
+	var origin: Vector2 = effect.from
+	var direction = (effect.to - origin).normalized()
+	if direction == Vector2.ZERO: direction = Vector2.RIGHT
+	var commit = clampf((progress - 0.10) / 0.38, 0.0, 1.0)
+	if effect.shape == "lattice":
+		var points: Array = effect.get("points", [])
+		if points.size() != 3: return
+		for index in range(3):
+			var anchor: Vector2 = points[index]
+			var stamp = clampf(progress * 4.0 - index * 0.22, 0.0, 1.0)
+			draw_arc(anchor, 8 + stamp * 5, 0, TAU * stamp, 18, Color(PAPER, fade * stamp), 2, true)
+		var edge_progress = clampf((progress - 0.24) / 0.42, 0.0, 1.0)
+		for index in range(3):
+			var start: Vector2 = points[index]
+			var finish: Vector2 = points[(index + 1) % 3]
+			var local_progress = clampf(edge_progress * 3.0 - index, 0.0, 1.0)
+			draw_line(start, start.lerp(finish, local_progress), Color(color, fade * 0.62), 7, true)
+			draw_line(start, start.lerp(finish, local_progress), Color(PAPER, fade * 0.7), 2, true)
+		return
+	var half_width = float(effect.get("width", 0.8))
+	var angle = direction.angle()
+	var sweep_angle = lerpf(angle - half_width, angle + half_width, ease(commit, -1.5))
+	var hook = origin + Vector2.from_angle(sweep_angle) * float(effect.range)
+	draw_arc(origin, float(effect.range), angle - half_width, sweep_angle, 28, Color(color, fade * 0.7), 5, true)
+	draw_line(origin, hook, Color(color, fade * 0.22), 2, true)
+	draw_line(hook, hook - direction.rotated(half_width) * 10 + direction.orthogonal() * 7, Color(PAPER, fade), 3, true)
+	if progress > 0.48:
+		for tick in [0.32, 0.55, 0.78]:
+			var p = origin.lerp(hook, tick)
+			draw_line(p - direction.orthogonal() * 3, p + direction.orthogonal() * 3, Color(PAPER, fade * 0.72), 2, true)
+
+func draw_hymn_attack(effect: Dictionary, color: Color, progress: float, fade: float):
+	var origin: Vector2 = effect.from
+	var target: Vector2 = effect.to
+	var direction = (target - origin).normalized()
+	if direction == Vector2.ZERO: direction = Vector2.RIGHT
+	var side = direction.orthogonal()
+	var commit = clampf((progress - 0.10) / 0.24, 0.0, 1.0)
+	var width = 18.0 if effect.shape == "sermon" else maxf(4.0, float(effect.get("width", 6)))
+	if progress < 0.22:
+		for tine in [-1, 1]: draw_line(origin + side * tine * 10, origin + direction * 24 + side * tine * (3 + 7 * (1.0 - commit)), Color(color, 0.35 + commit * 0.45), 2, true)
+	var pulse_count = 4 if effect.shape == "sermon" else 3
+	for pulse in range(pulse_count):
+		var offset = side * (pulse - (pulse_count - 1) * 0.5) * width / maxf(1.0, pulse_count - 1.0)
+		var alpha = fade * (0.26 + 0.18 * ((pulse + int(progress * 12)) % 2))
+		draw_line(origin + offset, origin.lerp(target, commit) + offset, Color(color, alpha), 3 if effect.shape == "sermon" else 2, true)
+	if effect.shape == "sermon":
+		draw_line(origin, origin.lerp(target, commit), Color(color, fade * 0.12), width, true)
+		for marker in [0.28, 0.58, 0.86]:
+			if commit >= marker:
+				var p = origin.lerp(target, marker)
+				draw_line(p - side * 8, p + side * 8, Color(PAPER, fade * 0.75), 2, true)
+
+func draw_mortar_attack(effect: Dictionary, color: Color, progress: float, fade: float):
+	var origin: Vector2 = effect.from
+	var target: Vector2 = effect.to
+	var travel = clampf((progress - 0.10) / 0.42, 0.0, 1.0)
+	var direction = (target - origin).normalized()
+	if direction == Vector2.ZERO: direction = Vector2.RIGHT
+	var control = origin.lerp(target, 0.5) + direction.orthogonal() * -90.0
+	var path = PackedVector2Array()
+	for step in range(13): path.append(quadratic_point(origin, control, target, step / 12.0))
+	draw_polyline(path, Color(color, fade * 0.22), 1, true)
+	var shell = quadratic_point(origin, control, target, travel)
+	draw_colored_polygon(PackedVector2Array([shell + Vector2(0, -5), shell + Vector2(5, 2), shell + Vector2(0, 5), shell + Vector2(-5, 2)]), Color(PAPER, fade))
+	if travel < 0.98: return
+	var radius = float(effect.get("range", 60)) * clampf((progress - 0.46) / 0.34, 0.0, 1.0)
+	var repair = effect.shape == "consecrated"
+	var seal_color = GREEN if repair else color
+	draw_circle(target, radius, Color(seal_color, fade * 0.09))
+	for side in range(4):
+		var a = target + Vector2.from_angle(side * PI / 2.0 + PI / 4.0) * radius
+		var b = target + Vector2.from_angle((side + 1) * PI / 2.0 + PI / 4.0) * radius
+		draw_line(a, b, Color(seal_color, fade * 0.88), 4, true)
+	if effect.shape == "benediction":
+		var inner = radius * 0.58
+		for side in range(4):
+			var a = target + Vector2.from_angle(side * PI / 2.0) * inner
+			var b = target + Vector2.from_angle((side + 1) * PI / 2.0) * inner
+			draw_line(a, b, Color(PAPER, fade * 0.74), 2, true)
+		for cardinal in range(4):
+			var d = Vector2.from_angle(cardinal * PI / 2.0)
+			draw_line(target + d * inner, target + d * radius, Color(GOLD, fade * 0.8), 3, true)
+	if not reduced_fx:
+		for index in range(8):
+			var d = Vector2.from_angle(index * TAU / 8.0) * radius
+			draw_line(target + d * 0.78, target + d, Color(GOLD, fade * 0.75), 2, true)
+
+func draw_censer_attack(effect: Dictionary, color: Color, progress: float, fade: float):
+	var center: Vector2 = effect.to if effect.shape == "ashen_censer" else effect.from
+	var radius = float(effect.range)
+	var bloom = ease(clampf((progress - 0.08) / 0.46, 0.0, 1.0), -1.6)
+	for layer in range(3 if not reduced_fx else 1):
+		var layer_radius = radius * bloom * (0.72 + layer * 0.14)
+		var layer_color = Color("b58ebd") if effect.shape == "ashen_censer" else color
+		draw_circle(center + Vector2(layer * 5 - 5, -layer * 3), layer_radius, Color(layer_color, fade * (0.045 + layer * 0.018)))
+		draw_arc(center, layer_radius, progress * (layer + 1), progress * (layer + 1) + PI * 1.45, 32, Color(layer_color, fade * 0.34), 2, true)
+	if effect.shape == "ashen_censer": draw_line(effect.from, center, Color(color, fade * 0.24), 2, true)
+	if not reduced_fx and bloom > 0.35:
+		for index in range(7):
+			var soot = center + Vector2.from_angle(index * TAU / 7.0 + progress) * radius * (0.25 + 0.55 * bloom)
+			draw_circle(soot, 2 + index % 2, Color("2f292c", fade * 0.62))
+
+func draw_winch_attack(effect: Dictionary, color: Color, progress: float, fade: float):
+	var origin: Vector2 = effect.from
+	var target: Vector2 = effect.to
+	var direction = (target - origin).normalized()
+	if direction == Vector2.ZERO: direction = Vector2.RIGHT
+	var side = direction.orthogonal()
+	var extend = clampf((progress - 0.08) / 0.34, 0.0, 1.0)
+	var retract = 1.0 - smoothstep(0.66, 1.0, progress)
+	var reach = extend * retract
+	if progress < 0.18:
+		for segment in range(5):
+			if segment % 2 == 0:
+				var a = origin.lerp(target, segment / 5.0)
+				var b = origin.lerp(target, (segment + 1) / 5.0)
+				draw_line(a, b, Color(color, 0.28), 2, true)
+	var head = origin.lerp(target, reach)
+	var elbows = 5 if effect.shape == "long_hand" else 3
+	for segment in range(elbows):
+		var a = origin.lerp(head, segment / float(elbows)) + side * (6 if segment % 2 else -6)
+		var b = origin.lerp(head, (segment + 1) / float(elbows)) + side * (6 if (segment + 1) % 2 else -6)
+		draw_line(a, b, Color(color, fade * 0.78), 7 if effect.shape == "long_hand" else 5, true)
+		draw_line(a, b, Color(PAPER, fade * 0.44), 2, true)
+	draw_line(head, head - direction * 10 + side * 8, Color(PAPER, fade), 3, true)
+	draw_line(head, head - direction * 10 - side * 8, Color(PAPER, fade), 3, true)
+	if effect.shape == "long_hand":
+		draw_line(origin + side * 13, head + side * 13, Color(color, fade * 0.16), 2, true)
+		draw_line(origin - side * 13, head - side * 13, Color(color, fade * 0.16), 2, true)
+
+func draw_halo_attack(effect: Dictionary, color: Color, progress: float, fade: float):
+	var origin: Vector2 = effect.from
+	var contacts: Array = [effect.to]
+	if effect.shape == "repair_halo": contacts.append(effect.to2)
+	var commit = clampf((progress - 0.10) / 0.34, 0.0, 1.0)
+	draw_arc(origin, 31, -PI / 2, -PI / 2 + TAU * commit, 32, Color(color, fade * 0.55), 3, true)
+	if effect.shape == "repair_halo": draw_arc(origin, 40, PI / 2, PI / 2 - TAU * commit, 36, Color(PAPER, fade * 0.42), 2, true)
+	for index in range(contacts.size()):
+		var contact: Vector2 = origin.lerp(contacts[index], ease(commit, -1.4))
+		draw_circle(contact, 6 + progress * 5, Color(color, fade * 0.22))
+		draw_arc(contact, 8 + progress * 7, 0, TAU, 18, Color(PAPER, fade * 0.78), 2, true)
+		if progress > 0.42: draw_line(contact, origin, Color("c9f2c8", fade * (0.75 if effect.shape == "repair_halo" else 0.4)), 3 if effect.shape == "repair_halo" else 2, true)
+	if effect.shape == "repair_halo" and progress > 0.52:
+		draw_arc(origin, 18 + progress * 12, 0, TAU, 24, Color(GREEN, fade * 0.72), 3, true)
+
 func draw_evolution_reconfiguration(effect: Dictionary, progress: float, fade: float):
 	var position: Vector2 = effect.get("position", sim.state.position)
 	var recipe = str(effect.get("recipe", ""))
@@ -1186,10 +1472,66 @@ func draw_evolution_reconfiguration(effect: Dictionary, progress: float, fade: f
 		for cardinal in range(4):
 			var marker = position + Vector2.from_angle(cardinal * PI / 2.0) * radius * 0.68
 			draw_arc(marker, 7, 0, TAU, 14, Color(PAPER, fade * 0.85), 2, true)
+	elif recipe == "evolution.maintenance_parade":
+		for ring_radius in [radius * 0.55, radius]: draw_arc(position, ring_radius, 0, TAU * progress, 36, Color(GOLD, fade * 0.75), 2, true)
+		for cardinal in range(4): draw_gear(position + Vector2.from_angle(cardinal * PI / 2.0 + progress) * radius * 0.75, 5, PAPER, progress * TAU)
+	elif recipe == "evolution.candle_unreturned":
+		for index in range(3):
+			var flame = position + Vector2((index - 1) * 13, -10 - progress * 26)
+			draw_circle(flame, 4, Color("cbb8ed", fade))
+	elif recipe == "evolution.contrition_lattice":
+		var points = [position + Vector2(0, -radius), position + Vector2(radius * 0.87, radius * 0.5), position + Vector2(-radius * 0.87, radius * 0.5)]
+		for index in range(3): draw_line(points[index], points[(index + 1) % 3], Color("81b8d0", fade * 0.8), 3, true)
+	elif recipe == "evolution.quiet_sermon":
+		draw_line(position + Vector2(-radius, 0), position + Vector2(radius, 0), Color("bdeff0", fade * 0.85), 8, true)
+		for offset in [-12, 12]: draw_line(position + Vector2(offset, -9), position + Vector2(offset, 9), Color(PAPER, fade), 2, true)
+	elif recipe == "evolution.workshop_benediction":
+		for side in range(4):
+			var a = position + Vector2.from_angle(side * PI / 2.0 + PI / 4.0) * radius * 0.72
+			var b = position + Vector2.from_angle((side + 1) * PI / 2.0 + PI / 4.0) * radius * 0.72
+			draw_line(a, b, Color(GREEN, fade * 0.85), 4, true)
+	elif recipe == "evolution.ashen_benediction":
+		draw_circle(position + Vector2(progress * 26, 0), radius * 0.7, Color("5b3f61", fade * 0.22))
+		draw_arc(position + Vector2(progress * 26, 0), radius * 0.7, 0, TAU, 32, Color("b58ebd", fade), 3, true)
+	elif recipe == "evolution.long_hand":
+		var elbow = position + Vector2(radius * 0.45, -radius * 0.25)
+		draw_line(position - Vector2(radius * 0.5, 0), elbow, Color(GOLD, fade), 7, true)
+		draw_line(elbow, position + Vector2(radius, radius * 0.18), Color(PAPER, fade * 0.85), 7, true)
+	elif recipe == "evolution.halo_of_repairs":
+		draw_arc(position, radius * 0.62, progress, progress + TAU * 0.82, 30, Color(GREEN, fade), 3, true)
+		draw_arc(position, radius, -progress, -progress + TAU * 0.82, 40, Color(PAPER, fade * 0.8), 2, true)
 	if not reduced_fx:
 		for index in range(10):
 			var spark_direction = Vector2.from_angle(index * TAU / 10.0 + progress)
 			draw_circle(position + spark_direction * (12 + progress * 40), 2, Color(GOLD, fade * 0.8))
+
+func draw_weapon_hit_aftermath(effect: Dictionary, progress: float, fade: float):
+	var position: Vector2 = effect.position
+	match str(effect.get("weapon", "")):
+		"weapon.procession_gear":
+			for tooth in range(4):
+				var d = Vector2.from_angle(tooth * PI / 2.0 + progress)
+				draw_line(position + d * 5, position + d * 10, Color("91c9b0", fade), 3, true)
+		"weapon.candle_nailer":
+			draw_line(position + Vector2(0, 5), position + Vector2(0, -4), Color("6f586f", fade), 2, true)
+			draw_circle(position + Vector2(0, -7), 3 + progress * 2, Color("cbb8ed", fade))
+		"weapon.cable_contrition":
+			draw_arc(position, 10 + progress * 4, -PI * 0.75, PI * 0.75, 16, Color("81b8d0", fade), 2, true)
+			for side in [-1, 1]: draw_line(position + Vector2(side * 8, -5), position + Vector2(side * 8, 5), Color(PAPER, fade * 0.7), 2, true)
+		"weapon.hymn_coil":
+			draw_line(position + Vector2(-8, -10), position + Vector2(8, -10), Color("8edce0", fade), 3, true)
+			if progress > 0.45: draw_line(position + Vector2(-5, -14), position + Vector2(5, -6), Color(PAPER, fade * 0.7), 2, true)
+		"weapon.altar_mortar":
+			var size = 7 + progress * 5
+			draw_rect(Rect2(position - Vector2(size, size), Vector2(size * 2, size * 2)), Color("e89765", fade), false, 2)
+		"weapon.foundry_censer":
+			draw_circle(position + Vector2(0, -progress * 12), 5 + progress * 3, Color("293431", fade * 0.55))
+		"weapon.penance_winch":
+			draw_line(position + Vector2(-7, -7), position + Vector2(7, 7), Color("d6b16d", fade), 3, true)
+			draw_line(position + Vector2(7, -7), position + Vector2(-7, 7), Color(PAPER, fade * 0.65), 2, true)
+		"weapon.welded_halo":
+			draw_line(position + Vector2(-9, 0), position + Vector2(9, 0), Color("a9e0b1", fade), 3, true)
+			for stitch in [-6, 0, 6]: draw_line(position + Vector2(stitch, -4), position + Vector2(stitch, 4), Color(PAPER, fade * 0.75), 2, true)
 
 func draw_ellipse_shadow(p: Vector2, radii: Vector2):
 	# Local circle shadow keeps the silhouette readable without physics ownership.
@@ -1296,14 +1638,19 @@ func draw_effect(e):
 					else:
 						draw_line(e.from, e.to, color, 5 if e.shape == "rail" else 2, true)
 						if e.shape == "rail": draw_line(e.from, e.to, Color(1, 0.98, 0.85, fade), 2, true)
-				"shot", "beam":
-					var line_targets = e.get("targets", []) if e.shape == "shot" else [e.to]
-					for line_target in line_targets:
-						draw_line(e.from, line_target, color, 5 if e.shape == "beam" else 2, true)
+				"shot":
+					if str(e.get("weapon", "")) == "weapon.candle_nailer": draw_candle_attack(e, color, progress, fade)
+					else:
+						for line_target in e.get("targets", []): draw_line(e.from, line_target, color, 2, true)
+				"beam":
+					if str(e.get("weapon", "")) == "weapon.hymn_coil": draw_hymn_attack(e, color, progress, fade)
+					else: draw_line(e.from, e.to, color, 5, true)
 				"blast":
-					draw_line(e.from, e.to, Color(color, fade * 0.4), 1)
-					draw_circle(e.to, e.range * (1.0 - fade * 0.35), Color(color, fade * 0.2))
-					draw_arc(e.to, e.range * (1.0 - fade * 0.35), 0, TAU, 32, color, 3)
+					if str(e.get("weapon", "")) == "weapon.altar_mortar": draw_mortar_attack(e, color, progress, fade)
+					else:
+						draw_line(e.from, e.to, Color(color, fade * 0.4), 1)
+						draw_circle(e.to, e.range * (1.0 - fade * 0.35), Color(color, fade * 0.2))
+						draw_arc(e.to, e.range * (1.0 - fade * 0.35), 0, TAU, 32, color, 3)
 				"cone":
 					if str(e.get("weapon", "")) == "weapon.bell_last_shift": draw_bell_attack(e, color, progress, fade)
 					else:
@@ -1311,26 +1658,29 @@ func draw_effect(e):
 						var half_width = float(e.get("width", 0.8))
 						draw_arc(e.from, e.range * (1 - fade * 0.4), angle - half_width, angle + half_width, 24, color, 3, true)
 				"tether":
-					var angle = (e.to - e.from).angle()
-					var half_width = float(e.get("width", 0.8))
-					draw_arc(e.from, e.range * (1 - fade * 0.4), angle - half_width, angle + half_width, 24, color, 3, true)
+					if str(e.get("weapon", "")) == "weapon.cable_contrition": draw_cable_attack(e, color, progress, fade)
+					else:
+						var angle = (e.to - e.from).angle()
+						var half_width = float(e.get("width", 0.8))
+						draw_arc(e.from, e.range * (1 - fade * 0.4), angle - half_width, angle + half_width, 24, color, 3, true)
 				"orbit":
-					for contact in e.get("targets", [e.to]): draw_arc(contact, 23 * (2 - fade), 0, TAU, 20, color, 2)
+					if str(e.get("weapon", "")) == "weapon.procession_gear": draw_procession_attack(e, color, progress, fade)
+					else:
+						for contact in e.get("targets", [e.to]): draw_arc(contact, 23 * (2 - fade), 0, TAU, 20, color, 2)
 				"censer":
-					draw_circle(e.from, e.range, Color(color, fade * 0.06))
-					draw_arc(e.from, e.range * (1.0 - fade * 0.08), 0, TAU, 44, color, 3)
+					if str(e.get("weapon", "")) == "weapon.foundry_censer": draw_censer_attack(e, color, progress, fade)
+					else:
+						draw_circle(e.from, e.range, Color(color, fade * 0.06))
+						draw_arc(e.from, e.range * (1.0 - fade * 0.08), 0, TAU, 44, color, 3)
 				"winch":
-					var delta = e.to - e.from
-					for segment in range(3):
-						var a = e.from + delta * segment / 3.0
-						var b = e.from + delta * (segment + 0.82) / 3.0
-						draw_line(a, b, color, 5, true)
-					draw_line(e.to + Vector2(-7, -6), e.to, PAPER, 3)
-					draw_line(e.to + Vector2(-7, 6), e.to, PAPER, 3)
+					if str(e.get("weapon", "")) == "weapon.penance_winch": draw_winch_attack(e, color, progress, fade)
+					else: draw_line(e.from, e.to, color, 5, true)
 				"halo":
-					draw_arc(e.from, 31, 0, TAU, 28, Color(color, fade * 0.65), 2)
-					draw_line(e.from, e.to, Color(0.75, 1.0, 0.78, fade), 2, true)
-					draw_arc(e.to, 11, 0, TAU, 16, color, 2)
+					if str(e.get("weapon", "")) == "weapon.welded_halo": draw_halo_attack(e, color, progress, fade)
+					else:
+						draw_arc(e.from, 31, 0, TAU, 28, Color(color, fade * 0.65), 2)
+						draw_line(e.from, e.to, Color(0.75, 1.0, 0.78, fade), 2, true)
+						draw_arc(e.to, 11, 0, TAU, 16, color, 2)
 				"radial":
 					if str(e.get("weapon", "")) == "weapon.bell_last_shift": draw_bell_attack(e, color, progress, fade)
 					else:
@@ -1338,43 +1688,28 @@ func draw_effect(e):
 						draw_arc(e.from, e.range * (1.0 - fade * 0.2), 0, TAU, 64, color, 6, true)
 						for i in range(4): draw_arc(e.from + Vector2.from_angle(i * PI / 2) * e.range * 0.55, 13, 0, TAU, 18, PAPER, 2)
 				"ashen_censer":
-					draw_line(e.from, e.to, Color(color, fade * 0.25), 2, true)
-					draw_circle(e.to, e.range, Color(0.36, 0.20, 0.42, fade * 0.12))
-					draw_arc(e.to, e.range, 0, TAU, 48, Color(Color("b58ebd"), fade), 3)
+					draw_censer_attack(e, color, progress, fade)
 				"long_hand":
-					draw_line(e.from, e.to, Color(color, fade * 0.24), 13, true)
-					for segment in range(5): draw_line(e.from.lerp(e.to, segment / 5.0), e.from.lerp(e.to, (segment + 0.72) / 5.0), color, 4, true)
+					draw_winch_attack(e, color, progress, fade)
 				"repair_halo":
-					draw_arc(e.from, 39, 0, TAU, 32, Color(color, fade * 0.7), 3)
-					draw_line(e.to, e.to2, Color(0.78, 1.0, 0.8, fade), 3, true)
-					draw_circle(e.to, 8, Color(color, fade * 0.3))
-					draw_circle(e.to2, 8, Color(color, fade * 0.3))
+					draw_halo_attack(e, color, progress, fade)
 				"funeral_shots":
-					for target in e.get("targets", []):
-						draw_line(e.from, target, Color(Color("cbb8ed"), fade), 3, true)
-						draw_circle(target, 6 + 5 * (1.0 - fade), Color(0.64, 0.48, 0.78, fade * 0.25))
+					draw_candle_attack(e, color, progress, fade)
 				"sermon":
-					draw_line(e.from, e.to, Color(0.56, 0.86, 0.88, fade * 0.16), 18, true)
-					draw_line(e.from, e.to, Color(Color("bdeff0"), fade), 3, true)
+					draw_hymn_attack(e, color, progress, fade)
 				"benediction", "consecrated":
-					draw_line(e.from, e.to, Color(color, fade * 0.35), 2, true)
-					draw_circle(e.to, e.range, Color(0.72, 0.85, 0.60, fade * 0.10))
-					draw_arc(e.to, e.range, 0, TAU, 40, GREEN if e.shape == "consecrated" else color, 4)
+					draw_mortar_attack(e, color, progress, fade)
 				"parade":
-					draw_arc(e.from, e.inner_range, 0, TAU, 48, Color(color, fade * 0.28), 2)
-					draw_arc(e.from, e.range, 0, TAU, 64, Color(GOLD if e.get("extended", false) else color, fade * 0.32), 3)
-					for contact in [e.to, e.to2] + e.get("points", []): draw_circle(contact, 9, Color(color, fade * 0.4))
+					draw_procession_attack(e, color, progress, fade)
 				"lattice":
-					var points = e.get("points", [])
-					if points.size() == 3:
-						for index in range(3): draw_line(points[index], points[(index + 1) % 3], Color(color, fade * 0.42), 7, true)
-						for point in points: draw_circle(point, 6, Color(PAPER, fade * 0.7))
+					draw_cable_attack(e, color, progress, fade)
 		"charge": draw_line(e.from, e.to, Color(0.9, 0.8, 0.5, fade * 0.35), 1)
 		"hit", "death":
-			var particle_count = 2 if reduced_fx else (7 if str(e.get("weapon", "")) in ["weapon.nailer_small_mercies", "weapon.bell_last_shift"] else 4)
+			var particle_count = 2 if reduced_fx else (7 if str(e.get("weapon", "")) != "" else 4)
 			for i in range(particle_count):
 				var d = Vector2.from_angle(i * TAU / particle_count + e.tick)
 				draw_line(e.position + d * 3, e.position + d * (7 + (1 - fade) * 13), color, 2)
+			if e.kind == "hit": draw_weapon_hit_aftermath(e, progress, fade)
 			if e.kind == "hit" and str(e.get("weapon", "")) == "weapon.nailer_small_mercies" and progress > 0.35:
 				draw_line(e.position + Vector2(-5, 0), e.position + Vector2(5, 0), Color(PAPER, fade), 2, true)
 				draw_line(e.position + Vector2(0, -5), e.position + Vector2(0, 5), Color(PAPER, fade), 2, true)

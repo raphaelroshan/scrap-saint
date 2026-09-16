@@ -26,12 +26,14 @@ func add_enemy(id: String, position: Vector2, hp = 500.0):
 	return enemy
 
 func configure(weapons: Array, enemies: Array):
+	game.reduced_fx = false
 	game.sim.start(0, 147, "optional")
 	game.sim.state.wave = 5
 	game.sim.state.position = Vector2(550, 500)
 	game.sim.state.weapons = weapons
 	game.sim.state.evolutions = weapons.map(func(weapon): return str(weapon.get("evolution", ""))).filter(func(id): return id != "")
 	game.sim.state.evolved = not game.sim.state.evolutions.is_empty()
+	game.sim.state.parade_until = 240 if "evolution.maintenance_parade" in game.sim.state.evolutions else 0
 	for enemy_data in enemies:
 		add_enemy(enemy_data[0], game.sim.state.position + enemy_data[1])
 	game.sim.events.clear()
@@ -41,7 +43,8 @@ func configure(weapons: Array, enemies: Array):
 	for event in game.sim.events: game.present(event)
 
 func save_frame(filename: String, label: String, elapsed_ms: int):
-	game.capture_label = "FIXTURE / P18 / " + label
+	var packet = "P19" if filename.begins_with("P19_") else "P18"
+	game.capture_label = "FIXTURE / %s / %s" % [packet, label]
 	game.visual_clock_override = 1000 + elapsed_ms
 	game.build_ui()
 	game.queue_redraw()
@@ -95,7 +98,53 @@ func capture():
 	game.reduced_fx = true
 	await save_frame("P18_REDUCED_OVERLAP.png", "REDUCED FX OVERLAP", 185)
 
+	configure(
+		[game.sim.make_weapon("weapon.procession_gear", 3), game.sim.make_weapon("weapon.foundry_censer", 3), game.sim.make_weapon("weapon.welded_halo", 3)],
+		[["enemy.scrap_mite", Vector2(82, 0)], ["enemy.rivet_hound", Vector2(-82, 0)], ["enemy.scrap_mite", Vector2(55, 55)]]
+	)
+	await save_frame("P19_PERSISTENT_BASES.png", "PERSISTENT BASES", 205)
+
+	configure(
+		[evolved_weapon("weapon.procession_gear", "evolution.maintenance_parade"), evolved_weapon("weapon.foundry_censer", "evolution.ashen_benediction"), evolved_weapon("weapon.welded_halo", "evolution.halo_of_repairs")],
+		[["enemy.scrap_mite", Vector2(84, 0)], ["enemy.rivet_hound", Vector2(-84, 0)], ["enemy.scrap_mite", Vector2(60, 60)], ["enemy.rivet_hound", Vector2(-58, -60)]]
+	)
+	game.sim.state.parade_until = 240
+	await save_frame("P19_PERSISTENT_EVOLUTIONS.png", "PERSISTENT EVOLUTIONS", 330)
+
+	configure(
+		[game.sim.make_weapon("weapon.candle_nailer", 3), game.sim.make_weapon("weapon.cable_contrition", 3), game.sim.make_weapon("weapon.hymn_coil", 3), game.sim.make_weapon("weapon.penance_winch", 3)],
+		[["enemy.choir_drone", Vector2(145, -18), 500.0], ["enemy.rust_pilgrim", Vector2(245, 8), 600.0], ["enemy.forklift_brute", Vector2(360, 18), 800.0], ["enemy.rivet_hound", Vector2(120, 75), 500.0]]
+	)
+	await save_frame("P19_LINKED_BASES.png", "LINKED BASES", 225)
+
+	configure(
+		[evolved_weapon("weapon.candle_nailer", "evolution.candle_unreturned"), evolved_weapon("weapon.cable_contrition", "evolution.contrition_lattice"), evolved_weapon("weapon.hymn_coil", "evolution.quiet_sermon"), evolved_weapon("weapon.penance_winch", "evolution.long_hand")],
+		[["enemy.choir_drone", Vector2(145, -22), 500.0], ["enemy.rust_pilgrim", Vector2(250, 4), 600.0], ["enemy.forklift_brute", Vector2(370, 20), 800.0], ["enemy.rivet_hound", Vector2(175, 88), 500.0]]
+	)
+	await save_frame("P19_LINKED_EVOLUTIONS.png", "LINKED EVOLUTIONS", 350)
+
+	configure(
+		[game.sim.make_weapon("weapon.altar_mortar", 3)],
+		[["enemy.scrap_mite", Vector2(235, -16), 500.0], ["enemy.rivet_hound", Vector2(255, 20), 500.0], ["enemy.forklift_brute", Vector2(275, 0), 800.0]]
+	)
+	await save_frame("P19_MORTAR_BASE.png", "MORTAR BASE", 500)
+
+	configure(
+		[evolved_weapon("weapon.altar_mortar", "evolution.workshop_benediction")],
+		[["enemy.scrap_mite", Vector2(235, -16), 500.0], ["enemy.rivet_hound", Vector2(255, 20), 500.0], ["enemy.forklift_brute", Vector2(275, 0), 800.0]]
+	)
+	await save_frame("P19_WORKSHOP_BENEDICTION.png", "WORKSHOP BENEDICTION", 525)
+
+	configure(
+		[evolved_weapon("weapon.procession_gear", "evolution.maintenance_parade"), evolved_weapon("weapon.candle_nailer", "evolution.candle_unreturned"), evolved_weapon("weapon.hymn_coil", "evolution.quiet_sermon"), evolved_weapon("weapon.altar_mortar", "evolution.workshop_benediction")],
+		[["enemy.choir_drone", Vector2(140, -22), 500.0], ["enemy.scrap_mite", Vector2(88, 0), 500.0], ["enemy.rust_pilgrim", Vector2(240, 10), 600.0], ["enemy.forklift_brute", Vector2(330, 30), 800.0]]
+	)
+	game.sim.state.parade_until = 240
+	await save_frame("P19_FULL_OVERLAP.png", "FOUR-FAMILY OVERLAP", 400)
+	game.reduced_fx = true
+	await save_frame("P19_REDUCED_OVERLAP.png", "REDUCED FOUR-FAMILY", 400)
+
 	game.queue_free()
 	await process_frame
-	print("P18 weapon-animation fixtures: configured executable states, seed147, Godot %s, 1280x800; not human playtests" % Engine.get_version_info().string)
+	print("P18/P19 weapon-animation fixtures: configured executable states, seed147, Godot %s, 1280x800; not human playtests" % Engine.get_version_info().string)
 	quit()
