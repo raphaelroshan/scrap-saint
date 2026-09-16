@@ -14,6 +14,7 @@ The deterministic simulation continues to own readiness, target selection, hit g
 - `tests/test_weapon_presentation.gd`
 - `tests/capture_weapon_animation.gd`
 - `tests/README.md`
+- `docs/weapon_evolution_trait_animation_map.md`
 - `docs/runtime_status.md`
 - `docs/verification_0_1.md`
 - `docs/task_packets/complete_weapon_animation_families.md`
@@ -38,6 +39,16 @@ The deterministic simulation continues to own readiness, target selection, hit g
 ## Screenshot states and provenance
 
 Capture configured executable states with Godot 4.5.1, 1280×800, seed 147 under `artifacts/weapon-animation`: persistent base families; persistent Evolutions; linked base families; linked Evolutions; Mortar/Benediction; and a four-family overlap in full and reduced-effects modes. Each image must show the exact build and a `FIXTURE / P19` label. Inspect every image and record a scored rubric for family recognition, base/Evolution distinction, target/area readability, overlap hierarchy, reduced-effects parity, and palette coherence.
+
+## Evidence recorded — 2026-09-16
+
+Clean commit `0209b7efd73131f6ac4a417915a826ca33dda5d7` was captured with Godot 4.5.1 stable, OpenGL Compatibility on Apple M1 Pro, at 1280×800 and seed 147. Eight configured executable P19 states were inspected: persistent bases, persistent Evolutions, linked bases, linked Evolutions, base Mortar, Workshop Benediction, full four-family overlap and reduced-effects overlap.
+
+Procession/Parade now read through moving gears, counter-rotating routes and repair-extension flags; Censer/Ashen through chain tension and layered offset smoke; Halo/Repairs through closing gimbals and stitch circuits. Candle/Unreturned uses independently curving violet shots and wick aftermath; Cable/Lattice uses a sweep hook or staged three-anchor boundary; Hymn/Sermon uses converging forks and separated cyan pulses; Winch/Long Hand uses unfolding segmented arms and a visible hook; Mortar/Benediction uses an arcing shell and square industrial seals. Every family also has a persistent Saint-mounted mechanism and family-specific impact residue.
+
+Rendered-evidence rubric (5-point internal review): family recognition 4, base/Evolution distinction 4, target/area readability 4, overlap hierarchy 4, reduced-effects parity 4, palette coherence 4. The full overlap remains dense by design, but the large Parade ring, narrow Sermon lane, curved funeral shots and square Benediction seal remain separable. Reduced effects removes smoke layers, filings, trails and secondary sparks while preserving attack boundaries and targets.
+
+All 878 Godot assertions and thirty-one Python checks pass. The normal-economy matrix wins 12/12, frame/Blessing/first-route 24/24, assembly 4/4, Evolutions 10/10 and Gift-specific routes 4/4. No script-load, resource-load or assertion errors appear in the iteration logs.
 
 ## Remaining limitation
 

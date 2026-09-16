@@ -163,3 +163,15 @@ Six configured executable captures in `artifacts/weapon-animation` were rendered
 Rendered-evidence rubric (5-point internal review): physical authorship 4, base/Evolution distinction 5, geometry readability 5, overlap hierarchy 4, reduced-effects parity 4, palette/coherence 4. This is still-image and deterministic-policy evidence, not a human assessment of feel. The principal limitation is unverified 1× anticipation/recovery timing; eight other weapon families retain their earlier presentation treatment.
 
 Exactly one next task: run a human-controlled 1× Nailer/Bell session across Ranks I–III and both Evolutions, then tune anticipation and persistence only from observed motion readability.
+
+## P19 complete weapon-animation catalogue, 2026-09-16
+
+The remaining eight base/Evolution families now render through deterministic presentation-only timelines. Persistent-contact weapons have moving physical contacts and repair/smoke aftermath; target-link weapons stage locks, travel, tension and recovery; Mortar now exposes its shell arc and differentiated ground seals. Family-specific Saint mounts, rank silhouette cues and all ten Evolution reconfiguration motifs are present. Reduced effects retains authoritative area/target communication while suppressing decorative layers.
+
+The complete suite passes 878 Godot assertions plus thirty-one Python manifest checks. Thirty-six presentation checks cover every base/Evolution attack duration, all eight newly animated mount selectors, simulation-hash isolation and common-clock expiry. The normal-economy matrix wins 12/12, the frame/Blessing/first-route matrix 24/24, assembly 4/4, Evolutions 10/10 and Gift-specific routes 4/4. No script-load, resource-load or assertion failures appear in the full iteration logs.
+
+Eight configured executable P19 captures under `artifacts/weapon-animation` were rendered from clean commit `0209b7efd73131f6ac4a417915a826ca33dda5d7` with Godot 4.5.1 stable, OpenGL Compatibility on Apple M1 Pro, 1280×800 and seed 147. Inspection covers persistent bases/Evolutions, linked bases/Evolutions, Mortar/Benediction and four-family overlap at full and reduced effects.
+
+Rendered-evidence rubric (5-point internal review): family recognition 4, base/Evolution distinction 4, target/area readability 4, overlap hierarchy 4, reduced-effects parity 4, palette coherence 4. These are configured stills and deterministic policies, not human evidence. Audio impact, normal-speed response and recognition during movement remain the principal limitation.
+
+Exactly one next task: run an uncoached human 1× combat session using two four-weapon builds spanning all ten families, then tune only observed timing, overlap and recognition failures.
