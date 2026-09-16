@@ -59,6 +59,10 @@ The first arena should be a compact industrial workshop with three readable laye
 
 Atmosphere must not compete with enemy silhouettes or attack telegraphs. Keep background motion slow and low contrast.
 
+## Title and loading tableau
+
+The WIP title-to-game art direction centres a six-armed bronze maintenance saint meditating beneath a Bodhi tree. Four arms carry distinct repair tools and two remain in its lap. On Play, its eyes open and white clouds part to reveal the industrial city in crisis. The full composition, motion, accessibility, layered-asset plan, and generation prompt are specified in [`saint_loading_tableau.md`](saint_loading_tableau.md). This is design direction, not a shipped or generated asset.
+
 ## Animation feel
 
 The Saint should communicate personality through very short state animations:
