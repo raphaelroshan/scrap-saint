@@ -40,6 +40,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Acquisition tests failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Evolution tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_weapon_ranks.gd 2>&1 | Tee-Object -FilePath "$bundlePath\weapon-ranks.log"
 if ($LASTEXITCODE -ne 0) { throw 'Weapon rank tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_weapon_presentation.gd 2>&1 | Tee-Object -FilePath "$bundlePath\weapon-presentation.log"
+if ($LASTEXITCODE -ne 0) { throw 'Weapon presentation tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_gift_breadth.gd 2>&1 | Tee-Object -FilePath "$bundlePath\gift-breadth.log"
 if ($LASTEXITCODE -ne 0) { throw 'Gift breadth tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/run_playthroughs.gd -- --optional 2>&1 | Tee-Object -FilePath "$bundlePath\playthroughs.log"
@@ -62,6 +64,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Assembly capture failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Evolution capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_weapon_ranks.gd -- --capture-dir="$bundlePath" 2>&1 | Tee-Object -FilePath "$bundlePath\weapon-rank-capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Weapon rank capture failed' }
+& $GodotBin --path $projectRoot --script res://tests/capture_weapon_animation.gd -- --capture-dir="$projectRoot\artifacts\weapon-animation" 2>&1 | Tee-Object -FilePath "$bundlePath\weapon-animation-capture.log"
+if ($LASTEXITCODE -ne 0) { throw 'Weapon animation capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_gift_breadth.gd 2>&1 | Tee-Object -FilePath "$bundlePath\gift-breadth-capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Gift breadth capture failed' }
 $commitId = git -C $projectRoot rev-parse HEAD
