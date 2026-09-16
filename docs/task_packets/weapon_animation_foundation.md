@@ -41,6 +41,14 @@ The deterministic simulation continues to own weapon readiness, target selection
 
 Capture configured executable states at Godot 4.5.1, 1280×800, seed 147 in `artifacts/weapon-animation`: Nailer commit, Mercy Rail resolve, Bell commit, Great Toll resolve, Nailer/Bell overlap, and the same overlap with reduced effects. Every image must show the exact build and `FIXTURE / P18` label. Inspect all six and record the visual rubric here.
 
+## Evidence recorded — 2026-09-16
+
+Commit `1fe4efd991429b29aff2e0973a70cc6920fb3ce5` was captured from a clean worktree with Godot 4.5.1 stable, OpenGL Compatibility on Apple M1 Pro, at 1280×800 and seed 147. All six configured executable states were inspected. Nailer now reads as a shoulder-mounted industrial tool with a traveling fastener, staged aim line and deterministic brass discharge. Mercy Rail widens that language into a split, braced lane. Bell visibly compresses its mounted striker before expanding cone pressure; Great Toll replaces it with a full radial brass boundary and cardinal impacts. The overlap fixture keeps straight-line and cone silhouettes separable, while reduced effects preserves boundaries and hit/status cues without decorative sparks.
+
+Rendered-evidence rubric (5-point internal review): physical authorship 4, base/Evolution distinction 5, geometry readability 5, overlap hierarchy 4, reduced-effects parity 4, palette/coherence 4. These scores describe configured stills, not player preference or timing feel.
+
+The complete repository loop passes 853 Godot assertions and thirty-one Python manifest checks. The normal-economy matrix wins 12/12, the frame/Blessing/first-route matrix 24/24, assembly 4/4, Evolutions 10/10 and Gift-specific routes 4/4. Presentation-state tests additionally verify that rendering does not mutate the simulation hash.
+
 ## Remaining limitation
 
 Configured stills can prove geometry and layering, not whether the timing feels responsive in a human-controlled run. Other weapon families still lack the complete four-beat mechanism treatment.

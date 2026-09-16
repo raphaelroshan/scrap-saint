@@ -201,3 +201,15 @@ Route eligibility, two-leg history, objective state, transient boss locks, compl
 Current integrated evidence passes 761 Godot assertions plus seventeen Python manifest checks on Godot 4.5.1. The normal-economy matrix wins 12/12, the three-frame × four-Blessing × two-first-route matrix wins 24/24, all four controlled assembly paths finish, and all ten Evolution policies complete their two-leg route. Chapter and Evolution fixtures include all three terminal objective/boss states and the two final Evolution geometries at 1280×800, seed 147, Compatibility renderer on Apple M1 Pro. These are deterministic policies and configured captures, not human enjoyment evidence.
 
 Exactly one next task: run uncoached 1× sessions through all four route chains and tune only observed objective comprehension, road-choice value and boss reaction-time friction.
+
+## P18 — Nailer and Bell weapon-animation foundation
+
+Nailer/Mercy Rail and Bell/Great Toll now have physical mounts and deterministic, event-driven presentation phases without changing authoritative combat. Nailer fires a traveling fastener along its existing line with recoil, a staged aim trace and brass discharge. Mercy Rail resolves as a wider split, braced lane. Bell compresses its mounted striker before releasing its existing cone; Rank III adds a secondary pressure arc. Great Toll replaces the cone with a full radial boundary, cardinal impacts and a visible Evolution reconfiguration beat. Reduced-effects mode keeps attack boundaries, endpoints and status cues while removing decorative particle density.
+
+All 853 Godot assertions and thirty-one Python manifest checks pass on pinned Godot 4.5.1. The 12/12 normal-economy, 24/24 frame/Blessing/first-route, 4/4 assembly, 10/10 Evolution and 4/4 Gift-specific policy matrices remain green. Eleven new presentation checks prove authored duration/progress, weapon-specific mount selection, expiry cleanup and unchanged simulation hashes.
+
+Six configured executable fixtures under `artifacts/weapon-animation` were captured from clean commit `1fe4efd991429b29aff2e0973a70cc6920fb3ce5` at 1280×800, seed 147, using Godot 4.5.1 stable and OpenGL Compatibility on Apple M1 Pro. They cover Nailer commit, Mercy Rail resolve, Bell commit, Great Toll resolve, overlapping Nailer/Bell fire and the same overlap with reduced effects.
+
+Rendered-evidence rubric (5-point internal review): physical authorship 4, base/Evolution distinction 5, geometry readability 5, overlap hierarchy 4, reduced-effects parity 4, palette/coherence 4. Configured stills establish visual structure and layering, not normal-speed responsiveness. The other eight weapon families still need the same full prepare/commit/resolve/recover treatment.
+
+Exactly one next task: run a human-controlled 1× Nailer/Bell session across Ranks I–III and both Evolutions, then tune anticipation and persistence only from observed motion readability.
