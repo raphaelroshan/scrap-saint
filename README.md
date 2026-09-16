@@ -108,6 +108,7 @@ If the Godot project is not yet present, the agent must not claim gameplay execu
 | [`docs/astra_game_bible.md`](docs/astra_game_bible.md) | Durable product context and Astra handoff. |
 | [`docs/story_and_acts.md`](docs/story_and_acts.md) | Plot, acts, factions, characters, objectives, and bosses. |
 | [`docs/art_direction.md`](docs/art_direction.md) | Visual, audio, animation, material, and asset direction. |
+| [`docs/saint_loading_tableau.md`](docs/saint_loading_tableau.md) | WIP title/loading key art and the eyes-open, cloud-parting transition into the city. |
 | [`design/gameplay_contract.md`](design/gameplay_contract.md) | Authoritative simulation and presentation contract. |
 | [`design/shop_and_blessings.md`](design/shop_and_blessings.md) | Blessings, shop, currencies, offers, and evolution rules. |
 | [`docs/progression_map_weapons_metagame.md`](docs/progression_map_weapons_metagame.md) | Research-backed run pacing, map, weapons, economy, metagame, and acceptance gates. |
