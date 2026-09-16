@@ -1,6 +1,6 @@
 # Scrap Saint
 
-**Scrap Saint** is a single-player evolution-driven arena roguelite about a small devotional machine crossing a ruined industrial world. It repairs broken systems, assembles relic weapons, receives competing blessings, and discovers what kind of machine it has chosen to become.
+**Scrap Saint** is a single-player evolution-driven arena roguelite set in a devastated machine world where corruption has spread. Repairs given freely have caused a small saint to manifest from discarded parts. It crosses the ruins, assembles relic weapons, receives competing blessings, and discovers what to do with the care that brought it into being. See the [sacred origin](docs/saint_of_freely_given_repairs.md).
 
 > **Restore the First Engine—or decide that the world is better without it.**
 
@@ -79,7 +79,7 @@ The transformation must change attack geometry, target rules, area control, obje
 
 ## Scope and quality bar
 
-The first playable is intentionally small: one arena, one Saint frame, seven base weapons, four catalysts, three Blessings, six enemy families, one elite, one boss, one repair objective, one shop, one visible evolution, and a deterministic eight-to-ten-minute run.
+The first playable is intentionally small: one arena, one Saint frame, eight base weapons, four catalysts, three Blessings, six enemy families, one elite, one boss, one repair objective, one shop, one visible evolution, and a deterministic eight-to-ten-minute run.
 
 The project is not complete when the content validator passes. Game quality requires a running build, readable combat, visible build transformation, causal Results, exact screenshot provenance, and evidence-led iteration. Technical tests establish simulation correctness; screenshots establish presentation evidence; neither is a substitute for the other.
 
@@ -99,6 +99,10 @@ If the Godot project is not yet present, the agent must not claim gameplay execu
 
 ## Repository map
 
+See the [weapon and item inspiration compendium](docs/weapon_inspiration_compendium.md) for 45 sourced reference entries across Slime 3K, Brotato and Vampire Survivors, and the framework for developing distinct Scrap Saint relics without copying reference concepts.
+
+The [world and relic direction](docs/world_and_relic_direction.md) evaluates four world variants and recommends a connected history for the Saint, creatures, communities and weapons. It identifies proposed revisions to the older story explicitly.
+
 | Path | Purpose |
 |---|---|
 | [`docs/astra_game_bible.md`](docs/astra_game_bible.md) | Durable product context and Astra handoff. |
@@ -116,3 +120,7 @@ If the Godot project is not yet present, the agent must not claim gameplay execu
 ## Current status
 
 The first Godot prototype is implemented. See [runtime status](docs/runtime_status.md) and [implementation packets](docs/implementation_packets.md). Automated simulation outcomes, rendered visual fixtures, and human playtesting are separate evidence categories. Human playtesting remains outstanding.
+
+Current shop: six relic cards with attack icons, base stats, ownership and upgrade previews. Repair kits drop during main-mode combat; healing services no longer consume shop slots. Optional map repair rewards remain.
+
+Penance Winch is now available in the relic shop: a long-range automatic brass hook that pins and reels one distant target. It is distinct from Cable's wide pull.

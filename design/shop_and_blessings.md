@@ -2,6 +2,10 @@
 
 Current executable rules and simplified services are detailed in [runtime status](../docs/runtime_status.md). The slice manifest determines enabled offers; future recipes are excluded from runtime promises.
 
+## Current main-mode override (P14)
+
+The user removed healing and service cards from the main shop. Six slots are dedicated to relics: four weapons and two catalysts while available. Recovery comes from combat repair-kit drops, existing motes and optional map machines. Legacy service rules below apply only to the relay comparison. See [runtime status](../docs/runtime_status.md).
+
 ## Design decision
 
 Scrap Saint uses a two-layer run-building model:

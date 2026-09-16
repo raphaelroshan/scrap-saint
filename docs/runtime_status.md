@@ -1,5 +1,16 @@
 # First Shift runtime — 0.1.0
 
+## Sacred ledger presentation (current)
+
+The title now introduces the Saint as born of repairs freely given. An optional ledger is accessible from the title and relic shop, with the manifestation, eight relic histories and six corrupted-machine entries. Shop entry opens the relic section. Keyboard/controller buttons navigate the pages; Escape returns. Reading does not advance the simulation or change offers. The first victory memory recalls an act of freely given repair.
+
+Authored text lives in content/lore/first_shift.json. No combat, currency, repair or save rules changed. All 30 page/scale combinations rendered and preserved the simulation snapshot; title/shop return checks passed. Existing 170 regression checks and content validation passed. The full-run sweep reproduced the recorded W-02a result: 11/12 wins, with Mourner seed 104730 timing out at the Foreman with 100 health. The all-win gate remains failed, so the standard loop stopped before its general capture stage. Dedicated new UI fixtures were captured independently and inspected; no older general captures are claimed as fresh evidence.
+
+Captures, exact source/content hashes and ten scored visual observations are in artifacts/sacred-ledger. Normal and large text use a 1280x800 viewport on Godot 4.5.1. The initial sandboxed graphical launch crashed before rendering; reviewed elevated execution produced valid captures and exited cleanly. This is fixture evidence, not human playtesting.
+
+Limitation: creature pages share a generic corruption emblem; bespoke portraits, combat expression of the new lore and human tone testing remain outstanding.
+Exactly one next task: give Nailer and Bell more tactile attack preparation and aftermath in ordinary combat.
+
 The project now contains a runnable Godot 4.5.1 desktop prototype. This is the first implementation, not a finished creative vertical. `content/slices/first_shift.json` is the authoritative enabled catalogue and tuning source; the larger catalogues also contain future concepts.
 
 ## Implemented
@@ -108,3 +119,31 @@ The previous relay-defence policy suite produced 9 wins and 3 losses after roste
 
 Limitation: automated fixtures and policies do not establish human pacing, balance or audio quality. Capture teardown still reports an ObjectDB leak warning.
 Exactly one next task: playtest roaming density and weapon/enemy balance at 1x.
+
+
+## P14 - relic shop and repair drops (current)
+The user moved recovery out of main-mode shop services. All six cards now offer relics: four weapons and two unowned catalysts when available, with weapon fallback when catalysts are exhausted. Repeated IDs are excluded; a held offer is preserved. Legacy relay comparison keeps its historical service shop. Old optional-mode shop saves containing services migrate to relic offers.
+
+Every twelfth defeat drops a repair kit worth 15 Saint integrity. Kits are ordinary field pickups, cannot over-heal, are consumed once and remain available at full health until the wave ends. Candle/Mourner healing motes and optional map machines remain. No new currency or inventory slot is added.
+
+Main-mode cards show distinct attack icons, behaviour labels, base damage/cycle, owned ranks, rank-combine outcome, cost, and disabled purchase reasons. Purchases update the equipped column. The UI uses the existing lock/refresh/reserve/evolution commands and supports normal and large text. Damage/cycle is explicitly the rank-I base; catalysts and enemy fields can modify actual output.
+
+The user's P14 decision supersedes service-card recommendations in the improvement plan. Recovery and build choices are now separate activities in the main mode.
+Limitation: repair-drop cadence and the new offer economy require human balance testing; automated wins are not enjoyment evidence.
+Exactly one next task: playtest relic purchases and repair-drop availability at 1x.
+
+P14 verification: 154 Godot assertions pass (129 existing + 25 relic-shop/pickup checks). Final main-mode policy sweep: 12/12 wins across three seeds and evolved/unevolved variants. Actual normal-text, large-text, purchased and repair-drop fixtures were inspected. Results and exact source/content provenance are in `artifacts/relic-shop`. The earlier capture formatting error was corrected and the final capture exits without script errors.
+
+
+## W-02a - Penance Winch (current)
+Penance Winch is the eighth enabled automatic weapon and the only implemented weapon from the new expansion proposals. It costs 19 Scrap, deals 34 base damage, has 440 range and a 210-tick (3.5s) base cycle. Rank combining uses the existing damage scaling. Foundry Censer, Welded Halo, Gifts and Confluences remain proposals.
+
+It locks the furthest living enemy between 110 and 440 pixels with clear line of access. It prepares for18 ticks, extends for12, deals one hit and holds for8, reels for24, then retracts for12. It pulls at most180 pixels toward the Saint and stops at110 separation, using body collision. Targets that die, leave range or move behind solid machinery before contact cannot be hit; it never silently retargets that cast. Pulling ends if access is lost. Major enemies remain eligible. Quiet Gear, calibration and Choir fields modify cooldown through the existing rules. Holding interrupts ordinary movement/charges; boss hazard scheduling remains separate.
+
+Simulation owns the complete phase state. Rendering reads it to animate three brass arm segments, elbow joints, braces, a spool, inspection lamp and hooked tip, including a folded idle pose. RankII adds braces. The shop has a hook icon and explicit distant-hook/pull role. Audio uses an original synthesized preparation ratchet and hook impact; no licensed source audio. Save/replay preserve a mid-hook cast and pause freezes it; entering shop clears an unfinished cast.
+
+Evidence: 16 dedicated assertions cover target selection, delayed single damage, movement/stop distance, cover, target loss, pause, save/replay and rank purchases. Real prepare/extend/hook/pull/retract and shop fixtures are in artifacts/winch. Fixtures use deliberately placed enemies and a supplied rankII weapon; they are not natural playthrough captures.
+Limitation: forceful automatic pulls, mixed-effect readability and audio weight still need human testing at1x.
+Exactly one next task: playtest Penance Winch alongside Cable and close-range weapons at1x.
+
+W-02a verification: 170 Godot assertions and four manifest checks pass. Full-run sweep:11/12 main-mode wins. Mourner seed104730 times out at the Foreman with100 health; the all-win gate remains failed. This is a recorded build/economy or targeting regression, not evidence of a solved balance gate. Six Winch/Shop renders were inspected and scored; exact provenance is in artifacts/winch.

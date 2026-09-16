@@ -177,6 +177,24 @@
       "cost_relic_shards": 2,
       "compatible_evolution_ids": [],
       "description": "A gear whose teeth move without permitting a sound."
+    },
+    {
+      "id": "weapon.penance_winch",
+      "kind": "weapon",
+      "name": "Penance Winch",
+      "rank": 1,
+      "geometry": "telescoping_hook",
+      "tags": [
+        "labour",
+        "threshold",
+        "control"
+      ],
+      "cost_scrap": 19,
+      "base_effect": "farthest_clear_target_hook_and_pull",
+      "secondary_effect": "brief_hold_on_hook",
+      "evolution_ids": [],
+      "description": "A brass maintenance arm extended beyond the limits of its original job.",
+      "weakness": "Long cycle and no swarm coverage."
     }
   ],
   "evolutions": [

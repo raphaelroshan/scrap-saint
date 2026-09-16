@@ -106,6 +106,23 @@
       "width": 72,
       "color": "e89765",
       "description": "Burst shells hit a cluster around the nearest enemy."
+    },
+    "weapon.penance_winch": {
+      "short": "Penance Winch",
+      "shape": "winch",
+      "damage": 34,
+      "cooldown": 210,
+      "range": 440,
+      "width": 8,
+      "color": "d9b879",
+      "description": "Hooks the furthest visible enemy, holds it, then reels it inward. Slow single-target control.",
+      "prepare_ticks": 18,
+      "extend_ticks": 12,
+      "hold_ticks": 8,
+      "pull_ticks": 24,
+      "retract_ticks": 12,
+      "pull_distance": 180,
+      "stop_distance": 110
     }
   },
   "catalysts": {
@@ -220,7 +237,9 @@
     "scrap_drop_every": 5,
     "hound_charge_ticks": 36,
     "hound_charge_speed": 240,
-    "roaming_spawn_radius": 460
+    "roaming_spawn_radius": 460,
+    "repair_drop_every": 12,
+    "repair_drop_healing": 15
   },
   "doctrine_rules": {
     "workshop_rate": 1.25,
@@ -292,6 +311,14 @@
         "description": "Next wave: the first six defeats leave healing motes.",
         "cost": 5
       }
+    ],
+    "relic_roles": [
+      "UPGRADE",
+      "NEW WEAPON",
+      "EVOLUTION",
+      "CATALYST",
+      "BUILD OPTION",
+      "BUILD OPTION"
     ]
   },
   "optional_repairs": {

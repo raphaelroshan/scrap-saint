@@ -120,3 +120,23 @@
 - Evidence: actual enlarged map, new weapon effects and enemy fixtures at 1280x800 with source/content provenance.
 - Limitation: wider content and camera pacing require human tuning.
 - Exactly one next task: playtest roaming density and weapon/enemy balance.
+## P14 - relic shop and field repair drops
+- Objective: spend shop space on relic decisions and recover through visible combat repair kits.
+- Authorization: user requests item/powerup repairs and removal of dedicated shop repair slots; supersedes P12.3 service-slot plan in main mode.
+- Owner: simulation owns six relic offers, purchase eligibility and repair-drop collection; presentation shows icons, stats, ownership, prices and disabled reasons.
+- Files: game/simulation.gd, game/main.gd, content/slices/first_shift.json, tests/test_relic_shop.gd, tests/capture_relic_shop.gd, scripts/agent_iteration.ps1, docs/runtime_status.md, design/shop_and_blessings.md.
+- Preserve: optional map repairs, automatic combat, four active weapons/one reserve, two currencies and deterministic saves. Legacy relay comparison retains services.
+- Acceptance: main-mode offers contain no services; unique relic choices; purchase rejections preserve state; kits drop deterministically, heal once, cap health and remain at full health; save replay matches.
+- Evidence: actual main-mode shop and repair kit captures at 1280x800, scored review and source hashes; existing autonomous regression loop.
+- Limitation: pickup frequency and expanded relic economy require human balance testing.
+- Exactly one next task: playtest relic purchases and repair-drop availability at 1x.
+## W-02a - Penance Winch
+- Objective: a telescoping brass arm automatically hooks one distant enemy, holds it and reels it inward before retracting.
+- Authorization: user selected Penance Winch implementation; only this weapon is enabled from the proposed expansion. Original roster cap is superseded.
+- Owner: simulation owns target lock, phase ticks, hit, hold, collision-safe pull and cooldown. Renderer reads weapon state for arm motion; no presentation damage.
+- Files: content/items/first_slice.json, content/slices/first_shift.json, game/simulation.gd, game/main.gd, game/sound.gd, scripts/validate_content.py, tests/test_winch.gd, tests/capture_winch.gd, scripts/agent_iteration.ps1, docs/runtime_status.md.
+- Preserve: automatic controls, optional repairs, relic-only main shop, four active slots, one reserve, every existing build valid. No Gift or Confluence system.
+- Acceptance: farthest clear-line target; windup before one hit; pull respects obstacles and minimum separation; dead/lost targets cancel; phases pause/save/replay; ranks and shop references valid.
+- Evidence: actual prepare/extend/hook/pull/retract frames at1280x800 with source hashes and scored review.
+- Limitation: automatic pulls and long-range readability need human playtesting.
+- Exactly one next task: playtest Penance Winch alongside Cable and close-range weapons at1x.

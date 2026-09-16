@@ -37,7 +37,7 @@ def validate_slice(manifest: dict, data: dict) -> None:
     bosses = {entry['id'] for entry in data['bosses']['bosses']}
     blessings = {entry['id'] for entry in data['blessings']['blessings']}
     evolutions = {entry['id']: entry for entry in data['items']['evolutions']}
-    assert len(manifest['weapons']) == 7, 'slice must enable seven weapons'
+    assert len(manifest['weapons']) == 8, 'slice must enable eight weapons'
     assert len(manifest['catalysts']) == 4, 'slice must enable four useful catalysts'
     assert len(manifest['enemies']) == 6, 'slice must enable six ordinary enemies'
     assert len(manifest['blessings']) == 3 and len(set(manifest['blessings'])) == 3

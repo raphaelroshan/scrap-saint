@@ -135,6 +135,7 @@ func buy(index: int) -> String:
 	if index < 0 or index >= state.offers.size(): return "INVALID_OFFER"
 	var id = state.offers[index]
 	if id == "": return "SOLD"
+	if optional_mode() and id.begins_with("service."): return "INVALID_OFFER"
 	if id.begins_with("service."):
 		if id not in ["service.repair", "service.doctrine", "service.calibrate"]: return "INVALID_OFFER"
 		var cost = int(config.shop_rules.services[state.doctrine].cost) if id == "service.doctrine" else int(config.economy.repair_cost)
@@ -217,7 +218,49 @@ func shop_pick(ids: Array, slot: int) -> String:
 	var index = key.sha256_text().substr(0, 8).hex_to_int() % ids.size()
 	return ids[index]
 
+func offer_reason(index: int) -> String:
+	if index < 0 or index >= state.offers.size(): return "Unavailable"
+	var id = state.offers[index]
+	if id == "": return "Sold"
+	if id in config.weapons:
+		if not can_fit_weapon(id): return "Loadout full"
+		if state.scrap < catalogue[id].cost_scrap: return "Need %d Scrap" % (catalogue[id].cost_scrap - state.scrap)
+	elif id in config.catalysts:
+		if id in state.catalysts: return "Already owned"
+		if state.shards < catalogue[id].cost_relic_shards: return "Need %d Shards" % (catalogue[id].cost_relic_shards - state.shards)
+	return ""
+
+func roll_relic_shop():
+	var pool = []
+	var upgrades = []
+	var fresh = []
+	var support = []
+	for id in config.weapons:
+		pool.append(id)
+		var owned = (state.weapons + state.reserve).any(func(w): return w.id == id)
+		if not owned: fresh.append(id)
+		elif can_fit_weapon(id): upgrades.append(id)
+	for id in config.catalysts:
+		if id not in state.catalysts:
+			pool.append(id)
+			support.append(id)
+	state.offers = []
+	for slot in range(6):
+		var candidates = pool.duplicate()
+		var preferred = upgrades if slot == 0 else (fresh if slot == 1 else support)
+		if slot >= 4: preferred = config.weapons.keys()
+		var filtered = candidates.filter(func(id): return id in preferred)
+		if not filtered.is_empty(): candidates = filtered
+		if slot == 2 and "catalyst.saints_rivet" in candidates and not state.evolved: candidates = ["catalyst.saints_rivet"]
+		var id = shop_pick(candidates, slot) if not candidates.is_empty() else ""
+		state.offers.append(id)
+		pool.erase(id)
+	if state.locked in catalogue and state.locked not in state.offers and not (state.locked in state.catalysts): state.offers[5] = state.locked
+
 func roll_shop():
+	if optional_mode():
+		roll_relic_shop()
+		return
 	var upgrades = []
 	var fresh = []
 	var owned = []
@@ -245,6 +288,7 @@ func warning_multiplier() -> float:
 	return config.shop_rules.bell_warning_multiplier if state.service_active and state.doctrine == 1 else 1.0
 
 func enter_shop():
+	for w in state.weapons: w.erase("winch")
 	state.phase = "shop"
 	state.scrap += int(config.economy.wave_scrap)
 	if state.wave in [2, 4, 6]: state.shards += 1
@@ -269,8 +313,7 @@ func step(move: Vector2):
 	move = move.limit_length()
 	if move.length() > 0.1: state.facing = move.normalized()
 	state.position = arena.move_body(state.position, move * config.saint.speed / config.tick_rate, config.saint.radius)
-	if optional_mode(): update_optional_repairs()
-	elif state.position.distance_to(relay_position()) < config.relay.radius:
+	if not optional_mode() and state.position.distance_to(relay_position()) < config.relay.radius:
 		var rate = (config.doctrine_rules.fulfilled_workshop_rate if state.fulfilled else config.doctrine_rules.workshop_rate) if state.doctrine == 0 else 1.0
 		if "catalyst.saints_rivet" in state.catalysts: rate *= config.catalysts["catalyst.saints_rivet"].repair_multiplier
 		state.progress = minf(config.relay.required_ticks, state.progress + rate)
@@ -286,6 +329,7 @@ func step(move: Vector2):
 	update_weapons()
 	update_pickups()
 	update_hazards()
+	if optional_mode() and state.hp > 0: update_optional_repairs()
 	if state.hp <= 0: finish(false, "The Saint's structure failed.")
 	elif not optional_mode() and state.relay_hp <= 0: finish(false, "The relay was destroyed.")
 	elif state.wave == 8 and state.boss_dead:
@@ -298,17 +342,38 @@ func step(move: Vector2):
 func optional_mode() -> bool:
 	return state.get("mode", "relay") == "optional"
 
+func repair_preview(index: int) -> Dictionary:
+	var machine = state.machines[index]
+	var data = config.optional_repairs.machines[index]
+	var p = Vector2(data.position[0], data.position[1])
+	var rate = (config.doctrine_rules.fulfilled_workshop_rate if state.fulfilled else config.doctrine_rules.workshop_rate) if state.doctrine == 0 else 1.0
+	if "catalyst.saints_rivet" in state.catalysts: rate *= config.catalysts["catalyst.saints_rivet"].repair_multiplier
+	var status = "READY"
+	if machine.complete: status = "RESTORED"
+	elif data.reward == "heal" and state.hp >= config.saint.structure: status = "FULL INTEGRITY - SAVED FOR LATER"
+	elif data.reward == "stun" and not state.enemies.any(func(e): return e.hp > 0 and e.stun < state.tick + int(data.amount)): status = "NO TARGETS - SAVED FOR LATER"
+	elif state.position.distance_to(p) < config.optional_repairs.radius:
+		status = "RECOVERING - WORK PAUSED" if state.tick < state.hurt_until else "REPAIRING"
+	var nearby = state.enemies.filter(func(e): return e.hp > 0 and e.p.distance_to(p) < 240).size()
+	return {"status": status, "rate": rate, "seconds": maxf(0, config.optional_repairs.required_ticks - machine.progress) / rate / config.tick_rate, "nearby": nearby, "distance": state.position.distance_to(p)}
+
 func update_optional_repairs():
+	if state.phase != "combat" or state.paused: return
 	for i in range(state.machines.size()):
 		var machine = state.machines[i]
 		var data = config.optional_repairs.machines[i]
 		var p = Vector2(data.position[0], data.position[1])
-		if machine.complete or state.position.distance_to(p) >= config.optional_repairs.radius: continue
-		var rate = (config.doctrine_rules.fulfilled_workshop_rate if state.fulfilled else config.doctrine_rules.workshop_rate) if state.doctrine == 0 else 1.0
-		if "catalyst.saints_rivet" in state.catalysts: rate *= config.catalysts["catalyst.saints_rivet"].repair_multiplier
-		machine.progress = minf(config.optional_repairs.required_ticks, machine.progress + rate)
+		var preview = repair_preview(i)
+		var working = preview.status == "REPAIRING"
+		if machine.get("working", false) != working:
+			emit("repair_started" if working else "repair_paused", {"machine_id": machine.id, "position": p, "reason": preview.status, "progress": machine.progress})
+		machine.working = working
+		if not working: continue
+		machine.progress = minf(config.optional_repairs.required_ticks, machine.progress + preview.rate)
+		if state.tick % 30 == 0: emit("repair_progress", {"machine_id": machine.id, "progress": machine.progress, "position": p})
 		if machine.progress >= config.optional_repairs.required_ticks:
 			machine.complete = true
+			machine.working = false
 			match data.reward:
 				"scrap": state.scrap += int(data.amount)
 				"heal": state.hp = minf(config.saint.structure, state.hp + data.amount)
@@ -384,9 +449,10 @@ func update_enemies():
 			if ally != null:
 				target = ally.p
 				if state.tick >= e.attack:
-					ally.hp = minf(ally.max_hp, ally.hp + data.heal_amount)
+					var healed = minf(ally.max_hp - ally.hp, data.heal_amount)
+					ally.hp += healed
 					e.attack = state.tick + int(data.heal_interval)
-					emit("repair", {"position": ally.p, "source": e.p})
+					emit("repair", {"position": ally.p, "source": e.p, "amount": healed, "target_id": ally.id, "target_type": ally.type, "source_id": e.id})
 		if e.type == "enemy.cinder_spitter" and state.tick >= e.attack:
 			e.attack = state.tick + int(data.attack_interval)
 			state.hazards.append({"p": state.position, "from": e.p, "until": state.tick + int(data.warning_ticks * warning_multiplier()), "warning_ticks": data.warning_ticks * warning_multiplier(), "radius": data.blast_radius, "damage": data.damage, "copy": false, "source": e.type, "source_id": e.id})
@@ -471,15 +537,18 @@ func update_weapons():
 		var radius = config.rail.range if rail else data.range
 		var target = null
 		var score = INF
-		for e in state.enemies:
-			if e.hp <= 0 or state.position.distance_to(e.p) > radius: continue
-			var candidate = e.hp if data.shape == "shot" else state.position.distance_squared_to(e.p)
-			if candidate < score:
-				score = candidate
-				target = e
+		if data.shape == "winch":
+			target = update_winch(w, data)
+		else:
+			for e in state.enemies:
+				if e.hp <= 0 or state.position.distance_to(e.p) > radius: continue
+				var candidate = e.hp if data.shape == "shot" else state.position.distance_squared_to(e.p)
+				if candidate < score:
+					score = candidate
+					target = e
 		if target == null: continue
 		if rail and state.tick == w.ready - int(config.rail.charge_ticks): emit("charge", {"from": state.position, "to": target.p, "weapon": w.id})
-		if state.tick < w.ready: continue
+		if data.shape != "winch" and state.tick < w.ready: continue
 		var cooldown = config.rail.cooldown if rail else data.cooldown
 		for enemy in state.enemies:
 			if enemy.type == "enemy.choir_drone" and enemy.hp > 0 and enemy.p.distance_to(state.position) < config.enemy_rules.drone_field_radius:
@@ -487,7 +556,7 @@ func update_weapons():
 				break
 		if "catalyst.quiet_gear" in state.catalysts: cooldown *= config.catalysts["catalyst.quiet_gear"].cooldown_multiplier
 		if state.calibrated: cooldown *= config.shop_rules.calibration_multiplier
-		w.ready = state.tick + int(cooldown)
+		if data.shape != "winch": w.ready = state.tick + int(cooldown)
 		var direction = (target.p - state.position).normalized()
 		var origin = state.position
 		var end = origin + direction * radius
@@ -506,11 +575,12 @@ func update_weapons():
 					hit = delta.dot(direction) >= 0 and delta.dot(direction) <= radius and absf(delta.cross(direction)) < (config.rail.width if rail else data.width) + e.radius
 				"cone", "tether": hit = delta.length() < radius + e.radius and absf(direction.angle_to(delta)) < data.width
 				"blast": hit = e.p.distance_to(end) <= data.width + e.radius
-				"shot": hit = e.id == target.id
+				"shot", "winch": hit = e.id == target.id
 				"orbit": hit = e.p.distance_to(end) < data.width + e.radius
 			if not hit or (shape == "line" and hits >= 2): continue
 			hits += 1
 			var dealt = damage * (config.doctrine_rules.bell_mark_multiplier if e.marked > state.tick else 1.0)
+			var effective = minf(e.hp, dealt)
 			e.hp -= dealt
 			e.flash = state.tick + 6
 			state.damage[w.id] = state.damage.get(w.id, 0.0) + dealt
@@ -528,9 +598,11 @@ func update_weapons():
 					state.hp = minf(config.saint.structure, state.hp + config.rail.repair_on_elite_hit)
 					emit("repair", {"position": state.position, "source": e.p})
 				else: repair_relay(config.rail.repair_on_elite_hit, e.p)
-			emit("hit", {"position": e.p, "amount": dealt, "weapon": w.id, "color": data.color})
+			emit("hit", {"position": e.p, "amount": dealt, "effective": effective, "target_id": e.id, "target_type": e.type, "weapon": w.id, "color": data.color})
 			if e.hp <= 0:
 				state.kills += 1
+				if optional_mode() and state.kills % int(config.combat.repair_drop_every) == 0:
+					state.pickups.append({"p": e.p, "kind": "repair_kit", "amount": config.combat.repair_drop_healing})
 				emit("death", {"position": e.p, "color": data.color})
 				if e.type == config.boss: state.boss_dead = true
 				if e.type == config.elite: state.shards += 2
@@ -548,10 +620,11 @@ func update_weapons():
 
 func update_pickups():
 	for p in state.pickups:
+		if p.kind == "repair_kit" and state.hp >= config.saint.structure: continue
 		if p.p.distance_to(state.position) < config.combat.pickup_radius:
 			if p.kind == "scrap": state.scrap += int(p.amount)
 			else: state.hp = minf(config.saint.structure, state.hp + p.amount)
-			emit("pickup", {"position": p.p, "amount": p.amount})
+			emit("repair" if p.kind == "repair_kit" else "pickup", {"position": p.p, "amount": p.amount})
 			p.amount = 0
 	state.pickups = state.pickups.filter(func(p): return p.amount > 0)
 
@@ -588,8 +661,58 @@ func restore(saved: Dictionary) -> bool:
 	for enemy in state.enemies:
 		if not enemy.has("relay_strike_at"): enemy.relay_strike_at = 0
 		if not enemy.has("relay_ready"): enemy.relay_ready = 0
+	if optional_mode() and state.phase == "shop" and state.offers.any(func(id): return id.begins_with("service.")):
+		roll_relic_shop()
 	events.clear()
 	return true
 
 func state_hash() -> String:
 	return var_to_bytes(state).hex_encode().sha256_text()
+
+func update_winch(w: Dictionary, data: Dictionary):
+	if not w.has("winch") or w.winch.is_empty():
+		if state.tick < w.ready: return null
+		var target = null
+		var farthest = data.stop_distance
+		for e in state.enemies:
+			var distance = state.position.distance_to(e.p)
+			if e.hp > 0 and distance > farthest and distance <= data.range and arena.clear_line(state.position,e.p,4):
+				farthest = distance
+				target = e
+		if target == null: return null
+		w.winch = {"start":state.tick,"target":target.id,"tip":state.position,"aim":target.p,"caught":false}
+		var multiplier = config.catalysts["catalyst.quiet_gear"].cooldown_multiplier if "catalyst.quiet_gear" in state.catalysts else 1.0
+		if state.calibrated: multiplier *= config.shop_rules.calibration_multiplier
+		if state.enemies.any(func(e): return e.hp > 0 and e.type == "enemy.choir_drone" and e.p.distance_to(state.position) < config.enemy_rules.drone_field_radius): multiplier *= config.enemy_rules.drone_cooldown_multiplier
+		w.ready = state.tick + int(data.cooldown * multiplier)
+		emit("winch_prepare", {"position":state.position})
+	var action = w.winch
+	var age = state.tick - action.start
+	var hook_tick = int(data.prepare_ticks + data.extend_ticks)
+	var pull_end = int(hook_tick + data.hold_ticks + data.pull_ticks)
+	if age >= pull_end + data.retract_ticks:
+		w.winch = {}
+		return null
+	var target = null
+	for e in state.enemies:
+		if e.id == action.target and e.hp > 0: target = e; break
+	if target != null and (state.position.distance_to(target.p) > data.range or not arena.clear_line(state.position,target.p,4)): target = null
+	if age < hook_tick:
+		if target != null: action.aim = target.p
+		action.tip = state.position.lerp(action.aim, clampf(float(age-data.prepare_ticks)/data.extend_ticks,0,1))
+	elif age == hook_tick:
+		if target != null:
+			action.caught = true
+			action.tip = target.p
+			target.stun = state.tick + int(data.hold_ticks + data.pull_ticks)
+			target.relay_strike_at = 0
+			return target
+	elif age < pull_end and action.caught:
+		if target != null:
+			if age >= hook_tick + data.hold_ticks:
+				var distance = state.position.distance_to(target.p)
+				var step_length = minf(data.pull_distance/data.pull_ticks, maxf(0,distance-data.stop_distance))
+				target.p = arena.move_body(target.p,(state.position-target.p).normalized()*step_length,target.radius)
+			action.tip = target.p
+		else: action.caught = false
+	return null

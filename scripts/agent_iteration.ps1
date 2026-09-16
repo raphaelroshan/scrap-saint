@@ -8,6 +8,12 @@ $bundlePath = Join-Path $projectRoot 'artifacts\agent-iteration'
 New-Item -ItemType Directory -Path $bundlePath -Force | Out-Null
 & $PythonBin "$PSScriptRoot\validate_content.py"
 if ($LASTEXITCODE -ne 0) { throw 'Content validation failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_repair_quality.gd 2>&1 | Tee-Object -FilePath "$bundlePath\repair_quality.log"
+if ($LASTEXITCODE -ne 0) { throw 'Repair quality tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_winch.gd 2>&1 | Tee-Object -FilePath "$bundlePath\winch.log"
+if ($LASTEXITCODE -ne 0) { throw 'Winch tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_relic_shop.gd 2>&1 | Tee-Object -FilePath "$bundlePath\relic_shop.log"
+if ($LASTEXITCODE -ne 0) { throw 'Relic shop tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_variety.gd 2>&1 | Tee-Object -FilePath "$bundlePath\variety.log"
 if ($LASTEXITCODE -ne 0) { throw 'Variety tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_optional_repairs.gd 2>&1 | Tee-Object -FilePath "$bundlePath\optional.log"
@@ -22,6 +28,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Arena tests failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Simulation tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_ui.gd 2>&1 | Tee-Object -FilePath "$bundlePath\ui.log"
 if ($LASTEXITCODE -ne 0) { throw 'UI tests failed' }
+& $GodotBin --path $projectRoot --script res://tests/capture_sacred_ledger.gd 2>&1 | Tee-Object -FilePath "$bundlePath\sacred_ledger.log"
+if ($LASTEXITCODE -ne 0) { throw 'Sacred ledger state/capture checks failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/run_playthroughs.gd -- --optional 2>&1 | Tee-Object -FilePath "$bundlePath\playthroughs.log"
 if ($LASTEXITCODE -ne 0) { throw 'Playthrough runner failed' }
 & $GodotBin --path $projectRoot -- --capture-dir=$bundlePath 2>&1 | Tee-Object -FilePath "$bundlePath\capture.log"
