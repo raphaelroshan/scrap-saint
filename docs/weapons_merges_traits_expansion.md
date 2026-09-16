@@ -4,6 +4,8 @@
 **Current runtime:** preview 0.5.0 with ten automatic weapons, eight catalysts, ten Evolutions, seven Gifts, four Blessings, four active slots, one reserve slot, and two Gift slots.
 **Purpose:** expand future build variety without weakening the current game’s readability, deterministic simulation boundary, or warm industrial devotional identity.
 
+The current WIP exploration of catalyst alternatives, weapon-specific Vows, Boss Imprints, and current-roster Confluences is maintained in [`confluences_and_alternate_evolution_paths.md`](confluences_and_alternate_evolution_paths.md). None is enabled by that design document.
+
 ## Executive design decision
 
 Scrap Saint should expand through three distinct layers:
@@ -363,25 +365,9 @@ The first new evolution after Mercy Rail should be **The Great Toll**, because B
 
 ### 3.4 Cross-weapon Confluence proposals
 
-Confluences should be rare, visible, and deliberately expensive in opportunity cost. They consume both Rank III weapons and do not require a third currency. The player gives up two weapon slots and receives one weapon with a new geometry.
+Confluences should be rare, visible, and deliberately expensive in opportunity cost. They consume two different active Rank III base weapons, require no third currency, produce one new geometry, preserve both source lineages, and free one active slot. They cannot be mandatory for a boss or objective.
 
-| Rank III pair | Confluence | Resulting behaviour | Why it is interesting |
-|---|---|---|---|
-| Nailer + Bell | **The Line That Rings** | A piercing rail ends in a short pulse; targets hit by both become `MARKED` and `RUNG`. | Combines precision with control without making either base weapon obsolete. |
-| Procession Gear + Cable | **Procession Harness** | Orbiting gear carries a tether ring that pulls enemies inward and repairs nearby machines when a bound enemy falls. | Creates a close-range repair/route build. |
-| Candle-Nailer + Hymn Coil | **Requiem Coil** | A beam jumps to low-health targets; deaths create one short-lived healing mote. | Turns execution and support suppression into one deliberate chain. |
-| Altar Mortar + Foundry Censer | **Incense Engine** | Shells create smoke zones that slow, mute healing, and amplify the next burst inside. | Creates a delayed area-control identity. |
-| Bell + Door of Two Exits | **Threshold Toll** | A placed threshold pulses when enemies cross it, pushing them back toward the longer route. | Makes map geometry part of the build. |
-| Penance Winch + Spare-Part Mortar | **Demolition Liturgy** | The winch groups a cluster, then the mortar schedules a shell on the gathered position. | Creates a visible setup/payoff loop. |
-
-Confluence rules:
-
-- The recipe is visible before either Rank III item is sold or dismantled.
-- The shop must show at least one non-Confluence alternative on the same visit.
-- The result must not be strictly stronger than two independent weapons in every matchup.
-- Confluences cannot be required for a boss or objective victory.
-- The Results screen records both source lineages and the resulting geometry.
-- The first implementation should contain only two Confluences, preferably **The Line That Rings** and **Procession Harness**.
+The detailed current-roster candidates, atomic command contract, inheritance limits, rejected pairings, animation choreography, and pacing gates now live in [`confluences_and_alternate_evolution_paths.md`](confluences_and_alternate_evolution_paths.md). The first implementation remains limited to **The Line That Rings** and **Procession Harness**; Requiem Coil, Incense Engine, Demolition Liturgy, and Mercy Gantry remain later candidates. All are disabled.
 
 ## 9. Gifts and traits to acquire
 
