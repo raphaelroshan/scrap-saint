@@ -1,0 +1,57 @@
+{
+  "scope": "Visual inspection of integration fixtures, not a human playtest or audio assessment",
+  "rubric": [
+    {
+      "criterion": "Hierarchy",
+      "score": 4,
+      "note": "Shop actions, currency and build panel are distinct."
+    },
+    {
+      "criterion": "Typography",
+      "score": 4,
+      "note": "Origin and shop inspected at normal and large sizes; shop summaries intentionally truncate."
+    },
+    {
+      "criterion": "Contrast",
+      "score": 4,
+      "note": "Warm gold and mint accents separate actions from the dark panels."
+    },
+    {
+      "criterion": "Spacing",
+      "score": 4,
+      "note": "Six relic cards fit with both ledger buttons and Next Wave."
+    },
+    {
+      "criterion": "State clarity",
+      "score": 4,
+      "note": "Unaffordable catalyst shows its reason and a disabled purchase action."
+    },
+    {
+      "criterion": "Theme",
+      "score": 4,
+      "note": "Origin and histories express freely given repair; generic history icons limit individuality."
+    },
+    {
+      "criterion": "Navigation",
+      "score": 4,
+      "note": "Ledger tabs and return are explicit; deterministic navigation checks preserve the run."
+    },
+    {
+      "criterion": "Combat legibility",
+      "score": 3,
+      "note": "Saint and repair cross are distinct in the sparse fixture; crowded evolved combat needs follow-up."
+    },
+    {
+      "criterion": "Pickup legibility",
+      "score": 3,
+      "note": "Repair kit has a mint cross, but is small and needs motion/encounter testing."
+    },
+    {
+      "criterion": "Consistency",
+      "score": 4,
+      "note": "Histories and shop share the established industrial devotional palette."
+    }
+  ],
+  "limitation": "No human 1x playtest or minimum-hardware benchmark. Sparse repair-kit fixture does not establish crowded combat legibility.",
+  "next_task": "Reduce overlapping evolved effects around the Saint without changing authoritative attacks."
+}

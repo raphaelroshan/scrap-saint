@@ -1,0 +1,124 @@
+{
+  "origin": {
+    "name": "A mercy made flesh of iron",
+    "subtitle": "THE MANIFESTATION",
+    "history": "Devastation broke the machine world. Corruption spread through what remained. Yet some still gave their last sound parts to mend another, asking nothing in return.\n\nThose repairs left grace within the metal. Across generations, it gathered in discarded pieces. In a ruined workshop, a small body held together and opened its eye.",
+    "line": "The Saint is small because most of the mercies that made it were small."
+  },
+  "relics": [
+    {
+      "id": "weapon.nailer_small_mercies",
+      "name": "Nailer of Small Mercies",
+      "shape": "line",
+      "history": "A worker-housing rivet gun passed between repairers who mended homes and bodies unable to repay them. Its mismatched casing holds the marks of several households.",
+      "line": "No account was kept of what it held together."
+    },
+    {
+      "id": "weapon.bell_last_shift",
+      "name": "Bell of the Last Shift",
+      "shape": "cone",
+      "history": "A workshop bell rung so the exhausted could stop working, even when their overseers would not release them. A replaced striking face gave its voice a second note.",
+      "line": "Someone rang it before permission came."
+    },
+    {
+      "id": "weapon.procession_gear",
+      "name": "Procession Gear",
+      "shape": "orbit",
+      "history": "A service-conveyor gear that carried the weight of bodies too damaged to travel alone. Its replaced teeth give it an uneven, dependable gait.",
+      "line": "Another place in the procession."
+    },
+    {
+      "id": "weapon.candle_nailer",
+      "name": "Candle-Nailer",
+      "shape": "shot",
+      "history": "A recovery flare tool carrying lights once left beside bodies whose names were unknown. Old wax has gathered beneath the barrel.",
+      "line": "A light was left for them anyway."
+    },
+    {
+      "id": "weapon.cable_contrition",
+      "name": "Cable of Contrition",
+      "shape": "tether",
+      "history": "A maintenance line repeatedly repaired by those who had relied on it, then left for the next traveller. No two splices were made by the same hands.",
+      "line": "Every splice is a hand that did not let go."
+    },
+    {
+      "id": "weapon.hymn_coil",
+      "name": "Hymn Coil",
+      "shape": "beam",
+      "history": "Its copper windings preserve fragments of signals used to answer isolated machines. Beneath the workshop cadence, a quieter voice sometimes returns.",
+      "line": "There is a reply beneath the static."
+    },
+    {
+      "id": "weapon.altar_mortar",
+      "name": "Altar Mortar",
+      "shape": "blast",
+      "history": "A community font rebuilt into a weapon when the sanctuary around it could no longer shelter the living. The bowl still carries a worn thumb rest.",
+      "line": "The sanctuary travels with what remains."
+    },
+    {
+      "id": "weapon.penance_winch",
+      "name": "Penance Winch",
+      "shape": "winch",
+      "history": "A retrieval arm once lowered for valuable equipment, then lowered again for those considered beyond recovery. Several hands have amended its extension limit.",
+      "line": "It was lowered again after the search was called off."
+    },
+    {
+      "id": "weapon.foundry_censer",
+      "name": "Foundry Censer",
+      "shape": "censer",
+      "history": "Before the air filters failed, a furnace attendant hung this can above the sickroom. It carried clean steam through the night. Someone kept replacing its cracked seals long after the factory stopped paying.",
+      "line": "The lid still opens for those who cannot breathe."
+    },
+    {
+      "id": "weapon.welded_halo",
+      "name": "Welded Halo",
+      "shape": "halo",
+      "history": "This alignment ring held broken water pipes together while their joints were mended. Its brass came from three workshops. None asked for it back. The Saint wears the circle crooked; the repairs still hold.",
+      "line": "No part of the circle had to belong to the same machine."
+    }
+  ],
+  "creatures": [
+    {
+      "id": "enemy.scrap_mite",
+      "name": "Scrap Mite",
+      "subtitle": "SWARM",
+      "history": "Small sorting crawlers once gathered loose fasteners. In corrupted bodies, hunger has outgrown sorting. Every living assembly looks dismantlable.",
+      "line": "They have forgotten what was worth keeping."
+    },
+    {
+      "id": "enemy.rivet_hound",
+      "name": "Rivet Hound",
+      "subtitle": "CHARGER",
+      "history": "Seam inspectors ran beside moving machinery and pinned loose panels. The Hollowing has turned that useful purpose into compulsion: another body's freedom looks like a fault.",
+      "line": "It has found a fault. Please stop running with it."
+    },
+    {
+      "id": "enemy.choir_drone",
+      "name": "Choir Drone",
+      "subtitle": "SUPPORT",
+      "history": "Acoustic signals once helped crews answer one another through smoke. Corruption has taken the pauses from their song. Shared rhythm has become enforced obedience.",
+      "line": "Its voice leaves no room for an answer."
+    },
+    {
+      "id": "enemy.rust_pilgrim",
+      "name": "Rust Pilgrim",
+      "subtitle": "REPAIR SUPPORT",
+      "history": "A travelling maintenance machine still tends the equipment on its service route. Hollowed by corruption, it keeps damaged bodies working long after it should have let them rest.",
+      "line": "The repairs are excellent. The mercy is gone."
+    },
+    {
+      "id": "enemy.forklift_brute",
+      "name": "Forklift Brute",
+      "subtitle": "HEAVY CHARGE",
+      "history": "A cargo mover once cleared paths for others. It now recognises bodies only as misplaced loads, and solves each obstruction with its entire weight.",
+      "line": "Destination amended: elsewhere."
+    },
+    {
+      "id": "enemy.cinder_spitter",
+      "name": "Cinder Spitter",
+      "subtitle": "DELAYED BLAST",
+      "history": "A furnace nozzle once released dangerous residue into collection bins. Corruption has blurred the difference between relieving pressure and spreading the wound.",
+      "line": "Stand clear of the collection point."
+    }
+  ]
+}

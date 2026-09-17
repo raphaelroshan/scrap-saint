@@ -518,6 +518,8 @@
     }
   },
   "combat": {
+    "repair_drop_every": 12,
+    "repair_drop_healing": 15,
     "spawn_interval": 110,
     "spawn_minimum": 30,
     "enemy_limit": 65,
@@ -572,6 +574,7 @@
     ]
   },
   "shop_rules": {
+    "relic_roles": ["BUILD IMPROVEMENT", "NEW DIRECTION", "EVOLUTION PATH", "SUPPORT RELIC", "BUILD OPTION", "BUILD OPTION"],
     "roles": [
       "BUILD IMPROVEMENT",
       "NEW DIRECTION",
@@ -619,6 +622,7 @@
     ]
   },
   "optional_repairs": {
+    "destination_node_scrap": 3,
     "radius": 56,
     "required_ticks": 180,
     "machines": [

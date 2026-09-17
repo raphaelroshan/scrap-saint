@@ -21,12 +21,13 @@ func enemy(sim, id: String, position: Vector2, hp = -1.0):
 
 func preview_case(label: String, weapons: Array, reserve: Array, offered_id: String, scrap: int):
 	var sim = Sim.new()
-	sim.start(0, 147, "optional")
+	sim.start(0, 147, "relay" if offered_id.begins_with("service.") else "optional")
 	sim.enter_shop()
 	sim.state.gifts = ["gift.honest_scale"]
 	sim.state.weapons = weapons.duplicate(true)
 	sim.state.reserve = reserve.duplicate(true)
 	sim.state.scrap = scrap
+	if offered_id == "service.repair": sim.state.relay_hp = sim.config.relay.structure
 	sim.state.offers[0] = offered_id
 	var saved = sim.snapshot()
 	var hash_before = sim.state_hash()
@@ -70,7 +71,7 @@ func _initialize():
 	var repair_rejection = preview_case("unneeded repair rejection", [catalogue.make_weapon("weapon.nailer_small_mercies")], [], "service.repair", 100)
 	check(repair_rejection.result == "ALREADY_REPAIRED", "Honest Scale predicts an already-complete repair service")
 	var used_service = Sim.new()
-	used_service.start(1, 147, "optional")
+	used_service.start(1, 147, "relay")
 	used_service.enter_shop()
 	used_service.state.gifts = ["gift.honest_scale"]
 	used_service.state.scrap = 100

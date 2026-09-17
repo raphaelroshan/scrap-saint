@@ -1,6 +1,6 @@
 # Scrap Saint
 
-**Scrap Saint** is a single-player evolution-driven arena roguelite about a small devotional machine crossing a ruined industrial world. It repairs broken systems, assembles relic weapons, receives competing blessings, and discovers what kind of machine it has chosen to become.
+**Scrap Saint** is a single-player arena roguelite set in a devastated machine world. Repairs given freely have left grace in discarded components, causing a small saint to manifest. It carries that care through the ruins while assembling relic weapons and choosing what to repair. See the [sacred origin](docs/saint_of_freely_given_repairs.md).
 
 > **Restore the First Engine—or decide that the world is better without it.**
 
@@ -15,7 +15,7 @@ For faster development, use **Play Scrap Saint 5x Dev.cmd**. Combat runs at 5× 
 - **Optional repairs is the main game.** The 5x development launcher retains the relay-defence comparison toggle. New runs use the displayed seed; change it on the title screen. Existing saves retain their mode.
 - WASD or arrows: move; weapons attack automatically. In Optional repairs, short repairs reward Scrap, healing or a stagger pulse. Machines cannot be destroyed and repairs are never required to win. In Relay defence, stay near the relay to repair it and keep it alive.
 - Escape: pause; F5: save; F9: load; M: mute; F3: diagnostic overlay.
-- Between waves: buy/combine, sell, store, equip, lock and refresh. Every weapon gains named behavior at Rank II and Rank III; Evolutions such as Mercy Rail remain optional.
+- Between waves: buy/combine, sell, store, equip, lock and refresh. All six main-mode cards offer relics; field repair kits and optional work provide recovery. Every weapon gains named behavior at Rank II and Rank III; Evolutions such as Mercy Rail remain optional.
 - Defeating the Foreman opens Brass Choir Relay and Rootworks Pump. Their memories open a second choice: Brass leads to Pale Archive or Red Foundry; Rootworks leads to Red Foundry or Null Assembly. The build, economy and Blessing persist through all three sites.
 - Controller: left stick movement, standard UI navigation/accept, Start to pause.
 
@@ -125,3 +125,9 @@ If the Godot project is not yet present, the agent must not claim gameplay execu
 ## Current status
 
 The first Godot prototype is implemented. See [runtime status](docs/runtime_status.md) and [implementation packets](docs/implementation_packets.md). Automated simulation outcomes, rendered visual fixtures, and human playtesting are separate evidence categories. Human playtesting remains outstanding.
+
+## Current integration
+
+The 2026-09-17 integration retains upstream ten weapons and ten Evolutions across the chapter and restores the approved sacred origin, histories ledger, relic-only shop and field repair kits. Destination work grants +3 Scrap per station and is optional: defeat the boss to advance. The ordinary and Evolution ledgers are separate. See [runtime status](docs/runtime_status.md) for current verification; older evidence sections are historical.
+
+Completed changes are committed and pushed to GitHub. Fetch before starting work and preserve local edits before integrating.

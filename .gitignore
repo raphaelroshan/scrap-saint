@@ -13,3 +13,7 @@ user://
 .DS_Store
 __pycache__/
 .pytest_cache/
+
+# Generated Godot import metadata for development evidence
+assets/development/*.png.import
+docs/evidence/**/*.png.import

@@ -443,12 +443,14 @@ func working_quiet_objective() -> bool:
 func advance_destination_node(index: int, amount: float, source: Vector2):
 	var objective = objective_data()
 	var node = state.objective[index]
+	if node.complete: return
 	var node_data = objective.nodes[index]
 	var p = Vector2(node_data.position[0], node_data.position[1])
 	node.progress = minf(float(objective.required_ticks), node.progress + amount)
 	emit("objective_repair_pulse", {"position": p, "source": source, "node_id": node.id, "amount": amount})
 	if node.progress >= float(objective.required_ticks):
 		node.complete = true
+		if optional_mode(): record_scrap("optional_site_work", int(config.optional_repairs.destination_node_scrap))
 		trigger_repair_completion_gifts("%s:%s" % [state.site_id, node.id], p)
 		extend_maintenance_parade(p, node.id)
 		emit("objective_node_complete", {"position": p, "node_id": node.id})
@@ -552,6 +554,7 @@ func purchase_preview(index: int) -> Dictionary:
 		if preview.result == "OK": preview.scrap_after -= int(catalogue[id].cost_scrap)
 		return preview
 	if id.begins_with("service."):
+		if optional_mode(): return preview
 		if id not in ["service.repair", "service.doctrine", "service.calibrate"]: return preview
 		var cost = int(config.shop_rules.services[state.doctrine].cost) if id == "service.doctrine" else int(config.economy.repair_cost)
 		if state.scrap < cost: preview.result = "INSUFFICIENT_SCRAP"
@@ -594,6 +597,7 @@ func combine_owned() -> String:
 func buy(index: int) -> String:
 	if index < 0 or index >= state.offers.size(): return "INVALID_OFFER"
 	var id = state.offers[index]
+	if optional_mode() and id.begins_with("service."): return "INVALID_OFFER"
 	if id == "": return "SOLD"
 	if id.begins_with("service."):
 		if id not in ["service.repair", "service.doctrine", "service.calibrate"]: return "INVALID_OFFER"
@@ -713,7 +717,45 @@ func evolution_path_offer() -> String:
 	if best_rank < int(best_recipe.required_rank) and can_fit_weapon(best_recipe.base_item_id): return best_recipe.base_item_id
 	return "service.calibrate"
 
+func roll_relic_shop():
+	var pool: Array = config.weapons.keys()
+	var upgrades: Array = []
+	var fresh: Array = []
+	var support: Array = []
+	for id in config.weapons:
+		var owned = (state.weapons + state.reserve).filter(func(w): return w.id == id)
+		if owned.is_empty() and can_fit_weapon(id): fresh.append(id)
+		elif owned.any(func(w): return w.rank < 3 and not weapon_evolved(w)) and can_fit_weapon(id): upgrades.append(id)
+	for id in config.catalysts:
+		if id not in state.catalysts: support.append(id)
+	for id in config.gifts:
+		if gift_offer_eligible(id): support.append(id)
+	pool.append_array(support)
+	var affordable = (upgrades + fresh).filter(func(id): return catalogue[id].cost_scrap <= state.scrap)
+	var path = evolution_path_offer()
+	# Reserve a valid held offer before rolling so it cannot displace another role.
+	var held = state.locked if state.locked in pool else ""
+	if held == "": state.locked = ""
+	pool.erase(held)
+	state.offers = []
+	for slot in range(6):
+		if slot == 5 and held != "":
+			state.offers.append(held)
+			continue
+		var preferred: Array = affordable if slot == 0 else (fresh if slot == 1 else support)
+		if slot >= 4: preferred = config.weapons.keys()
+		var candidates = pool.filter(func(id): return id in preferred)
+		if slot == 2 and path in pool: candidates = [path]
+		if candidates.is_empty(): candidates = pool.duplicate()
+		var id = shop_pick(candidates, slot) if not candidates.is_empty() else ""
+		state.offers.append(id)
+		pool.erase(id)
+	apply_component_lead()
+
 func roll_shop():
+	if optional_mode():
+		roll_relic_shop()
+		return
 	var upgrades = []
 	var fresh = []
 	var owned = []
@@ -861,7 +903,7 @@ func step(move: Vector2):
 	update_threat_metrics()
 	if state.hp <= 0: finish(false, "The Saint's structure failed.")
 	elif not optional_mode() and state.relay_hp <= 0: finish(false, "The relay was destroyed.")
-	elif state.wave == boss_wave and state.boss_dead and (not is_destination() or state.objective_complete):
+	elif state.wave == boss_wave and state.boss_dead and (optional_mode() or not is_destination() or state.objective_complete):
 		if is_destination(): open_memory()
 		else: complete_workshop()
 	elif state.wave_tick >= current_wave_ticks():
@@ -1622,6 +1664,8 @@ func update_weapons():
 			emit("hit", {"position": e.p, "amount": dealt, "weapon": w.id, "rank_behaviors": rank_behaviors, "color": data.color})
 			if e.hp <= 0:
 				state.kills += 1
+				if optional_mode() and state.kills % int(config.combat.repair_drop_every) == 0:
+					state.pickups.append({"p": e.p, "kind": "repair_kit", "amount": config.combat.repair_drop_healing})
 				state.kills_by_weapon[w.id] = int(state.kills_by_weapon.get(w.id, 0)) + 1
 				emit("death", {"position": e.p, "weapon": w.id, "rank_behaviors": rank_behaviors, "color": data.color})
 				if e.type == current_boss_id(): state.boss_dead = true
@@ -1697,12 +1741,13 @@ func apply_objective_repair_pulse(amount: float, radius: float, source: Vector2)
 
 func update_pickups():
 	for p in state.pickups:
+		if p.kind == "repair_kit" and state.hp >= saint_max_structure(): continue
 		if p.get("seeking", false) and p.p.distance_to(state.position) > 1:
 			p.p += (state.position - p.p).normalized() * minf(float(p.get("seek_speed", 3.5)), p.p.distance_to(state.position))
 		if p.p.distance_to(state.position) < config.combat.pickup_radius:
 			if p.kind == "scrap": collect_scrap(int(p.amount), "pickups")
 			else: state.hp = minf(saint_max_structure(), state.hp + p.amount)
-			emit("pickup", {"position": p.p, "amount": p.amount})
+			emit("repair" if p.kind == "repair_kit" else "pickup", {"position": p.p, "amount": p.amount})
 			p.amount = 0
 	state.pickups = state.pickups.filter(func(p): return p.amount > 0)
 
@@ -1864,6 +1909,8 @@ func restore(saved: Dictionary) -> bool:
 		if w.evolution == "" and w.toll: w.evolution = "evolution.great_toll"
 		if w.evolution != "" and w.evolution not in state.evolutions: state.evolutions.append(w.evolution)
 	state.evolved = not state.evolutions.is_empty()
+	if optional_mode() and state.phase == "shop" and state.offers.any(func(id): return id.begins_with("service.")):
+		roll_relic_shop()
 	for enemy in state.enemies:
 		if not enemy.has("relay_strike_at"): enemy.relay_strike_at = 0
 		if not enemy.has("relay_ready"): enemy.relay_ready = 0

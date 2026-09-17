@@ -1,10 +1,12 @@
 # Scrap Saint — Story and acts
 
+The user's [sacred origin revision](saint_of_freely_given_repairs.md) supersedes the earlier engineered-origin plot. The Saint manifests through repairs given freely in a devastated, corrupted machine world. The campaign below is an older structural outline; mandatory objective, relay-defence and build-counter passages do not override the current free-movement runtime or the user's later gameplay decisions.
+
 ## Narrative spine
 
-The Saint is a maintenance automaton built from parts that were never meant to share one body. It wakes beneath a collapsed workshop with a damaged instruction: **RESTORE THE FIRST ENGINE**.
+The Saint manifests from the accumulated grace of freely given repairs, taking a body of incompatible machine parts beneath a collapsed workshop. Devastation and corruption have spread through the machine world. Its pilgrimage leads toward the First Engine and the question of how that world can be healed.
 
-At first, the Saint interprets the instruction literally. It repairs relay towers, water pumps, workshops, and machine shrines. Each repair restores a fragment of memory. The fragments reveal that the First Engine coordinated an industrial society that was efficient, productive, and deeply exploitative. The Saint was assembled during the final collapse from whatever parts were available, which is why its memories and doctrines conflict.
+At first, the Saint understands healing through the broken things immediately before it. Its journey brings it among machine communities, damaged infrastructure and hostile corrupted bodies. The histories of its parts reveal repairs made freely by people who could not have known what their care would eventually bring into being. Competing traditions offer different accounts of the First Engine and its relationship to the devastation.
 
 The story’s central question is not whether the First Engine can be restarted. It is whether restoring the old order is morally and practically desirable.
 
@@ -58,7 +60,7 @@ Rivet Hounds, Scrap Mites, and Choir Drones.
 
 ### Narrative outcome
 
-The player learns that the Saint’s instruction was issued by the First Engine, but not why the machine stopped.
+The player learns that the First Engine is a destination of pilgrimage, while its relationship to the spreading corruption remains uncertain. The Saint's existence is not an instruction issued by the Engine.
 
 ## Act II — Contested Districts
 
@@ -90,7 +92,7 @@ The Saint enters districts claimed by rival machine doctrines. Each district off
 
 ### Narrative outcome
 
-The Saint discovers records showing that it was assembled during the collapse from parts selected by several factions. Its “wrongness” may have been intentional: a neutral machine was needed to carry knowledge across faction boundaries.
+The Saint discovers that its parts passed through different communities and traditions. Their histories contain acts of care across those divisions. No faction can claim to have designed or to own the being that eventually manifested.
 
 ## Act III — The Memory Works
 
@@ -113,7 +115,7 @@ Memory arenas introduce one temporary rule from the Saint’s past. A worker mem
 
 ### Narrative outcome
 
-The Saint learns that the First Engine deliberately mixed its components because a machine with one fixed purpose could be controlled. The Saint was built wrong so it could choose.
+The Saint discovers acts of freely given repair carried through the histories of its components. No single maker, including the First Engine, planned its existence. The revelation is that those acts caused the Saint to manifest, and that the care which made it leaves its choices open.
 
 ## Act IV — The First Engine
 

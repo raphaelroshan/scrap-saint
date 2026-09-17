@@ -44,6 +44,10 @@ var simulation_speed = 1
 var tutorial_page = 0
 var awaiting_binding = ""
 var recent_unlocks: Array = []
+var lore = JSON.parse_string(FileAccess.get_file_as_string("res://content/lore/first_shift.json"))
+var ledger_return = "title"
+var ledger_section = "origin"
+var ledger_page = 0
 var evolution_ledger_open = false
 var map_selection = ""
 var visual_clock_override = -1
@@ -78,6 +82,25 @@ const WEAPON_FX_DURATION_MS = {
 	"halo": 480,
 	"repair_halo": 680,
 }
+
+func open_ledger():
+	ledger_return = screen
+	screen = "ledger"
+	ledger_section = "relics" if ledger_return == "game" else "origin"
+	ledger_page = 0
+	build_ui()
+
+func ledger_entries() -> Array:
+	return [lore.origin] if ledger_section == "origin" else lore[ledger_section]
+
+func change_ledger(section: String):
+	ledger_section = section
+	ledger_page = 0
+	build_ui()
+
+func close_ledger():
+	screen = ledger_return
+	build_ui()
 
 func _ready():
 	title_font.font_names = PackedStringArray(["Georgia", "DejaVu Serif"])
@@ -150,6 +173,9 @@ func _unhandled_key_input(event):
 			settings.save_to()
 		awaiting_binding = ""
 		build_ui()
+		return
+	if event.keycode == KEY_ESCAPE and screen == "ledger":
+		close_ledger()
 		return
 	if event.keycode == KEY_ESCAPE and screen in ["settings", "tutorial"]:
 		screen = previous_screen
@@ -389,12 +415,23 @@ func build_ui():
 		ui.remove_child(child)
 		child.queue_free()
 	if screen == "game" and not evolution_showcase.is_empty(): return
-	if screen == "title":
+	if screen == "ledger":
+		for i in range(3):
+			var section = ["origin", "relics", "creatures"][i]
+			button(["The Saint", "Relic histories", "Corrupted machines"][i], Rect2(124+i*344, 174, 324, 42), func(): change_ledger(section), ledger_section == section)
+		var entries = ledger_entries()
+		var previous = button("← Previous", Rect2(124, 638, 190, 42), func(): ledger_page -= 1; build_ui())
+		previous.disabled = ledger_page == 0
+		var next = button("Next →", Rect2(330, 638, 190, 42), func(): ledger_page += 1; build_ui())
+		next.disabled = ledger_page >= entries.size()-1
+		button("Return to shop" if ledger_return == "game" else "Return to title", Rect2(808,638,348,42), close_ledger, true).grab_focus()
+	elif screen == "title":
 		if title_transition_started < 0:
 			button("BEGIN A PILGRIMAGE", Rect2(90, 404, 390, 52), begin_title_transition, true).grab_focus()
 			if FileAccess.file_exists(save_path): button("Resume saved expedition", Rect2(90, 468, 390, 42), load_run)
 			button("How to play", Rect2(90, 526, 188, 40), func(): tutorial_page = 0; open_panel("tutorial"))
 			button("Settings", Rect2(292, 526, 188, 40), func(): open_panel("settings"))
+			button("Sacred histories", Rect2(90, 578, 390, 34), open_ledger)
 	elif screen == "tutorial":
 		button("Back", Rect2(318, 640, 180, 42), close_panel)
 		if tutorial_page > 0: button("Previous", Rect2(514, 640, 180, 42), func(): tutorial_page -= 1; build_ui())
@@ -469,12 +506,14 @@ func build_ui():
 				var row = int(i / 3)
 				var x = 94 + col * 302
 				var y = 208 + row * 192
-				button("BUY / COMBINE" if i < 2 else "ACQUIRE", Rect2(x + 14, y + 142, 182, 28), func(): act("buy", i))
+				var buy_button = button("BUY / COMBINE" if sim.state.offers[i] in sim.config.weapons else "ACQUIRE", Rect2(x + 14, y + 142, 182, 28), func(): act("buy", i))
+				buy_button.disabled = sim.purchase_preview(i).result != "OK"
 				button("◆" if sim.state.locked == sim.state.offers[i] and sim.state.offers[i] != "" else "Lock", Rect2(x + 205, y + 142, 66, 28), func(): act("lock", i))
 			var costs = sim.config.economy.reroll_costs
 			var refresh = "No refreshes left" if sim.state.rerolls >= costs.size() else ("Refresh · FREE" if costs[sim.state.rerolls] == 0 else "Refresh · %d Scrap" % costs[sim.state.rerolls])
 			button(refresh, Rect2(108, 613, 220, 40), func(): act("reroll"))
 			button("EVOLUTION LEDGER · %d" % sim.config.evolutions.size(), Rect2(344, 613, 250, 40), func(): evolution_ledger_open = true; build_ui())
+			button("Histories", Rect2(610, 613, 108, 40), open_ledger)
 			button("NEXT WAVE  →", Rect2(734, 613, 250, 40), func(): act("continue"), true).grab_focus()
 			button("Combine pair", Rect2(1060, 573, 188, 32), func(): act("combine"))
 			button("Equip reserve", Rect2(1060, 613, 188, 32), func(): act("equip"))
@@ -523,6 +562,10 @@ func bar(rect: Rect2, fraction: float, color: Color):
 
 func _draw():
 	draw_rect(Rect2(0, 0, 1280, 800), INK)
+	if screen == "ledger":
+		camera_offset = Vector2.ZERO
+		draw_ledger()
+		return
 	if screen == "title":
 		camera_offset = Vector2.ZERO
 		draw_title()
@@ -578,6 +621,27 @@ func _draw():
 	if debug_visible:
 		text_at("BUILD %s | Godot %s | 1280×800 | seed %d | tick %d | %s" % [sim.config.get("version", "dev"), Engine.get_version_info().string, seed_value, sim.state.get("tick", 0), capture_label if capture_dir != "" or fixture_label else "LIVE"], Vector2(28, 745), 11, GOLD)
 
+func draw_ledger():
+	text_at("THE WORKSHOP LEDGER", Vector2(124,89),15,GOLD)
+	text_at("What the metal remembers",Vector2(120,143),38,PAPER,true)
+	panel(Rect2(108,238,1064,374))
+	var entry = ledger_entries()[ledger_page]
+	if ledger_section == "relics":
+		draw_gear(Vector2(163,291),20,GOLD,0)
+	elif ledger_section == "creatures":
+		draw_arc(Vector2(163,291),20,0.3,TAU-0.3,24,RED,3,true)
+		draw_circle(Vector2(163,291),7,INK)
+		draw_line(Vector2(153,270),Vector2(171,312),RED,2,true)
+	else:
+		draw_saint(Vector2(164,297),Vector2.RIGHT,1.0)
+		draw_set_transform(Vector2.ZERO)
+	text_at(entry.get("subtitle","RELIC / REMEMBERED SERVICE"),Vector2(212,276),12,GREEN)
+	text_at(entry.name,Vector2(210,316),30,PAPER,true)
+	wrapped(entry.history.replace("\n", " "),Vector2(148,365),968,18,PAPER)
+	wrapped(entry.line,Vector2(148,543),968,19,GOLD)
+	text_at("%d / %d" % [ledger_page+1,ledger_entries().size()],Vector2(596,665),16,MUTED)
+	text_at("Read at your own pace. Your build and shop offers stay as you left them.",Vector2(148,717),14,MUTED)
+
 func evolution_showcase_progress() -> float:
 	if evolution_showcase.is_empty(): return 0.0
 	return clampf(float(visual_now_ms() - int(evolution_showcase.started_at)) / float(EVOLUTION_SHOWCASE_MS), 0.0, 1.0)
@@ -616,8 +680,8 @@ func draw_title():
 	text_at("A PILGRIMAGE OF REPAIRS", Vector2(88, 92), 14, GOLD)
 	text_at("Scrap Saint", Vector2(82, 182), 68, PAPER, true)
 	text_at("Turn scrap into miracles.", Vector2(88, 226), 23, MUTED, true)
-	wrapped("A small maintenance machine crosses ruined workshops, carries incompatible relics, and decides what deserves to work again.", Vector2(90, 266), 410, 16, PAPER)
-	text_at("FIRST CHAPTER · FIVE SITES · TEN WEAPONS", Vector2(90, 610), 11, GOLD)
+	wrapped("Called into being by repairs freely given, a small maintenance machine crosses ruined workshops and decides what deserves to work again.", Vector2(90, 266), 410, 16, PAPER)
+	text_at("FIRST CHAPTER · SIX SITES · TEN EVOLUTIONS", Vector2(90, 634), 11, GOLD)
 	text_at("Memory fragments: %d" % profile.state.memory_fragments, Vector2(90, 698), 12, MUTED)
 	if title_transition_started >= 0:
 		text_at("REMEMBERING THE ROAD…", Vector2(90, 552), 14, PAPER)
@@ -751,7 +815,7 @@ func draw_tutorial():
 		"You are a maintenance automaton assembled from incompatible machines. Reach the First Engine—and decide whether the old order deserves repair.",
 		"Move with your chosen keys or a controller stick. Weapons fire automatically. Positioning decides which geometry reaches which threat.",
 		"Workshop machines are optional. Their reward and work time are shown before you commit. Leave when the risk stops being worth it; progress is preserved.",
-		"Spend Scrap on weapons and services. Relic Shards buy catalysts. Combine matching ranks; evolve a Rank III relic with its named catalyst. Gifts change one rule and occupy separate slots.",
+		"Spend Scrap on weapons and Gifts. Recover through field drops and optional repairs. Relic Shards buy catalysts. Combine matching ranks; evolve a Rank III relic with its named catalyst. Gifts change one rule and occupy separate slots.",
 		"Defeat the Foreman, choose Brass Choir or Rootworks, then follow one final authored road. Results explain the full route; Memory unlocks choices, never permanent damage."
 	]
 	text_at("FIELD MANUAL %d / 5" % (tutorial_page + 1), Vector2(220, 190), 12, GOLD)
@@ -774,7 +838,7 @@ func draw_header():
 	text_at("%d / %d" % [maxi(0, sim.state.hp), sim.saint_max_structure()], Vector2(352, 72), 13)
 	if sim.is_destination():
 		var complete = sim.state.objective.filter(func(node): return node.complete).size()
-		text_at("ROUTE OBJECTIVE", Vector2(568, 31), 11, MUTED)
+		text_at("OPTIONAL SITE WORK", Vector2(568, 31), 11, MUTED)
 		bar(Rect2(568, 43, 175, 8), complete / float(maxi(1, sim.state.objective.size())), GREEN)
 		text_at("%d / %d stations complete" % [complete, sim.state.objective.size()], Vector2(568, 72), 12)
 	elif sim.optional_mode():
@@ -952,7 +1016,11 @@ func draw_world():
 		var hazard_label = hazard_labels.get(h.get("kind", ""), "!")
 		text_at(hazard_label, h.p + Vector2(-font.get_string_size(hazard_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 10).x * 0.5, 5), 10, GOLD)
 	for p in sim.state.pickups:
-		if p.kind == "scrap": draw_colored_polygon(PackedVector2Array([p.p + Vector2(0, -6), p.p + Vector2(6, 0), p.p + Vector2(0, 6), p.p + Vector2(-6, 0)]), GOLD)
+		if p.kind == "repair_kit":
+			draw_rect(Rect2(p.p - Vector2(7,7), Vector2(14,14)), GREEN)
+			draw_line(p.p-Vector2(4,0),p.p+Vector2(4,0),INK,2)
+			draw_line(p.p-Vector2(0,4),p.p+Vector2(0,4),INK,2)
+		elif p.kind == "scrap": draw_colored_polygon(PackedVector2Array([p.p + Vector2(0, -6), p.p + Vector2(6, 0), p.p + Vector2(0, 6), p.p + Vector2(-6, 0)]), GOLD)
 		else:
 			draw_circle(p.p, 5, Color("cbb8ed"))
 			draw_arc(p.p, 9, 0, TAU, 16, Color("84759e"), 1)
@@ -2103,11 +2171,15 @@ func draw_shop():
 				if sim.optional_mode() and sim.state.doctrine == 1: description = "Next wave: demolition warnings last 50% longer."
 				if sim.state.doctrine == 3: description = "Next wave: orbiting relics travel 35% farther."
 			price = "%d SCRAP / SERVICE" % (sim.config.shop_rules.services[sim.state.doctrine].cost if id == "service.doctrine" else sim.config.economy.repair_cost)
-		text_at(sim.config.shop_rules.roles[i] + (" / LOCKED" if sim.state.locked == id else ""), Vector2(x + 16, y + 16), 9, MUTED)
+		text_at((sim.config.shop_rules.relic_roles[i] if sim.optional_mode() else sim.config.shop_rules.roles[i]) + (" / LOCKED" if sim.state.locked == id else ""), Vector2(x + 16, y + 16), 9, MUTED)
 		text_at(price, Vector2(x + 16, y + 33), 10, GOLD)
 		text_at(name_text, Vector2(x + 16, y + 60), 19, PAPER, true)
 		wrapped_limited(description, Vector2(x + 16, y + 80), 252, 10, MUTED, 3, 14)
 		var preview_text = honest_scale_preview_text(i)
+		if preview_text == "":
+			var projection = sim.purchase_preview(i)
+			if projection.result != "OK": preview_text = str(projection.result).replace("_", " ")
+			elif not projection.combines.is_empty(): preview_text = "COMBINES INTO A HIGHER RANK"
 		if preview_text != "": text_at(preview_text, Vector2(x + 16, y + 125), 9, GREEN if sim.purchase_preview(i).get("result", "") == "OK" else RED)
 	text_at("Gifts are unique support rules · seven designs · carry two.", Vector2(108, 685), 13, MUTED)
 	text_at("Open the Evolution Ledger to inspect every recipe, ingredient and readiness state.", Vector2(108, 714), 11, GOLD)
@@ -2159,7 +2231,7 @@ func draw_results():
 		var loss_segment = str(summary.get("worst_damage_segment", "wave " + str(summary.get("worst_damage_wave", 0)))).replace("site.", "").replace(":wave_", " / wave ").replace("_", " ")
 		text_at("PRIMARY CAUSE  " + summary.get("failure_cause", "UNCLASSIFIED") + " · largest loss " + loss_segment, Vector2(220, 534), 14, RED)
 	wrapped(summary.get("replay_cue", "Try one clear change next shift."), Vector2(220, 545), 820, 17, PAPER)
-	var memory_copy = sim.current_route().memory.text if won and sim.state.chapter_complete else "MEMORY 01 / Your arm remembers a waterworks. Your bell remembers a factory. Neither remembers being asked to become a weapon."
+	var memory_copy = sim.current_route().memory.text if won and sim.state.chapter_complete else "MEMORY 01 / A stranger gave this arm a sound joint and asked for nothing. The grace of that repair is still here. It is part of what woke you."
 	wrapped(memory_copy, Vector2(220, 603), 820, 14, MUTED)
 	if not recent_unlocks.is_empty():
 		text_at("NEW OPTIONS  " + ", ".join(recent_unlocks.map(func(id): return str(id).get_slice(".", 1).replace("_", " ").to_upper())), Vector2(220, 638), 11, GOLD)

@@ -8,8 +8,10 @@ $bundlePath = Join-Path $projectRoot 'artifacts\agent-iteration'
 New-Item -ItemType Directory -Path $bundlePath -Force | Out-Null
 & $PythonBin "$PSScriptRoot\validate_content.py"
 if ($LASTEXITCODE -ne 0) { throw 'Content validation failed' }
-& $PythonBin -m unittest tests/test_slice_manifest.py
+& $PythonBin -m unittest discover -s "$projectRoot\tests" -p test_slice_manifest.py
 if ($LASTEXITCODE -ne 0) { throw 'Manifest tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_sync_contract.gd 2>&1 | Tee-Object -FilePath "$bundlePath\sync-contract.log"
+if ($LASTEXITCODE -ne 0) { throw 'Sync contract tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_variety.gd 2>&1 | Tee-Object -FilePath "$bundlePath\variety.log"
 if ($LASTEXITCODE -ne 0) { throw 'Variety tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_optional_repairs.gd 2>&1 | Tee-Object -FilePath "$bundlePath\optional.log"
@@ -72,6 +74,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Weapon animation capture failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Game feel capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_gift_breadth.gd 2>&1 | Tee-Object -FilePath "$bundlePath\gift-breadth-capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Gift breadth capture failed' }
+& $GodotBin --path $projectRoot --script res://tests/capture_sync_contract.gd 2>&1 | Tee-Object -FilePath "$bundlePath\sync-capture.log"
+if ($LASTEXITCODE -ne 0) { throw 'Sync capture failed' }
 $commitId = git -C $projectRoot rev-parse HEAD
 $godotVersion = & $GodotBin --version
 $files = Get-ChildItem -LiteralPath "$projectRoot\game" -Filter '*.gd' | ForEach-Object { @{ path = $_.Name; sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash } }

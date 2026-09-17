@@ -1,5 +1,21 @@
 # First Shift runtime — 0.6.0 preview
 
+## 2026-09-17 integration — authoritative current rules
+
+Upstream 3a3808b and local work preserved at 67f1fec are reconciled. Keep all ten weapons, ten Evolutions, seven Gifts, four Blessings, three frames, chapter routes and the complete weapon-animation families.
+
+Main-mode shops have six unique relic offers with eligible Gifts and unowned catalysts. They retain deterministic locks, preview validation and an affordable first choice when available. Services remain only in the relay comparison. Loading an older main-mode shop with service cards regenerates that shop under the relic rules; subsequent saves preserve the new offers. Previously purchased service effects finish their existing lifetime.
+
+Every twelfth defeat drops a 15-integrity repair kit. It waits at full health, heals once up to the frame's cap, and expires at the shop boundary. Motes and optional machine rewards remain. All main-mode destinations advance when their boss is defeated; unfinished station work cannot fail the run. Completing a station grants +3 Scrap once and retains existing Gift and Evolution interactions. Upstream repair interruption, grace and banked empty-bell control remain.
+
+The title and optional histories ledger present the approved manifestation through freely given repairs. Ten relic histories and six creature histories accompany the origin. Reading freezes the run and preserves shop offers; the ten-recipe Evolution Ledger remains separate. Creature histories do not yet cover the seventh enemy family.
+
+The earlier evidence below belongs to its named build. Integration verification is recorded in packet_sync_2026-09-17.md; do not apply the older local Mourner timeout or old policy counts to this combined build.
+
+Limitation: human 1× balance and effect readability remain unverified. Exactly one next task: reduce overlapping evolved effects around the Saint without changing authoritative attacks.
+
+## Historical implementation and evidence
+
 The project now contains a runnable Godot 4.5.1 desktop prototype. This is the first implementation, not a finished creative vertical. `content/slices/first_shift.json` is the authoritative enabled catalogue and tuning source; the larger catalogues also contain future concepts.
 
 ## Implemented

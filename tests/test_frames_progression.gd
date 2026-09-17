@@ -36,7 +36,7 @@ func _initialize():
 	check(surveyor.state.machines[0].progress == expired and surveyor.state.active_machine == "", "Surveyor grace expires and pauses work")
 
 	var procession = Sim.new()
-	procession.start(3, 147, "optional", "frame.pilgrim", "frames-procession")
+	procession.start(3, 147, "relay", "frame.pilgrim", "frames-procession")
 	check(procession.state.doctrine == 3 and procession.state.weapons[0].id == "weapon.procession_gear", "Procession starts with its authored Gear")
 	procession.state.weapons.append(procession.make_weapon("weapon.foundry_censer"))
 	procession.update_fulfilment()

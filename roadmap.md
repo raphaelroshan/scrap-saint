@@ -1,5 +1,13 @@
 # Scrap Saint roadmap
 
+## Current direction — 2026-09-17
+
+This document retains historical planning below. The enabled 0.5 preview now has ten weapons, ten Evolutions, seven Gifts, four Blessings, three frames and a branching three-site expedition. The old seven-weapon count and Mourner wave-five failure describe earlier builds, not the current gate. Current verification and limitations are recorded in docs/runtime_status.md (runtime_status.md from this folder).
+
+User decisions govern integration: the Saint manifests through repairs freely given; main-mode shops contain six relics with healing supplied by drops and optional work; destination work is optional too. Preserve upstream rank, chapter and animation systems. Commit and push completed validated changes so collaborators share the same build.
+
+The next task after this integration is reducing evolved-effect overlap around the Saint. Historical next-task paragraphs below do not supersede this order.
+
 ## 1. Roadmap purpose and current truth
 
 A playable Godot prototype now spans the First Shift loop. See [runtime status](docs/runtime_status.md) for implemented subsets, verification results and deferred mechanics. The accepted launch scope is in the [Early Access delivery plan](docs/early_access_plan.md). Human playtesting and creative-vertical approval remain outstanding.

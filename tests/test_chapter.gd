@@ -267,7 +267,7 @@ func _initialize():
 	root.state.wave = root.current_wave_count()
 	root.state.boss_dead = true
 	root.step(Vector2.ZERO)
-	check(root.state.phase == "combat", "boss defeat cannot bypass unfinished destination objective")
+	check(root.state.phase == "memory" and not root.state.objective_complete, "boss defeat resolves optional destination work without requiring completion")
 	for node in root.state.objective: node.complete = true
 	root.state.objective_complete = true
 	root.step(Vector2.ZERO)

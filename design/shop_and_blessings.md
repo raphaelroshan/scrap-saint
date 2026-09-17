@@ -1,5 +1,9 @@
 # Scrap Saint — Shop and Blessings contract
 
+## Current main-mode contract — 2026-09-17
+
+All six offers are relics: weapons, unowned catalysts and eligible Gifts. Recovery comes from field repair kits, motes and optional machines. Services and calibration remain available only in relay comparison mode. The generator protects unique choices, valid locks and an affordable build action when available. The historical service layout below does not apply to main mode.
+
 Current executable rules and simplified services are detailed in [runtime status](../docs/runtime_status.md). The slice manifest determines enabled offers; future recipes are excluded from runtime promises.
 
 ## Design decision
