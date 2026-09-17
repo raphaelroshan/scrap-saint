@@ -1,0 +1,25 @@
+{
+  "date": "2026-09-17",
+  "method": "OpenAI built-in image generation with project-owned generated visual references",
+  "status": "CONCEPT_ONLY; not runtime sprites, not gameplay captures",
+  "references": [
+    "assets/title/meditation.png",
+    "docs/art_direction.md",
+    "content/lore/first_shift.json"
+  ],
+  "outputs": {
+    "saint.png": {
+      "generated_source": "exec-4cb769f5-e592-41e7-a037-773cefadf8ff.png",
+      "sha256": "49ca43f9c5dbceaaf69ca309df3488a30b563742fef4abf80609bce1842b95b8"
+    },
+    "relics.png": {
+      "generated_source": "exec-4fb6760d-2787-4bf7-a5ef-3bf448f364a8.png",
+      "sha256": "83f921dae4295194610781a512ba4ae6b1df152be19159aec4672a1566b7f36c"
+    },
+    "arena-target.png": {
+      "generated_source": "exec-a12bc98c-688d-40ce-9cf2-39ee2d3b0020.png",
+      "sha256": "73b672455c8ea74140ce6850a4e69e795e5e26c381ec94c3ded69204226ddf94"
+    }
+  },
+  "review": "Boards inspected visually. Secondary character poses obscure folded arms; arena hero oversized, smoke too opaque, decorative UI and perspective non-authoritative. See docs/visual_target.md."
+}

@@ -1,5 +1,9 @@
 # Scrap Saint — Art and feel direction
 
+## Proposed production target
+
+See [the Saint, four relic designs and arena visual target](visual_target.md) for the current proposed production treatment, concept boards, scale targets and explicit implementation corrections. These are concept assets; the runtime has not yet adopted them.
+
 ## Visual promise
 
 Scrap Saint should look like a **chunky industrial diorama built from repaired objects**. The world is ruined, but not visually dead. Brass catches warm light, rust flakes from moving parts, old warning paint survives on machine housings, and tiny maintenance details make the Saint feel like it belongs to a history of work.
