@@ -12,4 +12,4 @@ Evidence: generated design boards with source hashes and explicit concept proven
 
 Limitation: generated boards cannot establish animation, actual pixel-scale recognition or production-ready rigging.
 
-Exactly one next task: implement a single playable Saint and Nailer art slice at the real gameplay camera.
+Follow-up revised by the user on 2026-09-18: keep the current Saint sprite and defer attachment-arm rigging. Exactly one next task: implement the manifested Nailer and Mercy Rail visual slice while preserving the current Saint sprite.

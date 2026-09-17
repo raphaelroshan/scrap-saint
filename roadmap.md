@@ -1,12 +1,29 @@
 # Scrap Saint roadmap
 
-## Current direction — 2026-09-17
+## Current direction — 2026-09-18
 
-This document retains historical planning below. The enabled 0.5 preview now has ten weapons, ten Evolutions, seven Gifts, four Blessings, three frames and a branching three-site expedition. The old seven-weapon count and Mourner wave-five failure describe earlier builds, not the current gate. Current verification and limitations are recorded in docs/runtime_status.md (runtime_status.md from this folder).
+This section supersedes the historical implementation sequence below. The current 0.6 preview includes ten weapons, ten Evolutions, seven Gifts, four Blessings, three frames, a branching three-site expedition, and the illustrated main menu. See [runtime status](docs/runtime_status.md) for implemented behavior and verification. Earlier roster counts and failed-policy reports describe their original builds.
 
-User decisions govern integration: the Saint manifests through repairs freely given; main-mode shops contain six relics with healing supplied by drops and optional work; destination work is optional too. Preserve upstream rank, chapter and animation systems. Commit and push completed validated changes so collaborators share the same build.
+User decisions remain authoritative: the Saint manifests through repairs freely given; main-mode shops offer relics; recovery comes from drops and optional work; destination repairs are optional. Preserve the current gameplay and chapter systems. Commit and push completed validated changes.
 
-The next task after this integration is reducing evolved-effect overlap around the Saint. Historical next-task paragraphs below do not supersede this order.
+### Visual decision: manifested relics
+
+Keep the current playable Saint sprite unchanged for this phase. Weapons manifest as recognizable objects and attack effects near the Saint or at their authoritative attack origins. Brief manifestations appear, perform the attack and fade; persistent orbiting or area effects remain visible for their active lifetime. Warm brass and restrained cream light connect the relics to the remembered service of discarded tools.
+
+Defer the proposed attachment-arm rig, mount sockets and character-sprite replacement. The character and weapon concept boards remain references, not implementation requirements. Existing targeting, damage, attack cadence, hitboxes and evolution rules remain simulation-owned; visual appearance must not delay or duplicate an attack.
+
+### Ordered visual work
+
+| Order | Work | Completion gate |
+|---|---|---|
+| 1 — next | Manifested Nailer and Mercy Rail on the unchanged Saint | Distinct rivet mechanism, recoil and line resolve; Mercy Rail visibly unfolds longer guides and uses its existing attack geometry. Verify normal and reduced effects, moving/facing changes, event timing and unchanged simulation outcomes. |
+| 2 | Manifested Bell, Cable and Foundry Censer | Bell body and hammer precede readable arcs; clamp/reel accompany the tether; Censer vessel accompanies its low smoke field. Preserve each relic's silhouette and existing behavior. |
+| 3 | Four-weapon overlap and remaining relic families | Stress-test simultaneous attacks at the actual gameplay camera. Saint position, nearby enemies and threat cues remain visible. Persistent gears/halos follow their existing lifetimes; short attacks clean up promptly. |
+| 4 | Workshop Level 1 presentation and pacing review | Test the complete opening level at normal speed with uncoached players; use findings to tune clarity and pacing before expanding art coverage. |
+
+No character rig, new weapons or balance changes are prerequisites for step 1. Require real Godot captures with build/viewport/seed provenance and event/state regression checks for each runtime slice. Concept boards alone do not satisfy these gates.
+
+Exactly one next task: implement the manifested Nailer and Mercy Rail visual slice while preserving the current Saint sprite.
 
 ## 1. Roadmap purpose and current truth
 

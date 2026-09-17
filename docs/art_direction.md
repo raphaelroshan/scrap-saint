@@ -4,6 +4,10 @@
 
 See [the Saint, four relic designs and arena visual target](visual_target.md) for the current proposed production treatment, concept boards, scale targets and explicit implementation corrections. These are concept assets; the runtime has not yet adopted them.
 
+## Manifested weapons — current implementation direction
+
+Keep the playable Saint sprite unchanged for now. Relic objects appear at their attack origins, visibly perform their mechanism and fade with the attack; persistent orbiting or area effects keep their appropriate lifetime. Begin with the Nailer and Mercy Rail. Physical attachment-arm rigs and character replacement are deferred. The current roadmap supersedes the older rigging proposal in the concept brief.
+
 ## Visual promise
 
 Scrap Saint should look like a **chunky industrial diorama built from repaired objects**. The world is ruined, but not visually dead. Brass catches warm light, rust flakes from moving parts, old warning paint survives on machine housings, and tiny maintenance details make the Saint feel like it belongs to a history of work.

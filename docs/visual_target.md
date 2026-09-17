@@ -2,6 +2,12 @@
 
 Status: proposed production direction, with generated concept boards. These images are designs, not captures from the game or finished animation assets. The current runtime remains unchanged.
 
+## Current implementation decision — 2026-09-18
+
+Weapons manifest; the current playable Saint sprite stays unchanged for now. Use the relic concepts for brief event-driven weapon appearances and attack effects. Persistent orbiting relics retain their active visuals. Attachment arms, physical mount sockets and the replacement character rig described below are deferred concepts, not dependencies. The menu artwork remains unchanged.
+
+The current first slice is the manifested Nailer and Mercy Rail, followed by Bell, Cable and Censer, then a four-weapon readability pass. The [roadmap](../roadmap.md) governs implementation order. Presentation must preserve simulation timing, targets and outcomes.
+
 ## The decision
 
 Build a painted 2D industrial diorama around a small machine whose repairs are visible. Large cream and green shapes identify the Saint; bronze mechanisms identify its relics; dark iron and rust identify corrupted machines. Grace appears in a careful repair, a warm eye or a useful tool responding. Keep religious meaning in gestures and history, with restrained physical devotional objects.
@@ -74,11 +80,11 @@ Keep cream highlights strongest around the player. Reserve mint for recovery and
 
 The depicted Saint is larger than the proposed runtime scale. Its floor has too many small scratches for a dense late wave. The lower-right smoke is too opaque. The charge cue curves, whereas production must show the simulation's actual path. The decorative top bar is not a HUD specification. The rivet traces imply a multi-target arrangement that must not override the actual weapon rank. Use the image for material, spacing and contrast direction, with these corrections carried into implementation.
 
-## Production handoff
+## Deferred character and attachment-rig handoff
 
 Create the Saint as separated head, visor/eyes, torso, cloth, two legs, two utility arms and four mounting-arm chains. Preserve shared anchors between directional views. Each relic needs a body, moving mechanism, mount socket and event-driven resolve/aftermath layer. Render at higher resolution than display scale, then inspect actual-size samples; do not ship the concept board by slicing its views into an animation atlas.
 
-For the first art slice, deliver idle, walk, repair and hurt views for the Saint plus the Nailer attack and Mercy Rail transformation. Include base, rank and evolution distinctions, normal/reduced effects, and a four-relic stress scene. Reuse authored simulation events and test the foot anchor against collision geometry. Test normal gameplay before extending the treatment to every frame and weapon.
+For a later character-replacement phase, deliver idle, walk, repair and hurt views for the Saint. The current first art slice only manifests the Nailer and Mercy Rail around the existing sprite. Include base, rank and evolution distinctions, normal/reduced effects, and a four-relic stress scene. Reuse authored simulation events and test the foot anchor against collision geometry. Test normal gameplay before extending the treatment to every frame and weapon.
 
 Acceptance must include actual-size recognition against workshop floors, visibility during overlapping attacks, contrast without color, and stable joint/weapon anchors through directional changes. Concept-board thumbnails do not establish these results.
 
@@ -86,4 +92,4 @@ Acceptance must include actual-size recognition against workshop floors, visibil
 
 The character establishes a warm, recognizable face and a practical six-arm solution. The weapon board offers four strong outer shapes with shared material language. The arena board establishes a coherent world, with the readability corrections above still required. Fine scratches and small cloth details are optional polish after the large shapes work.
 
-Exactly one next task: implement a single playable Saint and Nailer art slice at the real gameplay camera.
+Exactly one next task: implement the manifested Nailer and Mercy Rail visual slice while preserving the current Saint sprite.

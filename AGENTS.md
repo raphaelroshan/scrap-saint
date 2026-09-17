@@ -8,6 +8,8 @@ Main-mode shop slots contain relics (weapons, catalysts and eligible Gifts), nev
 
 The user requests ongoing repository synchronization: fetch before integration, preserve dirty work, commit and push completed validated changes, and report the delivered branch/commit. Never force-push shared history. Keep the working delivery branch synchronized with the remote. Runtime status and the enabled slice supersede historical roster limits below.
 
+The 2026-09-18 visual decision is manifested relics: preserve the current Saint sprite, render weapon objects and effects at attack origins, and defer attachment-arm rigging and character replacement. Follow the current roadmap order; concept-board rigging proposals are not current implementation requirements.
+
 ## Read first
 
 Before editing, read [`README.md`](README.md), [`docs/agent_completion_prompt.md`](docs/agent_completion_prompt.md), [`docs/astra_game_bible.md`](docs/astra_game_bible.md), [`docs/story_and_acts.md`](docs/story_and_acts.md), [`design/gameplay_contract.md`](design/gameplay_contract.md), [`design/shop_and_blessings.md`](design/shop_and_blessings.md), and [`docs/progression_map_weapons_metagame.md`](docs/progression_map_weapons_metagame.md). Then select the smallest relevant roadmap and source/test files.
