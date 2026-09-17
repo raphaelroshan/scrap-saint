@@ -2,7 +2,7 @@
 
 **Status:** `WIP / DESIGN ONLY`
 
-No Vow, Boss Imprint, or Confluence in this document is enabled in `0.5.0-preview`. The current runtime still uses Rank III plus a named catalyst for every Evolution and contains no Confluence.
+No Vow, Boss Imprint, or Confluence in this document is enabled in `0.6.0-preview`. The current runtime still uses Rank III plus a named catalyst for every Evolution and contains no Confluence.
 
 ## Design decision
 

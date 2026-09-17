@@ -1,6 +1,6 @@
 # Weapon, Evolution, and trait animation map
 
-**Runtime reference:** `0.5.0-preview`
+**Runtime reference:** `0.6.0-preview`
 
 **Status:** all mechanics in the relationship map are enabled. P18/P19 implement the described procedural four-beat presentation for all ten base/Evolution families; final asset art, audio feel and human timing validation remain open.
 
@@ -87,7 +87,7 @@ Only two Gifts directly rewrite attacks. The others shape repair, targeting info
 
 The current build draws procedural geometry for roughly 230 ms after an attack event. The **target** column adds physical authorship around that already-authoritative resolve without changing hit timing.
 
-| Weapon | Current 0.5.0 presentation | Target Prepare → Commit → Resolve → Aftermath |
+| Weapon | Current procedural presentation | Target Prepare → Commit → Resolve → Aftermath |
 |---|---|---|
 | **Nailer** | Thin gold line; Saint arm turns and recoils. Rank II reaches one more target; Rank III targets retain the gold Mark. | Shoulder bracket locks onto the lane → brass barrel snaps forward and sheds one loose washer → a hard gold nail streak pierces the selected line → small cross-shaped rivet marks remain on hit plates; Foreman Notch stamps the priority target. |
 | **Last Shift Bell** | Expanding forward arc; struck targets stagger, move outward, and can show Mark. | Piston compresses and the bell darkens → clapper hits as the bell becomes the frame's brightest object → a cream pressure wave sweeps the full cone → the bell wobbles while enemies lean back with a vibration ring; Rank II widens the mouth and Rank III visibly double-strikes. |
@@ -140,6 +140,6 @@ The acceptance bar is recognition under overlap: at 1280×800 and normal play sp
 
 ## Current presentation state and gap
 
-The 0.5.0 procedural renderer now supplies presentation-only prepare, commit, resolve and aftermath phases for every enabled base weapon and Evolution. All ten families have a physical Saint-mounted mechanism, authored attack duration, base/Evolution geometry distinction, deterministic particles or residue, and a reduced-effects rendering path. Rank II/III changes appear through added contacts, tines, flames, braces, reach, width or reset hardware where the rank rule affects presentation. Evolution events display family-specific reconfiguration geometry.
+The 0.6.0 procedural renderer supplies presentation-only prepare, commit, resolve and aftermath phases for every enabled base weapon and Evolution. All ten families have a physical Saint-mounted mechanism, authored attack duration, base/Evolution geometry distinction, deterministic particles or residue, and a reduced-effects rendering path. Rank II/III changes appear through added contacts, tines, flames, braces, reach, width or reset hardware where the rank rule affects presentation. Evolution events display family-specific reconfiguration geometry.
 
 This is a complete code-native visual language pass, not final asset art. Configured stills and deterministic tests do not establish human recognition in motion, audio impact, animation comfort at 1×, or rendered minimum-hardware performance. Those questions require an observed real-time session before further timing or density changes.

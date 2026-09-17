@@ -6,8 +6,9 @@ import subprocess
 import sys
 
 root = Path(__file__).resolve().parents[1]
+build_version = json.loads((root / 'content/slices/first_shift.json').read_text(encoding='utf-8'))['version']
 data = {
-    'build': '0.5.0-preview',
+    'build': build_version,
     'base_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip(),
     'dirty': bool(subprocess.check_output(['git', 'status', '--porcelain'], cwd=root, text=True)),
     'godot': subprocess.check_output([sys.argv[1], '--version'], text=True).strip(),
@@ -17,6 +18,6 @@ data = {
     'source_hashes': {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root / 'game').glob('*')) if p.is_file()},
     'content_hashes': {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root / 'content').rglob('*.json'))},
     'limitation': 'No human playtest or rendered minimum-hardware benchmark',
-    'next_task': 'Uncoached 1x comparison of the three-Gift and seven-Gift workshop pools',
+    'next_task': 'Uncoached human 1x session on the packaged Windows build focused on timing, audio mix, recognition, and performance',
 }
 (root / 'artifacts/agent-iteration/provenance.json').write_text(json.dumps(data, indent=2), encoding='utf-8')

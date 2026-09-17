@@ -38,6 +38,9 @@ func run_checks():
 	game.close_panel()
 	for child in game.ui.get_children():
 		if child is Button and child.text == "BEGIN A PILGRIMAGE": child.pressed.emit(); break
+	game.visual_clock_override = game.title_transition_started + game.TITLE_TRANSITION_MS
+	game._process(0.0)
+	game.visual_clock_override = -1
 	check(game.screen == "menu", "new pilgrimage opens setup")
 	for child in game.ui.get_children():
 		if child is Button and child.text == "Choose Mourner": child.pressed.emit(); break

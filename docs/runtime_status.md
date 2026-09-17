@@ -1,4 +1,4 @@
-# First Shift runtime — 0.5.0 preview
+# First Shift runtime — 0.6.0 preview
 
 The project now contains a runnable Godot 4.5.1 desktop prototype. This is the first implementation, not a finished creative vertical. `content/slices/first_shift.json` is the authoritative enabled catalogue and tuning source; the larger catalogues also contain future concepts.
 
