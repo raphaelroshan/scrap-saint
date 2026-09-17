@@ -56,6 +56,9 @@ var evolution_showcase: Dictionary = {}
 var impulse_started = -1
 var impulse_strength = 0.0
 var impulse_angle = 0.0
+const MENU_MEDITATION = preload("res://assets/title/meditation.png")
+const MENU_AWAKENING = preload("res://assets/title/awakening.png")
+var painted_menu = true
 const TITLE_TRANSITION_MS = 1350
 const EVOLUTION_SHOWCASE_MS = 1450
 
@@ -174,10 +177,14 @@ func _unhandled_key_input(event):
 		awaiting_binding = ""
 		build_ui()
 		return
+	if event.keycode == KEY_ESCAPE and screen == "menu":
+		screen = "title"
+		build_ui()
+		return
 	if event.keycode == KEY_ESCAPE and screen == "ledger":
 		close_ledger()
 		return
-	if event.keycode == KEY_ESCAPE and screen in ["settings", "tutorial"]:
+	if event.keycode == KEY_ESCAPE and screen in ["settings", "tutorial", "quit_confirm"]:
 		screen = previous_screen
 		build_ui()
 		return
@@ -200,6 +207,19 @@ func _unhandled_key_input(event):
 	if event.keycode == KEY_F9: load_run()
 
 func _input(event):
+	if event is InputEventJoypadButton and event.pressed and event.button_index == JOY_BUTTON_B:
+		if screen == "ledger":
+			close_ledger()
+			get_viewport().set_input_as_handled()
+			return
+		if screen == "menu":
+			screen = "title"
+			build_ui()
+			get_viewport().set_input_as_handled()
+			return
+	if event is InputEventJoypadButton and event.pressed and event.button_index == JOY_BUTTON_B and screen in ["settings", "tutorial", "quit_confirm"]:
+		close_panel()
+		get_viewport().set_input_as_handled()
 	if event is InputEventJoypadButton and event.pressed and event.button_index == JOY_BUTTON_START and screen == "game":
 		sim.command("pause")
 		build_ui()
@@ -222,7 +242,7 @@ func begin_title_transition():
 
 func title_transition_progress() -> float:
 	if title_transition_started < 0: return 0.0
-	return clampf(float(visual_now_ms() - title_transition_started) / float(TITLE_TRANSITION_MS), 0.0, 1.0)
+	return clampf(float(visual_now_ms() - title_transition_started) / float(300 if reduced_fx else TITLE_TRANSITION_MS), 0.0, 1.0)
 
 func trigger_camera_impulse(strength: float, event: Dictionary):
 	if reduced_fx or not bool(settings.state.screen_shake): return
@@ -305,6 +325,10 @@ func save_run():
 func load_run():
 	if not FileAccess.file_exists(save_path): return
 	var file = FileAccess.open(save_path, FileAccess.READ)
+	if file == null:
+		notification = "Could not open the saved expedition."
+		notice_until = Time.get_ticks_msec() + 6000
+		return
 	var saved = file.get_var(false)
 	if saved is Dictionary and sim.restore(saved):
 		screen = "game"
@@ -427,11 +451,20 @@ func build_ui():
 		button("Return to shop" if ledger_return == "game" else "Return to title", Rect2(808,638,348,42), close_ledger, true).grab_focus()
 	elif screen == "title":
 		if title_transition_started < 0:
-			button("BEGIN A PILGRIMAGE", Rect2(90, 404, 390, 52), begin_title_transition, true).grab_focus()
-			if FileAccess.file_exists(save_path): button("Resume saved expedition", Rect2(90, 468, 390, 42), load_run)
-			button("How to play", Rect2(90, 526, 188, 40), func(): tutorial_page = 0; open_panel("tutorial"))
-			button("Settings", Rect2(292, 526, 188, 40), func(): open_panel("settings"))
-			button("Sacred histories", Rect2(90, 578, 390, 34), open_ledger)
+			var has_save = FileAccess.file_exists(save_path)
+			var resume = button("Continue", Rect2(80, 302, 350, 48), load_run, has_save)
+			resume.disabled = not has_save
+			resume.tooltip_text = "Resume your saved expedition." if has_save else "Save a shift from the pause menu to continue it here."
+			var fresh = button("New pilgrimage", Rect2(80, 362, 350, 48), begin_title_transition, not has_save)
+			if has_save: resume.grab_focus()
+			else: fresh.grab_focus()
+			button("Settings", Rect2(80, 434, 350, 42), func(): open_panel("settings"))
+			button("How to play", Rect2(80, 486, 350, 42), func(): tutorial_page = 0; open_panel("tutorial"))
+			button("Sacred histories", Rect2(80, 538, 350, 42), open_ledger)
+			button("Quit", Rect2(80, 610, 350, 42), func(): open_panel("quit_confirm"))
+	elif screen == "quit_confirm":
+		button("Stay", Rect2(340, 470, 280, 46), close_panel, true).grab_focus()
+		button("Quit game", Rect2(660, 470, 280, 46), func(): get_tree().quit())
 	elif screen == "tutorial":
 		button("Back", Rect2(318, 640, 180, 42), close_panel)
 		if tutorial_page > 0: button("Previous", Rect2(514, 640, 180, 42), func(): tutorial_page -= 1; build_ui())
@@ -576,6 +609,13 @@ func _draw():
 		camera_offset = Vector2.ZERO
 		draw_title()
 		draw_tutorial()
+	elif screen == "quit_confirm":
+		camera_offset = Vector2.ZERO
+		draw_title()
+		draw_rect(Rect2(0, 0, 1280, 800), Color(0.02, 0.04, 0.04, 0.72))
+		panel(Rect2(280, 260, 720, 310))
+		text_at("Leave the workshop?", Vector2(340, 337), 34, PAPER, true)
+		wrapped("Your saved expedition and collected memories will be here when you return.", Vector2(340, 387), 590, 17, MUTED)
 	elif screen == "settings":
 		camera_offset = Vector2.ZERO
 		draw_title()
@@ -667,25 +707,35 @@ func draw_evolution_showcase():
 
 func draw_title():
 	var transition = title_transition_progress()
-	for band in range(10):
-		var band_color = Color("183039").lerp(Color("526b6b"), band / 14.0)
-		draw_rect(Rect2(0, band * 80, 1280, 82), band_color)
-	for x in range(0, 1280, 48): draw_line(Vector2(x, 0), Vector2(x, 745), Color(0.08, 0.14, 0.15, 0.18))
-	var city_reveal = smoothstep(0.36, 0.84, transition)
-	draw_title_city(city_reveal)
-	draw_bodhi_tree(transition)
-	draw_title_saint(Vector2(900, 420), transition)
-	draw_title_clouds(transition)
-	draw_rect(Rect2(0, 0, 560, 745), Color(0.03, 0.065, 0.07, 0.56))
-	text_at("A PILGRIMAGE OF REPAIRS", Vector2(88, 92), 14, GOLD)
-	text_at("Scrap Saint", Vector2(82, 182), 68, PAPER, true)
-	text_at("Turn scrap into miracles.", Vector2(88, 226), 23, MUTED, true)
-	wrapped("Called into being by repairs freely given, a small maintenance machine crosses ruined workshops and decides what deserves to work again.", Vector2(90, 266), 410, 16, PAPER)
-	text_at("FIRST CHAPTER · SIX SITES · TEN EVOLUTIONS", Vector2(90, 634), 11, GOLD)
-	text_at("Memory fragments: %d" % profile.state.memory_fragments, Vector2(90, 698), 12, MUTED)
+	if painted_menu:
+		# Preserve the image aspect ratio and all six hands in the 16:10 canvas.
+		var target = Rect2(0, 40, 1280, 720)
+		draw_texture_rect(MENU_MEDITATION, target, false)
+		if transition > 0:
+			draw_texture_rect(MENU_AWAKENING, target, false, Color(1, 1, 1, smoothstep(0.08, 0.84, transition)))
+	else:
+		for band in range(10):
+			draw_rect(Rect2(0, band * 80, 1280, 82), Color("183039").lerp(Color("526b6b"), band / 14.0))
+		draw_title_city(smoothstep(0.36, 0.84, transition))
+		draw_bodhi_tree(transition)
+		draw_title_saint(Vector2(900, 420), transition)
+		draw_title_clouds(transition)
+	# Quiet graded scrim protects the controls without a hard panel edge.
+	var shade = Color(0.025, 0.055, 0.06, 0.72)
+	var clear = Color(shade, 0.0)
+	draw_rect(Rect2(0, 40, 320, 720), shade)
+	draw_polygon(PackedVector2Array([Vector2(320,40),Vector2(620,40),Vector2(620,760),Vector2(320,760)]), PackedColorArray([shade,clear,clear,shade]))
+	if screen != "title": return
+	text_at("A PILGRIMAGE OF REPAIRS", Vector2(80, 113), 12, GOLD)
+	text_at("Scrap", Vector2(76, 181), 54, PAPER, true)
+	text_at("Saint", Vector2(76, 240), 54, PAPER, true)
+	text_at("Small mercies. A world to mend.", Vector2(80, 272), 15, PAPER)
+	text_at("THE FIRST CHAPTER", Vector2(80, 697), 11, GOLD)
+	text_at("Memories gathered · %d" % profile.state.memory_fragments, Vector2(80, 719), 12, MUTED)
+	text_at("%s · PREVIEW" % str(sim.config.get("version", "")).trim_suffix("-preview"), Vector2(1050, 784), 11, MUTED)
 	if title_transition_started >= 0:
-		text_at("REMEMBERING THE ROAD…", Vector2(90, 552), 14, PAPER)
-		bar(Rect2(90, 570, 390, 5), transition, GOLD)
+		text_at("REMEMBERING THE ROAD…", Vector2(80, 375), 14, PAPER)
+		bar(Rect2(80, 397, 350, 3), transition, GOLD)
 
 func draw_title_city(reveal: float):
 	var horizon = 600.0
@@ -827,7 +877,7 @@ func draw_settings():
 	draw_rect(Rect2(155, 115, 970, 545), Color(0.035, 0.075, 0.08, 0.97))
 	text_at("SETTINGS", Vector2(220, 190), 12, GOLD)
 	text_at("Make the workshop readable.", Vector2(215, 245), 36, PAPER, true)
-	text_at("Keyboard bindings persist locally. Arrow keys and controller movement remain available.", Vector2(220, 405), 14, MUTED)
+	text_at("Keyboard bindings persist locally. Arrow keys and controller movement remain available.", Vector2(250, 565), 12, MUTED)
 
 func draw_header():
 	text_at("SCRAP SAINT", Vector2(28, 42), 25, PAPER, true)

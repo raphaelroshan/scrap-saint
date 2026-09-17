@@ -1,0 +1,100 @@
+{
+  "build": "0.6.0-preview + main-menu packet",
+  "base_commit": "922b5213aff07ad2efd6faa668ae3b9b9f1d83d6",
+  "timestamp_utc": "2026-09-17T08:00:04.992816+00:00",
+  "godot": "4.5.1-stable f62fdbde1",
+  "renderer": "OpenGL 3.3 Compatibility, NVIDIA RTX 4060, driver 616.92",
+  "seed": 147,
+  "capture_type": "CONFIGURED MAIN MENU FIXTURES; no human testing",
+  "logical_canvas": [
+    1280,
+    800
+  ],
+  "viewports": [
+    [
+      1280,
+      800
+    ],
+    [
+      1920,
+      1080
+    ]
+  ],
+  "capture_method": "Godot rendered textures. 1920x1080 harness applies equivalent aspect-preserving canvas scale and margins.",
+  "source_hashes": {
+    "game/main.gd": "31d95eb03b5497720faf68d9e064f8ca2eb1390659fc49c62ae466c82c698f66",
+    "tests/capture_main_menu.gd": "0b4f0210131079395ad6e7133368d6a97d19f16fa0feedce6d24d98c666468dd",
+    "tests/test_main_menu.gd": "4419ff711283c22a26e7bca917efa1faf25edc0b61000fbae0bb9d9e773eacfe",
+    "assets/title/awakening.png": "6194b8d900c8a02d97f7d054c6a2ccb1fa278d4e4687ef7ec8fbd309b15ce17a",
+    "assets/title/meditation.png": "6c3553d6a8c11b96d5fc6837056637c305c46191d783309f40a8a8ef7a8720ad"
+  },
+  "captures": {
+    "AWAKE_1280x800.png": {
+      "size": [
+        1280,
+        800
+      ],
+      "sha256": "65b2b47b70494286c59b3af2d041b074625deb5b3db35af0d73d73f7e68dde13"
+    },
+    "CONTINUE_1920x1080.png": {
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "f9c3a1e40bde9d2b497cda551dcf3d395228faa1dd4188477dd92c8eb0465b62"
+    },
+    "QUIT_1280x800.png": {
+      "size": [
+        1280,
+        800
+      ],
+      "sha256": "f7087eb71f4545fa07003e57fb8b06a5d194d36bdddfe6e0fe05535a42edec1b"
+    },
+    "SETTINGS_1280x800.png": {
+      "size": [
+        1280,
+        800
+      ],
+      "sha256": "f9d2979763f2b58659586664bf91fb90a15c6a47ea66fdb3e7c6b8d86282f9c6"
+    },
+    "TITLE_1280x800.png": {
+      "size": [
+        1280,
+        800
+      ],
+      "sha256": "b15adf94d285538a5df5d41bc8a83bbf6f9591585915ebabe74428935fa1121f"
+    },
+    "TITLE_LARGE_1920x1080.png": {
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "4b9f8314b630921009119d77b0a97c306f51e068c97a651d74d301cd5a4b063b"
+    }
+  },
+  "verification": {
+    "full_loop_exit": 0,
+    "menu_checks": 30,
+    "capture_states": 11,
+    "chapter_scenarios": {
+      "playthroughs": {
+        "count": 12,
+        "wins": 12
+      },
+      "assembly-playthroughs": {
+        "count": 4,
+        "wins": 4
+      },
+      "evolution-playthroughs": {
+        "count": 10,
+        "wins": 10
+      },
+      "gift-playthroughs": {
+        "count": 4,
+        "wins": 4
+      }
+    }
+  },
+  "limitation": "Flattened generated preview; no independent arm rig or uncoached usability review. Core quality capture retains its known ObjectDB shutdown warning.",
+  "next_task": "Validate the Workshop opening at normal speed with uncoached players."
+}

@@ -1,0 +1,15 @@
+{
+  "date": "2026-09-17",
+  "method": "OpenAI built-in image_gen generation, then referenced-image edit",
+  "intent": "Scrap Saint main menu preview",
+  "source": "Original repository docs/saint_loading_tableau.md, no external reference images",
+  "generated_outputs": [
+    "exec-bd3f2fd2-cc24-4434-a1bf-e7bf92964a61.png",
+    "exec-cefc2236-8989-49ce-a49e-fdee8af5e9f0.png"
+  ],
+  "files": {
+    "awakening.png": "6194b8d900c8a02d97f7d054c6a2ccb1fa278d4e4687ef7ec8fbd309b15ce17a",
+    "meditation.png": "6c3553d6a8c11b96d5fc6837056637c305c46191d783309f40a8a8ef7a8720ad"
+  },
+  "status": "Generated project preview, not independently rigged production art"
+}

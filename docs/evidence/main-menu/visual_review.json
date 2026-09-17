@@ -1,0 +1,57 @@
+{
+  "scope": "Main-menu presentation review",
+  "rubric": [
+    {
+      "criterion": "Saint silhouette",
+      "score": 4,
+      "note": "All six arms remain readable; four tool hands and two lap hands are distinct."
+    },
+    {
+      "criterion": "Composition",
+      "score": 4,
+      "note": "Art occupies the right side; menu does not cover the face or tools."
+    },
+    {
+      "criterion": "Materials and theme",
+      "score": 4,
+      "note": "Worn enamel, bronze and living Bodhi leaves express the approved tone; city architecture is more ornate than planned."
+    },
+    {
+      "criterion": "Typography",
+      "score": 4,
+      "note": "Normal and large text fit; the two-line title has clear hierarchy."
+    },
+    {
+      "criterion": "Menu hierarchy",
+      "score": 4,
+      "note": "New pilgrimage is primary without a save; Continue becomes primary for a returning player."
+    },
+    {
+      "criterion": "Navigation",
+      "score": 4,
+      "note": "Six direct options, persistent settings, and a deliberate quit confirmation; automated input paths pass."
+    },
+    {
+      "criterion": "Contrast",
+      "score": 4,
+      "note": "Dark scrim and solid controls preserve readable text against the painting."
+    },
+    {
+      "criterion": "Transition",
+      "score": 3,
+      "note": "Matched keyframes keep the silhouette stable, but a dissolve substitutes for articulated clouds and tools."
+    },
+    {
+      "criterion": "Accessibility",
+      "score": 4,
+      "note": "Large text, reduced effects, keyboard/controller cancellation and visible focus are present; no human accessibility review."
+    },
+    {
+      "criterion": "Evidence",
+      "score": 4,
+      "note": "Actual rendered configured states at two resolutions with source/asset hashes; no claim of gameplay or audio evaluation."
+    }
+  ],
+  "limitation": "Generated flattened preview art. No independent limb rig, uncoached usability test or audio-mix review.",
+  "next_task": "Validate the Workshop opening at normal speed with uncoached players."
+}

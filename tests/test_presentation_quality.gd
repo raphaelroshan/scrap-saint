@@ -18,6 +18,7 @@ func run_checks():
 	await process_frame
 	game.sound.muted = true
 
+	game.reduced_fx = false
 	game.visual_clock_override = 1000
 	game.begin_title_transition()
 	check(game.screen == "title" and game.sim.state.is_empty(), "title commit does not start authoritative simulation")

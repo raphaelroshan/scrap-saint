@@ -10,6 +10,8 @@ New-Item -ItemType Directory -Path $bundlePath -Force | Out-Null
 if ($LASTEXITCODE -ne 0) { throw 'Content validation failed' }
 & $PythonBin -m unittest discover -s "$projectRoot\tests" -p test_slice_manifest.py
 if ($LASTEXITCODE -ne 0) { throw 'Manifest tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_main_menu.gd 2>&1 | Tee-Object -FilePath "$bundlePath\main-menu.log"
+if ($LASTEXITCODE -ne 0) { throw 'Main menu tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_sync_contract.gd 2>&1 | Tee-Object -FilePath "$bundlePath\sync-contract.log"
 if ($LASTEXITCODE -ne 0) { throw 'Sync contract tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_variety.gd 2>&1 | Tee-Object -FilePath "$bundlePath\variety.log"
@@ -76,6 +78,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Game feel capture failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Gift breadth capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_sync_contract.gd 2>&1 | Tee-Object -FilePath "$bundlePath\sync-capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Sync capture failed' }
+& $GodotBin --path $projectRoot --script res://tests/capture_main_menu.gd 2>&1 | Tee-Object -FilePath "$bundlePath\main-menu-capture.log"
+if ($LASTEXITCODE -ne 0) { throw 'Main menu capture failed' }
 $commitId = git -C $projectRoot rev-parse HEAD
 $godotVersion = & $GodotBin --version
 $files = Get-ChildItem -LiteralPath "$projectRoot\game" -Filter '*.gd' | ForEach-Object { @{ path = $_.Name; sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash } }

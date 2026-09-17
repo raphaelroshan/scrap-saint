@@ -1,5 +1,12 @@
 # First Shift runtime — 0.6.0 preview
 
+## Main menu artwork and navigation — 2026-09-17
+
+The title uses painted meditation/awakening keyframes based on the six-armed Saint beneath the Bodhi tree. Continue is disabled without a save and focused when a save exists; New pilgrimage leads to frame/Blessing setup. Settings, How to play, Sacred histories and a cancellable Quit complete the menu. Settings retain mute, reduced effects, text size, fullscreen, camera motion and movement bindings. Reduced effects shortens the awakening dissolve to 300 ms; normal presentation takes 1.35 seconds. Simulation remains stopped until setup begins the run.
+
+This replaces the default procedural title presentation while retaining its development fallback. The bitmap preview does not have independently articulated arms or cloud layers. Evidence and limitations are in docs/task_packets/main_menu_art.md.
+
+
 ## 2026-09-17 integration — authoritative current rules
 
 Upstream 3a3808b and local work preserved at 67f1fec are reconciled. Keep all ten weapons, ten Evolutions, seven Gifts, four Blessings, three frames, chapter routes and the complete weapon-animation families.
@@ -244,7 +251,7 @@ Exactly one next task: run an uncoached human 1× combat session using two four-
 
 ## P20 — game-feel and presentation release pass
 
-The title is now a layered procedural tableau: a six-armed bronze maintenance Saint meditates beneath a Bodhi tree with inspection lamp, spanner, welder, cable clamp and two empty lap hands. Selecting Begin opens its eyes, activates the four tools, parts the cloud banks and reveals the broken industrial city during a deterministic 1.35-second handoff. Reduced effects removes secondary drift, sparks and motion while preserving the state change. No generated or third-party bitmap is shipped.
+The title is now a layered procedural tableau: a six-armed bronze maintenance Saint meditates beneath a Bodhi tree with inspection lamp, spanner, welder, cable clamp and two empty lap hands. Selecting Begin opens its eyes, activates the four tools, parts the cloud banks and reveals the broken industrial city during a deterministic 1.35-second handoff. Reduced effects removes secondary drift, sparks and motion while preserving the state change. That procedural build shipped no generated bitmap; the later main-menu update above adds two generated keyframes.
 
 Combat presentation now adds bounded camera impulse, directional enemy recoil, windup bracing, impact marks, stagger vibration, animated workshop belts/lamps/furnace/steam and an accessibility toggle for camera motion. Accepted Evolutions temporarily replace workshop controls with a 1.45-second named reconfiguration panel showing the base relic, resulting geometry and effects; the simulation is already paused at that shop boundary. Thirty-one original synthesized cues now cover every weapon family plus title confirmation, quiet, death, repair, boss contract, machine restoration and Evolution.
 

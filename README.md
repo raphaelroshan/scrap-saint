@@ -21,6 +21,12 @@ For faster development, use **Play Scrap Saint 5x Dev.cmd**. Combat runs at 5× 
 
 See [runtime status](docs/runtime_status.md) for implemented rules, prototype substitutions, and limitations. The enabled slice and balance values live in `content/slices/first_shift.json`.
 
+## Main menu
+
+The six-armed Saint rests beneath the Bodhi tree in the illustrated menu. Choose Continue to restore a saved expedition, or New pilgrimage to choose a frame and Blessing. Settings includes sound, reduced effects, text size, fullscreen, camera motion and movement bindings. How to play and Sacred histories are available before starting; Quit asks for confirmation. Escape or controller Back returns from panels and setup.
+
+The awakening uses two generated preview paintings and a short dissolve. Reduced effects shortens it to 300 ms. See [menu artwork and evidence](docs/task_packets/main_menu_art.md) for provenance and limitations.
+
 ## Current canonical direction
 
 The project uses a hybrid of two story variants:

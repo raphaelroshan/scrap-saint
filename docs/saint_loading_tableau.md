@@ -1,8 +1,8 @@
 # The Saint Beneath the Bodhi Tree
 
-**Status:** `IMPLEMENTED PROCEDURAL PREVIEW / PAINTERLY ASSET DEFERRED`
+**Status:** `PAINTED MENU PREVIEW / PROCEDURAL FALLBACK`
 
-The title/loading tableau is implemented as original layered Godot geometry in the 0.6.0 preview. The shipped transition includes the six-arm silhouette, four tools, closed/open eyes, tool responses, cloud parting and industrial-city reveal. The painterly key-art asset described below remains optional future replacement work; no generated bitmap is currently shipped.
+The main menu now uses two generated painterly keyframes with six connected arms and four maintenance tools. A short dissolve opens the eyes and reveals the city before frame/Blessing setup. Reduced effects shortens this to 300 ms. The original independently drawn procedural tableau remains available as a development fallback (`painted_menu = false`). The production-layer specification below remains a future target: the painted arms and tools are not independently rigged, and no camera match-cut is claimed.
 
 ## Core image
 

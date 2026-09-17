@@ -37,7 +37,7 @@ func run_checks():
 	check(game.screen == "tutorial" and game.tutorial_page == 0, "field manual opens")
 	game.close_panel()
 	for child in game.ui.get_children():
-		if child is Button and child.text == "BEGIN A PILGRIMAGE": child.pressed.emit(); break
+		if child is Button and child.text == "New pilgrimage": child.pressed.emit(); break
 	game.visual_clock_override = game.title_transition_started + game.TITLE_TRANSITION_MS
 	game._process(0.0)
 	game.visual_clock_override = -1

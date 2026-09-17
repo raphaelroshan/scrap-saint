@@ -61,7 +61,7 @@ Atmosphere must not compete with enemy silhouettes or attack telegraphs. Keep ba
 
 ## Title and loading tableau
 
-The WIP title-to-game art direction centres a six-armed bronze maintenance saint meditating beneath a Bodhi tree. Four arms carry distinct repair tools and two remain in its lap. On Play, its eyes open and white clouds part to reveal the industrial city in crisis. The full composition, motion, accessibility, layered-asset plan, and generation prompt are specified in [`saint_loading_tableau.md`](saint_loading_tableau.md). This is design direction, not a shipped or generated asset.
+The WIP title-to-game art direction centres a six-armed bronze maintenance saint meditating beneath a Bodhi tree. Four arms carry distinct repair tools and two remain in its lap. On Play, its eyes open and white clouds part to reveal the industrial city in crisis. The full composition, motion, accessibility, layered-asset plan, and generation prompt are specified in [`saint_loading_tableau.md`](saint_loading_tableau.md). The menu ships a generated two-keyframe preview with a short dissolve; the fully layered animation described there remains a future target.
 
 ## Animation feel
 

@@ -68,7 +68,7 @@ func run_checks():
 	await activate(button_with(game, "Back"))
 	check(game.screen == "title", "Settings returns to title")
 
-	await activate(button_with(game, "BEGIN A PILGRIMAGE"))
+	await activate(button_with(game, "New pilgrimage"))
 	game.visual_clock_override = game.title_transition_started + game.TITLE_TRANSITION_MS
 	game._process(0.0)
 	game.visual_clock_override = -1
