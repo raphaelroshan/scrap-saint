@@ -1,5 +1,7 @@
 # Scrap Saint release checklist
 
+Current candidate: `0.6.0-preview`, the complete procedural weapon-animation and game-feel pass.
+
 The project uses local release builds. GitHub Actions is intentionally not required.
 
 ## Build

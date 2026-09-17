@@ -1,8 +1,8 @@
 # The Saint Beneath the Bodhi Tree
 
-**Status:** `WIP / ART DIRECTION ONLY`
+**Status:** `IMPLEMENTED PROCEDURAL PREVIEW / PAINTERLY ASSET DEFERRED`
 
-This is the intended title/loading tableau, not a shipped screen or generated gameplay capture.
+The title/loading tableau is implemented as original layered Godot geometry in the 0.6.0 preview. The shipped transition includes the six-arm silhouette, four tools, closed/open eyes, tool responses, cloud parting and industrial-city reveal. The painterly key-art asset described below remains optional future replacement work; no generated bitmap is currently shipped.
 
 ## Core image
 

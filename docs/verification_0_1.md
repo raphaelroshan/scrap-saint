@@ -175,3 +175,13 @@ Eight configured executable P19 captures under `artifacts/weapon-animation` were
 Rendered-evidence rubric (5-point internal review): family recognition 4, base/Evolution distinction 4, target/area readability 4, overlap hierarchy 4, reduced-effects parity 4, palette coherence 4. These are configured stills and deterministic policies, not human evidence. Audio impact, normal-speed response and recognition during movement remain the principal limitation.
 
 Exactly one next task: run an uncoached human 1× combat session using two four-weapon builds spanning all ten families, then tune only observed timing, overlap and recognition failures.
+
+## P20 game-feel and presentation release pass, 2026-09-17
+
+The 0.6.0 preview adds a deterministic title/loading transition, six-arm procedural key tableau, bounded camera impulse, enemy windup/recoil presentation, moving Workshop atmosphere, premium accepted-Evolution overlay, camera-motion accessibility control and thirty-one original synthesized cues. All additions remain presentation-only; the title handoff precedes simulation creation, while Evolution runs during an existing shop pause.
+
+The complete suite passes 892 Godot assertions and thirty-one Python manifest checks. Fourteen new presentation-quality checks cover title timing and authority isolation, impulse/reduced-effects behavior, hit-driven enemy pose, accepted Evolution presentation, overlay expiry and generated PCM coverage. The existing 12/12, 24/24, 4/4 assembly, 10/10 Evolution and 4/4 Gift policy matrices remain green.
+
+Eight configured P20 captures were rendered from clean commit `7f878def7a41d23af5194c548274463cb3e72866` with Godot 4.5.1 stable, OpenGL Compatibility on Apple M1 Pro, at 1280×800 and seed 147. The scored evidence validator passes. Internal scores are 4/5 for title identity, transition clarity, combat readability, enemy response, Evolution premium, overlap, reduced-effects parity and palette/UI coherence; 3/5 for deliberately restrained environment depth; and 5/5 for provenance.
+
+No human audio, timing, controller or Windows minimum-hardware test is claimed. Exactly one next task: run an uncoached human 1× session on the packaged Windows build and record only observed timing, audio-mix, recognition and performance failures.
