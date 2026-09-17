@@ -57,11 +57,11 @@ Capture configured executable states under `artifacts/game-feel` with Godot 4.5.
 
 ## Evidence recorded — 2026-09-17
 
-Clean commit `7f878def7a41d23af5194c548274463cb3e72866` was captured with Godot 4.5.1 stable, OpenGL Compatibility on Apple M1 Pro, at 1280×800 and seed 147. All eight P20 fixtures were inspected. The title preserves exactly six arms, four distinct maintenance tools and two empty lap hands across the eye-opening/cloud-parting transition. Combat captures show braced windup, directional hit recoil, local impact marks, active workshop machinery, premium Evolution presentation, and full/reduced four-family overlap.
+Clean integration commit `349381764b0b26bffd0e21892560227ccad37ed6` was captured with Godot 4.5.1 stable, OpenGL Compatibility on Apple M1 Pro, at 1280×800 and seed 147. All eight P20 fixtures were inspected. The title preserves exactly six arms, four distinct maintenance tools and two empty lap hands across the eye-opening/cloud-parting transition, while the approved repairs-freely-given origin and Sacred Histories remain reachable. Combat captures show braced windup, directional hit recoil, local impact marks, active workshop machinery, premium Evolution presentation, and full/reduced four-family overlap.
 
 Rendered-evidence rubric (5-point internal review): title identity 4, transition clarity 4, combat action readability 4, enemy response 4, environment depth 3, Evolution premium 4, overlap hierarchy 4, reduced-effects parity 4, palette/UI coherence 4, provenance clarity 5. Environment motion remains intentionally restrained and reads more strongly in motion than in a still.
 
-All 892 Godot assertions and thirty-one Python checks pass. The normal-economy matrix wins 12/12, frame/Blessing/first-route 24/24, assembly 4/4, Evolutions 10/10 and Gift-specific routes 4/4. The scored rendered-evidence validator passes. No script-load, resource-load or assertion errors appear in the iteration logs.
+All 958 Godot assertions and thirty-one Python checks pass, including the 64-check sync contract. The normal-economy matrix wins 12/12, frame/Blessing/first-route 24/24, assembly 4/4, Evolutions 10/10 and Gift-specific routes 4/4. The scored rendered-evidence validator passes. No script-load, resource-load or assertion errors appear in the iteration logs.
 
 ## Remaining limitation
 
