@@ -44,6 +44,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Evolution tests failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Weapon rank tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_weapon_presentation.gd 2>&1 | Tee-Object -FilePath "$bundlePath\weapon-presentation.log"
 if ($LASTEXITCODE -ne 0) { throw 'Weapon presentation tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_presentation_quality.gd 2>&1 | Tee-Object -FilePath "$bundlePath\presentation-quality.log"
+if ($LASTEXITCODE -ne 0) { throw 'Presentation quality tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_gift_breadth.gd 2>&1 | Tee-Object -FilePath "$bundlePath\gift-breadth.log"
 if ($LASTEXITCODE -ne 0) { throw 'Gift breadth tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/run_playthroughs.gd -- --optional 2>&1 | Tee-Object -FilePath "$bundlePath\playthroughs.log"
@@ -68,6 +70,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Evolution capture failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Weapon rank capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_weapon_animation.gd -- --capture-dir="$projectRoot\artifacts\weapon-animation" 2>&1 | Tee-Object -FilePath "$bundlePath\weapon-animation-capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Weapon animation capture failed' }
+& $GodotBin --path $projectRoot --script res://tests/capture_game_feel.gd -- --capture-dir="$projectRoot\artifacts\game-feel" 2>&1 | Tee-Object -FilePath "$bundlePath\game-feel-capture.log"
+if ($LASTEXITCODE -ne 0) { throw 'Game feel capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_gift_breadth.gd 2>&1 | Tee-Object -FilePath "$bundlePath\gift-breadth-capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Gift breadth capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_sync_contract.gd 2>&1 | Tee-Object -FilePath "$bundlePath\sync-capture.log"
@@ -75,5 +79,5 @@ if ($LASTEXITCODE -ne 0) { throw 'Sync capture failed' }
 $commitId = git -C $projectRoot rev-parse HEAD
 $godotVersion = & $GodotBin --version
 $files = Get-ChildItem -LiteralPath "$projectRoot\game" -Filter '*.gd' | ForEach-Object { @{ path = $_.Name; sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash } }
-@{ build = '0.5.0-preview'; base_commit = $commitId; dirty = [bool](git -C $projectRoot status --porcelain); godot = $godotVersion; viewport = @(1280,800); scaling = 'canvas_items'; seed = 147; timestamp_utc = [DateTime]::UtcNow.ToString('o'); capture_type = 'rendered simulation fixtures; includes explicit setup budgets, Results, weapon ranks, Evolutions, Gifts, and destination bosses'; source_hashes = @($files); limitation = 'No human playtest or rendered minimum-hardware benchmark'; next_task = 'Reduce overlapping evolved effects around the Saint without changing authoritative attacks' } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath "$bundlePath\provenance.json" -Encoding utf8
+@{ build = '0.6.0-preview'; base_commit = $commitId; dirty = [bool](git -C $projectRoot status --porcelain); godot = $godotVersion; viewport = @(1280,800); scaling = 'canvas_items'; seed = 147; timestamp_utc = [DateTime]::UtcNow.ToString('o'); capture_type = 'rendered simulation fixtures; includes explicit setup budgets, Results, weapon ranks, Evolutions, Gifts, and destination bosses'; source_hashes = @($files); limitation = 'No human playtest or rendered minimum-hardware benchmark'; next_task = 'Uncoached human 1x session on the packaged Windows build focused on timing, audio mix, recognition, and performance' } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath "$bundlePath\provenance.json" -Encoding utf8
 Write-Output "Bundle ready for visual review: $bundlePath"

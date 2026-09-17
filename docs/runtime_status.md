@@ -1,4 +1,4 @@
-# First Shift runtime — 0.5.0 preview
+# First Shift runtime — 0.6.0 preview
 
 ## 2026-09-17 integration — authoritative current rules
 
@@ -241,3 +241,15 @@ The full suite passes 878 Godot assertions and thirty-one Python checks on pinne
 Rendered-evidence rubric (5-point internal review): family recognition 4, base/Evolution distinction 4, target/area readability 4, overlap hierarchy 4, reduced-effects parity 4, palette coherence 4. The visual language is complete at the procedural prototype level. Normal-speed response, audio impact and player recognition remain unverified by a human.
 
 Exactly one next task: run an uncoached human 1× combat session using two four-weapon builds spanning all ten families, then tune only observed timing, overlap and recognition failures.
+
+## P20 — game-feel and presentation release pass
+
+The title is now a layered procedural tableau: a six-armed bronze maintenance Saint meditates beneath a Bodhi tree with inspection lamp, spanner, welder, cable clamp and two empty lap hands. Selecting Begin opens its eyes, activates the four tools, parts the cloud banks and reveals the broken industrial city during a deterministic 1.35-second handoff. Reduced effects removes secondary drift, sparks and motion while preserving the state change. No generated or third-party bitmap is shipped.
+
+Combat presentation now adds bounded camera impulse, directional enemy recoil, windup bracing, impact marks, stagger vibration, animated workshop belts/lamps/furnace/steam and an accessibility toggle for camera motion. Accepted Evolutions temporarily replace workshop controls with a 1.45-second named reconfiguration panel showing the base relic, resulting geometry and effects; the simulation is already paused at that shop boundary. Thirty-one original synthesized cues now cover every weapon family plus title confirmation, quiet, death, repair, boss contract, machine restoration and Evolution.
+
+All 958 Godot assertions and thirty-one Python checks pass on pinned Godot 4.5.1, including the 64-check sacred-origin/relic-shop/field-recovery sync contract. The 12/12 normal-economy, 24/24 frame/Blessing/first-route, 4/4 assembly, 10/10 Evolution and 4/4 Gift-specific matrices remain green. Eight P20 fixtures were recaptured from clean integration commit `349381764b0b26bffd0e21892560227ccad37ed6` at 1280×800, seed 147, using OpenGL Compatibility on Apple M1 Pro.
+
+Rendered-evidence rubric (5-point internal review): title identity 4, transition clarity 4, combat action readability 4, enemy response 4, environment depth 3, Evolution premium 4, overlap hierarchy 4, reduced-effects parity 4, palette/UI coherence 4, provenance clarity 5. Automated evidence cannot establish audio mix, normal-speed feel, controller comfort or minimum-Windows-hardware performance.
+
+Exactly one next task: run an uncoached human 1× session on the packaged Windows build and record only observed timing, audio-mix, recognition and performance failures.

@@ -69,6 +69,9 @@ func run_checks():
 	check(game.screen == "title", "Settings returns to title")
 
 	await activate(button_with(game, "BEGIN A PILGRIMAGE"))
+	game.visual_clock_override = game.title_transition_started + game.TITLE_TRANSITION_MS
+	game._process(0.0)
+	game.visual_clock_override = -1
 	check(game.screen == "menu", "controller-style accept opens setup")
 	await activate(button_with(game, "Choose Mourner"))
 	check(game.chosen == 2, "setup Blessing button changes the selected doctrine")

@@ -51,6 +51,13 @@ var ledger_page = 0
 var evolution_ledger_open = false
 var map_selection = ""
 var visual_clock_override = -1
+var title_transition_started = -1
+var evolution_showcase: Dictionary = {}
+var impulse_started = -1
+var impulse_strength = 0.0
+var impulse_angle = 0.0
+const TITLE_TRANSITION_MS = 1350
+const EVOLUTION_SHOWCASE_MS = 1450
 
 const WEAPON_FX_DURATION_MS = {
 	"line": 380,
@@ -146,6 +153,13 @@ func advance_simulation(movement: Vector2):
 		for event in sim.events: present(event)
 
 func _process(_delta):
+	if title_transition_started >= 0 and title_transition_progress() >= 1.0:
+		title_transition_started = -1
+		screen = "menu"
+		build_ui()
+	if not evolution_showcase.is_empty() and visual_now_ms() >= int(evolution_showcase.expires):
+		evolution_showcase.clear()
+		build_ui()
 	if capture_dir != "":
 		rendered_frames += 1
 		if rendered_frames in [3, 15, 27, 39, 51, 63, 75]:
@@ -200,6 +214,32 @@ func begin():
 	fx.clear()
 	build_ui()
 
+func begin_title_transition():
+	if title_transition_started >= 0: return
+	title_transition_started = visual_now_ms()
+	sound.play("title_commit")
+	build_ui()
+
+func title_transition_progress() -> float:
+	if title_transition_started < 0: return 0.0
+	return clampf(float(visual_now_ms() - title_transition_started) / float(TITLE_TRANSITION_MS), 0.0, 1.0)
+
+func trigger_camera_impulse(strength: float, event: Dictionary):
+	if reduced_fx or not bool(settings.state.screen_shake): return
+	impulse_started = visual_now_ms()
+	impulse_strength = maxf(impulse_strength, strength)
+	impulse_angle = float(event.get("tick", sim.state.get("tick", 0))) * 1.618 + strength
+
+func current_camera_impulse() -> Vector2:
+	if reduced_fx or not bool(settings.state.screen_shake) or impulse_started < 0: return Vector2.ZERO
+	var progress = clampf(float(visual_now_ms() - impulse_started) / 190.0, 0.0, 1.0)
+	if progress >= 1.0:
+		impulse_started = -1
+		impulse_strength = 0.0
+		return Vector2.ZERO
+	var wave = sin(progress * PI * 5.0) * (1.0 - progress)
+	return Vector2.from_angle(impulse_angle) * impulse_strength * wave
+
 func act(action: String, value = null):
 	sim.events.clear()
 	notification = ""
@@ -212,6 +252,12 @@ func act(action: String, value = null):
 		notification = sim.evolution_recipes[str(value)].name.to_upper() + " — the relic answers differently"
 		notice_until = Time.get_ticks_msec() + 4500
 		evolution_ledger_open = false
+		evolution_showcase = {
+			"recipe": str(value),
+			"name": sim.evolution_recipes[str(value)].name,
+			"started_at": visual_now_ms(),
+			"expires": visual_now_ms() + EVOLUTION_SHOWCASE_MS,
+		}
 	if sim.state.phase in ["won", "lost"]: commit_profile_result()
 	build_ui()
 
@@ -300,8 +346,12 @@ func present(event):
 		notification = "%s / %s" % [str(gift_name).to_upper(), cue]
 		notice_until = Time.get_ticks_msec() + 1800
 	if e.kind == "attack": sound.play(e.shape)
-	elif e.kind in ["hurt", "relay_hurt", "repair", "pickup"]: sound.play(e.kind)
+	elif e.kind in ["hurt", "relay_hurt", "repair", "pickup", "death", "evolution", "boss_contract", "machine_restored", "quieted"]: sound.play(e.kind)
 	elif gift_id != "": sound.play("pickup")
+	if e.kind in ["hurt", "relay_hurt"]: trigger_camera_impulse(3.2 if e.kind == "hurt" else 4.0, e)
+	elif e.kind == "evolution": trigger_camera_impulse(5.0, e)
+	elif e.kind == "boss_contract": trigger_camera_impulse(3.5, e)
+	elif e.kind == "hit": trigger_camera_impulse(0.65, e)
 
 func visual_now_ms() -> int:
 	return visual_clock_override if visual_clock_override >= 0 else Time.get_ticks_msec()
@@ -364,6 +414,7 @@ func build_ui():
 	for child in ui.get_children():
 		ui.remove_child(child)
 		child.queue_free()
+	if screen == "game" and not evolution_showcase.is_empty(): return
 	if screen == "ledger":
 		for i in range(3):
 			var section = ["origin", "relics", "creatures"][i]
@@ -375,11 +426,12 @@ func build_ui():
 		next.disabled = ledger_page >= entries.size()-1
 		button("Return to shop" if ledger_return == "game" else "Return to title", Rect2(808,638,348,42), close_ledger, true).grab_focus()
 	elif screen == "title":
-		button("BEGIN A PILGRIMAGE", Rect2(420, 365, 440, 52), func(): screen = "menu"; build_ui(), true).grab_focus()
-		if FileAccess.file_exists(save_path): button("Resume saved expedition", Rect2(420, 431, 440, 42), load_run)
-		button("How to play", Rect2(420, 487, 212, 40), func(): tutorial_page = 0; open_panel("tutorial"))
-		button("Settings", Rect2(648, 487, 212, 40), func(): open_panel("settings"))
-		button("Sacred histories", Rect2(420, 539, 440, 36), open_ledger)
+		if title_transition_started < 0:
+			button("BEGIN A PILGRIMAGE", Rect2(90, 404, 390, 52), begin_title_transition, true).grab_focus()
+			if FileAccess.file_exists(save_path): button("Resume saved expedition", Rect2(90, 468, 390, 42), load_run)
+			button("How to play", Rect2(90, 526, 188, 40), func(): tutorial_page = 0; open_panel("tutorial"))
+			button("Settings", Rect2(292, 526, 188, 40), func(): open_panel("settings"))
+			button("Sacred histories", Rect2(90, 578, 390, 34), open_ledger)
 	elif screen == "tutorial":
 		button("Back", Rect2(318, 640, 180, 42), close_panel)
 		if tutorial_page > 0: button("Previous", Rect2(514, 640, 180, 42), func(): tutorial_page -= 1; build_ui())
@@ -394,6 +446,7 @@ func build_ui():
 		button("Effects: " + ("reduced" if settings.state.reduced_effects else "full"), Rect2(670, 280, 360, 42), func(): toggle_setting("reduced_effects"))
 		button("Text: " + ("large" if settings.state.ui_scale > 1.0 else "normal"), Rect2(250, 338, 360, 42), cycle_text_scale)
 		button("Display: " + ("fullscreen" if settings.state.fullscreen else "windowed"), Rect2(670, 338, 360, 42), func(): toggle_setting("fullscreen"))
+		button("Camera motion: " + ("on" if settings.state.screen_shake else "off"), Rect2(460, 390, 360, 34), func(): toggle_setting("screen_shake"))
 		var labels = {"move_up": "Move up", "move_down": "Move down", "move_left": "Move left", "move_right": "Move right"}
 		for i in range(Settings.ACTIONS.size()):
 			var action = Settings.ACTIONS[i]
@@ -534,7 +587,7 @@ func _draw():
 		else:
 			var half_view = WORLD_VIEW.size * 0.5
 			var camera = sim.state.position.clamp(sim.arena.bounds.position + half_view, sim.arena.bounds.end - half_view)
-			camera_offset = WORLD_VIEW.get_center() - camera
+			camera_offset = WORLD_VIEW.get_center() - camera + current_camera_impulse()
 			draw_set_transform(camera_offset)
 			draw_world()
 			draw_set_transform(Vector2.ZERO)
@@ -557,6 +610,7 @@ func _draw():
 		if sim.state.paused and sim.state.phase == "combat":
 			draw_rect(Rect2(0, 0, 1280, 745), Color(0.025, 0.05, 0.06, 0.87))
 			text_at("The machines can wait.", Vector2(432, 300), 34, PAPER, true)
+	if not evolution_showcase.is_empty(): draw_evolution_showcase()
 	if notification != "" and Time.get_ticks_msec() < notice_until:
 		panel(Rect2(430, 699, 600, 34))
 		text_at(notification, Vector2(444, 721), 15, GOLD)
@@ -588,16 +642,146 @@ func draw_ledger():
 	text_at("%d / %d" % [ledger_page+1,ledger_entries().size()],Vector2(596,665),16,MUTED)
 	text_at("Read at your own pace. Your build and shop offers stay as you left them.",Vector2(148,717),14,MUTED)
 
+func evolution_showcase_progress() -> float:
+	if evolution_showcase.is_empty(): return 0.0
+	return clampf(float(visual_now_ms() - int(evolution_showcase.started_at)) / float(EVOLUTION_SHOWCASE_MS), 0.0, 1.0)
+
+func draw_evolution_showcase():
+	var progress = evolution_showcase_progress()
+	var recipe_id = str(evolution_showcase.recipe)
+	var recipe = sim.evolution_recipes.get(recipe_id, {})
+	var reveal = smoothstep(0.16, 0.48, progress)
+	var fade_out = 1.0 - smoothstep(0.84, 1.0, progress)
+	draw_rect(Rect2(0, 0, 1280, 800), Color(0.02, 0.04, 0.045, 0.82 * fade_out))
+	var center = Vector2(640, 355)
+	draw_evolution_reconfiguration({"position": center, "recipe": recipe_id}, progress, fade_out)
+	text_at("THE RELIC ANSWERS DIFFERENTLY", Vector2(482, 196), 12, GOLD)
+	text_at(str(evolution_showcase.name), Vector2(430, 276), 42, Color(PAPER, reveal), true)
+	if not recipe.is_empty():
+		var base_name = sim.config.weapons.get(str(recipe.base_item_id), {}).get("short", "RANK III RELIC")
+		var geometry = str(recipe.get("result_geometry", "new geometry")).replace("_", " ").to_upper()
+		text_at(str(base_name).to_upper() + "  →  " + geometry, Vector2(410, 488), 12, Color(GREEN, reveal))
+		var effects = " · ".join(Array(recipe.get("result_effects", [])).map(func(value): return str(value).replace("_", " ").to_upper()))
+		wrapped(effects, Vector2(390, 525), 500, 12, Color(MUTED, reveal))
+	bar(Rect2(440, 612, 400, 4), progress, GOLD)
+
 func draw_title():
-	for x in range(0, 1280, 48): draw_line(Vector2(x, 0), Vector2(x, 745), Color("15252a"))
-	for y in range(0, 745, 48): draw_line(Vector2(0, y), Vector2(1280, y), Color("15252a"))
-	text_at("A PILGRIMAGE OF REPAIRS", Vector2(124, 112), 15, GOLD)
-	text_at("Scrap Saint", Vector2(120, 207), 76, PAPER, true)
-	text_at("Turn scrap into miracles.", Vector2(124, 257), 25, MUTED, true)
-	wrapped("In a devastated machine world, repairs freely given have called a small saint into being. Carry that care through the ruins.", Vector2(124, 292), 680, 17, PAPER)
-	draw_saint(Vector2(1035, 246), Vector2(-1, 0), 3.4)
-	text_at("FIRST CHAPTER · SIX SITES · TEN WEAPONS · TEN EVOLUTIONS", Vector2(330, 585), 12, GOLD)
-	text_at("Memory fragments: %d" % profile.state.memory_fragments, Vector2(550, 710), 12, MUTED)
+	var transition = title_transition_progress()
+	for band in range(10):
+		var band_color = Color("183039").lerp(Color("526b6b"), band / 14.0)
+		draw_rect(Rect2(0, band * 80, 1280, 82), band_color)
+	for x in range(0, 1280, 48): draw_line(Vector2(x, 0), Vector2(x, 745), Color(0.08, 0.14, 0.15, 0.18))
+	var city_reveal = smoothstep(0.36, 0.84, transition)
+	draw_title_city(city_reveal)
+	draw_bodhi_tree(transition)
+	draw_title_saint(Vector2(900, 420), transition)
+	draw_title_clouds(transition)
+	draw_rect(Rect2(0, 0, 560, 745), Color(0.03, 0.065, 0.07, 0.56))
+	text_at("A PILGRIMAGE OF REPAIRS", Vector2(88, 92), 14, GOLD)
+	text_at("Scrap Saint", Vector2(82, 182), 68, PAPER, true)
+	text_at("Turn scrap into miracles.", Vector2(88, 226), 23, MUTED, true)
+	wrapped("Called into being by repairs freely given, a small maintenance machine crosses ruined workshops and decides what deserves to work again.", Vector2(90, 266), 410, 16, PAPER)
+	text_at("FIRST CHAPTER · SIX SITES · TEN EVOLUTIONS", Vector2(90, 634), 11, GOLD)
+	text_at("Memory fragments: %d" % profile.state.memory_fragments, Vector2(90, 698), 12, MUTED)
+	if title_transition_started >= 0:
+		text_at("REMEMBERING THE ROAD…", Vector2(90, 552), 14, PAPER)
+		bar(Rect2(90, 570, 390, 5), transition, GOLD)
+
+func draw_title_city(reveal: float):
+	var horizon = 600.0
+	for index in range(13):
+		var width = 34 + (index * 17) % 55
+		var height = 42 + (index * 31) % 125
+		var x = 520 + index * 61
+		draw_rect(Rect2(x, horizon - height, width, height), Color("17282d", reveal))
+		if index % 3 == 0:
+			draw_circle(Vector2(x + width * 0.5, horizon - height + 18), 3, Color(RED, reveal * (0.55 + 0.3 * sin(visual_now_ms() * 0.004 + index))))
+	for crane_x in [665.0, 1080.0]:
+		draw_line(Vector2(crane_x, 485), Vector2(crane_x, 595), Color("26383b", reveal), 5)
+		draw_line(Vector2(crane_x, 490), Vector2(crane_x + 92, 490), Color("26383b", reveal), 4)
+		draw_line(Vector2(crane_x + 72, 490), Vector2(crane_x + 72, 535), Color(GOLD, reveal * 0.55), 2)
+	for smoke_index in range(4):
+		var smoke = Vector2(620 + smoke_index * 170, 454 - smoke_index % 2 * 32)
+		draw_circle(smoke, 22 + smoke_index * 3, Color("6c7772", reveal * 0.12))
+		draw_circle(smoke + Vector2(12, -24), 17, Color("89908a", reveal * 0.09))
+
+func draw_bodhi_tree(transition: float):
+	var trunk = PackedVector2Array([Vector2(837, 605), Vector2(858, 196), Vector2(908, 152), Vector2(942, 604)])
+	draw_colored_polygon(trunk, Color("3f382c"))
+	for branch in [[Vector2(880, 300), Vector2(738, 210)], [Vector2(900, 270), Vector2(1040, 192)], [Vector2(888, 225), Vector2(890, 98)]]:
+		draw_line(branch[0], branch[1], Color("504332"), 18, true)
+	for index in range(26):
+		var angle = index * TAU / 26.0
+		var radius = 78 + (index * 29) % 130
+		var leaf = Vector2(890, 155) + Vector2(cos(angle) * radius * 1.7, sin(angle) * radius * 0.58)
+		var sway = 0.0 if reduced_fx else sin(visual_now_ms() * 0.0007 + index) * 3.0
+		draw_colored_polygon(PackedVector2Array([leaf + Vector2(0, -8 + sway), leaf + Vector2(7, sway), leaf + Vector2(0, 9 + sway), leaf + Vector2(-7, sway)]), Color("526b55").lightened(0.12 if index % 5 == 0 else 0.0))
+	if transition > 0.2: draw_arc(Vector2(890, 310), 155, -PI * 0.9, -PI * 0.1, 48, Color(GOLD, 0.08 + transition * 0.12), 10, true)
+
+func draw_title_saint(center: Vector2, transition: float):
+	var lift = -4.0 * smoothstep(0.08, 0.28, transition)
+	var p = center + Vector2(0, lift)
+	draw_circle(p + Vector2(0, 83), 98, Color(0.02, 0.04, 0.04, 0.35))
+	draw_arc(p + Vector2(0, 70), 92, PI, TAU, 40, Color("7f6b4b"), 10)
+	draw_rect(Rect2(p + Vector2(-34, -34), Vector2(68, 95)), Color("7b6547"))
+	draw_rect(Rect2(p + Vector2(-27, -28), Vector2(54, 38)), Color("4e7568"))
+	for bolt in [Vector2(-26, -25), Vector2(26, -25), Vector2(-26, 51), Vector2(26, 51)]: draw_circle(p + bolt, 3, PAPER)
+	var shoulder_points = [Vector2(-28, -18), Vector2(28, -18), Vector2(-31, 7), Vector2(31, 7), Vector2(-26, 32), Vector2(26, 32)]
+	var hand_points = [Vector2(-135, -76), Vector2(135, -76), Vector2(-128, 4), Vector2(128, 4), Vector2(-42, 76), Vector2(42, 76)]
+	for index in range(6):
+		var hand = p + hand_points[index]
+		var elbow = p + shoulder_points[index].lerp(hand_points[index], 0.48) + Vector2(0, -12 if index < 4 else 10)
+		draw_line(p + shoulder_points[index], elbow, Color("8f7049"), 12, true)
+		draw_line(elbow, hand, Color("b08a58"), 10, true)
+		draw_circle(hand, 7, Color("d0aa6a"))
+	draw_inspection_lamp(p + hand_points[0], transition)
+	draw_spanner(p + hand_points[1], transition)
+	draw_welder(p + hand_points[2], transition)
+	draw_cable_clamp(p + hand_points[3], transition)
+	for lap_hand in [p + hand_points[4], p + hand_points[5]]: draw_arc(lap_hand, 12, PI, TAU, 14, Color("d0aa6a"), 5, true)
+	draw_rect(Rect2(p + Vector2(-26, -67), Vector2(52, 38)), Color("826c4d"))
+	draw_rect(Rect2(p + Vector2(-18, -56), Vector2(36, 12)), Color("18272a"))
+	var eye_open = smoothstep(0.08, 0.24, transition)
+	for side in [-1, 1]:
+		var eye = p + Vector2(side * 10, -50)
+		draw_line(eye + Vector2(-5, 0), eye + Vector2(5, 0), Color("2a312e"), 3)
+		if eye_open > 0: draw_circle(eye, 3 + eye_open * 2, Color(0.93, 0.82, 0.52, eye_open))
+
+func draw_inspection_lamp(hand: Vector2, transition: float):
+	draw_line(hand, hand + Vector2(-34, -22), Color("c19a57"), 8, true)
+	draw_circle(hand + Vector2(-40, -26), 12, Color("8edce0" if transition > 0.2 else "6b725f"))
+	if transition > 0.22: draw_line(hand + Vector2(-46, -28), hand + Vector2(-115, -42), Color(0.55, 0.86, 0.88, 0.3), 3, true)
+
+func draw_spanner(hand: Vector2, transition: float):
+	var angle = -0.55 + smoothstep(0.18, 0.38, transition) * 0.28
+	var end = hand + Vector2.from_angle(angle) * 52
+	draw_line(hand, end, Color("c7b28c"), 10, true)
+	draw_arc(end, 14, angle + 1.9, angle + 4.4, 16, Color("c7b28c"), 7, true)
+
+func draw_welder(hand: Vector2, transition: float):
+	draw_line(hand, hand + Vector2(-38, 18), Color("e4d6b5"), 10, true)
+	var tip = hand + Vector2(-46, 23)
+	draw_line(hand + Vector2(-38, 18), tip, Color("806249"), 4, true)
+	if transition > 0.26:
+		draw_circle(tip, 5, PAPER)
+		if not reduced_fx:
+			for index in range(3): draw_line(tip, tip + Vector2.from_angle(index * 1.4) * 16, Color(GOLD, 0.8), 2, true)
+
+func draw_cable_clamp(hand: Vector2, transition: float):
+	var jaw = 9.0 - smoothstep(0.22, 0.42, transition) * 5.0
+	draw_circle(hand + Vector2(28, 12), 13, Color("426c78"))
+	draw_line(hand, hand + Vector2(23, 8), Color("557d86"), 7, true)
+	for side in [-1, 1]: draw_line(hand + Vector2(23, 8), hand + Vector2(40, 8 + side * jaw), Color("9bcad4"), 5, true)
+	if transition > 0.35: draw_line(hand + Vector2(28, 12), hand + Vector2(78, 24), Color("81b8d0"), 3, true)
+
+func draw_title_clouds(transition: float):
+	var move = smoothstep(0.26, 0.78, transition)
+	var drift = 0.0 if reduced_fx else sin(visual_now_ms() * 0.0004) * 8.0
+	for side in [-1, 1]:
+		var center = Vector2(640 + side * (320 + move * 270) + drift * side, 590)
+		for index in range(8):
+			var cloud = center + Vector2((index - 3.5) * 55, sin(index * 1.7) * 24)
+			draw_circle(cloud, 72 + index % 3 * 16, Color(0.84, 0.86, 0.80, 0.92 - move * 0.28))
 
 func draw_menu():
 	for x in range(0, 1280, 48): draw_line(Vector2(x, 0), Vector2(x, 745), Color("15252a"))
@@ -729,6 +913,32 @@ func draw_workshop_layout():
 		text_at(machine.name, r.position + Vector2(12, r.size.y / 2), 10, PAPER)
 		for x in range(int(r.position.x), int(r.end.x), 12):
 			draw_line(Vector2(x, r.end.y + 2), Vector2(x + 6, r.end.y + 8), Color("a08b55"), 3)
+	draw_workshop_atmosphere(arena.bounds)
+
+func draw_workshop_atmosphere(bounds: Rect2):
+	var phase = float(sim.state.tick) * 0.045
+	# Moving service belts and floor lamps make the workshop feel operational
+	# without altering collision, navigation, hazards, or authoritative time.
+	for lane_y in [bounds.position.y + 74.0, bounds.end.y - 74.0]:
+		draw_line(Vector2(bounds.position.x + 80, lane_y), Vector2(bounds.end.x - 80, lane_y), Color("304744"), 9, true)
+		for index in range(12):
+			var travel = fposmod(index * 74.0 + (0.0 if reduced_fx else phase * 18.0), bounds.size.x - 190.0)
+			var p = Vector2(bounds.position.x + 95 + travel, lane_y)
+			draw_line(p + Vector2(-7, -5), p, Color("7d7358"), 2, true)
+			draw_line(p, p + Vector2(-7, 5), Color("7d7358"), 2, true)
+	var furnace = Vector2(bounds.end.x - 106, bounds.position.y + 150)
+	draw_circle(furnace, 34, Color(0.88, 0.31, 0.16, 0.045 + 0.02 * sin(phase)))
+	draw_arc(furnace, 28, 0, TAU, 30, Color(RED, 0.28), 3, true)
+	for lamp_index in range(5):
+		var lamp = Vector2(bounds.position.x + 120 + lamp_index * 190, bounds.position.y + 34)
+		draw_line(lamp + Vector2(0, -34), lamp, Color("45544e"), 2)
+		draw_circle(lamp, 5, Color(GOLD, 0.5 + 0.22 * sin(phase * 0.45 + lamp_index)))
+	if not reduced_fx:
+		for steam_index in range(4):
+			var source = Vector2(bounds.position.x + 245 + steam_index * 170, bounds.end.y - 42)
+			for puff_index in range(3):
+				var rise = fposmod(phase * 12.0 + puff_index * 24 + steam_index * 13, 78.0)
+				draw_circle(source + Vector2(sin(phase + steam_index) * 7, -rise), 7 + puff_index * 3, Color(0.66, 0.74, 0.70, 0.07 * (1.0 - rise / 90.0)))
 
 func draw_world():
 	var a = sim.config.arena
@@ -1605,8 +1815,25 @@ func draw_ellipse_shadow(p: Vector2, radii: Vector2):
 	# Local circle shadow keeps the silhouette readable without physics ownership.
 	draw_circle(p, radii.x, Color(0.02, 0.04, 0.05, 0.35))
 
+func enemy_reaction_offset(enemy: Dictionary) -> Vector2:
+	var offset = Vector2.ZERO
+	for index in range(fx.size() - 1, -1, -1):
+		var effect = fx[index]
+		if effect.get("kind", "") != "hit" or not effect.get("position", null) is Vector2: continue
+		if enemy.p.distance_to(effect.position) > enemy.radius + 18: continue
+		var progress = presentation_progress(effect)
+		var away = (enemy.p - sim.state.position).normalized()
+		if away == Vector2.ZERO: away = Vector2.RIGHT
+		offset += away * sin(progress * PI) * 7.0
+		break
+	if int(enemy.get("stun", 0)) > int(sim.state.tick): offset += Vector2(sin(sim.state.tick * 0.62) * 3.0, 1.5)
+	if int(enemy.get("windup", 0)) > int(sim.state.tick):
+		var brace = clampf(1.0 - float(enemy.windup - sim.state.tick) / 60.0, 0.0, 1.0)
+		offset -= Vector2(enemy.get("charge", Vector2.ZERO)) * (3.0 + brace * 5.0)
+	return offset
+
 func draw_enemy(e):
-	var p = e.p
+	var p = e.p + enemy_reaction_offset(e)
 	var color = Color("cb8565") if e.major else Color(sim.config.enemies[e.type].color)
 	if e.flash > sim.state.tick: color = PAPER
 	draw_circle(p + Vector2(0, 7), e.radius + 3, Color(0.02, 0.04, 0.05, 0.4))
@@ -1650,6 +1877,11 @@ func draw_enemy(e):
 			draw_line(p, p + e.charge * 135, RED, 2, true)
 			draw_circle(p + e.charge * 135, 4, GOLD)
 	if e.stun > sim.state.tick: draw_arc(p, e.radius + 6, 0, TAU, 24, GOLD, 2)
+	if e.flash > sim.state.tick:
+		draw_arc(p, e.radius + 9, -PI * 0.3, PI * 1.3, 20, Color(PAPER, 0.75), 3, true)
+		for impact in range(3):
+			var d = Vector2.from_angle(impact * TAU / 3.0 + sim.state.tick) * (e.radius + 6)
+			draw_line(p + d * 0.65, p + d, Color(GOLD, 0.85), 2, true)
 	if e.marked > sim.state.tick:
 		draw_line(p + Vector2(-4, -e.radius - 17), p + Vector2(4, -e.radius - 9), GOLD, 2)
 		draw_line(p + Vector2(4, -e.radius - 17), p + Vector2(-4, -e.radius - 9), GOLD, 2)
