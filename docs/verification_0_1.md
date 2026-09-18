@@ -195,3 +195,13 @@ The clean implementation commit `86d1da47888ae20552d94c8bb211d51572fe387d` passe
 Six configured P22 captures at 1280×800 and seed 147 show Bell strike, Great Toll, Cable clamp, Censer vent and three-family overlap in full and reduced effects. Internal scores are: authoritative origin 5/5, Bell mechanism 4/5, Cable mechanism 4/5, Censer mechanism 4/5, Evolution distinction 4/5, Saint preservation 5/5, overlap hierarchy 4/5, reduced-effects parity 5/5, palette coherence 4/5 and provenance clarity 5/5. These are executable stills, not human evidence of recognition, audio synchronization or normal-speed comfort.
 
 Exactly one next task: manifest the remaining short-lived relic families and stress-test four-weapon overlap at the actual gameplay camera.
+
+## P23 remaining short-lived manifested relics, 2026-09-18
+
+Candle-Nailer, Hymn Coil, Altar Mortar and Penance Winch now manifest as event-driven physical objects around the unchanged Saint. Their wick launcher, paired tuning forks, braced mortar and ratcheted drum remain presentation-only and preserve the existing shots, beam lanes, shell arc and articulated reach. Only Procession Gear and Welded Halo remain persistent, matching their authored active lifetimes.
+
+The clean implementation commit `add331bafc18750c05740704f626f1979844a49a` passes 1,000 Godot assertions and thirty-one Python manifest checks on Godot 4.5.1 stable. The normal-economy matrix wins 12/12, assembly 4/4, Evolutions 10/10 and Gift-specific routes 4/4. No assertion, script-load or resource-load failure appears in the full iteration logs.
+
+Ten configured P23 captures at 1280×800 and seed 147 cover both forms of all four families plus full/reduced four-Evolution overlap. Internal scores are: authoritative origin 5/5, Candle mechanism 4/5, Hymn mechanism 4/5, Mortar mechanism 5/5, Winch mechanism 5/5, Evolution distinction 4/5, four-family hierarchy 4/5, reduced-effects parity 4/5, palette coherence 5/5 and provenance clarity 5/5. These are executable stills, not human evidence of timing, aiming or enjoyment.
+
+Exactly one next task: run a normal-speed human readability pass across all manifested and persistent relic families, then tune only observed recognition, overlap and timing failures.

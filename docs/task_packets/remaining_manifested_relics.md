@@ -37,3 +37,7 @@ Configured stills cannot establish normal-speed recognition, sound synchronizati
 ## Exactly one next task
 
 Run a normal-speed human readability pass across all manifested and persistent relic families, then tune only observed recognition, overlap and timing failures.
+
+## Verification record
+
+Clean implementation commit `add331bafc18750c05740704f626f1979844a49a` was tested and captured with Godot 4.5.1 stable at 1280×800, seed 147, using the Compatibility renderer on Apple M1 Pro. The complete suite passes 1,000 Godot assertions and thirty-one Python manifest checks. The 12/12 normal-economy, 4/4 assembly, 10/10 Evolution and 4/4 Gift policy suites remain green. Ten configured P23 captures were inspected; they establish family-specific physical mechanisms, authored color separation, four-family overlap and reduced-effects parity, not human timing, aiming or enjoyment.
