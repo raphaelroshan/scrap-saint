@@ -1394,32 +1394,15 @@ func weapon_ready_amount(weapon: Dictionary, lead_ticks: int) -> float:
 	return 1.0 - float(remaining) / float(maxi(1, lead_ticks))
 
 func draw_nailer_mount(weapon: Dictionary, fallback_direction: Vector2):
-	var effect = latest_weapon_attack("weapon.nailer_small_mercies")
 	var direction = fallback_direction.normalized()
-	var progress = 0.0
-	if effect != null:
-		direction = (effect.to - effect.from).normalized()
-		progress = presentation_progress(effect)
 	if direction == Vector2.ZERO: direction = Vector2.RIGHT
-	var side = direction.orthogonal()
 	var evolved = sim.weapon_evolution_id(weapon) == "evolution.mercy_rail"
-	var readiness = weapon_ready_amount(weapon, 14 if evolved else 8)
-	var commit = smoothstep(0.08, 0.34, progress) * (1.0 - smoothstep(0.62, 1.0, progress)) if effect != null else 0.0
-	var extension = (13.0 if evolved else 7.0) * maxf(readiness, commit)
-	var mount = direction * 11 + side * 9
-	var rear = mount - direction * 8
-	var tip = mount + direction * (24 + extension)
-	draw_line(Vector2(8, -1), rear, Color("786e58"), 5, true)
-	draw_line(rear, tip, Color("b08b50"), 7 if evolved else 6, true)
-	draw_line(rear + side * 3, tip + side * 3, Color("ead8a5"), 2, true)
-	if evolved:
-		draw_line(rear - side * 5, tip - side * 5, Color("d7d2b2"), 3, true)
-		for brace in [0.28, 0.62]: draw_line(rear.lerp(tip, brace) - side * 5, rear.lerp(tip, brace) + side * 4, Color("6e775f"), 2, true)
-	elif int(weapon.rank) >= 2:
-		draw_line(rear - side * 4, tip - direction * 5 - side * 4, Color("806c48"), 2, true)
-	if int(weapon.rank) >= 3:
-		draw_colored_polygon(PackedVector2Array([tip - direction * 6 + side * 4, tip - direction * 1, tip - direction * 6 - side * 4]), GOLD)
-	draw_circle(tip, 2.5 + readiness * 2.0, Color(1.0, 0.88, 0.58, 0.5 + readiness * 0.5))
+	var readiness = weapon_ready_amount(weapon, 26 if evolved else 18)
+	# The equipped Nailer is not a permanent extra limb. It condenses only in
+	# the bounded pre-fire window; the committed object is drawn from its event.
+	if readiness <= 0.0: return
+	var origin = direction * 9 + direction.orthogonal() * 8
+	draw_manifested_nailer_geometry(origin, direction, evolved, readiness * 0.24, 0.28 + readiness * 0.72, readiness)
 
 func draw_bell_mount(weapon: Dictionary):
 	var effect = latest_weapon_attack("weapon.bell_last_shift")
@@ -1512,6 +1495,77 @@ func draw_weapon_mount(weapon: Dictionary):
 func gift_fx_active(gift_id: String) -> bool:
 	return fx.any(func(effect): return gift_event_id(effect) == gift_id)
 
+func nailer_manifest_state(effect: Dictionary) -> Dictionary:
+	var origin: Vector2 = effect.get("from", Vector2.ZERO)
+	var target: Vector2 = effect.get("to", origin + Vector2.RIGHT)
+	var direction = (target - origin).normalized()
+	if direction == Vector2.ZERO: direction = Vector2.RIGHT
+	var progress = presentation_progress(effect)
+	var evolved = str(effect.get("shape", "")) == "rail"
+	var reveal = smoothstep(0.0, 0.10, progress) * (1.0 - smoothstep(0.84, 1.0, progress))
+	var mechanism = smoothstep(0.07, 0.31, progress)
+	var recoil = sin(clampf((progress - 0.18) / 0.42, 0.0, 1.0) * PI) * (7.0 if evolved else 4.0)
+	return {
+		"origin": origin,
+		"direction": direction,
+		"evolved": evolved,
+		"progress": progress,
+		"visibility": reveal,
+		"mechanism": mechanism,
+		"recoil": recoil,
+		"guide_separation": (4.0 + mechanism * 6.0) if evolved else 0.0,
+		"guide_length": (34.0 + mechanism * 27.0) if evolved else 30.0,
+		"carriage": clampf((progress - 0.14) / (0.28 if evolved else 0.20), 0.0, 1.0),
+	}
+
+func draw_manifested_nailer_geometry(origin: Vector2, direction: Vector2, evolved: bool, progress: float, alpha: float, readiness = 0.0):
+	if alpha <= 0.0: return
+	var side = direction.orthogonal()
+	var mechanism = smoothstep(0.07, 0.31, progress)
+	var recoil = sin(clampf((progress - 0.18) / 0.42, 0.0, 1.0) * PI) * (7.0 if evolved else 4.0)
+	var root = origin - direction * recoil
+	var rear = root + direction * 7
+	var body_front = root + direction * (34 if evolved else 31)
+	var body_half = 8.0 if evolved else 7.0
+	var casing = Color(0.34, 0.47, 0.41, alpha)
+	var cream = Color(0.89, 0.84, 0.72, alpha)
+	var bronze = Color(0.71, 0.55, 0.30, alpha)
+	var dark = Color(0.14, 0.18, 0.17, alpha)
+	draw_colored_polygon(PackedVector2Array([rear - side * body_half, body_front - side * body_half, body_front + side * body_half, rear + side * body_half]), casing)
+	var patch_rear = rear.lerp(body_front, 0.22)
+	var patch_front = rear.lerp(body_front, 0.57)
+	draw_colored_polygon(PackedVector2Array([patch_rear - side * (body_half - 2), patch_front - side * (body_half - 2), patch_front + side * (body_half - 2), patch_rear + side * (body_half - 2)]), cream)
+	var wheel = rear.lerp(body_front, 0.69)
+	draw_circle(wheel, 5.0 if evolved else 4.0, dark)
+	draw_arc(wheel, 3.0, progress * TAU * 2.0, progress * TAU * 2.0 + TAU * 0.78, 12, bronze, 2, true)
+	var carriage_back = rear.lerp(body_front, 0.16 - readiness * 0.08)
+	var carriage_front = carriage_back + direction * 5
+	draw_line(carriage_back - side * body_half, carriage_front - side * body_half, bronze, 3, true)
+	if evolved:
+		var separation = 4.0 + mechanism * 6.0
+		var guide_length = 34.0 + mechanism * 27.0
+		var guide_end = rear + direction * guide_length
+		for rail_side in [-1.0, 1.0]:
+			var rail_start = rear + side * rail_side * separation
+			var rail_finish = guide_end + side * rail_side * separation
+			draw_line(rail_start, rail_finish, cream, 3, true)
+			draw_line(rail_start + direction * 4, rail_finish, Color(bronze, alpha * 0.74), 1, true)
+		for brace in [0.28, 0.62, 0.9]:
+			var brace_center = rear.lerp(guide_end, brace)
+			draw_line(brace_center - side * separation, brace_center + side * separation, Color(cream, alpha * 0.82), 2, true)
+		var carriage_amount = clampf((progress - 0.14) / 0.28, 0.0, 1.0)
+		var rail_carriage = rear.lerp(guide_end, carriage_amount)
+		draw_colored_polygon(PackedVector2Array([rail_carriage - direction * 4 - side * 4, rail_carriage + direction * 4 - side * 4, rail_carriage + direction * 4 + side * 4, rail_carriage - direction * 4 + side * 4]), bronze)
+		var muzzle = guide_end
+		draw_line(muzzle - side * (separation + 3), muzzle - side * separation, cream, 3, true)
+		draw_line(muzzle + side * separation, muzzle + side * (separation + 3), cream, 3, true)
+	else:
+		var jaw = body_front + direction * (5 + mechanism * 3)
+		for jaw_side in [-1.0, 1.0]: draw_line(body_front + side * jaw_side * 4, jaw + side * jaw_side * 5, cream, 3, true)
+		draw_line(jaw - side * 5, jaw + side * 5, bronze, 2, true)
+	if not reduced_fx:
+		draw_circle(rear, 10 + mechanism * 4, Color(0.95, 0.84, 0.55, alpha * 0.07))
+
 func draw_nailer_attack(effect: Dictionary, color: Color, progress: float, fade: float):
 	var origin: Vector2 = effect.from
 	var target: Vector2 = effect.to
@@ -1519,6 +1573,8 @@ func draw_nailer_attack(effect: Dictionary, color: Color, progress: float, fade:
 	if direction == Vector2.ZERO: direction = Vector2.RIGHT
 	var side = direction.orthogonal()
 	var is_rail = effect.shape == "rail"
+	var manifestation = nailer_manifest_state(effect)
+	draw_manifested_nailer_geometry(origin, direction, is_rail, progress, fade * float(manifestation.visibility))
 	var guide_alpha = (1.0 - smoothstep(0.0, 0.32, progress)) * (0.34 if is_rail else 0.22)
 	for segment in range(6):
 		if segment % 2 == 0:

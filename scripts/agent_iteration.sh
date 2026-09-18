@@ -39,6 +39,7 @@ mkdir -p artifacts/agent-iteration
 "$GODOT_BIN" --path . --script res://tests/capture_evolutions.gd | tee artifacts/agent-iteration/evolution-capture.log
 "$GODOT_BIN" --path . --script res://tests/capture_weapon_ranks.gd -- --capture-dir="$PWD/artifacts/agent-iteration" | tee artifacts/agent-iteration/weapon-rank-capture.log
 "$GODOT_BIN" --path . --script res://tests/capture_weapon_animation.gd -- --capture-dir="$PWD/artifacts/weapon-animation" | tee artifacts/agent-iteration/weapon-animation-capture.log
+"$GODOT_BIN" --path . --script res://tests/capture_manifested_nailer.gd -- --capture-dir="$PWD/artifacts/manifested-nailer" | tee artifacts/agent-iteration/manifested-nailer-capture.log
 "$GODOT_BIN" --path . --script res://tests/capture_game_feel.gd -- --capture-dir="$PWD/artifacts/game-feel" | tee artifacts/agent-iteration/game-feel-capture.log
 "$GODOT_BIN" --path . --script res://tests/capture_gift_breadth.gd | tee artifacts/agent-iteration/gift-breadth-capture.log
 "$GODOT_BIN" --path . --script res://tests/capture_main_menu.gd | tee artifacts/agent-iteration/main-menu-capture.log

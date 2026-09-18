@@ -260,3 +260,13 @@ All 958 Godot assertions and thirty-one Python checks pass on pinned Godot 4.5.1
 Rendered-evidence rubric (5-point internal review): title identity 4, transition clarity 4, combat action readability 4, enemy response 4, environment depth 3, Evolution premium 4, overlap hierarchy 4, reduced-effects parity 4, palette/UI coherence 4, provenance clarity 5. Automated evidence cannot establish audio mix, normal-speed feel, controller comfort or minimum-Windows-hardware performance.
 
 Exactly one next task: run an uncoached human 1× session on the packaged Windows build and record only observed timing, audio-mix, recognition and performance failures.
+
+## P21 — manifested Nailer and Mercy Rail
+
+The equipped Nailer is no longer rendered as a permanently attached extra limb. It condenses during a bounded pre-fire readiness window, then the committed object is rendered from the authoritative attack event's recorded origin and direction. The base form has a compact green-and-cream driver casing, household repair patch, exposed flywheel, moving carriage and blunt jaws. Mercy Rail retains that casing while unfolding two longer cream guide rails, cross-braces and a travelling structural-rivet carriage. Recoil and fade are presentation-only.
+
+Moving or turning after emission does not drag the manifested relic away from its recorded origin. Reduced effects removes only the secondary glow and impact spark density; driver silhouette, rails, attack boundary and endpoint remain. The current Saint sprite, target selection, timing, damage, hit geometry, repair effects, RNG and save state are unchanged.
+
+All 993 Godot assertions and thirty-one Python manifest checks pass on pinned Godot 4.5.1. Six configured executable fixtures were captured from clean commit `4b65b6915d154ebb08393141ac50e642bcecbbb8` at 1280×800, seed 147, using OpenGL Compatibility on Apple M1 Pro. The full normal-economy, assembly, Evolution and Gift policy suites remain green. These stills do not establish human recognition, normal-speed recoil timing or audio synchronization.
+
+Exactly one next task: manifest Bell, Cable and Foundry Censer with the same event-driven boundary and actual-camera capture gate.
