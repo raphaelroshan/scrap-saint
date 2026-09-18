@@ -6,7 +6,7 @@ Status: proposed production direction, with generated concept boards. These imag
 
 Weapons manifest; the current playable Saint sprite stays unchanged for now. Use the relic concepts for brief event-driven weapon appearances and attack effects. Persistent orbiting relics retain their active visuals. Attachment arms, physical mount sockets and the replacement character rig described below are deferred concepts, not dependencies. The menu artwork remains unchanged.
 
-The current first slice is the manifested Nailer and Mercy Rail, followed by Bell, Cable and Censer, then a four-weapon readability pass. The [roadmap](../roadmap.md) governs implementation order. Presentation must preserve simulation timing, targets and outcomes.
+The manifested Nailer and Mercy Rail slice is implemented. Bell, Cable and Censer follow, then a four-weapon readability pass. The [roadmap](../roadmap.md) governs implementation order. Presentation must preserve simulation timing, targets and outcomes.
 
 ## The decision
 
@@ -92,4 +92,4 @@ Acceptance must include actual-size recognition against workshop floors, visibil
 
 The character establishes a warm, recognizable face and a practical six-arm solution. The weapon board offers four strong outer shapes with shared material language. The arena board establishes a coherent world, with the readability corrections above still required. Fine scratches and small cloth details are optional polish after the large shapes work.
 
-Exactly one next task: implement the manifested Nailer and Mercy Rail visual slice while preserving the current Saint sprite.
+Exactly one next task: manifest Bell, Cable and Foundry Censer with the same event-driven boundary and actual-camera capture gate.

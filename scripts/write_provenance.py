@@ -18,6 +18,6 @@ data = {
     'source_hashes': {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root / 'game').glob('*')) if p.is_file()},
     'content_hashes': {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root / 'content').rglob('*.json'))},
     'limitation': 'No human playtest or rendered minimum-hardware benchmark',
-    'next_task': 'Uncoached human 1x session on the packaged Windows build focused on timing, audio mix, recognition, and performance',
+    'next_task': 'Manifest Bell, Cable and Foundry Censer with the same event-driven boundary and actual-camera capture gate',
 }
 (root / 'artifacts/agent-iteration/provenance.json').write_text(json.dumps(data, indent=2), encoding='utf-8')

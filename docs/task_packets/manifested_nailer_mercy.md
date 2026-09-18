@@ -15,6 +15,7 @@ The deterministic simulation continues to own attack cadence, origin, target, ge
 - `tests/capture_manifested_nailer.gd`
 - `scripts/agent_iteration.sh`
 - `scripts/agent_iteration.ps1`
+- `scripts/write_provenance.py`
 - `tests/README.md`
 - `docs/runtime_status.md`
 - `roadmap.md`
@@ -44,3 +45,7 @@ Configured stills cannot establish human recognition, perceived recoil timing, a
 ## Exactly one next task
 
 Manifest Bell, Cable and Foundry Censer with the same event-driven boundary and actual-camera capture gate.
+
+## Verification record
+
+Clean implementation commit `4b65b6915d154ebb08393141ac50e642bcecbbb8` was tested and captured with Godot 4.5.1 stable at 1280×800, seed 147, using the Compatibility renderer on Apple M1 Pro. The full suite passes 993 Godot assertions and thirty-one Python manifest checks. The normal-economy, assembly, Evolution and Gift policy suites remain green. Six configured P21 captures were inspected; they establish event-origin stability, compact-versus-unfolded silhouette, threat overlap and reduced-effects parity, not human timing or enjoyment.
