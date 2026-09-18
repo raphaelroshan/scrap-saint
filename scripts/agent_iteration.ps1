@@ -74,6 +74,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Weapon rank capture failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Weapon animation capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_manifested_nailer.gd -- --capture-dir="$projectRoot\artifacts\manifested-nailer" 2>&1 | Tee-Object -FilePath "$bundlePath\manifested-nailer-capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Manifested Nailer capture failed' }
+& $GodotBin --path $projectRoot --script res://tests/capture_manifested_relics.gd -- --capture-dir="$projectRoot\artifacts\manifested-relics" 2>&1 | Tee-Object -FilePath "$bundlePath\manifested-relics-capture.log"
+if ($LASTEXITCODE -ne 0) { throw 'Manifested relic capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_game_feel.gd -- --capture-dir="$projectRoot\artifacts\game-feel" 2>&1 | Tee-Object -FilePath "$bundlePath\game-feel-capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Game feel capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_gift_breadth.gd 2>&1 | Tee-Object -FilePath "$bundlePath\gift-breadth-capture.log"
