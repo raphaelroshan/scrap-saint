@@ -29,9 +29,21 @@ func run_checks():
 	check(is_equal_approx(game.presentation_progress(game.fx[0]), 0.5), "presentation progress is deterministic under the fixture clock")
 	check(game.presentation_fade(game.fx[0]) > 0.99, "Nailer resolve remains fully legible at mid-animation")
 	check(game.latest_weapon_attack("weapon.nailer_small_mercies") == game.fx[0] and game.latest_weapon_attack("weapon.bell_last_shift") == null, "physical mounts read only their matching authoritative attack")
+	var base_manifest = game.nailer_manifest_state(game.fx[0])
+	check(base_manifest.origin == Vector2(100, 100) and base_manifest.direction == Vector2.RIGHT, "manifested Nailer uses the authoritative event origin and direction")
+	check(not base_manifest.evolved and is_zero_approx(base_manifest.guide_separation), "base Nailer remains a compact driver without Mercy guides")
+	check(base_manifest.visibility > 0.9 and base_manifest.carriage > 0.9, "base Nailer exposes a bounded readable commit state")
 
 	game.visual_clock_override = 2000
 	game.present({"kind": "attack", "shape": "rail", "weapon": "weapon.nailer_small_mercies", "from": Vector2.ZERO, "to": Vector2.RIGHT * 620, "range": 620, "width": 19, "rank": 3, "color": "efb966"})
+	game.visual_clock_override = 2170
+	var rail_manifest = game.nailer_manifest_state(game.fx[-1])
+	check(rail_manifest.evolved and rail_manifest.guide_separation > 7.0 and rail_manifest.guide_length > 48.0, "Mercy Rail unfolds a longer separated guide silhouette")
+	var rail_origin = rail_manifest.origin
+	game.sim.state.position = Vector2(90, 70)
+	game.sim.state.facing = Vector2.LEFT
+	check(game.nailer_manifest_state(game.fx[-1]).origin == rail_origin, "movement and facing changes do not detach a committed manifestation from its event origin")
+	game.visual_clock_override = 2000
 	game.present({"kind": "attack", "shape": "cone", "weapon": "weapon.bell_last_shift", "from": Vector2.ZERO, "to": Vector2.RIGHT * 155, "range": 155, "width": 1.04, "rank": 3, "color": "efcf83"})
 	game.present({"kind": "attack", "shape": "radial", "weapon": "weapon.bell_last_shift", "from": Vector2.ZERO, "to": Vector2.ZERO, "range": 215, "width": 0, "rank": 3, "color": "efcf83"})
 	check(game.fx[-3].duration_ms == 560, "Mercy Rail has a longer physical resolve than the base Nailer")
