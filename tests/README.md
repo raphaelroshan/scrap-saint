@@ -93,6 +93,8 @@ P21 manifested Nailer: the same presentation suite proves authoritative event or
 
 P22 manifested Bell/Cable/Censer: the presentation suite proves authoritative event origins and family-specific physical mechanisms while `capture_manifested_relics.gd` renders Bell strike, Great Toll, Cable clamp, Censer vent, three-relic overlap and reduced-effects overlap in `artifacts/manifested-relics`. These are configured stills, not human recognition, audio synchronization or comfort evidence.
 
+P23 remaining manifested relics: the presentation suite extends authoritative origin/shape checks to Candle-Nailer, Hymn Coil, Altar Mortar and Penance Winch. `capture_remaining_manifested_relics.gd` renders both forms of each family plus a four-evolution stress scene in full and reduced effects under `artifacts/remaining-manifested-relics`; these are configured stills, not human recognition, timing or aiming evidence.
+
 P20 game feel: `test_presentation_quality.gd` keeps title, impulse, pose, Evolution and audio work on the presentation side of the simulation boundary. `capture_game_feel.gd` renders meditation/reveal, windup/impact, Evolution, atmosphere and full/reduced combat states under `artifacts/game-feel`; these are configured executable fixtures, not human timing or mix evidence.
 
 Peak-density simulation benchmark: Apple M1 Pro, Godot 4.5.1, 65 persistent mixed threats, four Rank III weapons and 1,800 fixed ticks completed at 315 simulation ticks/second (5.25× the 60 Hz requirement) in the integrated release run. This measures authoritative simulation throughput only; rendered Windows minimum-hardware performance remains unverified.
