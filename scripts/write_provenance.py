@@ -18,6 +18,6 @@ data = {
     'source_hashes': {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root / 'game').glob('*')) if p.is_file()},
     'content_hashes': {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root / 'content').rglob('*.json'))},
     'limitation': 'No human playtest or rendered minimum-hardware benchmark',
-    'next_task': 'Manifest the remaining short-lived relic families and stress-test four-weapon overlap at the actual gameplay camera',
+    'next_task': 'Run a normal-speed human readability pass across all manifested and persistent relic families, then tune only observed recognition, overlap and timing failures',
 }
 (root / 'artifacts/agent-iteration/provenance.json').write_text(json.dumps(data, indent=2), encoding='utf-8')

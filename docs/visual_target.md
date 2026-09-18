@@ -6,7 +6,7 @@ Status: proposed production direction, with generated concept boards. These imag
 
 Weapons manifest; the current playable Saint sprite stays unchanged for now. Use the relic concepts for brief event-driven weapon appearances and attack effects. Persistent orbiting relics retain their active visuals. Attachment arms, physical mount sockets and the replacement character rig described below are deferred concepts, not dependencies. The menu artwork remains unchanged.
 
-The manifested Nailer/Mercy Rail and Bell/Cable/Censer slices are implemented. The remaining short-lived families and a four-weapon readability pass follow. The [roadmap](../roadmap.md) governs implementation order. Presentation must preserve simulation timing, targets and outcomes.
+All eight short-lived weapon families now manifest from their authoritative attack events; Procession Gear and Welded Halo retain their appropriate persistent lifetimes. A four-Evolution readability stress pass is complete. The [roadmap](../roadmap.md) governs implementation order. Presentation must preserve simulation timing, targets and outcomes.
 
 ## The decision
 
@@ -92,4 +92,4 @@ Acceptance must include actual-size recognition against workshop floors, visibil
 
 The character establishes a warm, recognizable face and a practical six-arm solution. The weapon board offers four strong outer shapes with shared material language. The arena board establishes a coherent world, with the readability corrections above still required. Fine scratches and small cloth details are optional polish after the large shapes work.
 
-Exactly one next task: manifest the remaining short-lived relic families and stress-test four-weapon overlap at the actual gameplay camera.
+Exactly one next task: run a normal-speed human readability pass across all manifested and persistent relic families, then tune only observed recognition, overlap and timing failures.

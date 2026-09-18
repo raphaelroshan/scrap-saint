@@ -280,3 +280,13 @@ The simulation still owns every cadence, origin, target, radius, tether, damage,
 All 996 Godot assertions and thirty-one Python manifest checks pass on pinned Godot 4.5.1. Six configured executable fixtures were captured from clean implementation commit `86d1da47888ae20552d94c8bb211d51572fe387d` at 1280×800, seed 147, using OpenGL Compatibility on Apple M1 Pro. The 12/12 normal-economy, 4/4 assembly, 10/10 Evolution and 4/4 Gift policy suites remain green. These stills do not establish human recognition, normal-speed timing, audio synchronization or comfort.
 
 Exactly one next task: manifest the remaining short-lived relic families and stress-test four-weapon overlap at the actual gameplay camera.
+
+## P23 — remaining short-lived manifested relics
+
+Candle-Nailer, Hymn Coil, Altar Mortar and Penance Winch now appear as event-driven physical relics rather than permanent extra attachments. Candle-Nailer exposes a dark wick-fed launcher and expands from one to three violet flames for Candle for the Unreturned. Hymn Coil's paired forks visibly tune into its cyan beam, with a wider coil and separated lanes for Quiet Sermon. Altar Mortar braces and recoils before its shell follows the existing arc, while Workshop Benediction adds its green frame and existing ground seal. Penance Winch turns a ratcheted drum before the articulated hand extends; Long Hand adds a heavier brace and wider reach.
+
+Together with P21/P22, every short-lived weapon now manifests only during bounded readiness or its committed attack event. Procession Gear and Welded Halo retain their appropriate persistent lifetimes. The four-Evolution stress capture assigns separate directions and authored colors so the Saint, nearby threats, projectile endpoints and attack families remain identifiable at the actual gameplay camera. Reduced effects removes decorative layers without removing mechanisms or boundaries.
+
+All 1,000 Godot assertions and thirty-one Python manifest checks pass on pinned Godot 4.5.1. Ten configured executable fixtures were captured from clean implementation commit `add331bafc18750c05740704f626f1979844a49a` at 1280×800, seed 147, using OpenGL Compatibility on Apple M1 Pro. The 12/12 normal-economy, 4/4 assembly, 10/10 Evolution and 4/4 Gift policy suites remain green. These stills do not establish human recognition, normal-speed timing, audio synchronization or aiming comfort.
+
+Exactly one next task: run a normal-speed human readability pass across all manifested and persistent relic families, then tune only observed recognition, overlap and timing failures.

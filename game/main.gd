@@ -1430,7 +1430,7 @@ func draw_weapon_mount(weapon: Dictionary):
 	var progress = presentation_progress(effect) if effect != null else 0.0
 	var pulse = presentation_fade(effect) if effect != null else 0.0
 	var readiness = weapon_ready_amount(weapon, 12)
-	if str(weapon.id) in ["weapon.cable_contrition", "weapon.foundry_censer"]:
+	if str(weapon.id) in ["weapon.candle_nailer", "weapon.cable_contrition", "weapon.hymn_coil", "weapon.altar_mortar", "weapon.foundry_censer", "weapon.penance_winch"]:
 		if effect != null or readiness <= 0.0: return
 	var rank = int(weapon.get("rank", 1))
 	var evolution = sim.weapon_evolution_id(weapon)
@@ -1678,6 +1678,84 @@ func draw_manifested_censer(effect: Dictionary, progress: float, fade: float):
 			var puff = body + Vector2(15 + plume * 8, 3 - plume * 5)
 			draw_circle(puff, 5 + plume * 2, Color(0.48, 0.70, 0.64, alpha * (0.16 - plume * 0.03)))
 
+func draw_manifested_candle(effect: Dictionary, progress: float, fade: float):
+	var state = manifested_relic_state(effect)
+	var origin: Vector2 = state.origin
+	var direction: Vector2 = state.direction
+	var side = direction.orthogonal()
+	var alpha = fade * float(state.visibility)
+	var evolved = state.shape == "funeral_shots"
+	var body = origin - direction * 25 - side * 25
+	var rear = body - direction * 11
+	var front = body + direction * 13
+	draw_line(front, origin, Color(0.46, 0.38, 0.34, alpha), 3, true)
+	draw_colored_polygon(PackedVector2Array([rear - side * 8, front - side * 8, front + side * 8, rear + side * 8]), Color(0.22, 0.19, 0.22, alpha))
+	draw_line(rear - side * 8, front - side * 8, Color(0.76, 0.69, 0.57, alpha), 2, true)
+	var wick_count = 3 if evolved else 1
+	for wick in range(wick_count):
+		var offset = (wick - (wick_count - 1) * 0.5) * 7.0
+		var socket = front + side * offset
+		draw_line(socket - direction * 3, socket + direction * 7, Color(0.78, 0.68, 0.48, alpha), 3, true)
+		var flame = socket + direction * (10 + sin(progress * TAU + wick) * 2)
+		draw_colored_polygon(PackedVector2Array([flame + direction * 5, flame - direction * 3 - side * 3, flame - direction * 3 + side * 3]), Color(0.78, 0.67, 0.91, alpha))
+		if not reduced_fx: draw_circle(flame, 6, Color(0.55, 0.39, 0.65, alpha * 0.16))
+
+func draw_manifested_hymn(effect: Dictionary, progress: float, fade: float):
+	var state = manifested_relic_state(effect)
+	var origin: Vector2 = state.origin
+	var direction: Vector2 = state.direction
+	var side = direction.orthogonal()
+	var alpha = fade * float(state.visibility)
+	var evolved = state.shape == "sermon"
+	var body = origin - direction * 22 + side * 27
+	draw_line(body + direction * 9, origin, Color(0.42, 0.37, 0.29, alpha), 3, true)
+	draw_circle(body, 12 if evolved else 10, Color(0.18, 0.29, 0.31, alpha))
+	draw_arc(body, 7 if evolved else 6, progress * TAU * 2.0, progress * TAU * 2.0 + TAU * 0.8, 16, Color(0.56, 0.86, 0.88, alpha), 3, true)
+	var tune = smoothstep(0.04, 0.24, progress)
+	var gap = (9.0 if evolved else 7.0) - tune * 4.0
+	var fork_root = body + direction * 6
+	for fork_side in [-1.0, 1.0]:
+		var fork_base = fork_root + side * fork_side * gap
+		var fork_tip = origin + side * fork_side * (3.0 if evolved else 2.0)
+		draw_line(fork_base, fork_tip, Color(0.73, 0.93, 0.94, alpha), 3 if evolved else 2, true)
+		draw_line(fork_base - direction * 4, fork_base + side * fork_side * 4, Color(0.89, 0.84, 0.72, alpha), 2, true)
+
+func draw_manifested_mortar(effect: Dictionary, progress: float, fade: float):
+	var state = manifested_relic_state(effect)
+	var origin: Vector2 = state.origin
+	var direction: Vector2 = state.direction
+	var side = direction.orthogonal()
+	var alpha = fade * float(state.visibility)
+	var evolved = state.shape in ["benediction", "consecrated"]
+	var recoil = sin(clampf((progress - 0.08) / 0.34, 0.0, 1.0) * PI) * 5.0
+	var base = origin - direction * (30 + recoil) + side * 24
+	var mouth = origin - direction * recoil + side * 24
+	draw_line(base - side * 10, base + side * 10, Color(0.36, 0.31, 0.25, alpha), 5, true)
+	draw_line(base - side * 8, base - direction * 8 - side * 13, Color(0.45, 0.38, 0.28, alpha), 4, true)
+	draw_line(base + side * 8, base - direction * 8 + side * 13, Color(0.45, 0.38, 0.28, alpha), 4, true)
+	draw_line(base, mouth, Color(0.61, 0.37, 0.26, alpha), 13 if evolved else 11, true)
+	draw_line(base + direction * 4, mouth, Color(0.91, 0.73, 0.46, alpha), 3, true)
+	draw_arc(mouth, 8 if evolved else 7, direction.angle() - PI * 0.5, direction.angle() + PI * 0.5, 12, Color(0.89, 0.84, 0.72, alpha), 3, true)
+	draw_line(mouth, origin, Color(0.89, 0.84, 0.72, alpha * 0.72), 2, true)
+	if evolved: draw_rect(Rect2(base - Vector2(8, 8), Vector2(16, 16)), Color(0.35, 0.52, 0.43, alpha), false, 2)
+
+func draw_manifested_winch(effect: Dictionary, progress: float, fade: float):
+	var state = manifested_relic_state(effect)
+	var origin: Vector2 = state.origin
+	var direction: Vector2 = state.direction
+	var side = direction.orthogonal()
+	var alpha = fade * float(state.visibility)
+	var evolved = state.shape == "long_hand"
+	var drum = origin - direction * 20 - side * 27
+	draw_line(drum + direction * 8, origin, Color(0.45, 0.38, 0.28, alpha), 4, true)
+	draw_circle(drum, 13 if evolved else 11, Color(0.54, 0.44, 0.28, alpha))
+	draw_arc(drum, 8 if evolved else 7, -progress * TAU * 2.0, -progress * TAU * 2.0 + TAU * 0.82, 18, Color(0.86, 0.70, 0.43, alpha), 3, true)
+	draw_circle(drum, 3, Color(0.14, 0.18, 0.17, alpha))
+	var pawl = drum + direction * 9 - side * 6
+	draw_colored_polygon(PackedVector2Array([pawl, pawl - direction * 8 - side * 4, pawl - direction * 5 + side * 3]), Color(0.89, 0.84, 0.72, alpha))
+	if evolved:
+		draw_line(drum - side * 13, drum + side * 13, Color(0.89, 0.84, 0.72, alpha * 0.82), 3, true)
+
 func draw_bell_attack(effect: Dictionary, color: Color, progress: float, fade: float):
 	var origin: Vector2 = effect.from
 	var radial = effect.shape == "radial"
@@ -1746,6 +1824,7 @@ func draw_procession_attack(effect: Dictionary, color: Color, progress: float, f
 			draw_colored_polygon(PackedVector2Array([pole + Vector2(0, -16), pole + Vector2(11, -12), pole + Vector2(0, -8)]), Color(GOLD, fade * 0.75))
 
 func draw_candle_attack(effect: Dictionary, color: Color, progress: float, fade: float):
+	draw_manifested_candle(effect, progress, fade)
 	var targets: Array = effect.get("targets", [])
 	if targets.is_empty(): targets = [effect.to]
 	var travel = clampf((progress - 0.12) / (0.42 if effect.shape == "funeral_shots" else 0.30), 0.0, 1.0)
@@ -1804,6 +1883,7 @@ func draw_cable_attack(effect: Dictionary, color: Color, progress: float, fade: 
 			draw_line(p - direction.orthogonal() * 3, p + direction.orthogonal() * 3, Color(PAPER, fade * 0.72), 2, true)
 
 func draw_hymn_attack(effect: Dictionary, color: Color, progress: float, fade: float):
+	draw_manifested_hymn(effect, progress, fade)
 	var origin: Vector2 = effect.from
 	var target: Vector2 = effect.to
 	var direction = (target - origin).normalized()
@@ -1826,6 +1906,7 @@ func draw_hymn_attack(effect: Dictionary, color: Color, progress: float, fade: f
 				draw_line(p - side * 8, p + side * 8, Color(PAPER, fade * 0.75), 2, true)
 
 func draw_mortar_attack(effect: Dictionary, color: Color, progress: float, fade: float):
+	draw_manifested_mortar(effect, progress, fade)
 	var origin: Vector2 = effect.from
 	var target: Vector2 = effect.to
 	var travel = clampf((progress - 0.10) / 0.42, 0.0, 1.0)
@@ -1877,6 +1958,7 @@ func draw_censer_attack(effect: Dictionary, color: Color, progress: float, fade:
 			draw_circle(soot, 2 + index % 2, Color("2f292c", fade * 0.62))
 
 func draw_winch_attack(effect: Dictionary, color: Color, progress: float, fade: float):
+	draw_manifested_winch(effect, progress, fade)
 	var origin: Vector2 = effect.from
 	var target: Vector2 = effect.to
 	var direction = (target - origin).normalized()

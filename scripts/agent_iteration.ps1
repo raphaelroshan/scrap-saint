@@ -76,6 +76,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Weapon animation capture failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Manifested Nailer capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_manifested_relics.gd -- --capture-dir="$projectRoot\artifacts\manifested-relics" 2>&1 | Tee-Object -FilePath "$bundlePath\manifested-relics-capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Manifested relic capture failed' }
+& $GodotBin --path $projectRoot --script res://tests/capture_remaining_manifested_relics.gd -- --capture-dir="$projectRoot\artifacts\remaining-manifested-relics" 2>&1 | Tee-Object -FilePath "$bundlePath\remaining-manifested-relics-capture.log"
+if ($LASTEXITCODE -ne 0) { throw 'Remaining manifested relic capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_game_feel.gd -- --capture-dir="$projectRoot\artifacts\game-feel" 2>&1 | Tee-Object -FilePath "$bundlePath\game-feel-capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Game feel capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_gift_breadth.gd 2>&1 | Tee-Object -FilePath "$bundlePath\gift-breadth-capture.log"
@@ -87,5 +89,5 @@ if ($LASTEXITCODE -ne 0) { throw 'Main menu capture failed' }
 $commitId = git -C $projectRoot rev-parse HEAD
 $godotVersion = & $GodotBin --version
 $files = Get-ChildItem -LiteralPath "$projectRoot\game" -Filter '*.gd' | ForEach-Object { @{ path = $_.Name; sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash } }
-@{ build = '0.6.0-preview'; base_commit = $commitId; dirty = [bool](git -C $projectRoot status --porcelain); godot = $godotVersion; viewport = @(1280,800); scaling = 'canvas_items'; seed = 147; timestamp_utc = [DateTime]::UtcNow.ToString('o'); capture_type = 'rendered simulation fixtures; includes explicit setup budgets, Results, weapon ranks, Evolutions, Gifts, destination bosses, and manifested relics'; source_hashes = @($files); limitation = 'No human playtest or rendered minimum-hardware benchmark'; next_task = 'Manifest the remaining short-lived relic families and stress-test four-weapon overlap at the actual gameplay camera' } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath "$bundlePath\provenance.json" -Encoding utf8
+@{ build = '0.6.0-preview'; base_commit = $commitId; dirty = [bool](git -C $projectRoot status --porcelain); godot = $godotVersion; viewport = @(1280,800); scaling = 'canvas_items'; seed = 147; timestamp_utc = [DateTime]::UtcNow.ToString('o'); capture_type = 'rendered simulation fixtures; includes explicit setup budgets, Results, weapon ranks, Evolutions, Gifts, destination bosses, and manifested relics'; source_hashes = @($files); limitation = 'No human playtest or rendered minimum-hardware benchmark'; next_task = 'Run a normal-speed human readability pass across all manifested and persistent relic families, then tune only observed recognition, overlap and timing failures' } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath "$bundlePath\provenance.json" -Encoding utf8
 Write-Output "Bundle ready for visual review: $bundlePath"

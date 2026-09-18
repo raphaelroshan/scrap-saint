@@ -84,7 +84,7 @@ func run_checks():
 	check(game.sim.state_hash() == catalogue_hash, "presenting all remaining base and Evolution families preserves simulation state")
 	for weapon_id in ["weapon.procession_gear", "weapon.candle_nailer", "weapon.cable_contrition", "weapon.hymn_coil", "weapon.altar_mortar", "weapon.foundry_censer", "weapon.penance_winch", "weapon.welded_halo"]:
 		check(game.latest_weapon_attack(weapon_id) != null and str(game.latest_weapon_attack(weapon_id).weapon) == weapon_id, "%s mount reads only its own latest attack" % weapon_id)
-	for weapon_id in ["weapon.cable_contrition", "weapon.foundry_censer"]:
+	for weapon_id in ["weapon.candle_nailer", "weapon.cable_contrition", "weapon.hymn_coil", "weapon.altar_mortar", "weapon.foundry_censer", "weapon.penance_winch"]:
 		var manifested = game.manifested_relic_state(game.latest_weapon_attack(weapon_id))
 		check(manifested.origin == Vector2.ZERO and manifested.shape != "", "%s manifestation preserves its authoritative origin and shape" % weapon_id)
 
