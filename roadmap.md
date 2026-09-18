@@ -17,13 +17,13 @@ Defer the proposed attachment-arm rig, mount sockets and character-sprite replac
 | Order | Work | Completion gate |
 |---|---|---|
 | 1 — complete | Manifested Nailer and Mercy Rail on the unchanged Saint | Distinct rivet mechanism, recoil and line resolve; Mercy Rail visibly unfolds longer guides and uses its existing attack geometry. Verified normal and reduced effects, moving/facing changes, event timing and unchanged simulation outcomes. |
-| 2 — next | Manifested Bell, Cable and Foundry Censer | Bell body and hammer precede readable arcs; clamp/reel accompany the tether; Censer vessel accompanies its low smoke field. Preserve each relic's silhouette and existing behavior. |
-| 3 | Four-weapon overlap and remaining relic families | Stress-test simultaneous attacks at the actual gameplay camera. Saint position, nearby enemies and threat cues remain visible. Persistent gears/halos follow their existing lifetimes; short attacks clean up promptly. |
+| 2 — complete | Manifested Bell, Cable and Foundry Censer | Bell body and hammer precede readable arcs; clamp/reel accompany the tether; Censer vessel accompanies its low smoke field. Verified authoritative origins, distinct mechanisms, three-relic overlap and reduced-effects parity without changing simulation outcomes. |
+| 3 — next | Four-weapon overlap and remaining relic families | Stress-test simultaneous attacks at the actual gameplay camera. Saint position, nearby enemies and threat cues remain visible. Persistent gears/halos follow their existing lifetimes; short attacks clean up promptly. |
 | 4 | Workshop Level 1 presentation and pacing review | Test the complete opening level at normal speed with uncoached players; use findings to tune clarity and pacing before expanding art coverage. |
 
 No character rig, new weapons or balance changes are prerequisites for step 1. Require real Godot captures with build/viewport/seed provenance and event/state regression checks for each runtime slice. Concept boards alone do not satisfy these gates.
 
-Exactly one next task: manifest Bell, Cable and Foundry Censer with the same event-driven boundary and actual-camera capture gate.
+Exactly one next task: manifest the remaining short-lived relic families and stress-test four-weapon overlap at the actual gameplay camera.
 
 ## 1. Roadmap purpose and current truth
 

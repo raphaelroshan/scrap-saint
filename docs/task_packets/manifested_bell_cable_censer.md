@@ -36,3 +36,7 @@ Configured stills do not establish normal-speed recognition, sound synchronizati
 ## Exactly one next task
 
 Manifest the remaining short-lived relic families and stress-test four-weapon overlap at the actual gameplay camera.
+
+## Verification record
+
+Clean implementation commit `86d1da47888ae20552d94c8bb211d51572fe387d` was tested and captured with Godot 4.5.1 stable at 1280×800, seed 147, using the Compatibility renderer on Apple M1 Pro. The complete suite passes 996 Godot assertions and thirty-one Python manifest checks. The 12/12 normal-economy, 4/4 assembly, 10/10 Evolution and 4/4 Gift policy suites remain green. Six configured P22 captures were inspected; they establish authoritative origin use, distinct Bell/Cable/Censer mechanisms, three-family overlap and reduced-effects parity, not human timing, audio or enjoyment.
