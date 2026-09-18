@@ -270,3 +270,13 @@ Moving or turning after emission does not drag the manifested relic away from it
 All 993 Godot assertions and thirty-one Python manifest checks pass on pinned Godot 4.5.1. Six configured executable fixtures were captured from clean commit `4b65b6915d154ebb08393141ac50e642bcecbbb8` at 1280×800, seed 147, using OpenGL Compatibility on Apple M1 Pro. The full normal-economy, assembly, Evolution and Gift policy suites remain green. These stills do not establish human recognition, normal-speed recoil timing or audio synchronization.
 
 Exactly one next task: manifest Bell, Cable and Foundry Censer with the same event-driven boundary and actual-camera capture gate.
+
+## P22 — manifested Bell, Cable and Foundry Censer
+
+Bell, Cable and Foundry Censer no longer remain as permanent extra attachments during combat. Each physical relic condenses only during bounded readiness or its matching authoritative attack event. Bell appears as an upright bronze dome in a dark frame with a side hammer before its existing cone or Great Toll radial boundary. Cable exposes a rotating reel, travelling line and closing clamp at the recorded endpoint. Censer hangs from a repaired bracket, sways and vents beside its existing low smoke field. The three bodies occupy separate positions around the unchanged Saint so their causes remain visible during overlap.
+
+The simulation still owns every cadence, origin, target, radius, tether, damage, control effect, resource change, RNG result and save value. Reduced effects removes only decorative smoke/glow while preserving mechanisms and gameplay boundaries. Presentation-state tests confirm all three manifestations use recorded event origins and shapes without changing the simulation hash.
+
+All 996 Godot assertions and thirty-one Python manifest checks pass on pinned Godot 4.5.1. Six configured executable fixtures were captured from clean implementation commit `86d1da47888ae20552d94c8bb211d51572fe387d` at 1280×800, seed 147, using OpenGL Compatibility on Apple M1 Pro. The 12/12 normal-economy, 4/4 assembly, 10/10 Evolution and 4/4 Gift policy suites remain green. These stills do not establish human recognition, normal-speed timing, audio synchronization or comfort.
+
+Exactly one next task: manifest the remaining short-lived relic families and stress-test four-weapon overlap at the actual gameplay camera.

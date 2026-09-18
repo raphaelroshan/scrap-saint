@@ -1406,30 +1406,32 @@ func draw_nailer_mount(weapon: Dictionary, fallback_direction: Vector2):
 
 func draw_bell_mount(weapon: Dictionary):
 	var effect = latest_weapon_attack("weapon.bell_last_shift")
-	var progress = presentation_progress(effect) if effect != null else 0.0
+	if effect != null: return
 	var evolved = sim.weapon_evolution_id(weapon) == "evolution.great_toll"
 	var readiness = weapon_ready_amount(weapon, 16 if evolved else 10)
-	var strike = sin(clampf((progress - 0.12) / 0.38, 0.0, 1.0) * PI) if effect != null else 0.0
+	if readiness <= 0.0: return
 	var anchor = Vector2(0, -28 if evolved else -24)
 	var width = 16.0 if evolved else (13.0 if int(weapon.rank) >= 2 else 11.0)
 	draw_line(Vector2(0, -17), anchor + Vector2(0, -8 + readiness * 3), Color("796348"), 4, true)
-	var bell_color = Color("d4a85b").lightened(0.18 * maxf(readiness, strike))
+	var bell_color = Color("d4a85b").lightened(0.18 * readiness)
 	draw_colored_polygon(PackedVector2Array([anchor + Vector2(-width * 0.45, -7), anchor + Vector2(width * 0.45, -7), anchor + Vector2(width, 7), anchor + Vector2(-width, 7)]), bell_color)
-	draw_line(anchor + Vector2(-width, 7), anchor + Vector2(width, 7), PAPER if strike > 0.4 else Color("7d633d"), 2, true)
-	var clapper = anchor + Vector2(strike * (7 if int(weapon.rank) >= 3 else 4), 10)
+	draw_line(anchor + Vector2(-width, 7), anchor + Vector2(width, 7), Color("7d633d"), 2, true)
+	var clapper = anchor + Vector2(0, 10)
 	draw_line(anchor, clapper, Color("5c4934"), 2, true)
-	draw_circle(clapper, 3.5, PAPER if strike > 0.5 else GOLD)
+	draw_circle(clapper, 3.5, GOLD)
 	if evolved:
 		draw_arc(anchor, 22 + readiness * 3, -PI * 0.82, -PI * 0.18, 18, Color(0.88, 0.72, 0.42, 0.5), 2)
 		for cardinal in range(4):
 			var marker = anchor + Vector2.from_angle(cardinal * PI / 2.0) * 20
-			draw_line(marker - Vector2(0, 3), marker + Vector2(0, 3), Color(PAPER, 0.55 + strike * 0.45), 2)
+			draw_line(marker - Vector2(0, 3), marker + Vector2(0, 3), Color(PAPER, 0.55), 2)
 
 func draw_weapon_mount(weapon: Dictionary):
 	var effect = latest_weapon_attack(str(weapon.id))
 	var progress = presentation_progress(effect) if effect != null else 0.0
 	var pulse = presentation_fade(effect) if effect != null else 0.0
 	var readiness = weapon_ready_amount(weapon, 12)
+	if str(weapon.id) in ["weapon.cable_contrition", "weapon.foundry_censer"]:
+		if effect != null or readiness <= 0.0: return
 	var rank = int(weapon.get("rank", 1))
 	var evolution = sim.weapon_evolution_id(weapon)
 	match str(weapon.id):
@@ -1607,11 +1609,81 @@ func draw_nailer_attack(effect: Dictionary, color: Color, progress: float, fade:
 				var spark_length = (8 + index % 3 * 4) * (0.5 + fade * 0.5)
 				draw_line(target + spark_direction * 3, target + spark_direction * spark_length, Color(GOLD, resolve_alpha), 2, true)
 
+func manifested_relic_state(effect: Dictionary) -> Dictionary:
+	var origin: Vector2 = effect.get("from", Vector2.ZERO)
+	var target: Vector2 = effect.get("to", origin + Vector2.RIGHT)
+	var direction = (target - origin).normalized()
+	if direction == Vector2.ZERO: direction = Vector2.RIGHT
+	var progress = presentation_progress(effect)
+	return {"origin": origin, "direction": direction, "progress": progress, "shape": str(effect.get("shape", "")), "visibility": smoothstep(0.0, 0.1, progress) * (1.0 - smoothstep(0.86, 1.0, progress))}
+
+func draw_manifested_bell(effect: Dictionary, progress: float, fade: float):
+	var state = manifested_relic_state(effect)
+	var origin: Vector2 = state.origin
+	var direction: Vector2 = state.direction
+	var alpha = fade * float(state.visibility)
+	var radial = state.shape == "radial"
+	# Keep the remembered tool beside the Saint while the authored attack still
+	# resolves from the exact event origin. This prevents the body silhouette
+	# from disappearing into the player sprite during dense overlaps.
+	var bell_center = origin + Vector2(0, 40)
+	var width = 19.0 if radial else 16.0
+	var frame_top = bell_center + Vector2(0, -23)
+	draw_line(frame_top + Vector2(-20, 0), frame_top + Vector2(20, 0), Color(0.20, 0.22, 0.20, alpha), 4, true)
+	draw_line(frame_top, bell_center + Vector2(0, -10), Color(0.20, 0.22, 0.20, alpha), 4, true)
+	var dome = PackedVector2Array([bell_center + Vector2(-width * 0.45, -10), bell_center + Vector2(width * 0.45, -10), bell_center + Vector2(width, 9), bell_center + Vector2(-width, 9)])
+	draw_colored_polygon(dome, Color(0.72, 0.52, 0.27, alpha))
+	draw_polyline(PackedVector2Array([dome[0], dome[1], dome[2], dome[3], dome[0]]), Color(0.91, 0.83, 0.64, alpha * 0.82), 2, true)
+	draw_line(bell_center + Vector2(-width, 9), bell_center + Vector2(width, 9), Color(0.91, 0.83, 0.64, alpha), 3, true)
+	draw_circle(bell_center + Vector2(0, 13), 3, Color(0.38, 0.31, 0.23, alpha))
+	var strike = sin(clampf((progress - 0.06) / 0.34, 0.0, 1.0) * PI)
+	var facing = 1.0 if direction.x >= 0.0 else -1.0
+	var hammer_root = bell_center + Vector2(-facing * 28, -12)
+	var hammer_tip = bell_center + Vector2(-facing * (width + 3.0 - strike * (width + 1.0)), -1)
+	draw_line(hammer_root, hammer_tip, Color(0.50, 0.42, 0.30, alpha), 4, true)
+	draw_circle(hammer_tip, 4, Color(0.88, 0.75, 0.48, alpha))
+
+func draw_manifested_cable(effect: Dictionary, progress: float, fade: float):
+	var state = manifested_relic_state(effect)
+	var origin: Vector2 = state.origin
+	var direction: Vector2 = state.direction
+	var side = direction.orthogonal()
+	var alpha = fade * float(state.visibility)
+	var reel = origin - direction * 5
+	draw_circle(reel, 11, Color(0.20, 0.31, 0.34, alpha))
+	draw_arc(reel, 7, progress * TAU * 2.0, progress * TAU * 2.0 + TAU * 0.82, 18, Color(0.54, 0.76, 0.80, alpha), 3, true)
+	draw_circle(reel, 3, Color(0.89, 0.84, 0.72, alpha))
+	var reach = clampf((progress - 0.06) / 0.32, 0.0, 1.0)
+	var clamp_tip = origin.lerp(effect.to, reach)
+	draw_line(reel, clamp_tip, Color(0.45, 0.68, 0.72, alpha * 0.72), 2, true)
+	draw_line(clamp_tip, clamp_tip - direction * 8 + side * 6, Color(0.89, 0.84, 0.72, alpha), 3, true)
+	draw_line(clamp_tip, clamp_tip - direction * 8 - side * 6, Color(0.89, 0.84, 0.72, alpha), 3, true)
+
+func draw_manifested_censer(effect: Dictionary, progress: float, fade: float):
+	var state = manifested_relic_state(effect)
+	var origin: Vector2 = state.origin
+	var direction: Vector2 = state.direction
+	var side = direction.orthogonal()
+	var alpha = fade * float(state.visibility)
+	var sway = sin(progress * PI) * 7.0
+	var hanger = origin + direction * 3 + side * 58
+	var body = hanger + Vector2(sway, 20)
+	draw_line(hanger + Vector2(-11, -3), body + Vector2(-7, -9), Color(0.46, 0.38, 0.28, alpha), 2, true)
+	draw_line(hanger + Vector2(11, -3), body + Vector2(7, -9), Color(0.46, 0.38, 0.28, alpha), 2, true)
+	draw_colored_polygon(PackedVector2Array([body + Vector2(-12, -9), body + Vector2(12, -9), body + Vector2(8, 12), body + Vector2(-8, 12)]), Color(0.24, 0.34, 0.31, alpha))
+	draw_rect(Rect2(body + Vector2(-10, -14), Vector2(20, 6)), Color(0.89, 0.84, 0.72, alpha))
+	for vent_x in [-6, 0, 6]: draw_circle(body + Vector2(vent_x, 3), 2.1, Color(0.58, 0.80, 0.70, alpha))
+	if not reduced_fx:
+		for plume in range(3):
+			var puff = body + Vector2(15 + plume * 8, 3 - plume * 5)
+			draw_circle(puff, 5 + plume * 2, Color(0.48, 0.70, 0.64, alpha * (0.16 - plume * 0.03)))
+
 func draw_bell_attack(effect: Dictionary, color: Color, progress: float, fade: float):
 	var origin: Vector2 = effect.from
 	var radial = effect.shape == "radial"
 	var direction = (effect.to - origin).normalized()
 	if direction == Vector2.ZERO: direction = Vector2.RIGHT
+	draw_manifested_bell(effect, progress, fade)
 	var commit = clampf((progress - 0.16) / 0.52, 0.0, 1.0)
 	var radius = float(effect.range) * ease(commit, -1.8)
 	var alpha = fade * smoothstep(0.12, 0.28, progress)
@@ -1702,6 +1774,7 @@ func draw_cable_attack(effect: Dictionary, color: Color, progress: float, fade: 
 	var origin: Vector2 = effect.from
 	var direction = (effect.to - origin).normalized()
 	if direction == Vector2.ZERO: direction = Vector2.RIGHT
+	draw_manifested_cable(effect, progress, fade)
 	var commit = clampf((progress - 0.10) / 0.38, 0.0, 1.0)
 	if effect.shape == "lattice":
 		var points: Array = effect.get("points", [])
@@ -1788,6 +1861,7 @@ func draw_mortar_attack(effect: Dictionary, color: Color, progress: float, fade:
 			draw_line(target + d * 0.78, target + d, Color(GOLD, fade * 0.75), 2, true)
 
 func draw_censer_attack(effect: Dictionary, color: Color, progress: float, fade: float):
+	draw_manifested_censer(effect, progress, fade)
 	var center: Vector2 = effect.to if effect.shape == "ashen_censer" else effect.from
 	var radius = float(effect.range)
 	var bloom = ease(clampf((progress - 0.08) / 0.46, 0.0, 1.0), -1.6)

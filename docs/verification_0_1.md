@@ -185,3 +185,13 @@ The combined suite passes 958 Godot assertions and thirty-one Python manifest ch
 Eight configured P20 captures were recaptured from clean integration commit `349381764b0b26bffd0e21892560227ccad37ed6` with Godot 4.5.1 stable, OpenGL Compatibility on Apple M1 Pro, at 1280×800 and seed 147. The scored evidence validator passes. Internal scores are 4/5 for title identity, transition clarity, combat readability, enemy response, Evolution premium, overlap, reduced-effects parity and palette/UI coherence; 3/5 for deliberately restrained environment depth; and 5/5 for provenance.
 
 No human audio, timing, controller or Windows minimum-hardware test is claimed. Exactly one next task: run an uncoached human 1× session on the packaged Windows build and record only observed timing, audio-mix, recognition and performance failures.
+
+## P22 manifested Bell, Cable and Foundry Censer, 2026-09-18
+
+Bell, Cable and Foundry Censer now manifest as event-driven physical objects around the unchanged Saint. Their hammer, reel/clamp and hanging filter-pot motions remain presentation-only and preserve the existing cone/radial, tether/lattice and smoke-field outcomes. Persistent mounts disappear outside bounded readiness and committed attack windows.
+
+The clean implementation commit `86d1da47888ae20552d94c8bb211d51572fe387d` passes 996 Godot assertions and thirty-one Python manifest checks on Godot 4.5.1 stable. The normal-economy matrix wins 12/12, assembly 4/4, Evolutions 10/10 and Gift-specific routes 4/4. No assertion, script-load or resource-load failure appears in the full iteration logs.
+
+Six configured P22 captures at 1280×800 and seed 147 show Bell strike, Great Toll, Cable clamp, Censer vent and three-family overlap in full and reduced effects. Internal scores are: authoritative origin 5/5, Bell mechanism 4/5, Cable mechanism 4/5, Censer mechanism 4/5, Evolution distinction 4/5, Saint preservation 5/5, overlap hierarchy 4/5, reduced-effects parity 5/5, palette coherence 4/5 and provenance clarity 5/5. These are executable stills, not human evidence of recognition, audio synchronization or normal-speed comfort.
+
+Exactly one next task: manifest the remaining short-lived relic families and stress-test four-weapon overlap at the actual gameplay camera.

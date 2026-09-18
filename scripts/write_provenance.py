@@ -14,10 +14,10 @@ data = {
     'godot': subprocess.check_output([sys.argv[1], '--version'], text=True).strip(),
     'viewport': [1280, 800], 'scaling': 'canvas_items', 'seed': 147,
     'timestamp_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
-    'capture_type': 'rendered simulation fixtures; includes explicit setup budgets, Results, weapon ranks, Evolutions, Gifts, and destination bosses',
+    'capture_type': 'rendered simulation fixtures; includes explicit setup budgets, Results, weapon ranks, Evolutions, Gifts, destination bosses, and manifested relics',
     'source_hashes': {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root / 'game').glob('*')) if p.is_file()},
     'content_hashes': {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root / 'content').rglob('*.json'))},
     'limitation': 'No human playtest or rendered minimum-hardware benchmark',
-    'next_task': 'Manifest Bell, Cable and Foundry Censer with the same event-driven boundary and actual-camera capture gate',
+    'next_task': 'Manifest the remaining short-lived relic families and stress-test four-weapon overlap at the actual gameplay camera',
 }
 (root / 'artifacts/agent-iteration/provenance.json').write_text(json.dumps(data, indent=2), encoding='utf-8')

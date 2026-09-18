@@ -6,7 +6,7 @@ Status: proposed production direction, with generated concept boards. These imag
 
 Weapons manifest; the current playable Saint sprite stays unchanged for now. Use the relic concepts for brief event-driven weapon appearances and attack effects. Persistent orbiting relics retain their active visuals. Attachment arms, physical mount sockets and the replacement character rig described below are deferred concepts, not dependencies. The menu artwork remains unchanged.
 
-The manifested Nailer and Mercy Rail slice is implemented. Bell, Cable and Censer follow, then a four-weapon readability pass. The [roadmap](../roadmap.md) governs implementation order. Presentation must preserve simulation timing, targets and outcomes.
+The manifested Nailer/Mercy Rail and Bell/Cable/Censer slices are implemented. The remaining short-lived families and a four-weapon readability pass follow. The [roadmap](../roadmap.md) governs implementation order. Presentation must preserve simulation timing, targets and outcomes.
 
 ## The decision
 
@@ -84,7 +84,7 @@ The depicted Saint is larger than the proposed runtime scale. Its floor has too 
 
 Create the Saint as separated head, visor/eyes, torso, cloth, two legs, two utility arms and four mounting-arm chains. Preserve shared anchors between directional views. Each relic needs a body, moving mechanism, mount socket and event-driven resolve/aftermath layer. Render at higher resolution than display scale, then inspect actual-size samples; do not ship the concept board by slicing its views into an animation atlas.
 
-For a later character-replacement phase, deliver idle, walk, repair and hurt views for the Saint. The current first art slice only manifests the Nailer and Mercy Rail around the existing sprite. Include base, rank and evolution distinctions, normal/reduced effects, and a four-relic stress scene. Reuse authored simulation events and test the foot anchor against collision geometry. Test normal gameplay before extending the treatment to every frame and weapon.
+For a later character-replacement phase, deliver idle, walk, repair and hurt views for the Saint. The current art slices manifest Nailer/Mercy Rail, Bell/Great Toll, Cable/Contrition Lattice and Censer/Ashen Benediction around the existing sprite. Include base, rank and evolution distinctions, normal/reduced effects, and a four-relic stress scene. Reuse authored simulation events and test the foot anchor against collision geometry. Test normal gameplay before extending the treatment to every frame and weapon.
 
 Acceptance must include actual-size recognition against workshop floors, visibility during overlapping attacks, contrast without color, and stable joint/weapon anchors through directional changes. Concept-board thumbnails do not establish these results.
 
@@ -92,4 +92,4 @@ Acceptance must include actual-size recognition against workshop floors, visibil
 
 The character establishes a warm, recognizable face and a practical six-arm solution. The weapon board offers four strong outer shapes with shared material language. The arena board establishes a coherent world, with the readability corrections above still required. Fine scratches and small cloth details are optional polish after the large shapes work.
 
-Exactly one next task: manifest Bell, Cable and Foundry Censer with the same event-driven boundary and actual-camera capture gate.
+Exactly one next task: manifest the remaining short-lived relic families and stress-test four-weapon overlap at the actual gameplay camera.
