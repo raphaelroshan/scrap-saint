@@ -634,6 +634,6 @@ Every future implementation request should begin with a packet in this shape:
 ```
 
 ## 17. Immediate next task
-M1 is shipped: setup now opens a presentation-only First Pilgrimage preview, all six sites can be inspected, active route selection uses the same full map, and a separate Travel action commits an eligible route exactly once. Destination dossiers distinguish combat experience, boss/threat, optional work, duration, fare, arrival floor, road sequence and later connections without changing simulation authority.
+M1 and M2 are shipped: setup and route choice use the complete First Pilgrimage map, while every boss now resolves through one site-clear account of rewards, optional work, memory and the carried build. Expedition/profile saves use atomic primary/backup writes, checkpoint every validated journey boundary, remove terminal runs, and award discoveries through idempotent run/site receipts and route history.
 
-The next task is **M2 unified site-clear summaries and atomic automatic checkpoints with exactly-once discovery credit**. Use [the multi-level flow plan](docs/multi_level_flow.md), [implementation packets](docs/implementation_packets.md) and [runtime status](docs/runtime_status.md) to preserve the existing deterministic contracts.
+The next task is **M3 distinct arrival presentation and normal-speed four-path pacing evidence**. Use [the multi-level flow plan](docs/multi_level_flow.md), [implementation packets](docs/implementation_packets.md) and [runtime status](docs/runtime_status.md) to preserve the existing deterministic contracts.

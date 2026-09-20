@@ -39,3 +39,11 @@ Automated lifecycle tests and configured summaries cannot establish whether a pl
 ## Exactly one next task
 
 Implement M3 distinct arrival presentation and normal-speed four-path pacing evidence.
+
+## Verification record
+
+Clean implementation commit: `d3d78304c44586dd807d4e00c5462dcfc50c7f63`.
+
+Pinned Godot 4.5.1 passes 1,062 deterministic assertions and the Python manifest suite passes 34 checks. The 12/12 normal-economy, 4/4 assembly, 10/10 Evolution and 4/4 Gift policy matrices remain green. Fifteen configured pilgrimage-map, road and site-clear captures include Workshop, middle, terminal and large-text recaps at 1280×800 with seed 147.
+
+This is executable fixture and deterministic lifecycle evidence, not a human test of recap reading, autosave trust or route pacing.
