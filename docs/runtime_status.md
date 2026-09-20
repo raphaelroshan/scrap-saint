@@ -290,3 +290,13 @@ Together with P21/P22, every short-lived weapon now manifests only during bounde
 All 1,000 Godot assertions and thirty-one Python manifest checks pass on pinned Godot 4.5.1. Ten configured executable fixtures were captured from clean implementation commit `add331bafc18750c05740704f626f1979844a49a` at 1280×800, seed 147, using OpenGL Compatibility on Apple M1 Pro. The 12/12 normal-economy, 4/4 assembly, 10/10 Evolution and 4/4 Gift policy suites remain green. These stills do not establish human recognition, normal-speed timing, audio synchronization or aiming comfort.
 
 Exactly one next task: run a normal-speed human readability pass across all manifested and persistent relic families, then tune only observed recognition, overlap and timing failures.
+
+## M1 — First Pilgrimage navigation
+
+Frame and Blessing setup now opens a presentation-only departure map before a run exists. All six chapter sites are inspectable, only Collapsed Workshop can launch, and browsing cannot advance simulation state. Between sites, the same full-screen map separates inspection from commitment: reachable nodes arm the existing stable route ID, future and excluded nodes explain their state, and a separate Travel action sends the authoritative command exactly once.
+
+The destination dossier now presents combat experience, boss/threat, explicitly optional work, waves and estimated combat duration, fare/current Scrap, arrival floor, both road stops and later connections. Current, cleared, reachable, future and route-not-taken states use labels and marker geometry rather than color alone. The carried build remains visible without reintroducing the combat HUD.
+
+Clean implementation commit `64df0eb021443c83ffbc0eb28ece95904b5a3c6e` passes 1,027 Godot assertions and 33 Python manifest checks on pinned Godot 4.5.1. The 12/12 normal-economy, 4/4 assembly, 10/10 Evolution and 4/4 Gift policy matrices remain green. Eleven configured map/road captures cover departure, future inspection, both route tiers, branch exclusion, road handoff and normal/large-text layouts at 1280×800, seed 147. Internal rendered-evidence score: 46/50. This does not establish human comprehension, reading pace or route preference.
+
+Exactly one next task: implement M2 unified site-clear summaries and atomic automatic checkpoints with exactly-once discovery credit.

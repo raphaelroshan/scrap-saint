@@ -205,3 +205,13 @@ The clean implementation commit `add331bafc18750c05740704f626f1979844a49a` passe
 Ten configured P23 captures at 1280×800 and seed 147 cover both forms of all four families plus full/reduced four-Evolution overlap. Internal scores are: authoritative origin 5/5, Candle mechanism 4/5, Hymn mechanism 4/5, Mortar mechanism 5/5, Winch mechanism 5/5, Evolution distinction 4/5, four-family hierarchy 4/5, reduced-effects parity 4/5, palette coherence 5/5 and provenance clarity 5/5. These are executable stills, not human evidence of timing, aiming or enjoyment.
 
 Exactly one next task: run a normal-speed human readability pass across all manifested and persistent relic families, then tune only observed recognition, overlap and timing failures.
+
+## M1 First Pilgrimage navigation, 2026-09-20
+
+Setup now reaches a presentation-only chapter map without creating a run, and active expeditions use the same six-site graph for reversible destination inspection before an explicit Travel commitment. Destination dossiers show the combat experience, threat/boss, optional opportunity, duration, fare, arrival floor, road sequence and next connections while preserving deterministic simulation authority.
+
+The clean implementation commit `64df0eb021443c83ffbc0eb28ece95904b5a3c6e` passes 1,027 Godot assertions and 33 Python manifest checks on Godot 4.5.1 stable. The normal-economy matrix wins 12/12, assembly 4/4, Evolutions 10/10 and Gift-specific routes 4/4. Eleven configured executable captures at 1280×800 and seed 147 cover departure, a future finale, reachable and excluded branches, road handoff, and normal/large-text layouts.
+
+Rendered-evidence rubric (5-point internal review): journey hierarchy 5, graph comprehension 5, destination consequence clarity 5, optional-work clarity 5, state distinction 4, input/confirmation clarity 5, build carryover 4, large-text layout 4, world/style coherence 4 and provenance 5, for 46/50. These are configured fixtures, not human evidence of newcomer comprehension, reading pace or route preference.
+
+Exactly one next task: implement M2 unified site-clear summaries and atomic automatic checkpoints with exactly-once discovery credit.

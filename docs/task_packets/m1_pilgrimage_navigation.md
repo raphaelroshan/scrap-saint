@@ -38,3 +38,11 @@ Configured captures and controller-style automation cannot establish newcomer co
 ## Exactly one next task
 
 Implement M2: unified site-clear summary and atomic automatic checkpoints with exactly-once discovery credit.
+
+## Verification record
+
+Clean implementation commit: `64df0eb021443c83ffbc0eb28ece95904b5a3c6e`.
+
+Pinned Godot 4.5.1 passes 1,027 deterministic assertions and the Python manifest suite passes 33 checks. The 12/12 normal-economy, 4/4 assembly, 10/10 Evolution and 4/4 Gift policy matrices remain green. Eleven configured pilgrimage-map and road captures cover departure, future-site inspection, reachable and excluded branches, road handoff, and normal/large-text layouts at 1280×800 with seed 147.
+
+This is executable fixture evidence, not a human playtest. It does not establish newcomer comprehension, reading pace or route preference.
