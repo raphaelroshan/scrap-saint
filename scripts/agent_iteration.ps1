@@ -70,6 +70,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Assembly playthrough runner failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Evolution playthrough runner failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/run_gift_playthroughs.gd 2>&1 | Tee-Object -FilePath "$bundlePath\gift-playthroughs.log"
 if ($LASTEXITCODE -ne 0) { throw 'Gift playthrough runner failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/run_four_path_pacing.gd 2>&1 | Tee-Object -FilePath "$bundlePath\four-path-pacing.log"
+if ($LASTEXITCODE -ne 0) { throw 'Four-path pacing runner failed' }
 & $GodotBin --path $projectRoot -- --capture-dir=$bundlePath 2>&1 | Tee-Object -FilePath "$bundlePath\capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_chapter.gd -- --capture-dir=$bundlePath 2>&1 | Tee-Object -FilePath "$bundlePath\chapter-capture.log"

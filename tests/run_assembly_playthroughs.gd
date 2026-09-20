@@ -53,6 +53,9 @@ func _initialize():
 			if sim.state.phase == "travel":
 				choose_road(sim)
 				continue
+			if sim.state.phase == "arrival":
+				sim.command("begin_site")
+				continue
 			if sim.state.phase == "site_clear":
 				sim.command("continue_site_clear")
 				continue

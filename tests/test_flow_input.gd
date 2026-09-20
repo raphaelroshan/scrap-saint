@@ -132,7 +132,9 @@ func run_checks():
 	while game.sim.state.phase == "travel":
 		check(root.gui_get_focus_owner() is Button and root.gui_get_focus_owner().text.contains(" · "), "each in-between area has a focused authored choice")
 		await activate(root.gui_get_focus_owner())
-	check(game.sim.state.phase == "combat" and game.sim.is_destination(), "travel input reaches the selected destination")
+	check(game.sim.state.phase == "arrival" and game.sim.is_destination(), "travel input reaches the selected destination briefing")
+	await activate(button_with(game, "ENTER BRASS CHOIR", true))
+	check(game.sim.state.phase == "combat", "controller-style arrival input deliberately starts combat")
 
 	for node in game.sim.state.objective: node.complete = true
 	game.sim.state.objective_complete = true
@@ -152,7 +154,9 @@ func run_checks():
 	while game.sim.state.phase == "travel":
 		check(root.gui_get_focus_owner() is Button, "each terminal travel beat has a focused continuation")
 		await activate(root.gui_get_focus_owner())
-	check(game.sim.state.phase == "combat" and game.sim.state.route_history.size() == 2, "terminal travel preserves the two-route history")
+	check(game.sim.state.phase == "arrival" and game.sim.state.route_history.size() == 2, "terminal arrival preserves the two-route history")
+	await activate(button_with(game, "ENTER ", true))
+	check(game.sim.state.phase == "combat", "terminal arrival waits for explicit controller confirmation")
 	for node in game.sim.state.objective: node.complete = true
 	game.sim.state.objective_complete = true
 	game.sim.state.wave = game.sim.current_wave_count()

@@ -59,6 +59,9 @@ func _initialize():
 					transition_failed = true
 					break
 				continue
+			if sim.state.phase == "arrival":
+				if sim.command("begin_site") != "OK": transition_failed = true; break
+				continue
 			if sim.state.phase == "site_clear":
 				sim.command("continue_site_clear")
 				continue

@@ -24,6 +24,8 @@ M1 pilgrimage navigation adds a presentation-only departure preview plus a full-
 
 M2 checkpoint lifecycle adds one authoritative `site_clear` phase and atomic primary/backup persistence. `test_checkpoint_lifecycle.gd`, `test_save_flow.gd`, `test_profile.gd`, `test_chapter.gd` and the input tests cover every automatic boundary, failed replacement, corrupt-primary fallback, terminal-save cleanup, unique run IDs, run/site receipts, migration and route-history discovery. `capture_expedition_map.gd` adds Workshop, middle, terminal and large-text site-clear fixtures; these prove executable layout and state handoff, not human trust or reading behavior.
 
+M3 arrival and pacing adds a non-ticking `arrival` phase before each destination. Save, expedition-map, UI and controller-flow tests cover exact recovery, summary data, explicit combat entry, repeat-command rejection and restore parity. `run_four_path_pacing.gd` executes all four authored route chains at 1× fixed-tick semantics with a controlled unevolved build, zero completed optional work and zero Scrap after each paid route commitment; it records per-site combat/boss ticks, shops, road decisions and remaining structure. The runner proves deterministic viability and free-road continuity, not human pacing or enjoyment. Arrival fixtures cover Brass, Rootworks, a terminal site and large text.
+
 Run:
 
 ```bash

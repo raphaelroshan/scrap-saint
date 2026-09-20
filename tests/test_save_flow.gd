@@ -43,6 +43,7 @@ func finish_travel(sim):
 	while sim.state.phase == "travel":
 		var free_choice = sim.current_road_node().choices.filter(func(choice): return int(choice.cost) == 0)[0]
 		sim.command("choose_road_option", free_choice.id)
+	if sim.state.phase == "arrival": sim.command("begin_site")
 
 func _initialize():
 	var combat = Sim.new()
@@ -75,6 +76,9 @@ func _initialize():
 	travel.command("choose_road_option", "choice.brass.splice")
 	var travel_copy = restored_copy(travel, "travel")
 	compare_command(travel, travel_copy, "choose_road_option", "choice.brass.news", "travel")
+	check(travel.state.phase == "arrival", "final road choice pauses at the destination arrival boundary")
+	var arrival_copy = restored_copy(travel, "arrival")
+	compare_command(travel, arrival_copy, "begin_site", null, "arrival")
 
 	var destination = Sim.new()
 	destination.start(2, 104729, "optional", "frame.keeper", "save-destination")
@@ -135,7 +139,7 @@ func _initialize():
 		for field in ["worker", "phase", "spawn_tick", "slow", "quieted", "inspected"]: enemy.erase(field)
 	var legacy = Sim.new()
 	check(legacy.restore(legacy_source.snapshot()), "version-one integrated legacy save restores")
-	check(legacy.state.version == 4 and legacy.state.frame_id == "frame.pilgrim", "legacy save receives current version and frame defaults")
+	check(legacy.state.version == 5 and legacy.state.frame_id == "frame.pilgrim", "legacy save receives current version and frame defaults")
 	check(legacy.state.route_history.is_empty() and legacy.state.memory_ids.is_empty() and legacy.state.weapon_lock_until == 0, "legacy saves receive deterministic chapter-chain defaults")
 	check(legacy.state.road_history.is_empty() and legacy.state.assignment_statuses.is_empty() and legacy.state.road_totals.route_cost == 0, "legacy saves receive deterministic expedition-map defaults")
 	check(legacy.state.gifts == ["gift.spare_hand"] and legacy.has_evolution("evolution.great_toll"), "legacy assembly state preserves Gifts and reconstructs evolution IDs")

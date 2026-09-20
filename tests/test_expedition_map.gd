@@ -53,9 +53,15 @@ func _initialize():
 	restored.events.clear()
 	check(sim.command("choose_road_option", "choice.brass.repair") == "OK" and restored.command("choose_road_option", "choice.brass.repair") == "OK", "merchant repair resolves after restore")
 	check(restored.state_hash() == sim.state_hash() and restored.events == sim.events, "restored road choice preserves exact state and event trace")
-	check(sim.state.phase == "combat" and sim.state.site_id == "site.brass_choir_relay", "all intermediate nodes resolve before destination arrival")
+	check(sim.state.phase == "arrival" and sim.state.site_id == "site.brass_choir_relay", "all intermediate nodes resolve before the destination arrival briefing")
 	check(sim.state.hp == sim.saint_max_structure() and sim.state.scrap == 8, "paid service consequence carries into the destination")
 	check(sim.state.road_history.map(func(entry): return entry.choice_id) == ["choice.brass.cross", "choice.brass.repair"], "ordered road history survives arrival")
+	var arrival_hash = sim.state_hash()
+	sim.step(Vector2.RIGHT)
+	check(sim.state_hash() == arrival_hash, "arrival briefing cannot advance simulation time or repeat recovery")
+	check(sim.command("begin_site") == "OK" and sim.state.phase == "combat", "arrival requires an explicit begin-site command")
+	var begun_hash = sim.state_hash()
+	check(sim.command("begin_site") == "OUTSIDE_WINDOW" and sim.state_hash() == begun_hash, "destination combat cannot be begun twice")
 
 	var insufficient = Sim.new()
 	insufficient.start(0, 147, "optional")
@@ -74,6 +80,7 @@ func _initialize():
 	root.command("choose_route", "route.rootworks")
 	root.command("choose_road_option", "choice.rootworks.brace")
 	root.command("choose_road_option", "choice.rootworks.sell_valve")
+	root.command("begin_site")
 	check(root.state.site_id == "site.rootworks_pump" and root.state.scrap == 11, "Rootworks road cost, safety purchase, and merchant sale compose deterministically")
 	check(root.state.road_totals.scrap_delta == -5 and root.state.road_flags == ["road.rootworks.culvert_braced", "road.rootworks.valve_sold"], "Rootworks consequences remain explicit")
 	for node in root.state.objective: node.complete = true
@@ -89,6 +96,7 @@ func _initialize():
 	check(extension_restored.restore(root.snapshot()) and extension_restored.state_hash() == root.state_hash(), "second-leg travel restores its origin arena and exact state")
 	check(root.command("choose_road_option", "choice.foundry.cross") == "OK", "terminal encounter uses the shared road command")
 	check(root.command("choose_road_option", "choice.foundry.pass") == "OK", "terminal service stop retains a free continuation")
+	check(root.command("begin_site") == "OK", "terminal arrival waits for explicit entry")
 	check(root.state.site_id == "site.red_foundry" and root.state.route_history == ["route.rootworks", "route.red_foundry"] and root.state.road_history.size() == 4, "terminal route accumulates stable destination and road history IDs")
 
 	var legacy_source = Sim.new()
@@ -101,7 +109,7 @@ func _initialize():
 	for field in ["route_history", "route_origin_site_id", "assignment_statuses", "road_history", "road_flags", "road_totals"]: legacy_source.state.erase(field)
 	var migrated = Sim.new()
 	check(migrated.restore(legacy_source.snapshot()), "version-two travel save migrates")
-	check(migrated.state.version == 4 and migrated.state.travel_step == 0 and migrated.current_road_node().id == "road.brass.warning_wire", "legacy travel restarts before the first unskippable area")
+	check(migrated.state.version == 5 and migrated.state.travel_step == 0 and migrated.current_road_node().id == "road.brass.warning_wire", "legacy travel restarts before the first unskippable area")
 	check(migrated.assignment_status("route.brass_choir") == "accepted", "legacy selected route migrates to accepted assignment state")
 
 	print("EXPEDITION MAP: %d checks, %d failures" % [checks, failures])

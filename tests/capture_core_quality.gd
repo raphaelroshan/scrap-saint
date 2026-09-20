@@ -24,6 +24,9 @@ func policy_step(seek_repair: bool = true):
 		var free_choice = game.sim.current_road_node().choices.filter(func(choice): return int(choice.cost) == 0)[0]
 		game.sim.command("choose_road_option", free_choice.id)
 		return
+	if game.sim.state.phase == "arrival":
+		game.sim.command("begin_site")
+		return
 	if game.sim.state.phase == "site_clear":
 		game.sim.command("continue_site_clear")
 		return

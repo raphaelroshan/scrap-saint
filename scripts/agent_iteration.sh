@@ -36,6 +36,7 @@ mkdir -p artifacts/agent-iteration
 "$GODOT_BIN" --headless --path . --script res://tests/run_assembly_playthroughs.gd | tee artifacts/agent-iteration/assembly-playthroughs.log
 "$GODOT_BIN" --headless --path . --script res://tests/run_evolution_playthroughs.gd | tee artifacts/agent-iteration/evolution-playthroughs.log
 "$GODOT_BIN" --headless --path . --script res://tests/run_gift_playthroughs.gd | tee artifacts/agent-iteration/gift-playthroughs.log
+"$GODOT_BIN" --headless --path . --script res://tests/run_four_path_pacing.gd | tee artifacts/agent-iteration/four-path-pacing.log
 "$GODOT_BIN" --path . -- --capture-dir="$PWD/artifacts/agent-iteration" | tee artifacts/agent-iteration/capture.log
 "$GODOT_BIN" --path . --script res://tests/capture_chapter.gd -- --capture-dir="$PWD/artifacts/agent-iteration" | tee artifacts/agent-iteration/chapter-capture.log
 "$GODOT_BIN" --path . --script res://tests/capture_expedition_map.gd -- --capture-dir="$PWD/artifacts/agent-iteration" | tee artifacts/agent-iteration/expedition-map-capture.log
