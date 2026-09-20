@@ -50,6 +50,10 @@ var ledger_section = "origin"
 var ledger_page = 0
 var evolution_ledger_open = false
 var map_selection = ""
+var map_inspection_site = ""
+var departure_selection = "site.collapsed_workshop"
+var map_travel_button: Button
+var departure_launch_button: Button
 var visual_clock_override = -1
 var title_transition_started = -1
 var evolution_showcase: Dictionary = {}
@@ -181,6 +185,10 @@ func _unhandled_key_input(event):
 		screen = "title"
 		build_ui()
 		return
+	if event.keycode == KEY_ESCAPE and screen == "departure_map":
+		screen = "menu"
+		build_ui()
+		return
 	if event.keycode == KEY_ESCAPE and screen == "ledger":
 		close_ledger()
 		return
@@ -191,6 +199,9 @@ func _unhandled_key_input(event):
 	if event.keycode == KEY_ESCAPE and screen == "game" and evolution_ledger_open:
 		evolution_ledger_open = false
 		build_ui()
+		return
+	if event.keycode == KEY_ESCAPE and screen == "game" and not sim.state.is_empty() and sim.state.phase == "route":
+		select_map_site(str(sim.state.site_id))
 		return
 	if event.keycode == KEY_F3: debug_visible = not debug_visible
 	if event.keycode == KEY_F6 and dev_mode:
@@ -217,8 +228,16 @@ func _input(event):
 			build_ui()
 			get_viewport().set_input_as_handled()
 			return
+		if screen == "departure_map":
+			screen = "menu"
+			build_ui()
+			get_viewport().set_input_as_handled()
+			return
 	if event is InputEventJoypadButton and event.pressed and event.button_index == JOY_BUTTON_B and screen in ["settings", "tutorial", "quit_confirm"]:
 		close_panel()
+		get_viewport().set_input_as_handled()
+	if event is InputEventJoypadButton and event.pressed and event.button_index == JOY_BUTTON_B and screen == "game" and not sim.state.is_empty() and sim.state.phase == "route":
+		select_map_site(str(sim.state.site_id))
 		get_viewport().set_input_as_handled()
 	if event is InputEventJoypadButton and event.pressed and event.button_index == JOY_BUTTON_START and screen == "game":
 		sim.command("pause")
@@ -232,6 +251,11 @@ func begin():
 	recent_unlocks.clear()
 	last_phase = "combat"
 	fx.clear()
+	build_ui()
+
+func open_departure_map():
+	departure_selection = str(sim.chapter.expedition_map.origin_site_id)
+	screen = "departure_map"
 	build_ui()
 
 func begin_title_transition():
@@ -284,7 +308,56 @@ func act(action: String, value = null):
 func select_map_route(route_id: String):
 	if sim.available_routes().any(func(route): return route.id == route_id):
 		map_selection = route_id
+		map_inspection_site = str(sim.routes[route_id].site_id)
+		update_map_travel_button()
 		queue_redraw()
+
+func select_departure_site(site_id: String):
+	departure_selection = site_id
+	if departure_launch_button != null:
+		var origin_id = str(sim.chapter.expedition_map.origin_site_id)
+		departure_launch_button.disabled = site_id != origin_id
+		departure_launch_button.text = "BEGIN AT COLLAPSED WORKSHOP  →" if site_id == origin_id else "RETURN TO WORKSHOP TO BEGIN"
+	queue_redraw()
+
+func select_map_site(site_id: String):
+	map_inspection_site = site_id
+	map_selection = ""
+	for route in sim.available_routes():
+		if str(route.site_id) == site_id:
+			map_selection = str(route.id)
+			break
+	update_map_travel_button()
+	queue_redraw()
+
+func update_map_travel_button():
+	if map_travel_button == null: return
+	var selected = sim.routes.get(map_selection, {})
+	if selected.is_empty():
+		map_travel_button.text = "SELECT A REACHABLE DESTINATION"
+		map_travel_button.disabled = true
+		return
+	var accepted = sim.assignment_status(map_selection) == "accepted"
+	map_travel_button.text = "ASSIGNMENT ACCEPTED" if accepted else "TRAVEL TO %s  →" % str(selected.name).to_upper()
+	map_travel_button.disabled = accepted or sim.state.scrap < int(selected.cost)
+
+func build_map_node_buttons(departure: bool):
+	var first_focus: Button = null
+	var origin_id = str(sim.chapter.expedition_map.origin_site_id)
+	var reachable_site_ids = sim.available_routes().map(func(route): return str(route.site_id)) if not departure else [origin_id]
+	for site in sim.chapter.expedition_map.sites:
+		var site_id = str(site.id)
+		var position = map_site_position(site)
+		var selected = site_id == (departure_selection if departure else map_inspection_site)
+		var node_button = button(str(site.name).to_upper(), Rect2(position - Vector2(76, 17), Vector2(152, 34)), func():
+			if departure: select_departure_site(site_id)
+			else: select_map_site(site_id), selected)
+		node_button.tooltip_text = "Inspect %s" % str(site.name)
+		node_button.focus_entered.connect(func():
+			if departure: select_departure_site(site_id)
+			else: select_map_site(site_id))
+		if first_focus == null and site_id in reachable_site_ids: first_focus = node_button
+	if first_focus != null: first_focus.grab_focus()
 
 func commit_profile_result():
 	if sim.state.is_empty() or sim.state.result_summary.is_empty(): return
@@ -435,6 +508,8 @@ func button(label: String, rect: Rect2, callback: Callable, primary = false):
 	return b
 
 func build_ui():
+	map_travel_button = null
+	departure_launch_button = null
 	for child in ui.get_children():
 		ui.remove_child(child)
 		child.queue_free()
@@ -501,19 +576,25 @@ func build_ui():
 			var unlocked = blessing_ids[i] in profile.state.unlocked_blessings
 			var blessing_button = button(("Choose " if unlocked else "Locked / ") + blessing_names[i], Rect2(56 + i * 292, 548, 276, 38), func(): chosen = i; build_ui(), chosen == i and unlocked)
 			blessing_button.disabled = not unlocked
-		button("BEGIN THE FIRST SHIFT  →", Rect2(436, 613, 408, 52), begin, true).grab_focus()
+		button("REVIEW THE PILGRIMAGE  →", Rect2(436, 613, 408, 52), open_departure_map, true).grab_focus()
 		if FileAccess.file_exists(save_path): button("Resume saved expedition", Rect2(436, 678, 408, 36), load_run)
+	elif screen == "departure_map":
+		build_map_node_buttons(true)
+		button("BACK TO SETUP", Rect2(44, 682, 220, 46), func(): screen = "menu"; build_ui())
+		departure_launch_button = button("BEGIN AT COLLAPSED WORKSHOP  →", Rect2(850, 682, 386, 46), begin, true)
+		departure_launch_button.disabled = departure_selection != str(sim.chapter.expedition_map.origin_site_id)
 	elif sim.state.phase == "route":
 		var route_options = sim.available_routes()
-		if route_options.size() > 0 and not route_options.any(func(route): return route.id == map_selection): map_selection = route_options[0].id
-		for i in range(route_options.size()):
-			var route_id = str(route_options[i].id)
-			var route_button = button(route_options[i].name.to_upper(), Rect2(96 + i * 286, 610, 270, 42), func(): select_map_route(route_id))
-			route_button.focus_entered.connect(func(): select_map_route(route_id))
-			if i == 0: route_button.grab_focus()
-		var accepted = map_selection != "" and sim.assignment_status(map_selection) == "accepted"
-		var confirm = button("ASSIGNMENT ACCEPTED" if accepted else "ACCEPT ASSIGNMENT  →", Rect2(690, 610, 312, 42), func(): act("choose_route", map_selection), true)
-		confirm.disabled = map_selection == "" or accepted
+		if route_options.size() > 0 and not route_options.any(func(route): return route.id == map_selection):
+			map_selection = str(route_options[0].id)
+			map_inspection_site = str(route_options[0].site_id)
+		elif map_inspection_site == "" and route_options.size() > 0:
+			map_inspection_site = str(route_options[0].site_id)
+		build_map_node_buttons(false)
+		button("INSPECT CURRENT SITE", Rect2(44, 682, 250, 46), func(): select_map_site(str(sim.state.site_id)))
+		map_travel_button = button("TRAVEL TO SELECTED DESTINATION  →", Rect2(850, 682, 386, 46), func():
+			if map_selection != "": act("choose_route", map_selection), true)
+		update_map_travel_button()
 	elif sim.state.phase == "travel":
 		var node = sim.current_road_node()
 		var first_affordable: Button = null
@@ -605,6 +686,12 @@ func _draw():
 	elif screen == "menu":
 		camera_offset = Vector2.ZERO
 		draw_menu()
+	elif screen == "departure_map":
+		camera_offset = Vector2.ZERO
+		draw_pilgrimage_map(true)
+	elif screen == "game" and not sim.state.is_empty() and sim.state.phase == "route":
+		camera_offset = Vector2.ZERO
+		draw_pilgrimage_map(false)
 	elif screen == "tutorial":
 		camera_offset = Vector2.ZERO
 		draw_title()
@@ -657,7 +744,9 @@ func _draw():
 	if dev_mode:
 		panel(Rect2(924, 94, 328, 33))
 		text_at("DEV %d× SPEED · F6 toggles 1× / 5×" % simulation_speed, Vector2(938, 116), 13, GOLD)
-	if screen == "game": text_at("WASD / arrows · move     ESC · pause     F5 / F9 · save / load", Vector2(445, 777), 13, MUTED)
+	if screen == "departure_map" or (screen == "game" and not sim.state.is_empty() and sim.state.phase == "route"):
+		text_at("Select a landmark to inspect · confirm separately to travel", Vector2(430, 777), 12, MUTED)
+	elif screen == "game": text_at("WASD / arrows · move     ESC · pause     F5 / F9 · save / load", Vector2(445, 777), 13, MUTED)
 	if debug_visible:
 		text_at("BUILD %s | Godot %s | 1280×800 | seed %d | tick %d | %s" % [sim.config.get("version", "dev"), Engine.get_version_info().string, seed_value, sim.state.get("tick", 0), capture_label if capture_dir != "" or fixture_label else "LIVE"], Vector2(28, 745), 11, GOLD)
 
@@ -1198,43 +1287,158 @@ func draw_travel_background():
 		draw_arc(p, 18 + i * 2, 0, TAU, 20, accent, 2)
 
 func draw_route_choice():
-	draw_rect(Rect2(60, 148, 980, 588), Color(0.035, 0.075, 0.08, 0.96))
-	text_at(map_board_title(), Vector2(88, 187), 12, GOLD)
-	text_at("Choose the next repair.", Vector2(84, 225), 30, PAPER, true)
-	var map_data = sim.chapter.expedition_map
+	draw_pilgrimage_map(false)
+
+func map_site_data(site_id: String) -> Dictionary:
+	for site in sim.chapter.expedition_map.sites:
+		if str(site.id) == site_id: return site
+	return {}
+
+func map_route_for_site(site_id: String) -> Dictionary:
+	for route in sim.chapter.routes:
+		if str(route.site_id) == site_id: return route
+	return {}
+
+func map_site_tier(site_id: String) -> int:
+	return int(map_site_data(site_id).get("tier", 0))
+
+func map_route_names(route_ids: Array) -> String:
+	var names: Array[String] = []
+	for route_id in route_ids:
+		if sim.routes.has(str(route_id)): names.append(str(sim.routes[str(route_id)].name))
+	return " / ".join(names)
+
+func pilgrimage_site_preview(site_id: String, departure: bool) -> Dictionary:
+	var site = map_site_data(site_id)
+	var origin_id = str(sim.chapter.expedition_map.origin_site_id)
+	if site_id == origin_id:
+		var origin = sim.chapter.expedition_map.origin_preview
+		return {
+			"name": str(site.get("name", "Collapsed Workshop")), "experience": str(origin.experience),
+			"threat": str(origin.threat_preview), "optional": str(origin.optional_preview),
+			"boss": str(sim.bosses[str(origin.boss)].name), "waves": int(origin.wave_count),
+			"wave_ticks": int(origin.wave_ticks), "cost": 0, "arrival_floor": 1.0,
+			"road": "DEPARTURE  →  COLLAPSED WORKSHOP",
+			"next": map_route_names(["route.brass_choir", "route.rootworks"]), "terminal": false,
+		}
+	var route = map_route_for_site(site_id)
+	if route.is_empty(): return {"name": str(site.get("name", site_id)), "experience": "No pilgrimage record is available."}
+	var road_names: Array[String] = []
+	for node in route.get("road_nodes", []): road_names.append(str(node.name).to_upper())
+	road_names.append(str(site.name).to_upper())
+	return {
+		"name": str(route.name), "experience": str(route.description),
+		"threat": str(route.get("threat_preview", route.risk)), "optional": str(route.get("optional_preview", route.objective.description)),
+		"boss": str(sim.bosses[str(route.boss)].name), "waves": int(route.wave_count),
+		"wave_ticks": int(route.wave_ticks), "cost": int(route.cost), "arrival_floor": float(route.arrival_repair_floor),
+		"road": "  →  ".join(road_names), "next": "ENDS THE CHAPTER" if route.terminal else map_route_names(route.next_routes),
+		"terminal": bool(route.terminal), "route_id": str(route.id), "departure": departure,
+	}
+
+func pilgrimage_duration_text(preview: Dictionary) -> String:
+	var seconds = int(preview.get("waves", 0)) * int(preview.get("wave_ticks", 0)) / maxi(1, int(sim.config.tick_rate))
+	return "~%dM %02dS COMBAT" % [int(seconds / 60), seconds % 60]
+
+func map_site_state(site_id: String, departure: bool) -> String:
+	var origin_id = str(sim.chapter.expedition_map.origin_site_id)
+	if departure: return "current" if site_id == origin_id else "future"
+	if site_id == str(sim.state.site_id): return "current"
+	if site_id in sim.state.get("completed_site_ids", []): return "cleared"
+	for route in sim.available_routes():
+		if str(route.site_id) == site_id: return "reachable_final" if bool(route.terminal) else "reachable"
+	var current_tier = map_site_tier(str(sim.state.site_id))
+	return "future" if map_site_tier(site_id) > current_tier + 1 else "not_taken"
+
+func map_site_state_label(state_name: String) -> String:
+	return {"current":"● CURRENT", "cleared":"✓ CLEARED", "reachable":"◆ REACHABLE", "reachable_final":"◆ FINAL / REACHABLE", "future":"○ FUTURE CONNECTION", "not_taken":"× NOT THIS RUN"}.get(state_name, state_name.to_upper())
+
+func map_state_color(state_name: String) -> Color:
+	if state_name == "current": return GOLD
+	if state_name == "cleared": return GREEN
+	if state_name in ["reachable", "reachable_final"]: return Color("9fd7cb")
+	if state_name == "not_taken": return Color(MUTED, 0.34)
+	return Color(MUTED, 0.58)
+
+func draw_map_site_state(site: Dictionary, departure: bool):
+	var p = map_site_position(site)
+	var state_name = map_site_state(str(site.id), departure)
+	var color = map_state_color(state_name)
+	var outline = Rect2(p - Vector2(82, 23), Vector2(164, 46))
+	if state_name == "current":
+		draw_arc(p, 91, -0.36, 0.36, 16, color, 3, true)
+	elif state_name == "cleared":
+		draw_rect(outline.grow(3), color, false, 3)
+	elif state_name in ["reachable", "reachable_final"]:
+		var points = PackedVector2Array([Vector2(p.x, p.y - 30), Vector2(p.x + 88, p.y), Vector2(p.x, p.y + 30), Vector2(p.x - 88, p.y), Vector2(p.x, p.y - 30)])
+		draw_polyline(points, color, 2, true)
+	elif state_name == "not_taken":
+		draw_line(outline.position, outline.end, color, 2)
+		draw_line(Vector2(outline.end.x, outline.position.y), Vector2(outline.position.x, outline.end.y), color, 2)
+	else:
+		for dash in range(4):
+			draw_line(Vector2(outline.position.x + dash * 42, outline.position.y), Vector2(outline.position.x + dash * 42 + 22, outline.position.y), color, 2)
+	text_at(map_site_state_label(state_name), p + Vector2(-72, 40), 8, color)
+
+func map_build_summary(departure: bool) -> String:
+	if departure:
+		var frame_name = chosen_frame
+		for frame in frame_defs:
+			if str(frame.id) == chosen_frame: frame_name = str(frame.name)
+		var blessing_names = ["Workshop Gospel", "Bell Ward", "Mourner's Due", "Procession"]
+		return "%s  ·  %s  ·  relics, Gifts, Scrap and Structure carry through all three levels" % [frame_name, blessing_names[chosen]]
+	var relics: Array[String] = []
+	for weapon in sim.state.get("weapons", []): relics.append(str(sim.config.weapons[weapon.id].short))
+	return "%s  ·  %d Scrap  ·  %d/%d Structure  ·  build carries forward" % [", ".join(relics), int(sim.state.scrap), int(sim.state.hp), int(sim.saint_max_structure())]
+
+func draw_pilgrimage_map(departure: bool):
+	draw_rect(Rect2(0, 0, 1280, 800), Color("0d1c20"))
+	text_at("THE FIRST PILGRIMAGE", Vector2(44, 55), 14, GOLD)
+	text_at("Three levels. One carried build.", Vector2(40, 96), 31, PAPER, true)
+	var level_label = "BEFORE DEPARTURE · LEVEL 1 / 3"
+	if not departure:
+		level_label = "FINAL DESTINATION" if map_site_tier(str(sim.state.site_id)) >= 1 else "CHOOSE LEVEL 2 / 3"
+	text_at(level_label, Vector2(850, 56), 12, GREEN)
+	panel(Rect2(34, 125, 780, 550), Color("13272b"))
+	panel(Rect2(830, 125, 416, 550), Color("182e31"))
 	var sites_by_id = {}
-	for site in map_data.sites: sites_by_id[site.id] = site
-	for edge in map_data.edges:
-		var from = map_site_position(sites_by_id[edge.from_site_id])
-		var to = map_site_position(sites_by_id[edge.to_site_id])
-		var emphasis = map_edge_emphasis(edge)
-		var edge_color = GREEN if emphasis == "accepted" else (GOLD if emphasis == "selected" else Color(MUTED, 0.35))
+	for site in sim.chapter.expedition_map.sites: sites_by_id[str(site.id)] = site
+	for edge in sim.chapter.expedition_map.edges:
+		var from = map_site_position(sites_by_id[str(edge.from_site_id)])
+		var to = map_site_position(sites_by_id[str(edge.to_site_id)])
+		var emphasis = map_edge_emphasis(edge, departure)
+		var edge_color = GREEN if emphasis == "accepted" else (GOLD if emphasis == "selected" else (Color("79b6aa") if emphasis == "reachable" else Color(MUTED, 0.25 if emphasis == "not_taken" else 0.44)))
 		draw_line(from, to, edge_color, 4 if emphasis in ["accepted", "selected"] else 2)
 		for step in range(1, 4): draw_circle(from.lerp(to, step / 4.0), 3, edge_color)
-	for site in map_data.sites:
-		var p = map_site_position(site)
-		var is_origin = site.id == sim.state.site_id
-		var selected_destination = map_selection != "" and sim.routes.has(map_selection) and sim.routes[map_selection].site_id == site.id
-		var accepted_destination = selected_destination and sim.assignment_status(map_selection) == "accepted"
-		var site_color = GOLD if is_origin else (GREEN if accepted_destination else (GOLD if selected_destination else Color(MUTED, 0.48)))
-		draw_circle(p, 15 if is_origin else 11, Color(INK, 0.95))
-		draw_arc(p, 15 if is_origin else 11, 0, TAU, 28, site_color, 3)
-		text_at(site.name.to_upper(), p + Vector2(-45, 33), 9, site_color)
-	var selected = sim.routes.get(map_selection, {})
-	panel(Rect2(676, 250, 340, 330), Color("182e31"))
-	if not selected.is_empty():
-		var selected_status = sim.assignment_status(map_selection)
-		text_at(("ACCEPTED ASSIGNMENT" if selected_status == "accepted" else "AVAILABLE ASSIGNMENT"), Vector2(698, 278), 10, GREEN if selected_status == "accepted" else MUTED)
-		text_at(selected.name, Vector2(696, 315), 24, PAPER, true)
-		wrapped(selected.description, Vector2(698, 340), 294, 13, GREEN)
-		text_at("COST / %d SCRAP" % int(selected.cost), Vector2(698, 408), 12, GOLD)
-		text_at("RISK", Vector2(698, 441), 10, RED)
-		wrapped(selected.risk, Vector2(698, 459), 294, 12, PAPER)
-		text_at("ROAD NEWS", Vector2(698, 516), 10, GOLD)
-		wrapped(selected.news, Vector2(698, 534), 294, 11, MUTED)
-	text_at("AVAILABLE", Vector2(88, 586), 9, MUTED)
-	text_at("SELECTED", Vector2(162, 586), 9, GOLD)
-	text_at("ACCEPTED", Vector2(232, 586), 9, GREEN)
+	for site in sim.chapter.expedition_map.sites: draw_map_site_state(site, departure)
+	panel(Rect2(54, 620, 740, 40), Color("1a3033"))
+	text_at("CARRIED BUILD", Vector2(70, 640), 9, GOLD)
+	wrapped(map_build_summary(departure), Vector2(166, 641), 606, 10, PAPER)
+	var selected_site_id = departure_selection if departure else map_inspection_site
+	if selected_site_id == "": selected_site_id = str(sim.state.site_id)
+	var preview = pilgrimage_site_preview(selected_site_id, departure)
+	var state_name = map_site_state(selected_site_id, departure)
+	var x = 852
+	text_at(map_site_state_label(state_name), Vector2(x, 151), 9, map_state_color(state_name))
+	text_at(str(preview.get("name", selected_site_id)), Vector2(x, 187), 25, PAPER, true)
+	wrapped(str(preview.get("experience", "")), Vector2(x, 216), 368, 12, GREEN)
+	text_at("THREAT / %s" % str(preview.get("boss", "UNKNOWN BOSS")).to_upper(), Vector2(x, 285), 9, RED)
+	wrapped(str(preview.get("threat", "")), Vector2(x, 305), 368, 10, PAPER)
+	text_at("OPTIONAL OPPORTUNITY", Vector2(x, 367), 9, GOLD)
+	wrapped(str(preview.get("optional", "")), Vector2(x, 387), 368, 10, MUTED)
+	text_at("%d WAVES  ·  %s" % [int(preview.get("waves", 0)), pilgrimage_duration_text(preview)], Vector2(x, 447), 10, PAPER)
+	var current_scrap = int(sim.config.economy.starting_scrap) if departure else int(sim.state.scrap)
+	var fare = int(preview.get("cost", 0))
+	text_at("TRAVEL / %s  ·  YOU HAVE %d SCRAP" % ["NO FARE" if fare == 0 else "%d SCRAP" % fare, current_scrap], Vector2(x, 470), 10, GOLD)
+	text_at("ARRIVAL / %s" % ("FULL STRUCTURE" if selected_site_id == str(sim.chapter.expedition_map.origin_site_id) else "AT LEAST %d%% STRUCTURE" % int(float(preview.get("arrival_floor", 0.0)) * 100.0)), Vector2(x, 493), 10, GREEN)
+	text_at("ROAD", Vector2(x, 525), 9, GOLD)
+	wrapped(str(preview.get("road", "")), Vector2(x, 545), 368, 9, PAPER)
+	text_at("NEXT / " + str(preview.get("next", "" )).to_upper(), Vector2(x, 590), 9, GREEN if not bool(preview.get("terminal", false)) else GOLD)
+	var reason = "Only the Workshop launches this expedition; inspect later sites now." if departure and selected_site_id != str(sim.chapter.expedition_map.origin_site_id) else "The Workshop begins the carried three-level expedition."
+	if not departure:
+		if map_selection == "": reason = "Not connected from the current route. Inspection does not commit travel."
+		elif current_scrap < fare: reason = "Need %d more Scrap. Selection remains reversible." % (fare - current_scrap)
+		else: reason = "Travel commits the fare once, then enters both authored road stops."
+	wrapped(reason, Vector2(x, 625), 368, 10, RED if (map_selection == "" and not departure) or (not departure and current_scrap < fare) else MUTED)
 
 func map_board_title() -> String:
 	var current_site_id = str(sim.state.get("site_id", "site.collapsed_workshop"))
@@ -1243,7 +1447,8 @@ func map_board_title() -> String:
 			return "PILGRIMAGE BOARD / " + str(site.name).to_upper()
 	return "PILGRIMAGE BOARD / " + current_site_id.trim_prefix("site.").replace("_", " ").to_upper()
 
-func map_edge_emphasis(edge: Dictionary) -> String:
+func map_edge_emphasis(edge: Dictionary, departure: bool = false) -> String:
+	if departure: return "future"
 	var route_id = str(edge.route_id)
 	var edge_origin = str(edge.from_site_id)
 	var current_origin = str(sim.state.get("site_id", "site.collapsed_workshop"))
@@ -1257,10 +1462,11 @@ func map_edge_emphasis(edge: Dictionary) -> String:
 		if accepted_origin == "": accepted_origin = current_origin
 		if edge_origin == accepted_origin: return "accepted"
 	if route_id == map_selection and edge_origin == current_origin: return "selected"
-	return "available"
+	if edge_origin == current_origin and sim.assignment_status(route_id) == "available": return "reachable"
+	return "future" if map_site_tier(edge_origin) > map_site_tier(current_origin) else "not_taken"
 
 func map_site_position(site: Dictionary) -> Vector2:
-	return Vector2(100 + float(site.position[0]) * 525, 252 + float(site.position[1]) * 275)
+	return Vector2(100 + float(site.position[0]) * 690, 160 + float(site.position[1]) * 500)
 
 func draw_travel():
 	draw_rect(Rect2(60, 148, 980, 588), Color(0.03, 0.065, 0.07, 0.80))

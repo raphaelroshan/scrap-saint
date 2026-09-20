@@ -634,4 +634,6 @@ Every future implementation request should begin with a packet in this shape:
 ```
 
 ## 17. Immediate next task
-The next task is **uncoached 1× comparison of the original three-Gift pool with the P16 seven-Gift pool**. Measure whether players understand Honest Scale before buying, notice Spring/Filter/Fuse activation in motion, and encounter any low-value support offers despite compatibility filtering. Do not add Confluences or another progression layer until those shop-decision results are recorded. Use [implementation packets](docs/implementation_packets.md) and [runtime status](docs/runtime_status.md) to distinguish implemented subsets from the original milestone specifications.
+M1 is shipped: setup now opens a presentation-only First Pilgrimage preview, all six sites can be inspected, active route selection uses the same full map, and a separate Travel action commits an eligible route exactly once. Destination dossiers distinguish combat experience, boss/threat, optional work, duration, fare, arrival floor, road sequence and later connections without changing simulation authority.
+
+The next task is **M2 unified site-clear summaries and atomic automatic checkpoints with exactly-once discovery credit**. Use [the multi-level flow plan](docs/multi_level_flow.md), [implementation packets](docs/implementation_packets.md) and [runtime status](docs/runtime_status.md) to preserve the existing deterministic contracts.

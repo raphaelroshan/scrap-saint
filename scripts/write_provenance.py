@@ -14,10 +14,10 @@ data = {
     'godot': subprocess.check_output([sys.argv[1], '--version'], text=True).strip(),
     'viewport': [1280, 800], 'scaling': 'canvas_items', 'seed': 147,
     'timestamp_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
-    'capture_type': 'rendered simulation fixtures; includes explicit setup budgets, Results, weapon ranks, Evolutions, Gifts, destination bosses, and manifested relics',
+    'capture_type': 'rendered simulation fixtures; includes pilgrimage maps, explicit setup budgets, Results, weapon ranks, Evolutions, Gifts, destination bosses, and manifested relics',
     'source_hashes': {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root / 'game').glob('*')) if p.is_file()},
     'content_hashes': {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root / 'content').rglob('*.json'))},
     'limitation': 'No human playtest or rendered minimum-hardware benchmark',
-    'next_task': 'Run a normal-speed human readability pass across all manifested and persistent relic families, then tune only observed recognition, overlap and timing failures',
+    'next_task': 'Implement M2 unified site-clear summaries and atomic automatic checkpoints with exactly-once discovery credit',
 }
 (root / 'artifacts/agent-iteration/provenance.json').write_text(json.dumps(data, indent=2), encoding='utf-8')

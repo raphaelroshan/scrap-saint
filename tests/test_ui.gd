@@ -46,7 +46,22 @@ func run_checks():
 		if child is Button and child.text == "Choose Mourner": child.pressed.emit(); break
 	check(game.chosen == 2, "Blessing button selects doctrine")
 	for child in game.ui.get_children():
-		if child is Button and child.text.begins_with("BEGIN"): child.pressed.emit(); break
+		if child is Button and child.text.begins_with("REVIEW THE PILGRIMAGE"): child.pressed.emit(); break
+	check(game.screen == "departure_map" and game.sim.state.is_empty(), "setup opens the departure map without starting simulation")
+	var departure_buttons = game.ui.get_children().filter(func(child): return child is Button).map(func(child): return child.text)
+	for site_name in ["COLLAPSED WORKSHOP", "BRASS CHOIR", "ROOTWORKS", "PALE ARCHIVE", "RED FOUNDRY", "NULL ASSEMBLY"]:
+		check(site_name in departure_buttons, "departure map exposes %s for inspection" % site_name)
+	for child in game.ui.get_children():
+		if child is Button and child.text == "PALE ARCHIVE": child.pressed.emit(); break
+	check(game.departure_selection == "site.pale_archive" and game.departure_launch_button.disabled and game.sim.state.is_empty(), "future finale inspection cannot launch or mutate a run")
+	var pale_preview = game.pilgrimage_site_preview("site.pale_archive", true)
+	check(pale_preview.terminal and pale_preview.waves == 3 and pale_preview.boss == "The Archivist Prime" and pale_preview.optional.begins_with("Optional"), "future finale preview exposes ending, duration, boss and optional work")
+	game._physics_process(0.0)
+	check(game.sim.state.is_empty(), "departure map reading cannot tick or create simulation state")
+	for child in game.ui.get_children():
+		if child is Button and child.text == "COLLAPSED WORKSHOP": child.pressed.emit(); break
+	check(not game.departure_launch_button.disabled, "returning focus to the Workshop enables the only legal departure")
+	game.departure_launch_button.pressed.emit()
 	check(game.screen == "game" and game.sim.state.doctrine == 2 and game.sim.state.frame_id == "frame.pilgrim", "start button starts chosen build and frame")
 	var event = InputEventKey.new()
 	event.pressed = true
@@ -95,10 +110,15 @@ func run_checks():
 	game.sim.state.scrap = 20
 	game.sim.state.hp = 10
 	game.build_ui()
+	var route_read_hash = game.sim.state_hash()
 	for child in game.ui.get_children():
-		if child is Button and child.text == "ROOTWORKS PUMP": child.pressed.emit(); break
+		if child is Button and child.text == "PALE ARCHIVE": child.pressed.emit(); break
+	check(game.map_selection == "" and game.map_travel_button.disabled and game.sim.state_hash() == route_read_hash, "future-node inspection is reversible and cannot arm an illegal journey")
 	for child in game.ui.get_children():
-		if child is Button and child.text.begins_with("ACCEPT ASSIGNMENT"): child.pressed.emit(); break
+		if child is Button and child.text == "ROOTWORKS": child.pressed.emit(); break
+	check(game.map_selection == "route.rootworks" and not game.map_travel_button.disabled, "reachable node inspection arms the matching stable route ID")
+	for child in game.ui.get_children():
+		if child is Button and child.text.begins_with("TRAVEL TO ROOTWORKS"): child.pressed.emit(); break
 	check(game.sim.state.phase == "travel" and game.sim.state.route == "route.rootworks", "route button sends authoritative choice")
 	while game.sim.state.phase == "travel":
 		for child in game.ui.get_children():
@@ -117,16 +137,16 @@ func run_checks():
 	game.sim.refresh_assignments()
 	game.map_selection = "route.red_foundry"
 	check(game.map_board_title() == "PILGRIMAGE BOARD / BRASS CHOIR", "second-tier Brass board derives its title from the current site")
-	check(game.map_edge_emphasis(brass_red_edge) == "selected" and game.map_edge_emphasis(rootworks_red_edge) == "available", "Brass board selects only its own Red Foundry incoming edge")
+	check(game.map_edge_emphasis(brass_red_edge) == "selected" and game.map_edge_emphasis(rootworks_red_edge) == "not_taken", "Brass board selects only its own Red Foundry incoming edge")
 	game.sim.state.site_id = "site.rootworks_pump"
 	game.sim.refresh_assignments()
 	check(game.map_board_title() == "PILGRIMAGE BOARD / ROOTWORKS", "second-tier Rootworks board derives its title from the current site")
-	check(game.map_edge_emphasis(brass_red_edge) == "available" and game.map_edge_emphasis(rootworks_red_edge) == "selected", "Rootworks board selects only its own Red Foundry incoming edge")
+	check(game.map_edge_emphasis(brass_red_edge) == "not_taken" and game.map_edge_emphasis(rootworks_red_edge) == "selected", "Rootworks board selects only its own Red Foundry incoming edge")
 	game.sim.state.route = "route.red_foundry"
 	game.sim.state.route_history = ["route.rootworks", "route.red_foundry"]
 	game.sim.state.route_origin_site_id = "site.rootworks_pump"
 	game.sim.state.assignment_statuses["route.red_foundry"] = "accepted"
-	check(game.map_edge_emphasis(brass_red_edge) == "available" and game.map_edge_emphasis(rootworks_red_edge) == "accepted", "accepted shared route uses its persisted authored origin")
+	check(game.map_edge_emphasis(brass_red_edge) == "not_taken" and game.map_edge_emphasis(rootworks_red_edge) == "accepted", "accepted shared route uses its persisted authored origin")
 	var workshop_root_edge = game.sim.chapter.expedition_map.edges.filter(func(edge): return edge.route_id == "route.rootworks")[0]
 	check(game.map_edge_emphasis(workshop_root_edge) == "accepted", "completed first leg remains visible as accepted route history")
 	game.profile.state.unlocked_frames.append("frame.keeper")

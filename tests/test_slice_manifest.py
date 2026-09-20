@@ -190,6 +190,16 @@ class ExpeditionGraphTests(unittest.TestCase):
         chapter['routes'][0]['from_sites'].append(chapter['routes'][0]['from_sites'][0])
         self.assert_rejected(chapter)
 
+    def test_reject_missing_optional_map_preview(self):
+        chapter = copy.deepcopy(self.chapter)
+        chapter['routes'][0].pop('optional_preview')
+        self.assert_rejected(chapter)
+
+    def test_reject_imperative_optional_map_preview(self):
+        chapter = copy.deepcopy(self.chapter)
+        chapter['routes'][0]['optional_preview'] = 'Repair every relay to proceed.'
+        self.assert_rejected(chapter)
+
 
 if __name__ == '__main__':
     unittest.main()

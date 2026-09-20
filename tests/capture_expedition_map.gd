@@ -4,10 +4,11 @@ func _initialize(): call_deferred("run_capture")
 
 func capture(game, directory: String, name: String, selected_route: String = ""):
 	game.build_ui()
-	# Button focus deliberately selects the first assignment; fixture-specific captures
-	# move focus to the requested assignment after controls have been built.
+	# Map construction deliberately focuses the first legal node; fixture-specific
+	# captures move focus to the requested stable destination after controls exist.
 	if selected_route != "":
-		var selected_name = str(game.sim.routes[selected_route].name).to_upper()
+		var site_id = str(game.sim.routes[selected_route].site_id)
+		var selected_name = str(game.map_site_data(site_id).name).to_upper()
 		for child in game.ui.get_children():
 			if child is Button and child.text == selected_name:
 				child.grab_focus()
@@ -57,9 +58,22 @@ func run_capture():
 	game.fixture_label = true
 	game.capture_label = "SCRIPTED MAP FIXTURE"
 	game.debug_visible = true
+	game.screen = "departure_map"
+	game.capture_label = "M1 DEPARTURE MAP / CONFIGURED FIXTURE"
+	game.departure_selection = "site.collapsed_workshop"
+	await capture(game, directory, "M1_DEPARTURE_WORKSHOP")
+	await capture(game, directory, "M1_DEPARTURE_NULL_PREVIEW", "route.null_assembly")
+	game.ui_scale = 1.15
+	await capture(game, directory, "M1_DEPARTURE_LARGE_TEXT", "route.null_assembly")
+	game.ui_scale = 1.0
+
 	game.screen = "game"
+	game.capture_label = "M1 ROUTE MAP / CONFIGURED FIXTURE"
 	open_map(game)
 	await capture(game, directory, "EXPEDITION_MAP_AVAILABLE")
+	game.ui_scale = 1.15
+	await capture(game, directory, "M1_ROUTE_LARGE_TEXT", "route.brass_choir")
+	game.ui_scale = 1.0
 
 	game.sim.command("choose_route", "route.brass_choir")
 	await capture(game, directory, "BRASS_ROAD_ENCOUNTER")

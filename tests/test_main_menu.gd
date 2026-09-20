@@ -50,6 +50,10 @@ func run():
 	game.visual_clock_override = 1300
 	game._process(0)
 	check(game.screen == "menu" and game.sim.state.is_empty(), "reduced-motion handoff takes 300ms and reaches setup")
+	control(game,"REVIEW THE PILGRIMAGE  →").pressed.emit()
+	check(game.screen == "departure_map" and game.sim.state.is_empty(), "setup review opens departure without creating a run")
+	game._input(cancel)
+	check(game.screen == "menu" and game.sim.state.is_empty(), "controller cancel returns from departure preview without erasing setup")
 	game._input(cancel)
 	check(game.screen == "title", "controller cancel returns from setup")
 	game.sim.start(0,147,"optional")
