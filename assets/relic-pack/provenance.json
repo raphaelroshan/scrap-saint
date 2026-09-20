@@ -1,0 +1,41 @@
+{
+  "date": "2026-09-21",
+  "base_commit": "95f794be1e307dfa7d90f9a9bc54113f7df33905",
+  "status": "ASSET_PACK_PREVIEW; not enabled in live gameplay",
+  "art_method": "OpenAI image_gen with project relic-board reference; Nailer alpha edit supplied by image_gen",
+  "art_outputs": {
+    "nailer": "exec-a7b95b00-ec28-4d82-bb96-61435aa59934.png",
+    "bell": "exec-e37f1d6b-24c8-40c8-8818-8370e90ab2ac.png"
+  },
+  "pixel_method": "Godot 4.5.1 existing procedural geometry rendered to transparent 64x64 SubViewport then nearest-neighbor 128x128; 12 samples per clip",
+  "renderer": "OpenGL compatibility, NVIDIA RTX 4060",
+  "checks": {
+    "frame_bounds_alpha": 120,
+    "spriteframes_resources": 10,
+    "atlas_regions": 120
+  },
+  "files": {
+    "game/main.gd": "9a49fcda47dc228b99923a939d5f3bc9d69800eca70e891be909b97c48560669",
+    "tools/relic_asset_canvas.gd": "af21a0bddd4f0d07eb8ba7f1a542d5dfea42471f3836272340227d5ccb502865",
+    "tools/bake_relic_assets.gd": "c0532b93fd69c9dcd142b67d63807939e98ff091e48ce754d3cf761a644e74ef",
+    "assets/relic-pack/contact-sheet.png": "aac8fd50d329fe8ebc15770d79529476e5ab1208f6389819b23ed3c4932132b9",
+    "assets/relic-pack/art/bell.png": "206d2d3a3b072a56c9065573f253f6cc5b9cc76742b5176a237303cbf9085588",
+    "assets/relic-pack/art/nailer.png": "a13bb8a5aabda9ac856afa3092d767051a40249fbc7519c93f6f5a49d55fe1f7",
+    "assets/relic-pack/pixels/bell.png": "c094fc1d11ea39e04a18eea1e5691d09e0847d1db54ca6a6b6c2f41d3428048d",
+    "assets/relic-pack/pixels/bell_reduced.png": "c094fc1d11ea39e04a18eea1e5691d09e0847d1db54ca6a6b6c2f41d3428048d",
+    "assets/relic-pack/pixels/cable.png": "e4ecc47b6773f99c539a4f0d78dacdf9ad0d7982dd152730260697838237e7f3",
+    "assets/relic-pack/pixels/cable_reduced.png": "e4ecc47b6773f99c539a4f0d78dacdf9ad0d7982dd152730260697838237e7f3",
+    "assets/relic-pack/pixels/censer.png": "4077583d8e43ee34bc6a5d60df4816c234855d40dc4b847fd26917fe559f097f",
+    "assets/relic-pack/pixels/censer_reduced.png": "d39671949a6dd44079e45a6a5fc662bd93249877ba58197e84bb1701260f9192",
+    "assets/relic-pack/pixels/mercy_rail.png": "34022f6901f79e00c204287acd49eb3a1aa4275c6a2d2bfe65fb1cefac2dc170",
+    "assets/relic-pack/pixels/mercy_rail_reduced.png": "dd14b14fc744b35803bda2089117012eb135fd9d045713c69a161e4b5dd59a15",
+    "assets/relic-pack/pixels/nailer.png": "d39aaccfcd14d51e899ec2c75d5792c9e2ad74047f6a9201aef598ae343622c1",
+    "assets/relic-pack/pixels/nailer_reduced.png": "c9c180304c29670165569159d34e8349fc23ce757dafdf4c1f239fa66b4e80e1"
+  },
+  "limitations": [
+    "Mechanism-only clips: no collision, target tracking or damage. Cable target is a 72-unit preview, not a universal hit distance.",
+    "Illustrated art and pixel geometry differ in detail and perspective; integration must compare at actual display size.",
+    "Direction is right-facing; do not rotate upright Bell/Censer indiscriminately.",
+    "Initial and final frames intentionally empty. Reduced variants can match full variants when a mechanism has no optional particles."
+  ]
+}

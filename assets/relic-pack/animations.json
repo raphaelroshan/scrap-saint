@@ -1,0 +1,196 @@
+{
+  "clips": [
+    {
+      "anchor": [
+        24,
+        64
+      ],
+      "cell": [
+        128,
+        128
+      ],
+      "direction": "right",
+      "duration_ms": 380,
+      "frames": 12,
+      "id": "nailer",
+      "loop": false,
+      "native_render": [
+        64,
+        64
+      ]
+    },
+    {
+      "anchor": [
+        24,
+        64
+      ],
+      "cell": [
+        128,
+        128
+      ],
+      "direction": "right",
+      "duration_ms": 380,
+      "frames": 12,
+      "id": "nailer_reduced",
+      "loop": false,
+      "native_render": [
+        64,
+        64
+      ]
+    },
+    {
+      "anchor": [
+        24,
+        64
+      ],
+      "cell": [
+        128,
+        128
+      ],
+      "direction": "right",
+      "duration_ms": 560,
+      "frames": 12,
+      "id": "mercy_rail",
+      "loop": false,
+      "native_render": [
+        64,
+        64
+      ]
+    },
+    {
+      "anchor": [
+        24,
+        64
+      ],
+      "cell": [
+        128,
+        128
+      ],
+      "direction": "right",
+      "duration_ms": 560,
+      "frames": 12,
+      "id": "mercy_rail_reduced",
+      "loop": false,
+      "native_render": [
+        64,
+        64
+      ]
+    },
+    {
+      "anchor": [
+        64,
+        20
+      ],
+      "cell": [
+        128,
+        128
+      ],
+      "direction": "right",
+      "duration_ms": 460,
+      "frames": 12,
+      "id": "bell",
+      "loop": false,
+      "native_render": [
+        64,
+        64
+      ]
+    },
+    {
+      "anchor": [
+        64,
+        20
+      ],
+      "cell": [
+        128,
+        128
+      ],
+      "direction": "right",
+      "duration_ms": 460,
+      "frames": 12,
+      "id": "bell_reduced",
+      "loop": false,
+      "native_render": [
+        64,
+        64
+      ]
+    },
+    {
+      "anchor": [
+        28,
+        64
+      ],
+      "cell": [
+        128,
+        128
+      ],
+      "direction": "right",
+      "duration_ms": 500,
+      "frames": 12,
+      "id": "cable",
+      "loop": false,
+      "native_render": [
+        64,
+        64
+      ]
+    },
+    {
+      "anchor": [
+        28,
+        64
+      ],
+      "cell": [
+        128,
+        128
+      ],
+      "direction": "right",
+      "duration_ms": 500,
+      "frames": 12,
+      "id": "cable_reduced",
+      "loop": false,
+      "native_render": [
+        64,
+        64
+      ]
+    },
+    {
+      "anchor": [
+        56,
+        104
+      ],
+      "cell": [
+        128,
+        128
+      ],
+      "direction": "right",
+      "duration_ms": 520,
+      "frames": 12,
+      "id": "censer",
+      "loop": false,
+      "native_render": [
+        64,
+        64
+      ]
+    },
+    {
+      "anchor": [
+        56,
+        104
+      ],
+      "cell": [
+        128,
+        128
+      ],
+      "direction": "right",
+      "duration_ms": 520,
+      "frames": 12,
+      "id": "censer_reduced",
+      "loop": false,
+      "native_render": [
+        64,
+        64
+      ]
+    }
+  ],
+  "godot": "4.5.1-stable (official)",
+  "method": "Native procedural mechanism geometry baked at 64px, nearest-neighbor 2x. Not painted-art animation."
+}
