@@ -1,10 +1,16 @@
 # Scrap Saint roadmap
 
-## Current direction — 2026-09-18
+## Current direction — 2026-09-20
 
 This section supersedes the historical implementation sequence below. The current 0.6 preview includes ten weapons, ten Evolutions, seven Gifts, four Blessings, three frames, a branching three-site expedition, and the illustrated main menu. See [runtime status](docs/runtime_status.md) for implemented behavior and verification. Earlier roster counts and failed-policy reports describe their original builds.
 
 User decisions remain authoritative: the Saint manifests through repairs freely given; main-mode shops offer relics; recovery comes from drops and optional work; destination repairs are optional. Preserve the current gameplay and chapter systems. Commit and push completed validated changes.
+
+### Multi-level flow plan
+
+The [multi-level pilgrimage review and plan](docs/multi_level_flow.md) builds on the existing six-site, three-level expedition. First expose the chapter map before departure and clarify reachable destinations, threat previews, optional work, travel costs and chapter endings. Then add a unified site-clear/checkpoint flow with exactly-once discovery credit; verify branch unlocks from route history. Finally review each level's pacing at normal speed. Arbitrary destination starts and a separate practice mode are deferred.
+
+This is planned work, not shipped functionality. Preserve the current route graph, build carryover, economy and optional-repair rules for the first navigation packet. The completed visual work below remains intact; its human readability review joins the level pacing review.
 
 ### Visual decision: manifested relics
 
@@ -23,7 +29,7 @@ Defer the proposed attachment-arm rig, mount sockets and character-sprite replac
 
 No character rig, new weapons or balance changes are prerequisites for step 1. Require real Godot captures with build/viewport/seed provenance and event/state regression checks for each runtime slice. Concept boards alone do not satisfy these gates.
 
-Exactly one next task: run a normal-speed human readability pass across all manifested and persistent relic families, then tune only observed recognition, overlap and timing failures.
+Exactly one next task: implement M1 from the multi-level flow plan: departure map preview and clearer between-level destination selection, preserving current chapter rules.
 
 ## 1. Roadmap purpose and current truth
 
