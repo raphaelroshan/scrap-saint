@@ -1,12 +1,16 @@
 # Scrap Saint roadmap
 
+## Painted actor integration — 2026-09-21
+
+The six ordinary enemy families are live in the painted arena. Three Workshop repair fixtures now visibly progress from broken through working feedback to restored artwork. [Review gameplay captures](assets/actors/review.html). Directional poses and articulated gait remain deferred; no rotated or mirrored lighting is used to fake them.
+
 ## Arena material integration — 2026-09-21
 
-The playfield now uses a painted metal floor at a fixed material scale, footprint-fitted press/boiler/manifold scenery, quieter lane markings and perimeter services. Field Scrap and repair kits use painted icons, with Scrap/Shard icons in the HUD. Compare the [matched gameplay renders](assets/environment/review.html). Collision, navigation, collection, the Saint and enemy rules remain unchanged. Procedural enemies and repair-objective graphics still need an art integration pass.
+The playfield now uses a painted metal floor at a fixed material scale, footprint-fitted press/boiler/manifold scenery, quieter lane markings and perimeter services. Field Scrap and repair kits use painted icons, with Scrap/Shard icons in the HUD. Compare the [matched gameplay renders](assets/environment/review.html). Collision, navigation, collection, the Saint and enemy rules remain unchanged. The actor pass above completes ordinary enemies and Workshop repair fixtures; bosses, elite and destination objectives remain procedural.
 
 ## Supporting art delivery — 2026-09-21
 
-The supporting painted pack adds three enemy cutouts, three field pickup icons and three existing upgrade icons, with reusable Godot motion studies and an isolated gallery. See [the pack and remaining coverage](assets/supporting-art/README.md). This follows the painted industrial diorama direction; prior low-resolution procedural exports are not the final painted style. The environment pass below enables Scrap and Repair Kit icons in the field and currency icons in the HUD. Enemy/upgrade artwork remains staged; directional poses and articulated limbs remain pending.
+The supporting painted pack adds three enemy cutouts, three field pickup icons and three existing upgrade icons, with reusable Godot motion studies and an isolated gallery. See [the pack and remaining coverage](assets/supporting-art/README.md). This follows the painted industrial diorama direction; prior low-resolution procedural exports are not the final painted style. The environment pass below enables Scrap and Repair Kit icons in the field and currency icons in the HUD. Ordinary enemy artwork is now integrated by the actor pass above; upgrade artwork remains staged and articulated limbs remain pending.
 
 ## Current direction — 2026-09-20
 
@@ -37,7 +41,7 @@ Defer the proposed attachment-arm rig, mount sockets and character-sprite replac
 
 No character rig, new weapons or balance changes are prerequisites for step 1. Require real Godot captures with build/viewport/seed provenance and event/state regression checks for each runtime slice. Concept boards alone do not satisfy these gates.
 
-Exactly one next task: integrate the painted enemy roster with directional poses and combat-scale readability checks. M1 departure selection, M2 checkpoints and M3 arrival/pacing work are already implemented; retain normal-speed human review as a release gate.
+Exactly one next task: Give the Memory Crane and Foreman Engine painted bodies and state-driven mechanical animation. M1 departure selection, M2 checkpoints and M3 arrival/pacing work are already implemented; retain normal-speed human review as a release gate.
 
 ## 1. Roadmap purpose and current truth
 

@@ -1,5 +1,9 @@
 # Asset provenance
 
+## Painted actors — 2026-09-21
+
+Six original OpenAI image-generation outputs add Rust Pilgrim, Forklift Brute, Cinder Spitter and paired broken/restored sheets for Salvage Sorter, Coolant Pump and Warning Bell. The existing generated Rivet Hound was the material reference. Three earlier enemy PNGs are reused directly. Exact prompts, generator output IDs, references and hashes are in `assets/actors/sources.json` and `manifest.json`. Original PNGs are copied unchanged; Python only inspects alpha bounds. Runtime region drawing, servo/hover offsets, progress and welding sparks are code-driven presentation. No external game artwork was used.
+
 ## P20 procedural presentation assets — 2026-09-17
 
 - **Source / method:** Original code-native vector geometry drawn at runtime in `game/main.gd`; original PCM synthesis in `game/sound.gd`.

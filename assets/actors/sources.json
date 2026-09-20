@@ -1,0 +1,110 @@
+[
+  {
+    "slug": "rust_pilgrim",
+    "id": "enemy.rust_pilgrim",
+    "kind": "enemy",
+    "name": "Rust Pilgrim",
+    "description": "A squat wandering repair automaton: tall narrow rust-red tank backpack, two stout segmented treads, hunched hood-like iron casing, one orange sensor slit, compact bent welding arm tucked close to its body and a muted green coolant cylinder. Enemy healer, industrial travelling medic corrupted by endless maintenance. Strong tall rectangular silhouette. No medical cross.",
+    "path": "res://assets/actors/rust_pilgrim.png",
+    "source": "exec-cfa83262-4cac-4c03-8784-1d59d54cb71d.png",
+    "prompt": "Production painted 2D game art in Scrap Saint's industrial diorama style. Match the reference's chunky proportions and broad painted MATERIALS, but not its subject. High three-quarter overhead view, warm upper-left light, clear dark silhouette, very limited surface detail legible at 48 pixels. Entire object intact inside canvas with transparent padding. True transparent alpha background. No floor, text, labels, grid lines, border, cast shadow, glow haze, scenery, watermarks or UI. No pixel art or photorealism. ONE isolated enemy sprite centered in a square composition: A squat wandering repair automaton: tall narrow rust-red tank backpack, two stout segmented treads, hunched hood-like iron casing, one orange sensor slit, compact bent welding arm tucked close to its body and a muted green coolant cylinder. Enemy healer, industrial travelling medic corrupted by endless maintenance. Strong tall rectangular silhouette. No medical cross.",
+    "reference": "assets/supporting-art/art/rivet_hound.png",
+    "generator": "OpenAI built-in image generation"
+  },
+  {
+    "slug": "forklift_brute",
+    "id": "enemy.forklift_brute",
+    "kind": "enemy",
+    "name": "Forklift Brute",
+    "description": "A squat wide heavy unmanned industrial forklift beast, broad chipped ochre/rust chassis on four chunky wheels, two unmistakable short thick iron forks pointing toward bottom-right, stout lift mast integrated close to chassis, dark visor with a tiny orange sensor. Wide square charging silhouette, no driver, no humanoid arms. Short forks so the entire silhouette remains compact.",
+    "path": "res://assets/actors/forklift_brute.png",
+    "source": "exec-3a56d8dd-d415-4b33-bd75-b5c3efee3354.png",
+    "prompt": "Production painted 2D game art in Scrap Saint's industrial diorama style. Match the reference's chunky proportions and broad painted MATERIALS, but not its subject. High three-quarter overhead view, warm upper-left light, clear dark silhouette, very limited surface detail legible at 48 pixels. Entire object intact inside canvas with transparent padding. True transparent alpha background. No floor, text, labels, grid lines, border, cast shadow, glow haze, scenery, watermarks or UI. No pixel art or photorealism. ONE isolated enemy sprite centered in a square composition: A squat wide heavy unmanned industrial forklift beast, broad chipped ochre/rust chassis on four chunky wheels, two unmistakable short thick iron forks pointing toward bottom-right, stout lift mast integrated close to chassis, dark visor with a tiny orange sensor. Wide square charging silhouette, no driver, no humanoid arms. Short forks so the entire silhouette remains compact.",
+    "reference": "assets/supporting-art/art/rivet_hound.png",
+    "generator": "OpenAI built-in image generation"
+  },
+  {
+    "slug": "cinder_spitter",
+    "id": "enemy.cinder_spitter",
+    "kind": "enemy",
+    "name": "Cinder Spitter",
+    "description": "A compact round furnace crawler on three short stout mechanical legs, dark soot metal pot belly, brick-red furnace housing, one short broad ceramic-lined nozzle pointing bottom-right, dim amber ember visible deep inside nozzle. Round kettle silhouette with one thick snout. No flame, smoke, projectile or external glow.",
+    "path": "res://assets/actors/cinder_spitter.png",
+    "source": "exec-8cb5440b-6a78-420f-b493-fb256e1de5d0.png",
+    "prompt": "Production painted 2D game art in Scrap Saint's industrial diorama style. Match the reference's chunky proportions and broad painted MATERIALS, but not its subject. High three-quarter overhead view, warm upper-left light, clear dark silhouette, very limited surface detail legible at 48 pixels. Entire object intact inside canvas with transparent padding. True transparent alpha background. No floor, text, labels, grid lines, border, cast shadow, glow haze, scenery, watermarks or UI. No pixel art or photorealism. ONE isolated enemy sprite centered in a square composition: A compact round furnace crawler on three short stout mechanical legs, dark soot metal pot belly, brick-red furnace housing, one short broad ceramic-lined nozzle pointing bottom-right, dim amber ember visible deep inside nozzle. Round kettle silhouette with one thick snout. No flame, smoke, projectile or external glow.",
+    "reference": "assets/supporting-art/art/rivet_hound.png",
+    "generator": "OpenAI built-in image generation"
+  },
+  {
+    "slug": "salvage_sorter",
+    "id": "repair.salvage",
+    "kind": "repair",
+    "name": "Salvage Sorter",
+    "description": "A low floor-service salvage sorting mechanism, a shallow green enamel tray with three broad chunky conveyor rollers and a cream side housing, brass maintenance latches. LEFT broken: centre roller jammed askew, cracked belt and open hinged access cover. RIGHT restored: all rollers seated and aligned, belt repaired with a visible brass join, cover closed. The same object, same outer footprint, same chassis damage/wear. No loose salvage outside the machine.",
+    "path": "res://assets/actors/salvage_sorter.png",
+    "source": "exec-4c749ea1-a3ec-40dd-8a62-f77cec7f3053.png",
+    "prompt": "Production painted 2D game art in Scrap Saint's industrial diorama style. Match the reference's chunky proportions and broad painted MATERIALS, but not its subject. High three-quarter overhead view, warm upper-left light, clear dark silhouette, very limited surface detail legible at 48 pixels. Entire object intact inside canvas with transparent padding. True transparent alpha background. No floor, text, labels, grid lines, border, cast shadow, glow haze, scenery, watermarks or UI. No pixel art or photorealism. ONE repair-machine asset sheet with exactly TWO equal square cells side by side, landscape 2:1 canvas. Left cell has broken state, right cell has restored state of the EXACT SAME MACHINE. Match camera, scale and pivot precisely between states; leave a broad transparent vertical gap at the halfway line and all outer edges. Each machine fits comfortably inside its own half. No text or cell borders. This is a low-profile service fixture, not a tall building. A low floor-service salvage sorting mechanism, a shallow green enamel tray with three broad chunky conveyor rollers and a cream side housing, brass maintenance latches. LEFT broken: centre roller jammed askew, cracked belt and open hinged access cover. RIGHT restored: all rollers seated and aligned, belt repaired with a visible brass join, cover closed. The same object, same outer footprint, same chassis damage/wear. No loose salvage outside the machine.",
+    "reference": "assets/supporting-art/art/rivet_hound.png",
+    "generator": "OpenAI built-in image generation"
+  },
+  {
+    "slug": "coolant_pump",
+    "id": "repair.pump",
+    "kind": "repair",
+    "name": "Coolant Pump",
+    "description": "A low compact green enamel coolant-pump service module, rounded cream pressure vessel inside a shallow square base, two thick bent copper pipes and a large readable gauge. LEFT broken: one disconnected coupling, dial at zero, access cover open. RIGHT restored: coupling connected by a new brass repair collar, dial raised, access cover seated. Same silhouette, base size, orientation and surface wear. No water spray or fluid puddle.",
+    "path": "res://assets/actors/coolant_pump.png",
+    "source": "exec-6fdd6f0b-2231-41f2-8771-7ab0acd4d1be.png",
+    "prompt": "Production painted 2D game art in Scrap Saint's industrial diorama style. Match the reference's chunky proportions and broad painted MATERIALS, but not its subject. High three-quarter overhead view, warm upper-left light, clear dark silhouette, very limited surface detail legible at 48 pixels. Entire object intact inside canvas with transparent padding. True transparent alpha background. No floor, text, labels, grid lines, border, cast shadow, glow haze, scenery, watermarks or UI. No pixel art or photorealism. ONE repair-machine asset sheet with exactly TWO equal square cells side by side, landscape 2:1 canvas. Left cell has broken state, right cell has restored state of the EXACT SAME MACHINE. Match camera, scale and pivot precisely between states; leave a broad transparent vertical gap at the halfway line and all outer edges. Each machine fits comfortably inside its own half. No text or cell borders. This is a low-profile service fixture, not a tall building. A low compact green enamel coolant-pump service module, rounded cream pressure vessel inside a shallow square base, two thick bent copper pipes and a large readable gauge. LEFT broken: one disconnected coupling, dial at zero, access cover open. RIGHT restored: coupling connected by a new brass repair collar, dial raised, access cover seated. Same silhouette, base size, orientation and surface wear. No water spray or fluid puddle.",
+    "reference": "assets/supporting-art/art/rivet_hound.png",
+    "generator": "OpenAI built-in image generation"
+  },
+  {
+    "slug": "warning_bell",
+    "id": "repair.signal",
+    "kind": "repair",
+    "name": "Warning Bell",
+    "description": "A compact low brass factory warning bell mounted in a green enamel square service cradle, thick bell rim, visible short striker arm, cream electrical box. LEFT broken: striker drooping away from bell, cracked wire connection and open electrical cover. RIGHT restored: striker seated beside bell, wire bridged with fresh brass connector, electrical cover closed. Same footprint, silhouette, orientation and wear. No ringing lines or soundwaves.",
+    "path": "res://assets/actors/warning_bell.png",
+    "source": "exec-c2b89d45-de3b-4d05-8769-0cb31a5c82f7.png",
+    "prompt": "Production painted 2D game art in Scrap Saint's industrial diorama style. Match the reference's chunky proportions and broad painted MATERIALS, but not its subject. High three-quarter overhead view, warm upper-left light, clear dark silhouette, very limited surface detail legible at 48 pixels. Entire object intact inside canvas with transparent padding. True transparent alpha background. No floor, text, labels, grid lines, border, cast shadow, glow haze, scenery, watermarks or UI. No pixel art or photorealism. ONE repair-machine asset sheet with exactly TWO equal square cells side by side, landscape 2:1 canvas. Left cell has broken state, right cell has restored state of the EXACT SAME MACHINE. Match camera, scale and pivot precisely between states; leave a broad transparent vertical gap at the halfway line and all outer edges. Each machine fits comfortably inside its own half. No text or cell borders. This is a low-profile service fixture, not a tall building. A compact low brass factory warning bell mounted in a green enamel square service cradle, thick bell rim, visible short striker arm, cream electrical box. LEFT broken: striker drooping away from bell, cracked wire connection and open electrical cover. RIGHT restored: striker seated beside bell, wire bridged with fresh brass connector, electrical cover closed. Same footprint, silhouette, orientation and wear. No ringing lines or soundwaves.",
+    "reference": "assets/supporting-art/art/rivet_hound.png",
+    "generator": "OpenAI built-in image generation"
+  },
+  {
+    "slug": "scrap_mite",
+    "id": "enemy.scrap_mite",
+    "name": "Scrap Mite",
+    "description": "A tiny squat round rust-red sorting crawler, six short stout iron legs, one orange sensor aperture and two little scrap sorting mandibles. Round beetle silhouette, patched plate.",
+    "motion": "scuttle",
+    "source": "exec-d2bb3f21-df23-43aa-a549-aab8745144f8.png",
+    "reference": "assets/concepts/visual-target/arena-target.png",
+    "generator": "OpenAI built-in image generation",
+    "kind": "enemy",
+    "path": "res://assets/supporting-art/art/scrap_mite.png"
+  },
+  {
+    "slug": "rivet_hound",
+    "id": "enemy.rivet_hound",
+    "name": "Rivet Hound",
+    "description": "A low lean industrial quadruped seam-inspection machine, four stout piston legs, wedge-shaped rust iron head pointing down-right, front rivet jaws and long compressed spring spine. No organic parts. Angular charging silhouette.",
+    "motion": "charge",
+    "source": "exec-cc5fa299-b0a7-4bbd-83e5-65bd4b40102d.png",
+    "reference": "assets/concepts/visual-target/arena-target.png",
+    "generator": "OpenAI built-in image generation",
+    "kind": "enemy",
+    "path": "res://assets/supporting-art/art/rivet_hound.png"
+  },
+  {
+    "slug": "choir_drone",
+    "id": "enemy.choir_drone",
+    "name": "Choir Drone",
+    "description": "A hovering corrupted acoustic factory signal machine. Three large dark speaker mouths in a compact triangular rust iron housing, brass suspension yoke and small red signal lens. No wings, no legs, no effects. Bell-like hanging silhouette.",
+    "motion": "hover",
+    "source": "exec-29d8a65b-3f78-4d67-bece-d8bafbca6e28.png",
+    "reference": "assets/concepts/visual-target/arena-target.png",
+    "generator": "OpenAI built-in image generation",
+    "kind": "enemy",
+    "path": "res://assets/supporting-art/art/choir_drone.png"
+  }
+]

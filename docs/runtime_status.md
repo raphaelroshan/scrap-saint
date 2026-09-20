@@ -1,10 +1,16 @@
 # First Shift runtime — 0.6.0 preview
 
+## Painted enemies and repairs — 2026-09-21
+
+All six ordinary enemy families now use painted bodies. Rust Pilgrim, Forklift Brute and Cinder Spitter join the earlier Mite, Hound and Drone. Existing charge warnings, support fields, statuses and hit reactions remain. Workshop Salvage Sorter, Coolant Pump and Warning Bell use matched broken/restored artwork, with progress and welding feedback while repairing. Simulation outcomes and optional-work rules are unchanged.
+
+57 focused checks pass. See [the task packet](task_packets/enemies_and_repairs.md) and [native gameplay review](../assets/actors/review.html). Fixed-view body motion is not an articulated gait. Bosses, elite and destination objectives still use procedural art.
+
 ## Painted arena material pass — 2026-09-21
 
 All six sites use a subdued painted metal floor, fixed 384×256 world-space material tiles, subtle site tints and scenery fitted inside existing obstacle plinths. Vertical machines use press/boiler art; wide machines use a horizontal service manifold without sprite stretching or rotated lighting. Normal-play zone/machine labels move to F3 diagnostics. The old animated belt chevrons, decorative furnace circle and drifting floor steam are replaced by quiet perimeter services.
 
-Field Scrap and repair kits now use painted cutouts. Scrap and Relic Shard icons also appear beside their HUD totals. Healing motes retain their previous spectral form, and no new drops or currencies are introduced. The Saint, enemies and optional-work symbols retain their current renderer. See [the task packet](task_packets/arena_material_pass.md) and [before/after review](../assets/environment/review.html).
+Field Scrap and repair kits now use painted cutouts. Scrap and Relic Shard icons also appear beside their HUD totals. Healing motes retain their previous spectral form, and no new drops or currencies are introduced. At that delivery, the Saint, enemies and optional-work symbols retained their prior renderer; the actor pass above supersedes ordinary enemy and Workshop repair presentation. See [the task packet](task_packets/arena_material_pass.md) and [before/after review](../assets/environment/review.html).
 
 ## Main menu artwork and navigation — 2026-09-17
 

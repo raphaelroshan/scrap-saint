@@ -1,0 +1,57 @@
+{
+  "scope": "Painted ordinary enemies and three Workshop optional repair machines",
+  "rubric": [
+    {
+      "criterion": "Silhouettes",
+      "score": 4,
+      "note": "Brute forks, Pilgrim tank and Spitter furnace distinguish the new families."
+    },
+    {
+      "criterion": "Material cohesion",
+      "score": 4,
+      "note": "Rust and brass actors match the arena; the unchanged Saint retains its graphic treatment."
+    },
+    {
+      "criterion": "Lighting",
+      "score": 4,
+      "note": "Fixed views preserve painted highlights; camera angles vary slightly across assets."
+    },
+    {
+      "criterion": "Gameplay scale",
+      "score": 3,
+      "note": "Major shapes survive downscaling; fine surface details are dense."
+    },
+    {
+      "criterion": "Attack warnings",
+      "score": 4,
+      "note": "Directional charge lines and support radii remain visible around painted bodies."
+    },
+    {
+      "criterion": "Repair identity",
+      "score": 4,
+      "note": "Belt, pump and gong are recognizable distinct fixtures."
+    },
+    {
+      "criterion": "Repair transformation",
+      "score": 3,
+      "note": "Hardware changes are subtle at 64 pixels; progress, labels and checkmarks explain state."
+    },
+    {
+      "criterion": "Status readability",
+      "score": 4,
+      "note": "Marked and quieted overlays remain separable from the sprite."
+    },
+    {
+      "criterion": "Reduced effects",
+      "score": 4,
+      "note": "Decorative body movement and sparks stop; essential state and threat cues persist."
+    },
+    {
+      "criterion": "Evidence",
+      "score": 4,
+      "note": "Actual renderer fixtures and state-hash checks; no human playtest claimed."
+    }
+  ],
+  "limitation": "Fixed-view flattened sprites, not articulated or directional gait. Fine repair details are subtle at gameplay scale; state markers carry completion clarity. Bosses, elite and destination objectives remain procedural. Human 1x readability testing remains outstanding.",
+  "next_task": "Give the Memory Crane and Foreman Engine painted bodies and state-driven mechanical animation."
+}

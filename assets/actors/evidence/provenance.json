@@ -1,0 +1,48 @@
+{
+  "build": "0.6.0-preview + painted enemies and repairs",
+  "base_commit": "57069e5f6b52709759fb8f3f53584cd73463cce4",
+  "godot": "4.5.1-stable official f62fdbde1",
+  "viewport": [
+    1280,
+    800
+  ],
+  "seed": 147,
+  "timestamp_utc": "2026-09-20T18:06:20.828955+00:00",
+  "capture_type": "Configured native gameplay renderer fixtures; real repair state updates; not human playtest",
+  "source_hashes": {
+    "game/main.gd": "9813bb5e9ae686705564118343a4629aa54d6947bbe8fb7d99623ef1021c4e48",
+    "game/actor_art.gd": "93965ad72fca27f963cb80c859540ee4927ac8b2f8c6dfb38d9de2bbe68fd81c",
+    "assets/actors/manifest.json": "a8f7bebe57bd776a14e72bfbe31a99cd85f20687ef7fa9dcda9544e0343328ee",
+    "assets/actors/sources.json": "b2d51e400bb3b25ffb8dcb7fe8ed10fdfa082a280110424760cd90013a1a6f7e",
+    "tests/capture_actor_art.gd": "1a42163ce9b6b164db4fd806f713d7c33a858109c7dc9993d4305f01aafdeb80",
+    "tests/test_actor_art.gd": "1fb9a453d482e2fec459be0b54d8041eb6ab0992d746c831360e9b224c433e4c"
+  },
+  "capture_hashes": {
+    "REPAIR_0_BROKEN.png": "a97aaf9603206f302f9c7f578bbaeb6560199f3dbbe27822b060af28fea61dae",
+    "REPAIR_0_RESTORED.png": "1ae7bace8c251c724d88c0a048ad6f52c6ec3741f79ae0be008a73b648a4eb66",
+    "REPAIR_0_WORKING.png": "e12e90b5fc1b755b6831d612225ed049c20c01627274dd1bab4baebe3dc24b68",
+    "REPAIR_1_BROKEN.png": "b5a87eafb2c0e6e22ff1cdcc175e6316f249bb86988472a3df92e3a22e429d3a",
+    "REPAIR_1_RESTORED.png": "2ccb3f99e2e272c9199f479c379b2b7f2b3d01d97813799e667f94224a968d7b",
+    "REPAIR_1_WORKING.png": "6da9e79eac6d58ae42a8ff9c1ce447b76f238c172fd79a7d7f4114b5351fb645",
+    "REPAIR_2_BROKEN.png": "5a344da4e9a08ed9c5d2e284f5c21a3aaeeb399a84b0908df12f72b59d74e0af",
+    "REPAIR_2_RESTORED.png": "bf87b5166b9774ac118691ffc11e0b604bc3694fb62b0f40adf4dbd357bf595d",
+    "REPAIR_2_WORKING.png": "10d7373b4677b230c565a1c727590183cf8095f4a68004946d6e880b0801ed3a",
+    "ROSTER_COMBAT.png": "fba5b5fb11bbd8d956fe62c9c93abf87c4a1beb2598d0880a1c7200a3133bd1b",
+    "ROSTER_REDUCED.png": "39fc01443c5e17d017587f628f034a0ab966073c942a3410994032bc6d5a448f"
+  },
+  "limitation": "Fixed-view flattened sprites, not articulated or directional gait. Fine repair details are subtle at gameplay scale; state markers carry completion clarity. Bosses, elite and destination objectives remain procedural. Human 1x readability testing remains outstanding.",
+  "next_task": "Give the Memory Crane and Foreman Engine painted bodies and state-driven mechanical animation.",
+  "render_state_hashes": {
+    "ROSTER_COMBAT": "db30556b43d2c11d93da346641365f4d43d317b8188544e32f703cdfefe49c53",
+    "ROSTER_REDUCED": "db30556b43d2c11d93da346641365f4d43d317b8188544e32f703cdfefe49c53",
+    "REPAIR_0_BROKEN": "307381b917665e66a6fa1deff9355c9de924eaad3c25bf7494f0dd544893f169",
+    "REPAIR_0_WORKING": "91a3b48a466f5eabf8c2550300742031bf1ac83c490ce6c17fc981f32adbada0",
+    "REPAIR_0_RESTORED": "a8e345eecc0931c3212d5cfe0fba175517b4b9c26050136db33605ef12e0a68a",
+    "REPAIR_1_BROKEN": "7663237507330f3e971e8fbe58e690a2822d03488514394e262e2eed1e18593c",
+    "REPAIR_1_WORKING": "c00f5258437a89a61c7e6b1a9a371f9706cde136e7d317caefc0dc442bfe0f6f",
+    "REPAIR_1_RESTORED": "e8fb832684045df6ab411573420a8969452ded2c61f6dc29a41835ca9a046734",
+    "REPAIR_2_BROKEN": "fe8cc8166f1b4b67be3e3e38c257bee4e1aa717ffc95b33ab1b9885993ce3978",
+    "REPAIR_2_WORKING": "53e301c0b0df7cff5aabcb4a31649c9fdcc7afa5f6880f348337a48a281eae29",
+    "REPAIR_2_RESTORED": "8d719cd8e9543a512df5fdfc9af0016252d042b757f0a4530402b4f4c67264ce"
+  }
+}

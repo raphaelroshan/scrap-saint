@@ -1,0 +1,11 @@
+{
+  "actor_checks": 57,
+  "actor_failures": 0,
+  "regression_suites": 26,
+  "regression_checks": 1087,
+  "regression_failures": 0,
+  "full_iteration_exit": 0,
+  "scored_evidence": "pass",
+  "warning": "Existing ObjectDB shutdown leak warnings in some fixture scripts",
+  "human_playtest": false
+}

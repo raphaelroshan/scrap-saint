@@ -2,6 +2,8 @@ extends Node2D
 const Sim = preload("res://game/simulation.gd")
 const ArenaArt = preload("res://game/arena_art.gd")
 var arena_art = ArenaArt.new()
+const ActorArt = preload("res://game/actor_art.gd")
+var actor_art = ActorArt.new()
 const Sound = preload("res://game/sound.gd")
 const Profile = preload("res://game/profile.gd")
 const Settings = preload("res://game/settings.gd")
@@ -1555,15 +1557,14 @@ func draw_optional_machines():
 		if not machine.complete:
 			draw_arc(p, sim.config.optional_repairs.radius, 0, TAU, 40, Color("506657"), 1)
 			draw_arc(p, sim.config.optional_repairs.radius, -PI / 2, -PI / 2 + TAU * maxf(0.001, machine.progress / sim.config.optional_repairs.required_ticks), 40, color, 3)
-		panel(Rect2(p - Vector2(20, 20), Vector2(40, 40)), Color("314b43"))
-		draw_gear(p, 12, color, sim.state.tick * 0.02 if machine.complete else 0)
+		actor_art.draw_repair(self, machine, p, sim.state.active_machine, sim.state.tick, reduced_fx, sim.config.optional_repairs.required_ticks)
 		panel(Rect2(p + Vector2(-70, -57), Vector2(148, 17)), PANEL)
 		text_at(data.name, p + Vector2(-64, -44), 11, color)
 		text_at("RESTORED" if machine.complete else data.description, p + Vector2(-75, 76), 10, color)
 		if machine.get("deferred", "") == "INTEGRITY_FULL": text_at("SAVE FOR DAMAGE", p + Vector2(-67, 94), 10, MUTED)
 		if working:
 			draw_line(sim.state.position, p, GREEN, 2)
-			text_at("REPAIRING · %.1fs" % ((sim.config.optional_repairs.required_ticks - machine.progress) / sim.config.tick_rate), p + Vector2(-52, -30), 10, GREEN)
+			text_at("REPAIRING · %.1fs" % ((sim.config.optional_repairs.required_ticks - machine.progress) / sim.config.tick_rate), p + Vector2(-52, -68), 10, GREEN)
 
 func draw_gear(p: Vector2, radius: float, color: Color, angle: float):
 	for i in range(8):
@@ -2356,41 +2357,16 @@ func draw_enemy(e):
 		draw_gear(p, e.radius, color, sim.state.tick * 0.009)
 		draw_rect(Rect2(p - Vector2(17, 12), Vector2(34, 24)), INK)
 		for i in range(3): draw_circle(p + Vector2(-10 + i * 10, 0), 3, RED)
-	elif e.type == "enemy.choir_drone":
-		if sim.enemy_support_ready(e):
+	else:
+		if e.type == "enemy.choir_drone" and sim.enemy_support_ready(e):
 			draw_circle(p, sim.config.enemy_rules.drone_field_radius, Color(0.6, 0.5, 0.8, 0.035))
 			draw_arc(p, sim.config.enemy_rules.drone_field_radius, 0, TAU, 40, Color(0.6, 0.5, 0.8, 0.15), 1)
-		draw_colored_polygon(PackedVector2Array([p + Vector2(0, -22), p + Vector2(19, 8), p + Vector2(0, 18), p + Vector2(-19, 8)]), color)
-		draw_circle(p, 9, INK)
-		draw_arc(p, 29, sim.state.tick * 0.03, sim.state.tick * 0.03 + PI, 20, color, 1.5)
-	elif e.type == "enemy.rust_pilgrim":
-		draw_rect(Rect2(p - Vector2(15, 20), Vector2(30, 38)), color)
-		draw_line(p + Vector2(-9, -2), p + Vector2(9, -2), GREEN, 5)
-		draw_line(p + Vector2(0, -11), p + Vector2(0, 7), GREEN, 5)
-		draw_circle(p + Vector2(17, 6), 6, GOLD)
-	elif e.type == "enemy.forklift_brute":
-		draw_rect(Rect2(p - Vector2(23, 20), Vector2(46, 40)), color)
-		for x in [-15, 15]: draw_line(p + Vector2(x, 10), p + Vector2(x, 38), GOLD, 6)
-		draw_rect(Rect2(p - Vector2(14, 13), Vector2(28, 15)), INK)
-		if e.windup > sim.state.tick: draw_line(p, p + e.charge * 135, RED, 3)
-	elif e.type == "enemy.cinder_spitter":
-		draw_circle(p, 16, color)
-		var direction = (sim.state.position - p).normalized()
-		draw_line(p, p + direction * 26, color, 10)
-		draw_circle(p, 8, INK)
-		draw_circle(p, 4, GOLD)
-	elif e.type == "enemy.scrap_mite":
-		for i in [-1, 1]:
-			draw_line(p + Vector2(i * 6, -3), p + Vector2(i * 16, -9), color, 2)
-			draw_line(p + Vector2(i * 6, 3), p + Vector2(i * 16, 9), color, 2)
-		draw_circle(p, 9, color)
-		draw_circle(p + Vector2(0, -3), 3, INK)
-	else:
-		draw_colored_polygon(PackedVector2Array([p + Vector2(-13, 10), p + Vector2(-10, -12), p + Vector2(8, -16), p + Vector2(16, 4), p + Vector2(7, 13)]), color)
-		draw_line(p + Vector2(-7, -3), p + Vector2(7, -3), INK, 4)
-		if e.windup > sim.state.tick:
-			draw_line(p, p + e.charge * 135, RED, 2, true)
-			draw_circle(p + e.charge * 135, 4, GOLD)
+		actor_art.draw_enemy(self, e, p, sim.state.tick, reduced_fx)
+		if e.type == "enemy.choir_drone":
+			draw_arc(p, 29, sim.state.tick * 0.03, sim.state.tick * 0.03 + PI, 20, color, 1.5)
+		if e.type in ["enemy.rivet_hound", "enemy.forklift_brute"] and e.windup > sim.state.tick:
+			draw_line(p, p + e.charge * 135, RED, 3 if e.type == "enemy.forklift_brute" else 2, true)
+			if e.type == "enemy.rivet_hound": draw_circle(p + e.charge * 135, 4, GOLD)
 	if e.stun > sim.state.tick: draw_arc(p, e.radius + 6, 0, TAU, 24, GOLD, 2)
 	if e.flash > sim.state.tick:
 		draw_arc(p, e.radius + 9, -PI * 0.3, PI * 1.3, 20, Color(PAPER, 0.75), 3, true)
