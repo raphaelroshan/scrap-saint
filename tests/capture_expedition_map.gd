@@ -25,7 +25,18 @@ func open_map(game, scrap: int = 28):
 	game.sim.state.wave = game.sim.current_wave_count()
 	game.sim.state.boss_dead = true
 	game.sim.step(Vector2.ZERO)
+	game.sim.command("continue_site_clear")
 	game.map_selection = "route.brass_choir"
+
+func finish_travel(game):
+	while game.sim.state.phase == "travel":
+		var free_choice = game.sim.current_road_node().choices.filter(func(choice): return int(choice.cost) == 0)[0]
+		game.sim.command("choose_road_option", free_choice.id)
+
+func force_site_clear(game):
+	game.sim.state.wave = game.sim.current_wave_count()
+	game.sim.state.boss_dead = true
+	game.sim.step(Vector2.ZERO)
 
 func configure_second_tier_board(game, site_id: String, selected_route: String, accepted: bool = false):
 	game.sim.state.phase = "route"
@@ -94,6 +105,32 @@ func run_capture():
 	configure_second_tier_board(game, "site.rootworks_pump", "route.red_foundry", true)
 	game.capture_label = "SCRIPTED SECOND-TIER BOARD / ROOTWORKS"
 	await capture(game, directory, "SECOND_TIER_ROOT_RED_ACCEPTED", "route.red_foundry")
+
+	game.capture_label = "M2 SITE CLEAR / CONFIGURED FIXTURE"
+	game.sim.start(0, 147, "optional", "frame.pilgrim", "capture-m2-clear")
+	game.sim.state.machines[0].complete = true
+	force_site_clear(game)
+	await capture(game, directory, "M2_WORKSHOP_SITE_CLEAR")
+	game.ui_scale = 1.15
+	await capture(game, directory, "M2_WORKSHOP_SITE_CLEAR_LARGE_TEXT")
+	game.ui_scale = 1.0
+	game.sim.command("continue_site_clear")
+	game.sim.state.scrap = 40
+	game.sim.command("choose_route", "route.brass_choir")
+	finish_travel(game)
+	game.sim.state.objective[0].complete = true
+	game.sim.state.objective[0].progress = float(game.sim.objective_data().required_ticks)
+	force_site_clear(game)
+	await capture(game, directory, "M2_MIDDLE_SITE_CLEAR")
+	game.sim.command("continue_site_clear")
+	game.sim.command("choose_route", "route.pale_archive")
+	finish_travel(game)
+	for node in game.sim.state.objective:
+		node.complete = true
+		node.progress = float(game.sim.objective_data().required_ticks)
+	game.sim.state.objective_complete = true
+	force_site_clear(game)
+	await capture(game, directory, "M2_TERMINAL_SITE_CLEAR")
 	game.queue_free()
 	await process_frame
 	quit()

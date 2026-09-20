@@ -13,6 +13,7 @@ func reach_map(sim):
 	sim.state.wave = sim.current_wave_count()
 	sim.state.boss_dead = true
 	sim.step(Vector2.ZERO)
+	if sim.state.phase == "site_clear": sim.command("continue_site_clear")
 
 func _initialize():
 	var sim = Sim.new()
@@ -80,7 +81,7 @@ func _initialize():
 	root.state.wave = root.current_wave_count()
 	root.state.boss_dead = true
 	root.step(Vector2.ZERO)
-	root.command("accept_memory")
+	root.command("continue_site_clear")
 	check(root.state.phase == "route" and root.state.road_history.size() == 2 and root.state.road_totals.scrap_delta == -5, "the next map carries the complete first-road record")
 	check(root.available_routes().map(func(route): return route.id) == ["route.red_foundry", "route.null_assembly"], "Rootworks exposes its two authored terminal assignments")
 	check(root.command("choose_route", "route.red_foundry") == "OK", "shared Red Foundry endpoint accepts through the same authoritative assignment command")
@@ -100,7 +101,7 @@ func _initialize():
 	for field in ["route_history", "route_origin_site_id", "assignment_statuses", "road_history", "road_flags", "road_totals"]: legacy_source.state.erase(field)
 	var migrated = Sim.new()
 	check(migrated.restore(legacy_source.snapshot()), "version-two travel save migrates")
-	check(migrated.state.version == 3 and migrated.state.travel_step == 0 and migrated.current_road_node().id == "road.brass.warning_wire", "legacy travel restarts before the first unskippable area")
+	check(migrated.state.version == 4 and migrated.state.travel_step == 0 and migrated.current_road_node().id == "road.brass.warning_wire", "legacy travel restarts before the first unskippable area")
 	check(migrated.assignment_status("route.brass_choir") == "accepted", "legacy selected route migrates to accepted assignment state")
 
 	print("EXPEDITION MAP: %d checks, %d failures" % [checks, failures])

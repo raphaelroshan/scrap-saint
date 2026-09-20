@@ -15,7 +15,7 @@ func _initialize():
 	a.state.boss_dead = true
 	a.state.relay_hp = 0
 	a.step(Vector2.ZERO)
-	check(a.state.phase == "route" and a.state.machines.all(func(m): return not m.complete), "Foreman victory opens routes without any repairs or relay integrity")
+	check(a.state.phase == "site_clear" and a.state.machines.all(func(m): return not m.complete), "Foreman victory opens the clear summary without any repairs or relay integrity")
 	a.start(1,147,"optional")
 	a.state.hp = 0
 	a.step(Vector2.ZERO)

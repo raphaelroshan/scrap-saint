@@ -55,6 +55,7 @@ func run_capture():
 	game.sim.state.wave = 8
 	game.sim.state.boss_dead = true
 	game.sim.step(Vector2.ZERO)
+	game.sim.command("continue_site_clear")
 	await capture(game, directory, "ROUTE_CHOICE")
 
 	game.sim.command("choose_route", "route.brass_choir")

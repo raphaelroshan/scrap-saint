@@ -59,8 +59,8 @@ func _initialize():
 					transition_failed = true
 					break
 				continue
-			if sim.state.phase == "memory":
-				sim.command("accept_memory")
+			if sim.state.phase == "site_clear":
+				sim.command("continue_site_clear")
 				continue
 			if sim.state.phase == "shop":
 				if sim.state.hp < sim.saint_max_structure() * 0.7: sim.command("buy", 4)

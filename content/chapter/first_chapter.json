@@ -9,7 +9,13 @@
       "optional_preview": "Optional press, furnace and bell work grants immediate run rewards.",
       "boss": "boss.foreman_engine",
       "wave_count": 8,
-      "wave_ticks": 4200
+      "wave_ticks": 4200,
+      "clear_memory": {
+        "id": "memory.first_shift",
+        "title": "THE PARTS THAT CHOSE ONE ANOTHER",
+        "text": "Your arm remembers a waterworks. Your bell remembers a factory. Neither remembers being asked to become a weapon.",
+        "conclusion": "The Foreman is silent. Two roads answer the repaired workshop."
+      }
     },
     "sites": [
       {"id": "site.collapsed_workshop", "name": "Collapsed Workshop", "tier": 0, "position": [0.08, 0.50]},

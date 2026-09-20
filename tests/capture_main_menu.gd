@@ -18,7 +18,7 @@ func run():
 	game.set_process(false)
 	game.sound.muted = true
 	game.save_path = "user://main_menu_capture.save"
-	if FileAccess.file_exists(game.save_path): DirAccess.remove_absolute(game.save_path)
+	game.save_store.clear(game.save_path)
 	game.profile.state.memory_fragments = 0
 	game.debug_visible = false
 	for size in [Vector2i(1280,800),Vector2i(1920,1080)]:
@@ -50,7 +50,7 @@ func run():
 	game.save_run()
 	game.notification = ""
 	await shot("CONTINUE_1920x1080")
-	DirAccess.remove_absolute(game.save_path)
+	game.save_store.clear(game.save_path)
 	game.queue_free()
 	await process_frame
 	print("MAIN MENU: 11 configured captures; normal and large text, 1280x800 and 1920x1080. Not human testing.")

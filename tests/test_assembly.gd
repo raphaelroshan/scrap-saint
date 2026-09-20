@@ -145,6 +145,7 @@ func _initialize():
 	s.state.wave = 8
 	s.state.boss_dead = true
 	s.step(Vector2.ZERO)
+	s.command("continue_site_clear")
 	s.state.scrap = 20
 	s.command("choose_route", "route.rootworks")
 	while s.state.phase == "travel":

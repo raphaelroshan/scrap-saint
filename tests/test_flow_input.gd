@@ -59,7 +59,8 @@ func _initialize():
 
 func run_checks():
 	for path in ["user://first_shift.save", "user://scrap_saint_profile.save", "user://scrap_saint_settings.save"]:
-		if FileAccess.file_exists(path): DirAccess.remove_absolute(path)
+		for suffix in ["", ".tmp", ".bak"]:
+			if FileAccess.file_exists(path + suffix): DirAccess.remove_absolute(path + suffix)
 	var game = load("res://game/main.tscn").instantiate()
 	root.add_child(game)
 	await process_frame
@@ -113,6 +114,8 @@ func run_checks():
 	game.last_phase = game.sim.state.phase
 	game.build_ui()
 	await process_frame
+	check(game.sim.state.phase == "site_clear", "Foreman completion opens the unified site-clear summary")
+	await activate(button_with(game, "OPEN THE PILGRIMAGE MAP", true))
 	check(game.sim.state.phase == "route", "Foreman completion reaches route selection")
 	check(root.gui_get_focus_owner() is Button and root.gui_get_focus_owner().text == "BRASS CHOIR", "expedition map has a controller focus target")
 	var route_map_hash = game.sim.state_hash()
@@ -138,10 +141,10 @@ func run_checks():
 	game.sim.step(Vector2.ZERO)
 	game.build_ui()
 	await process_frame
-	var memory_button = button_with(game, "CARRY THIS MEMORY", true)
-	check(game.sim.state.phase == "memory" and memory_button != null, "completed destination exposes a focused memory action")
+	var memory_button = button_with(game, "CHOOSE THE NEXT DESTINATION", true)
+	check(game.sim.state.phase == "site_clear" and memory_button != null, "completed destination exposes a focused site-clear action")
 	await activate(memory_button)
-	check(game.sim.state.phase == "route" and game.sim.state.memory_ids.size() == 1, "mid-site memory input reaches the terminal route choice")
+	check(game.sim.state.phase == "route" and game.sim.state.memory_ids == ["memory.first_shift", "memory.borrowed_bell"], "mid-site clear preserves both site memories and reaches the terminal route choice")
 	check(root.gui_get_focus_owner() is Button and root.gui_get_focus_owner().text in ["PALE ARCHIVE", "RED FOUNDRY", "NULL ASSEMBLY"], "terminal route selection has a controller focus target")
 	await activate(root.gui_get_focus_owner())
 	check(game.sim.state.phase == "route", "terminal route preview does not bypass assignment confirmation")
@@ -157,8 +160,8 @@ func run_checks():
 	game.sim.step(Vector2.ZERO)
 	game.build_ui()
 	await process_frame
-	memory_button = button_with(game, "CARRY THIS MEMORY", true)
-	check(game.sim.state.phase == "memory" and memory_button != null, "terminal destination exposes its memory action")
+	memory_button = button_with(game, "COMPLETE THE CHAPTER", true)
+	check(game.sim.state.phase == "site_clear" and memory_button != null, "terminal destination exposes its site-clear action")
 	await activate(memory_button)
 	check(game.sim.state.phase == "won" and not game.sim.state.result_summary.is_empty(), "terminal memory input reaches causal Results")
 	var result_button = button_with(game, "RETURN TO THE WORKSHOP")
@@ -167,7 +170,8 @@ func run_checks():
 	check(game.screen == "menu", "Results action returns to setup")
 
 	for path in ["user://first_shift.save", "user://scrap_saint_profile.save", "user://scrap_saint_settings.save"]:
-		if FileAccess.file_exists(path): DirAccess.remove_absolute(path)
+		for suffix in ["", ".tmp", ".bak"]:
+			if FileAccess.file_exists(path + suffix): DirAccess.remove_absolute(path + suffix)
 	game.queue_free()
 	await process_frame
 	print("FLOW INPUT: %d checks, %d failures" % [checks, failures])

@@ -13,6 +13,7 @@ func reach_route(sim):
 	sim.state.wave = 8
 	sim.state.boss_dead = true
 	sim.step(Vector2.ZERO)
+	if sim.state.phase == "site_clear": sim.command("continue_site_clear")
 
 func finish_travel(sim):
 	while sim.state.phase == "travel":
@@ -118,13 +119,14 @@ func _initialize():
 	sim.state.wave = sim.current_wave_count()
 	sim.state.boss_dead = true
 	sim.step(Vector2.ZERO)
-	check(sim.state.phase == "memory" and sim.state.memory_id == "memory.borrowed_bell", "Brass completion opens its authored memory")
+	check(sim.state.phase == "site_clear" and sim.state.memory_id == "memory.borrowed_bell", "Brass completion opens its unified site-clear summary")
+	check(sim.state.site_clear_summary.site_id == "site.brass_choir_relay" and sim.state.site_clear_summary.route_salvage == 7 and not sim.state.site_clear_summary.terminal, "mid-site summary records its site, salvage and onward route")
 	var brass_memory_save = sim.snapshot()
-	check(restored.restore(brass_memory_save) and restored.state.phase == "memory", "memory state saves and restores")
+	check(restored.restore(brass_memory_save) and restored.state.phase == "site_clear", "site-clear state saves and restores")
 	check(sim.state.road_history.size() == 2 and sim.state.assignment_statuses["route.brass_choir"] == "accepted", "mid-site memory preserves the accepted assignment and every road decision")
 	var scrap_before_mid_memory = sim.state.scrap
-	check(sim.command("accept_memory") == "OK" and sim.state.phase == "route" and not sim.state.chapter_complete, "accepting a mid-site memory continues the pilgrimage")
-	check(sim.state.memory_ids == ["memory.borrowed_bell"] and sim.state.scrap == scrap_before_mid_memory, "mid-site memory and previously granted road salvage persist")
+	check(sim.command("continue_site_clear") == "OK" and sim.state.phase == "route" and not sim.state.chapter_complete, "continuing a mid-site clear resumes the pilgrimage")
+	check(sim.state.memory_ids == ["memory.first_shift", "memory.borrowed_bell"] and sim.state.scrap == scrap_before_mid_memory, "site-clear memories and previously granted road salvage persist")
 	check(sim.available_routes().map(func(route): return route.id) == ["route.pale_archive", "route.red_foundry"], "Brass Choir opens only Pale Archive and Red Foundry")
 	var before_disconnected = sim.snapshot()
 	check(sim.command("choose_route", "route.null_assembly") == "ROUTE_NOT_CONNECTED" and sim.snapshot() == before_disconnected, "disconnected terminal route rejects without mutation")
@@ -209,10 +211,11 @@ func _initialize():
 	sim.state.wave = sim.current_wave_count()
 	sim.state.boss_dead = true
 	sim.step(Vector2.ZERO)
-	check(sim.state.phase == "memory" and sim.state.memory_id == "memory.borrowed_lens", "Pale Archive opens its terminal memory")
-	check(sim.command("accept_memory") == "OK" and sim.state.phase == "won" and sim.state.chapter_complete, "accepting a terminal memory completes the chapter")
+	check(sim.state.phase == "site_clear" and sim.state.memory_id == "memory.borrowed_lens", "Pale Archive opens its terminal site-clear summary")
+	check(sim.state.site_clear_summary.boss_id == "boss.archivist_prime" and sim.state.site_clear_summary.terminal and sim.state.site_clear_summary.route_salvage == 0, "terminal summary identifies its boss and chapter-ending reward boundary")
+	check(sim.command("continue_site_clear") == "OK" and sim.state.phase == "won" and sim.state.chapter_complete, "continuing a terminal clear completes the chapter")
 	check(sim.state.result_summary.completed_site_ids == ["site.collapsed_workshop", "site.brass_choir_relay", "site.pale_archive"] and sim.state.result_summary.defeated_boss_ids == ["boss.foreman_engine", "boss.choir_regent", "boss.archivist_prime"], "Results expose all three completed sites and bosses")
-	check(sim.state.result_summary.memory_ids == ["memory.borrowed_bell", "memory.borrowed_lens"] and sim.state.result_summary.route_ids == ["route.brass_choir", "route.pale_archive"], "Results preserve the complete route and memory history")
+	check(sim.state.result_summary.memory_ids == ["memory.first_shift", "memory.borrowed_bell", "memory.borrowed_lens"] and sim.state.result_summary.route_ids == ["route.brass_choir", "route.pale_archive"], "Results preserve the complete route and memory history")
 	check(sim.state.result_summary.route_id == "route.brass_choir" and sim.state.result_summary.terminal_route_id == "route.pale_archive", "Results retain the profile-compatible first route and explicit terminal route")
 	check(sim.state.result_summary.road_history.size() == 4 and sim.state.result_summary.assignment_ids == ["assignment.brass_choir", "assignment.pale_archive"], "terminal Results preserve both assignments and every road decision")
 
@@ -267,12 +270,12 @@ func _initialize():
 	root.state.wave = root.current_wave_count()
 	root.state.boss_dead = true
 	root.step(Vector2.ZERO)
-	check(root.state.phase == "memory" and not root.state.objective_complete, "boss defeat resolves optional destination work without requiring completion")
+	check(root.state.phase == "site_clear" and not root.state.objective_complete, "boss defeat resolves optional destination work without requiring completion")
 	for node in root.state.objective: node.complete = true
 	root.state.objective_complete = true
 	root.step(Vector2.ZERO)
-	check(root.state.phase == "memory" and root.state.memory_id == "memory.borrowed_arm", "Rootworks completion opens its authored memory")
-	check(root.command("accept_memory") == "OK" and root.state.phase == "route", "Rootworks memory continues to a terminal route choice")
+	check(root.state.phase == "site_clear" and root.state.memory_id == "memory.borrowed_arm", "Rootworks completion opens its unified site-clear summary")
+	check(root.command("continue_site_clear") == "OK" and root.state.phase == "route", "Rootworks clear continues to a terminal route choice")
 	check(root.available_routes().map(func(route): return route.id) == ["route.red_foundry", "route.null_assembly"], "Rootworks opens only Red Foundry and Null Assembly")
 	check(root.command("choose_route", "route.pale_archive") == "ROUTE_NOT_CONNECTED", "Pale Archive rejects the disconnected Rootworks road")
 	check(root.command("choose_route", "route.null_assembly") == "OK", "Null Assembly accepts the Rootworks road")
@@ -306,8 +309,8 @@ func _initialize():
 	root.state.wave = root.current_wave_count()
 	root.state.boss_dead = true
 	root.step(Vector2.ZERO)
-	check(root.state.phase == "memory" and root.state.memory_id == "memory.unwritten_instruction", "Null Assembly opens its terminal memory")
-	check(root.command("accept_memory") == "OK" and root.state.phase == "won" and root.state.memory_ids == ["memory.borrowed_arm", "memory.unwritten_instruction"], "Null terminal memory completes the full route history")
+	check(root.state.phase == "site_clear" and root.state.memory_id == "memory.unwritten_instruction", "Null Assembly opens its terminal site-clear summary")
+	check(root.command("continue_site_clear") == "OK" and root.state.phase == "won" and root.state.memory_ids == ["memory.first_shift", "memory.borrowed_arm", "memory.unwritten_instruction"], "Null terminal clear completes the full route history")
 
 	var red = Sim.new()
 	red.start(0, 147, "optional")
@@ -352,8 +355,8 @@ func _initialize():
 	red.state.wave = red.current_wave_count()
 	red.state.boss_dead = true
 	red.step(Vector2.ZERO)
-	check(red.state.phase == "memory" and red.state.memory_id == "memory.borrowed_shell", "Red Foundry opens its authored terminal memory")
-	check(red.command("accept_memory") == "OK" and red.state.phase == "won" and red.state.result_summary.route_ids == ["route.brass_choir", "route.red_foundry"], "Red Foundry completes with deterministic route history")
+	check(red.state.phase == "site_clear" and red.state.memory_id == "memory.borrowed_shell", "Red Foundry opens its authored terminal site-clear summary")
+	check(red.command("continue_site_clear") == "OK" and red.state.phase == "won" and red.state.result_summary.route_ids == ["route.brass_choir", "route.red_foundry"], "Red Foundry completes with deterministic route history")
 	var red_from_root = Sim.new()
 	red_from_root.start(0, 147, "optional")
 	red_from_root.state.phase = "route"

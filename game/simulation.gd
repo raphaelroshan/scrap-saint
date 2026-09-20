@@ -33,7 +33,7 @@ func start(doctrine: int = 0, seed_value: int = 147, mode: String = "relay", fra
 	arena.load_file("res://content/arenas/collapsed_workshop.json")
 	if not frames.has(frame_id): frame_id = "frame.pilgrim"
 	var frame = frames[frame_id]
-	state = {"mode": "optional" if mode == "optional" else "relay", "machines": [], "version": 3, "run_id": run_id if run_id != "" else "test-%d-%d-%s" % [seed_value, doctrine, frame_id], "frame_id": frame_id, "max_hp": float(frame.structure), "move_speed": float(frame.speed), "repair_grace_ticks": int(frame.repair_grace_ticks), "knockback_multiplier": float(frame.knockback_multiplier), "keeper_shove_segment": "", "repair_grace_until": 0, "arena_id": arena.data.id, "site_id": "site.collapsed_workshop", "route": "", "route_history": [], "route_origin_site_id": "", "travel_step": 0, "assignment_statuses": {}, "road_history": [], "road_flags": [], "road_totals": {"route_cost": 0, "service_cost": 0, "scrap_delta": 0, "structure_delta": 0.0}, "objective": [], "objective_complete": false, "objective_lock_until": 0, "weapon_lock_until": 0, "memory_id": "", "memory_ids": [], "chapter_complete": false, "pressure_until": 0, "pressure_multiplier": 1.0, "seed": seed_value, "rng": maxi(1, seed_value), "tick": 0, "phase": "combat", "paused": false,
+	state = {"mode": "optional" if mode == "optional" else "relay", "machines": [], "version": 4, "run_id": run_id if run_id != "" else "test-%d-%d-%s" % [seed_value, doctrine, frame_id], "frame_id": frame_id, "max_hp": float(frame.structure), "move_speed": float(frame.speed), "repair_grace_ticks": int(frame.repair_grace_ticks), "knockback_multiplier": float(frame.knockback_multiplier), "keeper_shove_segment": "", "repair_grace_until": 0, "arena_id": arena.data.id, "site_id": "site.collapsed_workshop", "route": "", "route_history": [], "route_origin_site_id": "", "travel_step": 0, "assignment_statuses": {}, "road_history": [], "road_flags": [], "road_totals": {"route_cost": 0, "service_cost": 0, "scrap_delta": 0, "structure_delta": 0.0}, "objective": [], "objective_complete": false, "objective_lock_until": 0, "weapon_lock_until": 0, "memory_id": "", "memory_ids": [], "site_clear_summary": {}, "chapter_complete": false, "pressure_until": 0, "pressure_multiplier": 1.0, "seed": seed_value, "rng": maxi(1, seed_value), "tick": 0, "phase": "combat", "paused": false,
 		"wave": 1, "wave_tick": 0, "doctrine": doctrine, "position": arena.point(arena.data.start), "facing": Vector2.UP,
 		"hp": float(frame.structure), "relay_hp": float(config.relay.structure * config.relay.starting_fraction), "progress": 0.0,
 		"scrap": int(config.economy.starting_scrap), "shards": 0, "kills": 0, "next_id": 1,
@@ -159,8 +159,14 @@ func command(action: String, value = null) -> String:
 	if state.phase == "travel":
 		var travel_result = choose_road_option(str(value)) if action == "choose_road_option" else (advance_travel() if action == "advance_travel" else "OUTSIDE_WINDOW")
 		return travel_result
-	if state.phase == "memory":
-		if action != "accept_memory": return "OUTSIDE_WINDOW"
+	if state.phase == "site_clear":
+		if action not in ["continue_site_clear", "accept_memory"]: return "OUTSIDE_WINDOW"
+		if not is_destination():
+			state.phase = "route"
+			refresh_assignments()
+			state.last_reason = str(state.site_clear_summary.get("conclusion", "Two roads answer the repaired workshop."))
+			emit("routes_opened", {"routes": available_routes().map(func(route): return route.id), "travel_salvage": 8})
+			return "OK"
 		if bool(current_route().get("terminal", true)):
 			state.chapter_complete = true
 			finish(true, current_route().memory.conclusion)
@@ -272,7 +278,7 @@ func available_routes() -> Array:
 	return result
 
 func assignment_status(route_id: String) -> String:
-	if state.get("route", "") == route_id and state.get("phase", "") in ["travel", "combat", "shop", "memory", "won", "lost"]:
+	if state.get("route", "") == route_id and state.get("phase", "") in ["travel", "combat", "shop", "site_clear", "memory", "won", "lost"]:
 		return "accepted"
 	if state.get("assignment_statuses", {}).has(route_id):
 		return str(state.assignment_statuses[route_id])
@@ -461,28 +467,75 @@ func advance_destination_node(index: int, amount: float, source: Vector2):
 func complete_workshop():
 	# The Foreman's road-worthy salvage guarantees that neither authored branch can dead-end.
 	record_scrap("foreman_travel", 8)
-	state.phase = "route"
-	refresh_assignments()
-	state.last_reason = "The Foreman is silent. Two roads answer the repaired workshop."
 	state.enemies.clear()
 	state.hazards.clear()
 	state.pickups.clear()
 	if "site.collapsed_workshop" not in state.completed_site_ids: state.completed_site_ids.append("site.collapsed_workshop")
 	if str(config.boss) not in state.defeated_boss_ids: state.defeated_boss_ids.append(str(config.boss))
-	emit("routes_opened", {"routes": available_routes().map(func(route): return route.id), "travel_salvage": 8})
+	var memory: Dictionary = chapter.expedition_map.origin_preview.clear_memory
+	state.memory_id = str(memory.id)
+	if state.memory_id not in state.memory_ids: state.memory_ids.append(state.memory_id)
+	open_site_clear(memory, 8)
 
 func open_memory():
-	state.phase = "memory"
 	state.memory_id = current_route().memory.id
 	if state.memory_id not in state.memory_ids: state.memory_ids.append(state.memory_id)
-	state.last_reason = current_route().memory.text
 	state.enemies.clear()
 	state.hazards.clear()
 	state.pickups.clear()
 	if state.site_id not in state.completed_site_ids: state.completed_site_ids.append(state.site_id)
 	if current_boss_id() not in state.defeated_boss_ids: state.defeated_boss_ids.append(current_boss_id())
-	if not bool(current_route().get("terminal", true)): record_scrap("route_salvage", int(current_route().get("route_salvage", 0)))
-	emit("memory_recovered", {"memory_id": state.memory_id, "route": state.route})
+	var route_salvage = int(current_route().get("route_salvage", 0)) if not bool(current_route().get("terminal", true)) else 0
+	if route_salvage > 0: record_scrap("route_salvage", route_salvage)
+	open_site_clear(current_route().memory, route_salvage)
+
+func open_site_clear(memory: Dictionary, route_salvage: int):
+	state.phase = "site_clear"
+	state.last_reason = str(memory.text)
+	var optional_completed = state.machines.filter(func(machine): return machine.complete).size() if not is_destination() else state.objective.filter(func(node): return node.complete).size()
+	var optional_total = state.machines.size() if not is_destination() else state.objective.size()
+	state.site_clear_summary = {
+		"site_id": state.site_id,
+		"site_name": site_name(state.site_id),
+		"boss_id": current_boss_id(),
+		"boss_name": str(bosses.get(current_boss_id(), {}).get("name", current_boss_id().trim_prefix("boss.").replace("_", " "))),
+		"route_salvage": route_salvage,
+		"memory_id": str(memory.id),
+		"memory_title": str(memory.title),
+		"memory_text": str(memory.text),
+		"conclusion": str(memory.conclusion),
+		"optional_completed": optional_completed,
+		"optional_total": optional_total,
+		"scrap": int(state.scrap),
+		"structure": float(state.hp),
+		"max_structure": saint_max_structure(),
+		"weapon_ids": state.weapons.map(func(weapon): return weapon.id),
+		"evolution_ids": state.evolutions.duplicate(),
+		"gift_ids": state.gifts.duplicate(),
+		"terminal": is_destination() and bool(current_route().get("terminal", true)),
+	}
+	emit("site_cleared", state.site_clear_summary.duplicate(true))
+
+func site_name(site_id: String) -> String:
+	for site in chapter.expedition_map.sites:
+		if str(site.id) == site_id: return str(site.name)
+	return site_id.trim_prefix("site.").replace("_", " ").capitalize()
+
+func progress_summary() -> Dictionary:
+	return {
+		"run_id": state.run_id,
+		"site_id": state.site_id,
+		"boss_id": current_boss_id(),
+		"route_id": state.route_history[0] if not state.route_history.is_empty() else state.route,
+		"terminal_route_id": state.route,
+		"route_ids": state.route_history.duplicate(),
+		"route_history": state.route_history.duplicate(),
+		"optional_repairs": state.machines.filter(func(machine): return machine.complete).size(),
+		"memory_ids": state.memory_ids.duplicate(),
+		"evolution_ids": state.evolutions.duplicate(),
+		"completed_site_ids": state.completed_site_ids.duplicate(),
+		"defeated_boss_ids": state.defeated_boss_ids.duplicate(),
+	}
 
 func evolve_weapon(requested: String = "") -> String:
 	for recipe_id in config.evolutions:
@@ -1860,7 +1913,7 @@ func snapshot() -> Dictionary:
 	return state.duplicate(true)
 
 func restore(saved: Dictionary) -> bool:
-	if saved.get("version", 0) not in [1, 2, 3] or not saved.has("weapons") or not saved.has("rng"): return false
+	if saved.get("version", 0) not in [1, 2, 3, 4] or not saved.has("weapons") or not saved.has("rng"): return false
 	var saved_version = int(saved.get("version", 0))
 	var saved_route = str(saved.get("route", ""))
 	var saved_site = str(saved.get("site_id", "site.collapsed_workshop"))
@@ -1873,7 +1926,7 @@ func restore(saved: Dictionary) -> bool:
 	else: arena.load_file("res://content/arenas/collapsed_workshop.json")
 	if saved.get("arena_id", "") != arena.data.id: return false
 	state = saved.duplicate(true)
-	state.version = 3
+	state.version = 4
 	if not state.has("mode"): state.mode = "relay"
 	if not state.has("machines"): state.machines = []
 	var legacy_pressure_multiplier = float(routes.get(saved_route, {}).get("pressure", {}).get("cooldown_multiplier", 1.0))
@@ -1882,7 +1935,7 @@ func restore(saved: Dictionary) -> bool:
 		"spawn_count": 0, "active_machine": "", "repair_blocked_until": 0, "signal_reserve": 0, "kills_by_weapon": {}, "damage_taken": {}, "damage_by_wave": {}, "last_damage_source": "",
 		"scrap_sources": {"starting": int(config.economy.starting_scrap)}, "metrics": {"first_contact_tick": -1, "longest_threat_gap": 0, "threat_gap_started": state.get("tick", 0), "had_threat": false, "repairs_started": 0, "repairs_interrupted": 0, "useful_repairs": 0, "wasted_repairs": 0, "dead_shop_visits": 0}, "result_summary": {},
 		"scrap_by_segment": {}, "completed_site_ids": [], "defeated_boss_ids": [],
-		"site_id": "site.collapsed_workshop", "route": "", "route_history": [], "route_origin_site_id": "", "travel_step": 0, "assignment_statuses": {}, "road_history": [], "road_flags": [], "road_totals": {"route_cost": 0, "service_cost": 0, "scrap_delta": 0, "structure_delta": 0.0}, "objective": [], "objective_complete": false, "objective_lock_until": 0, "weapon_lock_until": 0, "memory_id": "", "memory_ids": [], "chapter_complete": false, "pressure_until": 0, "pressure_multiplier": legacy_pressure_multiplier,
+		"site_id": "site.collapsed_workshop", "route": "", "route_history": [], "route_origin_site_id": "", "travel_step": 0, "assignment_statuses": {}, "road_history": [], "road_flags": [], "road_totals": {"route_cost": 0, "service_cost": 0, "scrap_delta": 0, "structure_delta": 0.0}, "objective": [], "objective_complete": false, "objective_lock_until": 0, "weapon_lock_until": 0, "memory_id": "", "memory_ids": [], "site_clear_summary": {}, "chapter_complete": false, "pressure_until": 0, "pressure_multiplier": legacy_pressure_multiplier,
 		"evolutions": [], "gifts": [], "component_tag": "", "inspection": "", "scrap_tax_progress": 0, "censer_defeats": 0, "ashen_defeats": 0, "parade_until": 0,
 		"loose_spring_until": 0, "loose_spring_sources": [], "brass_fuse_segment": "",
 		"gift_metrics": {"loose_spring_triggers": 0, "choir_filter_applications": 0, "brass_fuse_triggers": 0}}
@@ -1892,6 +1945,10 @@ func restore(saved: Dictionary) -> bool:
 		if not state.gift_metrics.has(metric): state.gift_metrics[metric] = defaults.gift_metrics[metric]
 	if state.route_history.is_empty() and state.route != "": state.route_history.append(state.route)
 	if state.memory_ids.is_empty() and state.memory_id != "": state.memory_ids.append(state.memory_id)
+	if state.phase == "memory": state.phase = "site_clear"
+	if state.phase == "site_clear" and state.site_clear_summary.is_empty():
+		var restored_memory = current_route().memory if is_destination() else chapter.expedition_map.origin_preview.clear_memory
+		open_site_clear(restored_memory, int(current_route().get("route_salvage", 0)) if is_destination() and not bool(current_route().get("terminal", true)) else (8 if not is_destination() else 0))
 	if saved_version < 3:
 		# Legacy travel beats had no choices. Resume at the first authored road node
 		# rather than silently skipping a newly meaningful in-between area.
