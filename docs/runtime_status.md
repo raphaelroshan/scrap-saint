@@ -312,3 +312,13 @@ Profile version 3 allocates unique run IDs and records stable `run_id|site_id` c
 Clean implementation commit `d3d78304c44586dd807d4e00c5462dcfc50c7f63` passes 1,062 Godot assertions and 34 Python manifest checks on pinned Godot 4.5.1. All 12/12 normal-economy routes, 4/4 assembly builds, 10/10 Evolution routes and 4/4 Gift routes pass. Fifteen configured map/road/site-clear captures include normal and large-text recaps at 1280×800, seed 147. Internal rendered-evidence score: 47/50. Configured fixtures do not establish recap reading, autosave trust or normal-speed route pacing.
 
 Exactly one next task: implement M3 distinct arrival presentation and normal-speed four-path pacing evidence.
+
+## M3 — destination arrival and four-path pacing evidence
+
+Every road now ends at an authoritative, non-ticking `arrival` phase before destination combat. The screen identifies the site and level, combat experience, boss and threat, optional opportunity, waves and estimated duration, exact arrival recovery, cumulative road consequences, current Structure/Scrap and carried build. A distinct Enter action starts combat; reading or repeating that action cannot advance ticks, reroll state or apply recovery twice. Arrival itself and the subsequent combat handoff are automatic checkpoints, and Save & Title remains available.
+
+The clean implementation commit `08f12084d6ae77df8f113f64593f0a642f3c34aa` passes 1,087 Godot assertions and 34 Python manifest checks on pinned Godot 4.5.1. Existing natural matrices remain 12/12 normal-economy routes, 4/4 assembly builds, 10/10 Evolution routes and 4/4 Gift routes. A dedicated M3 1× fixed-tick runner wins Brass→Pale, Brass→Red, Rootworks→Red and Rootworks→Null with a controlled Rank III base build, no Evolution, no completed optional work and four zero-Scrap road choices per run.
+
+Recorded combat totals are 754.90, 758.02, 750.97 and 752.32 seconds. Each route crosses twelve shop boundaries. Final structure is respectively 61, 24, 40 and 80, identifying Brass→Red as the narrowest automated result without proving that it is unfair. Nineteen configured map/road/clear/arrival captures include normal and large-text arrival states at 1280×800, seed 147. Internal arrival evidence score: 46/50.
+
+No human reading time, confusion, boss recognition, difficulty comfort or replay motivation is claimed. Exactly one next task: run uncoached human 1× sessions across all four paths and tune only observed pacing, arrival-comprehension and boss-readability failures.

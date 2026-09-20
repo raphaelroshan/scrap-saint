@@ -115,13 +115,13 @@ Do not enable arbitrary destination starts by calling `enter_destination` with a
 
 ## Implementation packets
 
-Status: M1 and M2 are implemented. M3 is the active next packet; M4 remains deferred until normal-speed pacing evidence supports the complete expedition.
+Status: M1 through M3 are implemented. M4 remains deferred until an uncoached human 1× pass validates arrival comprehension, boss readability and complete-expedition pacing.
 
 | Packet | Scope and likely files | Acceptance |
 |---|---|---|
 | M1 — complete | Navigation and destination clarity in `game/main.gd`, chapter descriptions in `content/chapter/first_chapter.json`, map/flow/UI tests | Departure preview reaches setup/run correctly; six nodes inspectable, only legal nodes selectable; map controls work by mouse/keyboard/controller; repairs described as optional; Travel commits exactly once; no simulation step during map reading |
 | M2 — complete | Site-clear summary and automatic checkpoint lifecycle in main, simulation save contract and profile; migration/save/profile tests | Save/quit/load at every boundary preserves hashes and offers; failed write keeps prior save; death cannot resurrect old run; clear/unlock rewards credited once; route-history unlock regression passes |
-| M3 — next | Distinct arrival presentation and normal-speed pacing review; chapter/arena content only where observations justify it | All four paths complete; zero-Scrap continuation guarantees hold; no-repair and non-evolved paths remain viable; record combat/decision time, confusion and boss readability |
+| M3 — complete, human gate open | Distinct arrival presentation and normal-speed pacing review; chapter/arena content only where observations justify it | All four paths complete; zero-Scrap continuation guarantees hold; no-repair and non-evolved paths remain viable; deterministic combat/shop/road timing is recorded; human decision time, confusion and boss readability remain unmeasured |
 | M4 — deferred | Discovered-site practice and later chapter catalogue | Explicit fresh/preset build policy, separate rewards, no bypass of expedition records; implement only after the three-level expedition is satisfying |
 
 M1 does not require more weapons, character replacement, a procedural map, a hub world or a new currency. Maintain the completed manifested-relic work and keep its human readability review alongside M3.
@@ -130,4 +130,4 @@ M1 does not require more weapons, character replacement, a procedural map, a hub
 
 A newcomer can identify where the current run ends, what carries over, which two sites are available, what a choice costs and whether repairs are optional. Returning players can deliberately choose any of the four legal paths. Saves work across map/road/site boundaries without losing a run or farming rewards. Review one complete human run through each branch family and record observations; automated outcomes alone do not prove these criteria.
 
-Exactly one next implementation task: M3, distinct arrival presentation and normal-speed four-path pacing evidence.
+Exactly one next task: run uncoached human 1× sessions across all four paths and tune only observed pacing, arrival-comprehension and boss-readability failures.

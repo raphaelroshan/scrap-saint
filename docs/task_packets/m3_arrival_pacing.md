@@ -37,3 +37,11 @@ Deterministic policy completions and configured arrivals cannot establish human 
 ## Exactly one next task
 
 Run uncoached human 1× sessions across all four paths and tune only observed pacing, arrival-comprehension and boss-readability failures.
+
+## Verification record
+
+Clean implementation commit: `08f12084d6ae77df8f113f64593f0a642f3c34aa`.
+
+Pinned Godot 4.5.1 passes 1,087 deterministic assertions and the Python manifest suite passes 34 checks. The established 12/12 normal-economy, 4/4 assembly, 10/10 Evolution and 4/4 Gift matrices remain green. The dedicated M3 runner wins 4/4 paths with an unevolved controlled build, no completed optional work and four zero-Scrap road continuations per run. Recorded combat totals range from 750.97 to 758.02 seconds, with twelve shop boundaries per route.
+
+Nineteen configured pilgrimage captures include Brass, Rootworks, terminal and large-text arrivals at 1280×800 with seed 147. This does not establish human reading time, confusion, boss recognition, difficulty comfort or replay motivation.

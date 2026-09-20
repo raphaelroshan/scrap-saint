@@ -225,3 +225,13 @@ The clean implementation commit `d3d78304c44586dd807d4e00c5462dcfc50c7f63` passe
 Rendered-evidence rubric (5-point internal review): result hierarchy 5, boss/victory clarity 5, reward causality 5, optional-work clarity 5, memory integration 5, next-action clarity 5, carried-build continuity 4, large-text layout 4, world/style coherence 4 and provenance 5, for 47/50. Atomic-failure and exact-resume claims come from deterministic tests, not screenshots. No human recap reading, autosave trust or normal-speed four-path pacing result is claimed.
 
 Exactly one next task: implement M3 distinct arrival presentation and normal-speed four-path pacing evidence.
+
+## M3 destination arrival and four-path pacing, 2026-09-20
+
+Each destination now pauses at a non-ticking arrival briefing after both road choices and before combat. The briefing combines road consequences and arrival recovery with the next site's combat question, boss, duration, optional opportunity and carried build, then requires an explicit Enter action. Save/restore and repeat-command tests preserve exact hashes and prevent duplicate recovery.
+
+Clean implementation commit `08f12084d6ae77df8f113f64593f0a642f3c34aa` passes 1,087 Godot assertions and 34 Python checks on Godot 4.5.1 stable. All established policy matrices remain green. The new 4/4 path runner records 750.97–758.02 seconds of combat, twelve shops, four road decisions, no completed optional work, no Evolution and four forced-zero-Scrap continuations per run. Final Structure ranges from 24 on Brass→Red to 80 on Rootworks→Null.
+
+Rendered-evidence rubric (5-point internal review): arrival hierarchy 5, road consequence clarity 5, threat/boss clarity 5, optional-work clarity 5, explicit combat consent 5, carried-build continuity 4, route identity 4, large-text layout 4, world/style coherence 4 and provenance 5, for 46/50. These are configured fixtures and deterministic policies, not human evidence of reading time, confusion, boss readability, comfort or replay motivation.
+
+Exactly one next task: run uncoached human 1× sessions across all four paths and tune only observed pacing, arrival-comprehension and boss-readability failures.

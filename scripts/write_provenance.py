@@ -14,10 +14,10 @@ data = {
     'godot': subprocess.check_output([sys.argv[1], '--version'], text=True).strip(),
     'viewport': [1280, 800], 'scaling': 'canvas_items', 'seed': 147,
     'timestamp_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
-    'capture_type': 'rendered simulation fixtures; includes pilgrimage maps, unified site-clear summaries, explicit setup budgets, Results, weapon ranks, Evolutions, Gifts, destination bosses, and manifested relics',
+    'capture_type': 'rendered simulation fixtures; includes pilgrimage maps, destination arrivals, unified site-clear summaries, explicit setup budgets, Results, weapon ranks, Evolutions, Gifts, destination bosses, and manifested relics',
     'source_hashes': {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root / 'game').glob('*')) if p.is_file()},
     'content_hashes': {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root / 'content').rglob('*.json'))},
     'limitation': 'No human playtest or rendered minimum-hardware benchmark',
-    'next_task': 'Implement M3 distinct arrival presentation and normal-speed four-path pacing evidence',
+    'next_task': 'Run uncoached human 1x sessions across all four paths and tune only observed pacing, arrival-comprehension and boss-readability failures',
 }
 (root / 'artifacts/agent-iteration/provenance.json').write_text(json.dumps(data, indent=2), encoding='utf-8')
