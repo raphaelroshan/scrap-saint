@@ -19,7 +19,7 @@ func run():
 	game.set_process(false)
 	game.sound.muted = true
 	game.save_path = "user://main_menu_test.save"
-	if FileAccess.file_exists(game.save_path): DirAccess.remove_absolute(game.save_path)
+	game.save_store.clear(game.save_path)
 	game.build_ui()
 	check(control(game,"Continue").disabled, "Continue unavailable without a save")
 	check(root.gui_get_focus_owner() == control(game,"New pilgrimage"), "new player focus starts on New pilgrimage")
@@ -71,7 +71,7 @@ func run():
 	game.screen = "title"
 	game.load_run()
 	check(game.screen == "title" and game.sim.state_hash() == saved_hash, "invalid save keeps title and current state intact")
-	DirAccess.remove_absolute(game.save_path)
+	game.save_store.clear(game.save_path)
 	game.queue_free()
 	await process_frame
 	print("MAIN MENU: %d checks, %d failures" % [checks,failures])

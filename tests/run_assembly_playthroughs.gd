@@ -53,8 +53,8 @@ func _initialize():
 			if sim.state.phase == "travel":
 				choose_road(sim)
 				continue
-			if sim.state.phase == "memory":
-				sim.command("accept_memory")
+			if sim.state.phase == "site_clear":
+				sim.command("continue_site_clear")
 				continue
 			if sim.state.phase == "shop":
 				if sim.state.hp < 70: sim.command("buy", 4)

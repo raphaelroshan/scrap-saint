@@ -200,6 +200,11 @@ class ExpeditionGraphTests(unittest.TestCase):
         chapter['routes'][0]['optional_preview'] = 'Repair every relay to proceed.'
         self.assert_rejected(chapter)
 
+    def test_reject_incomplete_origin_site_clear_memory(self):
+        chapter = copy.deepcopy(self.chapter)
+        chapter['expedition_map']['origin_preview']['clear_memory'].pop('conclusion')
+        self.assert_rejected(chapter)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -37,6 +37,7 @@ func reach_route(sim):
 	sim.state.wave = sim.current_wave_count()
 	sim.state.boss_dead = true
 	sim.step(Vector2.ZERO)
+	if sim.state.phase == "site_clear": sim.command("continue_site_clear")
 
 func finish_travel(sim):
 	while sim.state.phase == "travel":
@@ -94,9 +95,9 @@ func _initialize():
 	memory.state.wave = memory.current_wave_count()
 	memory.state.boss_dead = true
 	memory.step(Vector2.ZERO)
-	check(memory.state.phase == "memory", "memory fixture reaches the authored memory phase")
+	check(memory.state.phase == "site_clear", "memory fixture reaches the unified site-clear phase")
 	var memory_copy = restored_copy(memory, "memory")
-	compare_command(memory, memory_copy, "accept_memory", null, "memory")
+	compare_command(memory, memory_copy, "continue_site_clear", null, "site clear")
 
 	# Version-two saves could already contain the chapter's two-leg route history.
 	# Migrating the road-choice schema must not collapse that history to its last leg.
@@ -110,7 +111,7 @@ func _initialize():
 	legacy_chain.state.wave = legacy_chain.current_wave_count()
 	legacy_chain.state.boss_dead = true
 	legacy_chain.step(Vector2.ZERO)
-	legacy_chain.command("accept_memory")
+	legacy_chain.command("continue_site_clear")
 	legacy_chain.command("choose_route", "route.pale_archive")
 	legacy_chain.state.version = 2
 	var migrated_chain = Sim.new()
@@ -127,14 +128,14 @@ func _initialize():
 	legacy_source.state.gifts = ["gift.spare_hand"]
 	legacy_source.state.weapons[0].toll = true
 	legacy_source.state.weapons[0].erase("evolution")
-	for field in ["run_id", "frame_id", "max_hp", "move_speed", "repair_grace_ticks", "repair_grace_until", "knockback_multiplier", "keeper_shove_segment", "evolutions", "site_id", "route", "route_history", "route_origin_site_id", "travel_step", "assignment_statuses", "road_history", "road_flags", "road_totals", "objective", "objective_complete", "objective_lock_until", "weapon_lock_until", "memory_id", "memory_ids", "chapter_complete", "pressure_until", "completed_site_ids", "defeated_boss_ids", "scrap_by_segment", "result_summary"]:
+	for field in ["run_id", "frame_id", "max_hp", "move_speed", "repair_grace_ticks", "repair_grace_until", "knockback_multiplier", "keeper_shove_segment", "evolutions", "site_id", "route", "route_history", "route_origin_site_id", "travel_step", "assignment_statuses", "road_history", "road_flags", "road_totals", "objective", "objective_complete", "objective_lock_until", "weapon_lock_until", "memory_id", "memory_ids", "site_clear_summary", "chapter_complete", "pressure_until", "completed_site_ids", "defeated_boss_ids", "scrap_by_segment", "result_summary"]:
 		legacy_source.state.erase(field)
 	for machine in legacy_source.state.machines: machine.erase("deferred")
 	for enemy in legacy_source.state.enemies:
 		for field in ["worker", "phase", "spawn_tick", "slow", "quieted", "inspected"]: enemy.erase(field)
 	var legacy = Sim.new()
 	check(legacy.restore(legacy_source.snapshot()), "version-one integrated legacy save restores")
-	check(legacy.state.version == 3 and legacy.state.frame_id == "frame.pilgrim", "legacy save receives current version and frame defaults")
+	check(legacy.state.version == 4 and legacy.state.frame_id == "frame.pilgrim", "legacy save receives current version and frame defaults")
 	check(legacy.state.route_history.is_empty() and legacy.state.memory_ids.is_empty() and legacy.state.weapon_lock_until == 0, "legacy saves receive deterministic chapter-chain defaults")
 	check(legacy.state.road_history.is_empty() and legacy.state.assignment_statuses.is_empty() and legacy.state.road_totals.route_cost == 0, "legacy saves receive deterministic expedition-map defaults")
 	check(legacy.state.gifts == ["gift.spare_hand"] and legacy.has_evolution("evolution.great_toll"), "legacy assembly state preserves Gifts and reconstructs evolution IDs")

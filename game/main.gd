@@ -3,6 +3,7 @@ const Sim = preload("res://game/simulation.gd")
 const Sound = preload("res://game/sound.gd")
 const Profile = preload("res://game/profile.gd")
 const Settings = preload("res://game/settings.gd")
+const SaveStore = preload("res://game/save_store.gd")
 const INK = Color("101e23")
 const PANEL = Color("17292d")
 const PAPER = Color("e9dec2")
@@ -13,6 +14,7 @@ const RED = Color("e48b73")
 var sim = Sim.new()
 var profile = Profile.new()
 var settings = Settings.new()
+var save_store = SaveStore.new()
 var frame_defs: Array = []
 var sound
 var screen = "title"
@@ -39,6 +41,7 @@ var last_phase = ""
 var seed_value = 147
 var ui_scale = 1.0
 var save_path = "user://first_shift.save"
+var profile_path = Profile.DEFAULT_PATH
 var dev_mode = false
 var simulation_speed = 1
 var tutorial_page = 0
@@ -112,7 +115,7 @@ func close_ledger():
 func _ready():
 	title_font.font_names = PackedStringArray(["Georgia", "DejaVu Serif"])
 	frame_defs = JSON.parse_string(FileAccess.get_file_as_string("res://content/frames/first_chapter.json")).frames
-	profile.load_from()
+	profile.load_from(profile_path)
 	settings.load_from()
 	settings.apply_input_map()
 	settings.apply_presentation()
@@ -147,6 +150,9 @@ func _physics_process(_delta):
 		advance_simulation(movement)
 		if sim.state.phase != last_phase:
 			last_phase = sim.state.phase
+			if last_phase == "site_clear":
+				commit_profile_progress()
+				checkpoint_run("site clear")
 			if last_phase in ["won", "lost"]: commit_profile_result()
 			build_ui()
 	fx = fx.filter(func(e): return visual_now_ms() < int(e.expires))
@@ -245,12 +251,16 @@ func _input(event):
 
 func begin():
 	# Fixed seed makes the two objective modes directly comparable.
-	var run_id = "run-%d-%d-%s" % [profile.state.completed_runs.size() + 1, seed_value, chosen_frame]
+	var run_id = profile.claim_run_id(seed_value, chosen_frame)
+	profile.save_to(profile_path)
+	# Committing a new pilgrimage retires every generation of the previous run.
+	save_store.clear(save_path)
 	sim.start(chosen, seed_value, run_mode, chosen_frame, run_id)
 	screen = "game"
 	recent_unlocks.clear()
 	last_phase = "combat"
 	fx.clear()
+	checkpoint_run("departure")
 	build_ui()
 
 func open_departure_map():
@@ -287,6 +297,7 @@ func current_camera_impulse() -> Vector2:
 func act(action: String, value = null):
 	sim.events.clear()
 	notification = ""
+	var before_phase = str(sim.state.get("phase", ""))
 	var result = sim.command(action, value)
 	for event in sim.events: present(event)
 	if result != "OK":
@@ -302,8 +313,20 @@ func act(action: String, value = null):
 			"started_at": visual_now_ms(),
 			"expires": visual_now_ms() + EVOLUTION_SHOWCASE_MS,
 		}
+	if result == "OK": handle_checkpoint_boundary(action, before_phase)
 	if sim.state.phase in ["won", "lost"]: commit_profile_result()
+	last_phase = str(sim.state.phase)
 	build_ui()
+
+func handle_checkpoint_boundary(action: String, before_phase: String):
+	if action == "continue_site_clear" or (action == "accept_memory" and before_phase == "site_clear"):
+		checkpoint_run("route map" if sim.state.phase == "route" else "chapter complete")
+	elif action == "choose_route":
+		commit_profile_progress()
+		checkpoint_run("route commitment")
+	elif action == "choose_road_option":
+		commit_profile_progress()
+		checkpoint_run("destination arrival" if sim.state.phase == "combat" else "road choice")
 
 func select_map_route(route_id: String):
 	if sim.available_routes().any(func(route): return route.id == route_id):
@@ -361,8 +384,16 @@ func build_map_node_buttons(departure: bool):
 
 func commit_profile_result():
 	if sim.state.is_empty() or sim.state.result_summary.is_empty(): return
-	recent_unlocks = profile.record_run(sim.state.result_summary)
-	profile.save_to()
+	for unlocked in profile.record_run(sim.state.result_summary):
+		if unlocked not in recent_unlocks: recent_unlocks.append(unlocked)
+	profile.save_to(profile_path)
+	save_store.clear(save_path)
+
+func commit_profile_progress():
+	if sim.state.is_empty(): return
+	for unlocked in profile.record_progress(sim.progress_summary()):
+		if unlocked not in recent_unlocks: recent_unlocks.append(unlocked)
+	profile.save_to(profile_path)
 
 func open_panel(panel_name: String):
 	previous_screen = screen
@@ -388,30 +419,46 @@ func cycle_text_scale():
 	build_ui()
 
 func save_run():
-	var file = FileAccess.open(save_path, FileAccess.WRITE)
-	if file:
-		file.store_var(sim.snapshot())
+	if sim.state.is_empty() or sim.state.phase in ["won", "lost"]:
+		save_store.clear(save_path)
+		notification = "Completed expeditions cannot be resumed."
+	elif save_store.write_atomic(save_path, sim.snapshot()):
 		notification = "Shift saved. F9 to resume."
 	else: notification = "Could not write save."
 	notice_until = Time.get_ticks_msec() + 2500
 
-func load_run():
-	if not FileAccess.file_exists(save_path): return
-	var file = FileAccess.open(save_path, FileAccess.READ)
-	if file == null:
-		notification = "Could not open the saved expedition."
-		notice_until = Time.get_ticks_msec() + 6000
-		return
-	var saved = file.get_var(false)
-	if saved is Dictionary and sim.restore(saved):
-		screen = "game"
-		fx.clear()
-		if sim.state.phase in ["won", "lost"]: commit_profile_result()
-		build_ui()
+func checkpoint_run(_reason: String) -> bool:
+	if sim.state.is_empty() or sim.state.phase in ["won", "lost"]: return false
+	return save_store.write_atomic(save_path, sim.snapshot())
 
+func has_saved_expedition() -> bool:
+	return save_store.has_valid_save(save_path)
+
+func save_and_return_to_title():
+	if checkpoint_run("return to title"):
+		screen = "title"
+		build_ui()
 	else:
-		notification = "This save predates the workshop layout. Start a new shift."
-		notice_until = Time.get_ticks_msec() + 6000
+		notification = "Could not secure the pilgrimage."
+		notice_until = Time.get_ticks_msec() + 4000
+
+func load_run():
+	for saved in save_store.load_dictionaries(save_path):
+		if not sim.restore(saved): continue
+		if sim.state.phase in ["won", "lost"]:
+			commit_profile_result()
+			screen = "title"
+			notification = "That pilgrimage has already ended."
+			notice_until = Time.get_ticks_msec() + 4000
+		else:
+			screen = "game"
+			last_phase = str(sim.state.phase)
+			fx.clear()
+			commit_profile_progress()
+			build_ui()
+		return
+	notification = "This save could not be restored. The last safe checkpoint was also checked."
+	notice_until = Time.get_ticks_msec() + 6000
 
 func present(event):
 	var e = event.duplicate(true)
@@ -526,7 +573,7 @@ func build_ui():
 		button("Return to shop" if ledger_return == "game" else "Return to title", Rect2(808,638,348,42), close_ledger, true).grab_focus()
 	elif screen == "title":
 		if title_transition_started < 0:
-			var has_save = FileAccess.file_exists(save_path)
+			var has_save = has_saved_expedition()
 			var resume = button("Continue", Rect2(80, 302, 350, 48), load_run, has_save)
 			resume.disabled = not has_save
 			resume.tooltip_text = "Resume your saved expedition." if has_save else "Save a shift from the pause menu to continue it here."
@@ -577,7 +624,7 @@ func build_ui():
 			var blessing_button = button(("Choose " if unlocked else "Locked / ") + blessing_names[i], Rect2(56 + i * 292, 548, 276, 38), func(): chosen = i; build_ui(), chosen == i and unlocked)
 			blessing_button.disabled = not unlocked
 		button("REVIEW THE PILGRIMAGE  →", Rect2(436, 613, 408, 52), open_departure_map, true).grab_focus()
-		if FileAccess.file_exists(save_path): button("Resume saved expedition", Rect2(436, 678, 408, 36), load_run)
+		if has_saved_expedition(): button("Resume saved expedition", Rect2(436, 678, 408, 36), load_run)
 	elif screen == "departure_map":
 		build_map_node_buttons(true)
 		button("BACK TO SETUP", Rect2(44, 682, 220, 46), func(): screen = "menu"; build_ui())
@@ -605,8 +652,9 @@ func build_ui():
 			option_button.disabled = sim.state.scrap < int(option.cost)
 			if first_affordable == null and not option_button.disabled: first_affordable = option_button
 		if first_affordable != null: first_affordable.grab_focus()
-	elif sim.state.phase == "memory":
-		button("CARRY THIS MEMORY  →", Rect2(410, 615, 460, 48), func(): act("accept_memory"), true).grab_focus()
+	elif sim.state.phase == "site_clear":
+		var continue_label = "COMPLETE THE CHAPTER  →" if bool(sim.state.site_clear_summary.get("terminal", false)) else ("OPEN THE PILGRIMAGE MAP  →" if str(sim.state.site_id) == str(sim.chapter.expedition_map.origin_site_id) else "CHOOSE THE NEXT DESTINATION  →")
+		button(continue_label, Rect2(410, 615, 460, 48), func(): act("continue_site_clear"), true).grab_focus()
 	elif sim.state.phase == "shop":
 		if evolution_ledger_open:
 			for i in range(sim.config.evolutions.size()):
@@ -644,7 +692,9 @@ func build_ui():
 		button("Resume", Rect2(475, 355, 330, 46), func(): sim.command("pause"); build_ui(), true).grab_focus()
 		button("Save shift", Rect2(475, 415, 330, 42), save_run)
 		button("Settings", Rect2(475, 475, 330, 42), func(): open_panel("settings"))
-		button("Back to title", Rect2(475, 535, 330, 42), func(): screen = "title"; build_ui())
+		button("Save & return to title", Rect2(475, 535, 330, 42), save_and_return_to_title)
+	if screen == "game" and not sim.state.is_empty() and sim.state.phase in ["route", "travel", "shop", "site_clear"]:
+		button("SAVE & TITLE", Rect2(1060, 710, 188, 30), save_and_return_to_title)
 	if screen == "game":
 		button("Sound " + ("off" if settings.state.muted else "on"), Rect2(28, 757, 117, 28), func(): toggle_setting("muted"))
 		button("Effects " + ("low" if reduced_fx else "full"), Rect2(153, 757, 122, 28), func(): toggle_setting("reduced_effects"))
@@ -732,7 +782,7 @@ func _draw():
 			else: draw_shop()
 		if sim.state.phase == "route": draw_route_choice()
 		if sim.state.phase == "travel": draw_travel()
-		if sim.state.phase == "memory": draw_memory()
+		if sim.state.phase == "site_clear": draw_site_clear()
 		if sim.state.phase in ["won", "lost"]: draw_results()
 		if sim.state.paused and sim.state.phase == "combat":
 			draw_rect(Rect2(0, 0, 1280, 745), Color(0.025, 0.05, 0.06, 0.87))
@@ -1007,7 +1057,7 @@ func draw_header():
 	if sim.is_destination(): instruction = sim.objective_data().description
 	if sim.state.phase == "route": instruction = "Preview a grey assignment, then accept it. Gold marks your selection."
 	if sim.state.phase == "travel": instruction = "Resolve this in-between area. No road node can be bypassed."
-	if sim.state.phase == "memory": instruction = "A repaired machine returns one borrowed purpose."
+	if sim.state.phase == "site_clear": instruction = "The site is clear. Review what the pilgrimage carries forward."
 	if sim.state.phase in ["won", "lost"]: instruction = "SHIFT RECORDED / Read the cause. Choose one change. Return quickly."
 	text_at(instruction, Vector2(60, 126), 16, GREEN)
 	if sim.state.phase == "combat" and not sim.optional_mode():
@@ -1488,15 +1538,31 @@ func draw_travel():
 		text_at("SITE" if i == 0 or i == nodes.size() + 1 else "%02d" % i, p + Vector2(-13, 30), 9, MUTED)
 	text_at("CARRIED / %d SCRAP · %d STRUCTURE     ROAD TOTAL / %+d SCRAP · %+d STRUCTURE" % [sim.state.scrap, sim.state.hp, int(sim.state.road_totals.scrap_delta), int(sim.state.road_totals.structure_delta)], Vector2(92, 514), 11, GOLD)
 
-func draw_memory():
-	draw_rect(Rect2(60, 148, 980, 588), Color(0.045, 0.06, 0.075, 0.96))
-	var memory = sim.current_route().memory
-	text_at(memory.title, Vector2(150, 225), 13, Color("cbb8ed"))
-	text_at("A borrowed purpose returns.", Vector2(145, 292), 38, PAPER, true)
-	draw_circle(Vector2(185, 405), 56, Color("5d5575"))
-	draw_arc(Vector2(185, 405), 72, 0, TAU, 40, Color("cbb8ed"), 3)
-	wrapped(memory.text, Vector2(285, 374), 650, 20, PAPER)
-	wrapped(memory.conclusion, Vector2(285, 465), 650, 15, GREEN)
+func draw_site_clear():
+	var summary: Dictionary = sim.state.site_clear_summary
+	draw_rect(Rect2(60, 148, 980, 588), Color(0.045, 0.06, 0.075, 0.97))
+	text_at("SITE CLEAR · %d / 3" % sim.state.completed_site_ids.size(), Vector2(105, 193), 11, GOLD)
+	text_at(str(summary.site_name), Vector2(100, 239), 36, PAPER, true)
+	text_at(str(summary.boss_name).to_upper() + " / DEFEATED", Vector2(104, 270), 11, RED)
+	panel(Rect2(96, 302, 360, 245), Color("172a2d"))
+	text_at("WHAT THE SAINT CARRIES", Vector2(118, 333), 10, GOLD)
+	text_at("STRUCTURE", Vector2(118, 370), 10, MUTED)
+	bar(Rect2(118, 380, 310, 8), float(summary.structure) / maxf(1.0, float(summary.max_structure)), GREEN)
+	text_at("%d / %d" % [int(summary.structure), int(summary.max_structure)], Vector2(118, 410), 13, PAPER)
+	text_at("SCRAP / %d" % int(summary.scrap), Vector2(118, 443), 12, GOLD)
+	text_at("OPTIONAL WORK / %d OF %d" % [int(summary.optional_completed), int(summary.optional_total)], Vector2(118, 470), 11, GREEN if int(summary.optional_completed) > 0 else MUTED)
+	var reward = "+%d SCRAP / ROAD SALVAGE" % int(summary.route_salvage) if int(summary.route_salvage) > 0 else ("CHAPTER ROUTE SECURED" if bool(summary.terminal) else "TWO ROADS OPEN")
+	text_at("REWARD / " + reward, Vector2(118, 501), 11, PAPER)
+	panel(Rect2(480, 302, 520, 245), Color("1d2733"))
+	text_at("MEMORY RECOVERED", Vector2(506, 333), 10, Color("cbb8ed"))
+	text_at(str(summary.memory_title), Vector2(502, 368), 19, PAPER, true)
+	wrapped(str(summary.memory_text), Vector2(506, 405), 462, 14, PAPER)
+	wrapped(str(summary.conclusion), Vector2(506, 490), 462, 11, GREEN)
+	var carried: Array[String] = []
+	for weapon_id in summary.weapon_ids:
+		carried.append(str(sim.config.weapons.get(weapon_id, {}).get("short", weapon_id)))
+	text_at("BUILD CARRIES FORWARD", Vector2(100, 582), 9, GOLD)
+	wrapped(", ".join(carried) + " · %d Evolutions · %d Gifts" % [summary.evolution_ids.size(), summary.gift_ids.size()], Vector2(274, 583), 718, 11, PAPER)
 
 func draw_optional_machines():
 	for i in range(sim.state.machines.size()):

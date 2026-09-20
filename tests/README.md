@@ -22,6 +22,8 @@ SC-15/SC-17 add ten rendered chapter fixtures: the seven opening/mid-site states
 
 M1 pilgrimage navigation adds a presentation-only departure preview plus a full-screen active route map. `test_main_menu.gd`, `test_ui.gd`, `test_flow_input.gd`, `test_expedition_map.gd` and the manifest tests cover non-authoritative inspection, six stable site IDs, mouse/controller-style selection, reversible future-node inspection, exact-once Travel and required preview data. `capture_expedition_map.gd` adds departure and large-text fixtures; these establish layout and control state, not newcomer comprehension or reading pace.
 
+M2 checkpoint lifecycle adds one authoritative `site_clear` phase and atomic primary/backup persistence. `test_checkpoint_lifecycle.gd`, `test_save_flow.gd`, `test_profile.gd`, `test_chapter.gd` and the input tests cover every automatic boundary, failed replacement, corrupt-primary fallback, terminal-save cleanup, unique run IDs, run/site receipts, migration and route-history discovery. `capture_expedition_map.gd` adds Workshop, middle, terminal and large-text site-clear fixtures; these prove executable layout and state handoff, not human trust or reading behavior.
+
 Run:
 
 ```bash

@@ -6,6 +6,10 @@ python3 scripts/validate_content.py
 python3 -m unittest tests/test_slice_manifest.py
 mkdir -p artifacts/agent-iteration
 "$GODOT_BIN" --headless --path . --script res://tests/test_main_menu.gd | tee artifacts/agent-iteration/main-menu.log
+"$GODOT_BIN" --headless --path . --script res://tests/test_dev_speed.gd | tee artifacts/agent-iteration/dev-speed.log
+"$GODOT_BIN" --headless --path . --script res://tests/test_frames_progression.gd | tee artifacts/agent-iteration/frames-progression.log
+"$GODOT_BIN" --headless --path . --script res://tests/test_profile.gd | tee artifacts/agent-iteration/profile.log
+"$GODOT_BIN" --headless --path . --script res://tests/test_settings.gd | tee artifacts/agent-iteration/settings.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_sync_contract.gd | tee artifacts/agent-iteration/sync-contract.log
 "$GODOT_BIN" --path . --script res://tests/capture_sync_contract.gd | tee artifacts/agent-iteration/sync-capture.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_relay.gd | tee artifacts/agent-iteration/relay.log
@@ -20,6 +24,7 @@ mkdir -p artifacts/agent-iteration
 "$GODOT_BIN" --headless --path . --script res://tests/test_ui.gd | tee artifacts/agent-iteration/ui.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_flow_input.gd | tee artifacts/agent-iteration/flow-input.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_save_flow.gd | tee artifacts/agent-iteration/save-flow.log
+"$GODOT_BIN" --headless --path . --script res://tests/test_checkpoint_lifecycle.gd | tee artifacts/agent-iteration/checkpoint-lifecycle.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_assembly.gd | tee artifacts/agent-iteration/assembly.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_acquisition.gd | tee artifacts/agent-iteration/acquisition.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_evolutions.gd | tee artifacts/agent-iteration/evolutions.log

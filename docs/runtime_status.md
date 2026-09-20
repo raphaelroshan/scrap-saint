@@ -300,3 +300,15 @@ The destination dossier now presents combat experience, boss/threat, explicitly 
 Clean implementation commit `64df0eb021443c83ffbc0eb28ece95904b5a3c6e` passes 1,027 Godot assertions and 33 Python manifest checks on pinned Godot 4.5.1. The 12/12 normal-economy, 4/4 assembly, 10/10 Evolution and 4/4 Gift policy matrices remain green. Eleven configured map/road captures cover departure, future inspection, both route tiers, branch exclusion, road handoff and normal/large-text layouts at 1280×800, seed 147. Internal rendered-evidence score: 46/50. This does not establish human comprehension, reading pace or route preference.
 
 Exactly one next task: implement M2 unified site-clear summaries and atomic automatic checkpoints with exactly-once discovery credit.
+
+## M2 — site-clear and checkpoint lifecycle
+
+Every defeated boss now enters one authoritative `site_clear` phase. Workshop, middle and terminal summaries use the same hierarchy to report the site and boss, structure and Scrap, optional-work result, earned road salvage, recovered memory, carried relic build and the exact next action. Workshop opens the pilgrimage map, middle sites open the next destination choice and terminal sites complete the chapter; repeated Continue commands cannot reapply rewards.
+
+Expedition and profile saves now use a shared atomic temporary-write/replacement path with a last-known-good backup. A new pilgrimage retires all prior-run generations. Validated site clears, map continuation, route commitments, each road choice and destination arrival checkpoint automatically. Continue can restore a structurally valid backup when the primary is corrupt; defeat and chapter completion remove primary, temporary and backup run saves.
+
+Profile version 3 allocates unique run IDs and records stable `run_id|site_id` clear receipts. Site fragments and memories are granted once, route discoveries derive from the complete route history, and migration initializes receipts for older completed sites without regranting fragments. Map inspection remains presentation-only.
+
+Clean implementation commit `d3d78304c44586dd807d4e00c5462dcfc50c7f63` passes 1,062 Godot assertions and 34 Python manifest checks on pinned Godot 4.5.1. All 12/12 normal-economy routes, 4/4 assembly builds, 10/10 Evolution routes and 4/4 Gift routes pass. Fifteen configured map/road/site-clear captures include normal and large-text recaps at 1280×800, seed 147. Internal rendered-evidence score: 47/50. Configured fixtures do not establish recap reading, autosave trust or normal-speed route pacing.
+
+Exactly one next task: implement M3 distinct arrival presentation and normal-speed four-path pacing evidence.

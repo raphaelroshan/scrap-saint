@@ -12,6 +12,14 @@ if ($LASTEXITCODE -ne 0) { throw 'Content validation failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Manifest tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_main_menu.gd 2>&1 | Tee-Object -FilePath "$bundlePath\main-menu.log"
 if ($LASTEXITCODE -ne 0) { throw 'Main menu tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_dev_speed.gd 2>&1 | Tee-Object -FilePath "$bundlePath\dev-speed.log"
+if ($LASTEXITCODE -ne 0) { throw 'Development speed tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_frames_progression.gd 2>&1 | Tee-Object -FilePath "$bundlePath\frames-progression.log"
+if ($LASTEXITCODE -ne 0) { throw 'Frame progression tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_profile.gd 2>&1 | Tee-Object -FilePath "$bundlePath\profile.log"
+if ($LASTEXITCODE -ne 0) { throw 'Profile tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_settings.gd 2>&1 | Tee-Object -FilePath "$bundlePath\settings.log"
+if ($LASTEXITCODE -ne 0) { throw 'Settings tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_sync_contract.gd 2>&1 | Tee-Object -FilePath "$bundlePath\sync-contract.log"
 if ($LASTEXITCODE -ne 0) { throw 'Sync contract tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_variety.gd 2>&1 | Tee-Object -FilePath "$bundlePath\variety.log"
@@ -28,6 +36,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Arena tests failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Simulation tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_chapter.gd 2>&1 | Tee-Object -FilePath "$bundlePath\chapter.log"
 if ($LASTEXITCODE -ne 0) { throw 'Chapter tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_expedition_map.gd 2>&1 | Tee-Object -FilePath "$bundlePath\expedition-map.log"
+if ($LASTEXITCODE -ne 0) { throw 'Expedition map tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_roaming_quality.gd 2>&1 | Tee-Object -FilePath "$bundlePath\roaming-quality.log"
 if ($LASTEXITCODE -ne 0) { throw 'Roaming quality tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_ui.gd 2>&1 | Tee-Object -FilePath "$bundlePath\ui.log"
@@ -36,6 +46,8 @@ if ($LASTEXITCODE -ne 0) { throw 'UI tests failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Flow input tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_save_flow.gd 2>&1 | Tee-Object -FilePath "$bundlePath\save-flow.log"
 if ($LASTEXITCODE -ne 0) { throw 'Save flow tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_checkpoint_lifecycle.gd 2>&1 | Tee-Object -FilePath "$bundlePath\checkpoint-lifecycle.log"
+if ($LASTEXITCODE -ne 0) { throw 'Checkpoint lifecycle tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_assembly.gd 2>&1 | Tee-Object -FilePath "$bundlePath\assembly.log"
 if ($LASTEXITCODE -ne 0) { throw 'Assembly tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_acquisition.gd 2>&1 | Tee-Object -FilePath "$bundlePath\acquisition.log"
@@ -62,6 +74,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Gift playthrough runner failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_chapter.gd -- --capture-dir=$bundlePath 2>&1 | Tee-Object -FilePath "$bundlePath\chapter-capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Chapter capture failed' }
+& $GodotBin --path $projectRoot --script res://tests/capture_expedition_map.gd -- --capture-dir=$bundlePath 2>&1 | Tee-Object -FilePath "$bundlePath\expedition-map-capture.log"
+if ($LASTEXITCODE -ne 0) { throw 'Expedition map capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_core_quality.gd 2>&1 | Tee-Object -FilePath "$bundlePath\core-quality-capture.log"
 if ($LASTEXITCODE -ne 0) { throw 'Core quality capture failed' }
 & $GodotBin --path $projectRoot --script res://tests/capture_assembly.gd 2>&1 | Tee-Object -FilePath "$bundlePath\assembly-capture.log"
@@ -89,5 +103,5 @@ if ($LASTEXITCODE -ne 0) { throw 'Main menu capture failed' }
 $commitId = git -C $projectRoot rev-parse HEAD
 $godotVersion = & $GodotBin --version
 $files = Get-ChildItem -LiteralPath "$projectRoot\game" -Filter '*.gd' | ForEach-Object { @{ path = $_.Name; sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash } }
-@{ build = '0.6.0-preview'; base_commit = $commitId; dirty = [bool](git -C $projectRoot status --porcelain); godot = $godotVersion; viewport = @(1280,800); scaling = 'canvas_items'; seed = 147; timestamp_utc = [DateTime]::UtcNow.ToString('o'); capture_type = 'rendered simulation fixtures; includes pilgrimage maps, explicit setup budgets, Results, weapon ranks, Evolutions, Gifts, destination bosses, and manifested relics'; source_hashes = @($files); limitation = 'No human playtest or rendered minimum-hardware benchmark'; next_task = 'Implement M2 unified site-clear summaries and atomic automatic checkpoints with exactly-once discovery credit' } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath "$bundlePath\provenance.json" -Encoding utf8
+@{ build = '0.6.0-preview'; base_commit = $commitId; dirty = [bool](git -C $projectRoot status --porcelain); godot = $godotVersion; viewport = @(1280,800); scaling = 'canvas_items'; seed = 147; timestamp_utc = [DateTime]::UtcNow.ToString('o'); capture_type = 'rendered simulation fixtures; includes pilgrimage maps, unified site-clear summaries, explicit setup budgets, Results, weapon ranks, Evolutions, Gifts, destination bosses, and manifested relics'; source_hashes = @($files); limitation = 'No human playtest or rendered minimum-hardware benchmark'; next_task = 'Implement M3 distinct arrival presentation and normal-speed four-path pacing evidence' } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath "$bundlePath\provenance.json" -Encoding utf8
 Write-Output "Bundle ready for visual review: $bundlePath"

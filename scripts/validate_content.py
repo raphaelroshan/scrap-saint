@@ -192,6 +192,9 @@ def validate_expedition_graph(chapter: dict) -> None:
         assert isinstance(origin_preview.get(field), str) and origin_preview[field], f"origin preview missing {field}"
     assert origin_preview["optional_preview"].startswith("Optional"), "origin preview must identify optional work"
     assert origin_preview.get("wave_count", 0) > 0 and origin_preview.get("wave_ticks", 0) > 0, "origin preview needs duration data"
+    clear_memory = origin_preview.get("clear_memory", {})
+    for field in ("id", "title", "text", "conclusion"):
+        assert isinstance(clear_memory.get(field), str) and clear_memory[field], f"origin site-clear memory missing {field}"
 
     expected_edges: set[tuple[str, str, str]] = set()
     expected_pairs: set[tuple[str, str]] = set()

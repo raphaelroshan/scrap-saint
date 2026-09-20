@@ -215,3 +215,13 @@ The clean implementation commit `64df0eb021443c83ffbc0eb28ece95904b5a3c6e` passe
 Rendered-evidence rubric (5-point internal review): journey hierarchy 5, graph comprehension 5, destination consequence clarity 5, optional-work clarity 5, state distinction 4, input/confirmation clarity 5, build carryover 4, large-text layout 4, world/style coherence 4 and provenance 5, for 46/50. These are configured fixtures, not human evidence of newcomer comprehension, reading pace or route preference.
 
 Exactly one next task: implement M2 unified site-clear summaries and atomic automatic checkpoints with exactly-once discovery credit.
+
+## M2 site-clear and checkpoint lifecycle, 2026-09-20
+
+The three-level expedition now pauses after every boss at a shared site-clear screen that combines victory, reward, optional-work outcome, memory and carried build before the player chooses the next step. Saves use atomic primary/backup generations, checkpoint all journey transitions and are cleared at defeat or chapter completion. Durable discovery is separated from the unfinished run through run/site receipts and route-history facts.
+
+The clean implementation commit `d3d78304c44586dd807d4e00c5462dcfc50c7f63` passes 1,062 Godot assertions and 34 Python manifest checks on Godot 4.5.1 stable. Natural policy evidence remains 12/12 normal-economy routes, 4/4 assembly builds, 10/10 Evolution routes and 4/4 Gift routes. Fifteen configured captures cover the map, road, Workshop clear, middle clear, terminal clear and large-text clear states at 1280×800 and seed 147.
+
+Rendered-evidence rubric (5-point internal review): result hierarchy 5, boss/victory clarity 5, reward causality 5, optional-work clarity 5, memory integration 5, next-action clarity 5, carried-build continuity 4, large-text layout 4, world/style coherence 4 and provenance 5, for 47/50. Atomic-failure and exact-resume claims come from deterministic tests, not screenshots. No human recap reading, autosave trust or normal-speed four-path pacing result is claimed.
+
+Exactly one next task: implement M3 distinct arrival presentation and normal-speed four-path pacing evidence.

@@ -58,7 +58,7 @@ func _initialize():
 		a.state.boss_spawned = true
 		a.state.boss_dead = true
 		a.step(Vector2.ZERO)
-		check(a.state.phase == "memory" and not a.state.objective_complete, "unfinished optional work never blocks destination")
+		check(a.state.phase == "site_clear" and not a.state.objective_complete, "unfinished optional work never blocks destination")
 		a.start(0,147,"optional")
 		a.state.route = route.id
 		a.enter_destination(route)

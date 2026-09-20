@@ -97,8 +97,8 @@ func _initialize():
 			if sim.state.phase == "travel":
 				if choose_free_road_option(sim) != "OK": transition_failed = true; break
 				continue
-			if sim.state.phase == "memory":
-				if sim.command("accept_memory") != "OK": transition_failed = true; break
+			if sim.state.phase == "site_clear":
+				if sim.command("continue_site_clear") != "OK": transition_failed = true; break
 				continue
 			if sim.state.phase == "shop":
 				if sim.state.hp < sim.saint_max_structure() * 0.7: sim.command("buy", 4)
