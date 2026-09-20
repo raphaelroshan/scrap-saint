@@ -1,5 +1,11 @@
 # First Shift runtime — 0.6.0 preview
 
+## Painted arena material pass — 2026-09-21
+
+All six sites use a subdued painted metal floor, fixed 384×256 world-space material tiles, subtle site tints and scenery fitted inside existing obstacle plinths. Vertical machines use press/boiler art; wide machines use a horizontal service manifold without sprite stretching or rotated lighting. Normal-play zone/machine labels move to F3 diagnostics. The old animated belt chevrons, decorative furnace circle and drifting floor steam are replaced by quiet perimeter services.
+
+Field Scrap and repair kits now use painted cutouts. Scrap and Relic Shard icons also appear beside their HUD totals. Healing motes retain their previous spectral form, and no new drops or currencies are introduced. The Saint, enemies and optional-work symbols retain their current renderer. See [the task packet](task_packets/arena_material_pass.md) and [before/after review](../assets/environment/review.html).
+
 ## Main menu artwork and navigation — 2026-09-17
 
 The title uses painted meditation/awakening keyframes based on the six-armed Saint beneath the Bodhi tree. Continue is disabled without a save and focused when a save exists; New pilgrimage leads to frame/Blessing setup. Settings, How to play, Sacred histories and a cancellable Quit complete the menu. Settings retain mute, reduced effects, text size, fullscreen, camera motion and movement bindings. Reduced effects shortens the awakening dissolve to 300 ms; normal presentation takes 1.35 seconds. Simulation remains stopped until setup begins the run.

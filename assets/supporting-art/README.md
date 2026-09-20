@@ -22,7 +22,7 @@ Each scene also includes `RESET` and a 240ms `collect` clip. Scenes do not autop
 
 ## Integration boundary
 
-These are reusable art and whole-sprite motion studies, not articulated enemy walk cycles. Transforming a flattened image cannot move its legs independently. They are not enabled in gameplay yet. Scene roots are visual centres, with a normalized 160px visible extent; gameplay must scale them to its own display size and position them relative to the simulation-owned footprint. The charge study moves only its visual child and must never supply collision or damage timing. Reduced effects should hold RESET or use a static sprite; collect animations must never delay simulation collection.
+These are reusable art and whole-sprite motion studies, not articulated enemy walk cycles. Transforming a flattened image cannot move its legs independently. The animation scenes are not wired into gameplay yet. The arena material pass now uses the Scrap and Repair Kit textures for field pickups and Scrap/Relic Shard textures in the currency HUD; enemy and upgrade images remain staged. Scene roots are visual centres, with a normalized 160px visible extent; gameplay must scale them to its own display size and position them relative to the simulation-owned footprint. The charge study moves only its visual child and must never supply collision or damage timing. Reduced effects should hold RESET or use a static sprite; collect animations must never delay simulation collection.
 
 The three pickup IDs in this pack are presentation labels, not new simulation content IDs. Scrap and Relic Shards remain the existing currencies; Repair Kit is field healing, never a shop slot. Preserve the existing Saint and manifested relic renderer.
 

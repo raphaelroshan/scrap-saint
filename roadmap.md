@@ -1,8 +1,12 @@
 # Scrap Saint roadmap
 
+## Arena material integration — 2026-09-21
+
+The playfield now uses a painted metal floor at a fixed material scale, footprint-fitted press/boiler/manifold scenery, quieter lane markings and perimeter services. Field Scrap and repair kits use painted icons, with Scrap/Shard icons in the HUD. Compare the [matched gameplay renders](assets/environment/review.html). Collision, navigation, collection, the Saint and enemy rules remain unchanged. Procedural enemies and repair-objective graphics still need an art integration pass.
+
 ## Supporting art delivery — 2026-09-21
 
-The supporting painted pack adds three enemy cutouts, three field pickup icons and three existing upgrade icons, with reusable Godot motion studies and an isolated gallery. See [the pack and remaining coverage](assets/supporting-art/README.md). This follows the painted industrial diorama direction; prior low-resolution procedural exports are not the final painted style. Gameplay still uses its existing renderer. Directional poses, articulated limbs and real combat-scale validation remain pending.
+The supporting painted pack adds three enemy cutouts, three field pickup icons and three existing upgrade icons, with reusable Godot motion studies and an isolated gallery. See [the pack and remaining coverage](assets/supporting-art/README.md). This follows the painted industrial diorama direction; prior low-resolution procedural exports are not the final painted style. The environment pass below enables Scrap and Repair Kit icons in the field and currency icons in the HUD. Enemy/upgrade artwork remains staged; directional poses and articulated limbs remain pending.
 
 ## Current direction — 2026-09-20
 
@@ -33,7 +37,7 @@ Defer the proposed attachment-arm rig, mount sockets and character-sprite replac
 
 No character rig, new weapons or balance changes are prerequisites for step 1. Require real Godot captures with build/viewport/seed provenance and event/state regression checks for each runtime slice. Concept boards alone do not satisfy these gates.
 
-Exactly one next task: integrate the approved pickup and enemy art into event-driven gameplay presentation with real combat-scale readability checks. M1 departure selection, M2 checkpoints and M3 arrival/pacing work are already implemented; retain normal-speed human review as a release gate.
+Exactly one next task: integrate the painted enemy roster with directional poses and combat-scale readability checks. M1 departure selection, M2 checkpoints and M3 arrival/pacing work are already implemented; retain normal-speed human review as a release gate.
 
 ## 1. Roadmap purpose and current truth
 

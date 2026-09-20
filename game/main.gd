@@ -1,5 +1,7 @@
 extends Node2D
 const Sim = preload("res://game/simulation.gd")
+const ArenaArt = preload("res://game/arena_art.gd")
+var arena_art = ArenaArt.new()
 const Sound = preload("res://game/sound.gd")
 const Profile = preload("res://game/profile.gd")
 const Settings = preload("res://game/settings.gd")
@@ -1044,6 +1046,8 @@ func draw_header():
 		text_at("RELAY", Vector2(568, 31), 11, MUTED)
 		bar(Rect2(568, 43, 175, 8), sim.state.relay_hp / sim.config.relay.structure, RED if sim.state.relay_hp < sim.config.relay.structure * sim.config.relay.critical_fraction else GOLD)
 		text_at("%d%% integrity · %d%% work" % [sim.state.relay_hp * 100 / sim.config.relay.structure, sim.state.progress * 100 / sim.config.relay.required_ticks], Vector2(568, 72), 13)
+	arena_art.draw_icon(self, "scrap", Vector2(782,36), 20)
+	arena_art.draw_icon(self, "relic_shard", Vector2(782,65), 16)
 	text_at("%02d  SCRAP" % sim.state.scrap, Vector2(800, 43), 19, GOLD)
 	text_at("%d  RELIC SHARDS" % sim.state.shards, Vector2(800, 69), 12, MUTED)
 	var stage_label = "WAVE %02d / %02d" % [sim.state.wave, sim.current_wave_count()]
@@ -1070,70 +1074,17 @@ func draw_header():
 		text_at("STARTUP BACKUP · Relay cannot break before the first workshop" if sim.state.wave == 1 else "BACKUP OFFLINE · Break enemy strike warnings to protect the relay", Vector2(60, 146), 11, GOLD if sim.state.wave == 1 else MUTED)
 
 func draw_workshop_layout():
-	var arena = sim.arena
-	for x in range(int(arena.bounds.position.x) + 8, int(arena.bounds.end.x), 40):
-		for y in range(int(arena.bounds.position.y) + 8, int(arena.bounds.end.y), 40):
-			draw_rect(Rect2(x, y, 32, 32), Color("263a3c"), false, 1)
-	# Painted outer service circuit makes the two directions around machines visible.
-	var loop = arena.bounds.grow(-65)
-	draw_rect(loop, Color("40524b"), false, 2)
-	for zone in arena.data.zones:
-		var r = arena.rect(zone.rect)
-		draw_rect(r, Color("293d3b"))
-		text_at(zone.name, r.position + Vector2(5, 18), 10, MUTED)
-		if zone.id == "zone.workshop":
-			draw_line(r.position + Vector2(20, 45), r.end - Vector2(20, 30), Color("837353"), 4)
-			text_at("REBUILD BETWEEN WAVES", r.position + Vector2(16, 65), 10, MUTED)
-	for entry in arena.data.entries:
-		var center = (arena.point(entry.from) + arena.point(entry.to)) * 0.5
-		var inward = (sim.relay_position() - center).normalized()
-		draw_line(arena.point(entry.from), arena.point(entry.to), Color("a88c59"), 5)
-		for offset in [-16, 0, 16]:
-			var tip = center + inward * (22 + offset)
-			draw_line(tip - inward.rotated(0.6) * 9, tip, GOLD, 2)
-			draw_line(tip - inward.rotated(-0.6) * 9, tip, GOLD, 2)
-		var label = center + Vector2(-48, -18)
-		if entry.id == "entry.west_conveyor": label = Vector2(165, 340)
-		if entry.id == "entry.east_furnace": label = Vector2(808, 365)
-		text_at(entry.name, label, 10, GOLD)
-	for machine in arena.data.obstacles:
-		var r = arena.rect(machine.rect)
-		draw_rect(r.grow(5), Color("101f24"))
-		draw_rect(r, Color("52625a"))
-		draw_rect(r.grow(-7), Color("304443"))
-		for y in range(int(r.position.y) + 14, int(r.end.y) - 8, 22):
-			draw_line(Vector2(r.position.x + 12, y), Vector2(r.end.x - 12, y), Color("667061"), 5)
-		for x in [r.position.x + 5, r.end.x - 5]:
-			for y in [r.position.y + 5, r.end.y - 5]: draw_circle(Vector2(x, y), 2, GOLD)
-		text_at(machine.name, r.position + Vector2(12, r.size.y / 2), 10, PAPER)
-		for x in range(int(r.position.x), int(r.end.x), 12):
-			draw_line(Vector2(x, r.end.y + 2), Vector2(x + 6, r.end.y + 8), Color("a08b55"), 3)
-	draw_workshop_atmosphere(arena.bounds)
+	arena_art.draw_layout(self, sim.arena, debug_visible)
+	draw_workshop_atmosphere(sim.arena.bounds)
 
 func draw_workshop_atmosphere(bounds: Rect2):
-	var phase = float(sim.state.tick) * 0.045
-	# Moving service belts and floor lamps make the workshop feel operational
-	# without altering collision, navigation, hazards, or authoritative time.
-	for lane_y in [bounds.position.y + 74.0, bounds.end.y - 74.0]:
-		draw_line(Vector2(bounds.position.x + 80, lane_y), Vector2(bounds.end.x - 80, lane_y), Color("304744"), 9, true)
-		for index in range(12):
-			var travel = fposmod(index * 74.0 + (0.0 if reduced_fx else phase * 18.0), bounds.size.x - 190.0)
-			var p = Vector2(bounds.position.x + 95 + travel, lane_y)
-			draw_line(p + Vector2(-7, -5), p, Color("7d7358"), 2, true)
-			draw_line(p, p + Vector2(-7, 5), Color("7d7358"), 2, true)
-	var furnace = Vector2(bounds.end.x - 106, bounds.position.y + 150)
-	draw_circle(furnace, 34, Color(0.88, 0.31, 0.16, 0.045 + 0.02 * sin(phase)))
-	draw_arc(furnace, 28, 0, TAU, 30, Color(RED, 0.28), 3, true)
-	for lamp_index in range(5):
-		var lamp = Vector2(bounds.position.x + 120 + lamp_index * 190, bounds.position.y + 34)
-		draw_line(lamp + Vector2(0, -34), lamp, Color("45544e"), 2)
-		draw_circle(lamp, 5, Color(GOLD, 0.5 + 0.22 * sin(phase * 0.45 + lamp_index)))
-	if not reduced_fx:
-		for steam_index in range(4):
-			var source = Vector2(bounds.position.x + 245 + steam_index * 170, bounds.end.y - 42)
-			for puff_index in range(3):
-				var rise = fposmod(phase * 12.0 + puff_index * 24 + steam_index * 13, 78.0)
-				draw_circle(source + Vector2(sin(phase + steam_index) * 7, -rise), 7 + puff_index * 3, Color(0.66, 0.74, 0.70, 0.07 * (1.0 - rise / 90.0)))
+	# Quiet perimeter services stay away from the active combat field.
+	for y in [bounds.position.y + 12, bounds.end.y - 12]:
+		draw_line(Vector2(bounds.position.x+12,y), Vector2(bounds.end.x-12,y), Color("39453f"), 3)
+		for x in range(int(bounds.position.x)+48, int(bounds.end.x)-24, 190):
+			var lamp = Vector2(x,y)
+			draw_circle(lamp,9,Color(0.7,0.5,0.22,0.055))
+			draw_rect(Rect2(lamp-Vector2(4,2),Vector2(8,4)),Color("a08d62"))
 
 func draw_world():
 	var a = sim.config.arena
@@ -1211,12 +1162,10 @@ func draw_world():
 		var hazard_label = hazard_labels.get(h.get("kind", ""), "!")
 		text_at(hazard_label, h.p + Vector2(-font.get_string_size(hazard_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 10).x * 0.5, 5), 10, GOLD)
 	for p in sim.state.pickups:
-		if p.kind == "repair_kit":
-			draw_rect(Rect2(p.p - Vector2(7,7), Vector2(14,14)), GREEN)
-			draw_line(p.p-Vector2(4,0),p.p+Vector2(4,0),INK,2)
-			draw_line(p.p-Vector2(0,4),p.p+Vector2(0,4),INK,2)
-		elif p.kind == "scrap": draw_colored_polygon(PackedVector2Array([p.p + Vector2(0, -6), p.p + Vector2(6, 0), p.p + Vector2(0, 6), p.p + Vector2(-6, 0)]), GOLD)
+		if p.kind in ["repair_kit", "scrap"]:
+			arena_art.draw_pickup(self, p)
 		else:
+			# Healing motes keep their distinct spectral identity; they are not Shards.
 			draw_circle(p.p, 5, Color("cbb8ed"))
 			draw_arc(p.p, 9, 0, TAU, 16, Color("84759e"), 1)
 	for e in sim.state.enemies: draw_enemy(e)

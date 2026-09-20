@@ -2,7 +2,7 @@
 
 ## Proposed production target
 
-See [the Saint, four relic designs and arena visual target](visual_target.md) for the current proposed production treatment, concept boards, scale targets and explicit implementation corrections. These are concept assets; the runtime has not yet adopted them.
+See [the Saint, four relic designs and arena visual target](visual_target.md) for the current proposed production treatment, concept boards, scale targets and explicit implementation corrections. These remain concept references. The runtime now adopts painted floor material, footprint-fitted machinery and pickup icons through [the arena material pass](task_packets/arena_material_pass.md); actors and objectives are still partly procedural.
 
 ## Manifested weapons — current implementation direction
 
@@ -165,3 +165,9 @@ A presentation slice is not ready when it merely has art on screen. It must pass
 10. The screenshot contains exact build and viewport provenance.
 
 The agent must inspect actual captures, score the visual rubric, record one limitation, and state exactly one next task.
+
+## Arena incorporation rules — 2026-09-21
+
+Use the [environment pack](../assets/environment/README.md) as the integration contract. Design at gameplay scale: fixed world-space material size, orthographic floor, shallow overhead props, upper-left illumination and aspect-preserved sprites. Machinery must fit inside the simulation collision footprint, with a visible plinth explaining the full blocked region. Prefer a purpose-built horizontal asset over rotating a vertical sprite with baked lighting. Keep material contrast lower than actors, rewards and telegraphs. Reserve luminous accents for gameplay authority, and keep normal-play scenery labels out of the action.
+
+The floor is intentionally restrained. Extra density belongs on existing machinery and arena edges, not in navigation corridors. View new assets against both the floor and neighbouring procedural actors before approving them. Match camera and material language first; detailed surface wear cannot compensate for incompatible scale.

@@ -1,0 +1,29 @@
+{
+  "base_commit": "58d0b77d1d3b5ed3b1d7a6c1616ce0c251cb17c5",
+  "build": "0.6.0-preview + arena material pass",
+  "godot": "4.5.1-stable official f62fdbde1",
+  "viewport": [
+    1280,
+    800
+  ],
+  "seed": 147,
+  "timestamp_utc": "2026-09-20T17:43:43.742170+00:00",
+  "capture_type": "matched configured gameplay renderer states; not human playtest",
+  "matched_before_after_state_hashes": {
+    "WORKSHOP_CENTRE": "8d6fc188c1f5cdfd4979f7be0a1df19eeafe3d3507bbd43b7cb7a5de87ceb9a9",
+    "WORKSHOP_COMBAT": "67ca328508b1f7d46309f818a9def2f06b37b2ccb430c65677db686c503ee515",
+    "WORKSHOP_REDUCED": "67ca328508b1f7d46309f818a9def2f06b37b2ccb430c65677db686c503ee515",
+    "WORKSHOP_EDGE": "15c0f6b64d6d87e7d42e0799d81bfa3c367c4a0b91abcc2ea6562d260c3ba44d",
+    "ROOTWORKS": "651c60951d71c630e7fbe606e61a8a062dd162061de2efb937b662d7a0a0143c"
+  },
+  "source_hashes": {
+    "game/main.gd": "336d23a5783661c0e7b890d0336033869d3fbcd24a09b62ff4c8f3409df98d17",
+    "game/arena_art.gd": "59281389929aaffac3cd8cee327bba0e7158ee189634b516aafb5edf6be22c9d",
+    "tests/capture_arena_art.gd": "cf8ba521c8b5c303ffc8ca45f12bbd867a5d06e1bdf34ec11a19170cfc72910e",
+    "tests/test_arena_art.gd": "2726b52a897f20fd2fde21cda803d9c597c326a5c45c47deb4752b2e9a3f7906",
+    "assets/environment/regions.json": "2ce7bb038ee62aa4829c3b33b0b69b059c4a5b1c7789556e7608fa86c14a9304",
+    "assets/environment/sources.json": "5ca9996b4e024f8e3703867481a1a4cf414c51f751c7417911c732fe8b3a47b2"
+  },
+  "limitation": "Procedural actors and objective markers remain; the environment modules are shared across sites and dense effects still require human playtesting.",
+  "next_task": "Integrate the painted enemy roster with directional poses and combat-scale readability checks."
+}

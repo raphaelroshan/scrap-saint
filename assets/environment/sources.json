@@ -1,0 +1,42 @@
+[
+  {
+    "id": "workshop_floor",
+    "prompt": "A production game floor texture ONLY, full bleed rectangular landscape 1536x1024. Direct orthographic overhead, no vanishing point, no isometric diagonal grid. Muted desaturated blue-grey iron and slate industrial floor, large quiet worn plates with irregular broad brush patches, barely visible seams, occasional flat rivets. VERY low contrast, matte diffuse lighting, even value across image, no vignette, no large feature or pattern focal point. Entire image is empty walkable floor. No machines, walls, crates, pipes, text, symbols, lamps, glowing marks, objects, holes, hazards, loose scrap or cast shadows. Match reference painterly material treatment, but dramatically quieter and less detailed. Used underneath tiny gameplay actors. Opaque background. No border.",
+    "source": "exec-a771ea30-1aff-4106-9538-22ba25712650.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "sha256": "74bb28e7344a35a2e27bf60b36101c3d5034dc5ff9e17763e2a91995b9aec76c"
+  },
+  {
+    "id": "salvage_press",
+    "prompt": "One isolated long low salvage press machinery module for a top-down 2D game, true transparent alpha background. Portrait composition. Rectangular footprint ratio 1 wide to 2.3 tall oriented vertically in the image; axis-aligned, NOT diagonal isometric. High overhead view with only a shallow front face. Muted green enamel heavy housing, dark iron rails running lengthwise, chunky cream piston block, a few brass couplings. Machine fills rectangular base, no long extending cables or limbs. Painted broad shapes like reference, reduced contrast, warm light upper left. Inactive, no glow or sparks, no signage or text, no surroundings or cast shadow outside object. Full object with clear transparent padding.",
+    "source": "exec-c998559a-5d16-465d-a261-4ce321d1a5a2.png",
+    "size": [
+      827,
+      1902
+    ],
+    "sha256": "9e50b87c8cca15f6302b8a405a6f01ab8b304a781967042d6055249c20bb404a"
+  },
+  {
+    "id": "cold_furnace",
+    "prompt": "One isolated long low cold furnace machinery module for a top-down 2D game, true transparent alpha background. Portrait composition. Rectangular footprint ratio 1 wide to 2.3 tall oriented vertically in image; axis-aligned NOT diagonal isometric. High overhead view, only a shallow front face. Dark soot iron rectangular housing, short stout cylindrical boiler running lengthwise, broad dull rust bands, heavy cold vent grille, a few worn brass valves. No chimney taller than body, no parts extending beyond base, no cables. Painted broad shading like reference, reduced contrast, warm upper left light. Inactive: NO glow, flames, smoke, sparks or orange windows. No signage/text, surroundings or cast shadow outside object. Full object with generous transparent padding.",
+    "source": "exec-8678724f-e13b-4fab-927f-bae68b9e3900.png",
+    "size": [
+      827,
+      1902
+    ],
+    "sha256": "0f8816260c99850686a50bdce389356678ba3fe98aa5e8e68cad3973d0e7c518"
+  },
+  {
+    "id": "service_manifold",
+    "prompt": "One isolated broad low industrial service manifold for a top-down 2D game, actual transparent alpha background. Landscape composition. Rectangular footprint 2.7 wide to 1 tall, axis-aligned horizontal, high orthographic overhead view with only shallow front face, NOT diagonal isometric. Broad worn muted green enamel rectangular chassis, two thick parallel pipes running LEFT TO RIGHT into a dark iron filter housing, chunky cream removable access panel, restrained dull brass coupling bands and four stout mounting bolts. Industrial full-size machinery, NOT a row of miniature machines. Same painted material treatment as provided workshop reference: broad shapes, warm upper-left lighting, moderate detail, no glow, smoke, text, floor, scenery, extending wires or cast shadow outside object. Full object inside canvas with clear transparent padding. Low profile and compact straight footprint for fitting actual collision rectangles.",
+    "source": "exec-26dc7e0a-4e07-4918-b30c-2aca9a9c45b3.png",
+    "size": [
+      2060,
+      763
+    ],
+    "sha256": "5e88e7b2cb4683742c4c6adc2db64d59474fdb11e153ee2d870aa5bbe326d720"
+  }
+]

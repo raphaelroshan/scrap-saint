@@ -1,0 +1,57 @@
+{
+  "scope": "Integrated arena material pass; matched centre, combat, reduced effects, edge and Rootworks captures",
+  "rubric": [
+    {
+      "criterion": "Floor hierarchy",
+      "score": 4,
+      "note": "Subdued small plates ground the field without competing with warnings."
+    },
+    {
+      "criterion": "Material scale",
+      "score": 4,
+      "note": "Fixed 384x256 material tiles preserve scale between Workshop and Rootworks."
+    },
+    {
+      "criterion": "Perspective and lighting",
+      "score": 4,
+      "note": "Overhead floor and axis-aligned props share upper-left highlights; no rotated painted lighting."
+    },
+    {
+      "criterion": "Navigation truth",
+      "score": 4,
+      "note": "Visible plinths explain complete blocked rectangles; fitted machinery stays inside them."
+    },
+    {
+      "criterion": "Pickup identity",
+      "score": 4,
+      "note": "Scrap and Repair Kit appear as useful objects; healing motes retain their spectral appearance."
+    },
+    {
+      "criterion": "Danger readability",
+      "score": 4,
+      "note": "Heat warning rings and actor silhouettes remain separate from quiet floor detail."
+    },
+    {
+      "criterion": "Visual cohesion",
+      "score": 3,
+      "note": "Painted scenery matches the supplied asset style, but procedural enemies and objectives still differ."
+    },
+    {
+      "criterion": "Site identity",
+      "score": 3,
+      "note": "Subtle site tint and different layouts remain readable; bespoke scenery per site is pending."
+    },
+    {
+      "criterion": "Reduced effects",
+      "score": 4,
+      "note": "Static floor/scenery and unchanged telegraphs preserve the same hierarchy with reduced effects."
+    },
+    {
+      "criterion": "Evidence",
+      "score": 4,
+      "note": "Matched renderer captures and identical simulation hashes; all six arenas pass footprint/aspect checks. No human playtest claimed."
+    }
+  ],
+  "limitation": "Procedural actors and objective markers remain; the environment modules are shared across sites and dense effects still require human playtesting.",
+  "next_task": "Integrate the painted enemy roster with directional poses and combat-scale readability checks."
+}
