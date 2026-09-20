@@ -1,0 +1,30 @@
+{
+  "base_commit": "3f646d265700e86c1a66e4328c6e2c5fd93cd8f9",
+  "timestamp_utc": "2026-09-20T17:22:15.298288+00:00",
+  "godot": "4.5.1-stable official f62fdbde1",
+  "renderer": "OpenGL Compatibility / NVIDIA GeForce RTX 4060",
+  "viewport": [
+    1440,
+    1000
+  ],
+  "capture_type": "isolated supporting-art gallery; not gameplay",
+  "sample_seconds": [
+    0.12,
+    0.36,
+    0.72
+  ],
+  "source_hashes": {
+    "tools/build_supporting_assets.py": "2d531eff6ddbc1eb26bcfbced70053b194ce69a5d929cf0e2e2948b3882793ad",
+    "tools/preview_supporting_assets.gd": "a4f4e42e68b29f380d28e94eafb81ab084329d2937ff84746002554ec594c96f",
+    "tests/test_supporting_assets.gd": "f82829cff12f4ba820c6d93a61955a9cd43ce96f423604b9d1037ce15b8c0e63",
+    "assets/supporting-art/manifest.json": "2008c3b05b9041cd2c2f5ff7b258e6aaaff3b0411d85f943b21089d77c84ddb2",
+    "assets/concepts/visual-target/arena-target.png": "73b672455c8ea74140ce6850a4e69e795e5e26c381ec94c3ded69204226ddf94"
+  },
+  "validation": [
+    "content validator and full scripts/agent_iteration.ps1 completed with exit 0",
+    "nine supporting asset scene checks passed",
+    "three fixed-time gallery captures inspected; whole-sprite motion only"
+  ],
+  "limitation": "Flattened sprites, one direction, dense fine wear and no real combat-scale test. Whole-body motion is not an articulated walk cycle.",
+  "next_task": "Integrate the approved pickup and enemy art into event-driven gameplay presentation with real combat-scale readability checks."
+}

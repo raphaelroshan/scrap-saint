@@ -1,0 +1,57 @@
+{
+  "scope": "Supporting painted asset gallery only; native renders at .12/.36/.72s. Baseline gameplay captures are separate.",
+  "rubric": [
+    {
+      "criterion": "Material cohesion",
+      "score": 4,
+      "note": "Rust, brass and chipped enamel match the painted reference; surface wear is dense."
+    },
+    {
+      "criterion": "Enemy silhouettes",
+      "score": 4,
+      "note": "Round Mite, elongated Hound and triangular speaker Drone separate clearly."
+    },
+    {
+      "criterion": "Pickup distinction",
+      "score": 4,
+      "note": "Metal cluster, ceramic fragment and box read as different categories."
+    },
+    {
+      "criterion": "Upgrade identity",
+      "score": 4,
+      "note": "Rivet, helping hand and inspection loupe express the existing item names."
+    },
+    {
+      "criterion": "Small-size readability",
+      "score": 3,
+      "note": "48px silhouettes remain distinct; Hound detail is busy and actual combat sizes remain untested."
+    },
+    {
+      "criterion": "Alpha compositing",
+      "score": 4,
+      "note": "No visible rectangular backgrounds in Godot; faint low-alpha noise remains in the originals."
+    },
+    {
+      "criterion": "Camera consistency",
+      "score": 3,
+      "note": "Hound is overhead; Drone reads more front-facing. Further directional work is needed."
+    },
+    {
+      "criterion": "Motion",
+      "score": 3,
+      "note": "Fixed-time renders show lunge, hover and reveal; limb articulation is absent."
+    },
+    {
+      "criterion": "Reduced motion",
+      "score": 4,
+      "note": "RESET restores static position, scale, rotation and opacity; browser respects reduced-motion preference."
+    },
+    {
+      "criterion": "Integration readiness",
+      "score": 3,
+      "note": "Nine loadable scenes with tests and hashes; no gameplay event hookup or combat approval yet."
+    }
+  ],
+  "limitation": "Flattened sprites, one direction, dense fine wear and no real combat-scale test. Whole-body motion is not an articulated walk cycle.",
+  "next_task": "Integrate the approved pickup and enemy art into event-driven gameplay presentation with real combat-scale readability checks."
+}

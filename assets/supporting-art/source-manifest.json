@@ -1,0 +1,92 @@
+[
+  {
+    "slug": "scrap_mite",
+    "id": "enemy.scrap_mite",
+    "name": "Scrap Mite",
+    "description": "A tiny squat round rust-red sorting crawler, six short stout iron legs, one orange sensor aperture and two little scrap sorting mandibles. Round beetle silhouette, patched plate.",
+    "motion": "scuttle",
+    "source": "exec-d2bb3f21-df23-43aa-a549-aab8745144f8.png",
+    "reference": "assets/concepts/visual-target/arena-target.png",
+    "generator": "OpenAI built-in image generation"
+  },
+  {
+    "slug": "rivet_hound",
+    "id": "enemy.rivet_hound",
+    "name": "Rivet Hound",
+    "description": "A low lean industrial quadruped seam-inspection machine, four stout piston legs, wedge-shaped rust iron head pointing down-right, front rivet jaws and long compressed spring spine. No organic parts. Angular charging silhouette.",
+    "motion": "charge",
+    "source": "exec-cc5fa299-b0a7-4bbd-83e5-65bd4b40102d.png",
+    "reference": "assets/concepts/visual-target/arena-target.png",
+    "generator": "OpenAI built-in image generation"
+  },
+  {
+    "slug": "choir_drone",
+    "id": "enemy.choir_drone",
+    "name": "Choir Drone",
+    "description": "A hovering corrupted acoustic factory signal machine. Three large dark speaker mouths in a compact triangular rust iron housing, brass suspension yoke and small red signal lens. No wings, no legs, no effects. Bell-like hanging silhouette.",
+    "motion": "hover",
+    "source": "exec-29d8a65b-3f78-4d67-bece-d8bafbca6e28.png",
+    "reference": "assets/concepts/visual-target/arena-target.png",
+    "generator": "OpenAI built-in image generation"
+  },
+  {
+    "slug": "scrap",
+    "id": "pickup.scrap",
+    "name": "Scrap",
+    "description": "A single compact cluster of three chunky salvaged objects: worn brass hex nut, bent iron bracket, copper wire loop. Readable currency pickup, not coins, no gold pile.",
+    "motion": "bob",
+    "source": "exec-58af44fc-362c-4193-b94a-ea5dad2c9d1f.png",
+    "reference": "assets/concepts/visual-target/arena-target.png",
+    "generator": "OpenAI built-in image generation"
+  },
+  {
+    "slug": "relic_shard",
+    "id": "pickup.relic_shard",
+    "name": "Relic Shard",
+    "description": "One large broken cream ceramic machine-reliquary fragment with a brass repaired seam, small inset green enamel patch and exposed copper edge. Asymmetric angular shard, not crystal or gem.",
+    "motion": "bob",
+    "source": "exec-7ea915e9-c373-4297-ad2d-7fe695c7d69c.png",
+    "reference": "assets/concepts/visual-target/arena-target.png",
+    "generator": "OpenAI built-in image generation"
+  },
+  {
+    "slug": "repair_kit",
+    "id": "pickup.repair_kit",
+    "name": "Field Repair Kit",
+    "description": "One chunky old green enamel maintenance tin, cream lid with simple pale mint wrench emblem, brass latch, stubby side handle, one soldered patch. No text, no medical cross.",
+    "motion": "bob",
+    "source": "exec-3a406a7e-d2f4-4922-a65f-b12072bb4047.png",
+    "reference": "assets/concepts/visual-target/arena-target.png",
+    "generator": "OpenAI built-in image generation"
+  },
+  {
+    "slug": "saints_rivet",
+    "id": "catalyst.saints_rivet",
+    "name": "Saint's Rivet",
+    "description": "One oversized short brass rivet with broad worn domed head, cream ceramic collar and tiny green thread tied beneath it. Humble treasured fastener, diagonal three-quarter view.",
+    "motion": "reveal",
+    "source": "exec-043bbf05-4210-460d-9cec-1e2c199fcc64.png",
+    "reference": "assets/concepts/visual-target/arena-target.png",
+    "generator": "OpenAI built-in image generation"
+  },
+  {
+    "slug": "spare_hand",
+    "id": "gift.spare_hand",
+    "name": "Spare Hand",
+    "description": "One detached friendly three-fingered mechanical maintenance hand with cream ceramic finger plates, green enamel palm and brass articulated joints, short capped wrist. Open helpful palm, no arm.",
+    "motion": "reveal",
+    "source": "exec-e37e3b0b-fd6c-4a80-9588-7e951894eb8b.png",
+    "reference": "assets/concepts/visual-target/arena-target.png",
+    "generator": "OpenAI built-in image generation"
+  },
+  {
+    "slug": "inspection_lens",
+    "id": "gift.inspection_lens",
+    "name": "Inspection Lens",
+    "description": "One chunky round inspection loupe with large pale cyan glass lens, worn brass concentric rim, green enamel short folding handle and visible soldered hinge repair. Crisp simple silhouette.",
+    "motion": "reveal",
+    "source": "exec-ee64bf00-a786-4e8a-abf8-fe49f0c21fd7.png",
+    "reference": "assets/concepts/visual-target/arena-target.png",
+    "generator": "OpenAI built-in image generation"
+  }
+]

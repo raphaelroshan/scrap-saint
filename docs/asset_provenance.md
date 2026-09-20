@@ -19,3 +19,9 @@ The runtime uses the original PNGs as aspect-preserved textures with a presentat
 ## Relic asset pack — 2026-09-21
 
 See assets/relic-pack/README.md and provenance.json. Two generated RGBA relic illustrations accompany ten Godot-baked pixel mechanism strips and SpriteFrames resources. The illustrated Nailer received a transparency edit; RGB under zero-alpha pixels may retain background colors and should never be displayed without alpha compositing. Native sheets reuse existing repository geometry at a fixed low-resolution render size; they are not generated animation guesses or hand-painted sprite atlases. These are reusable preview assets, not replacements already enabled in gameplay.
+
+## Supporting painted pack — 2026-09-21
+
+`assets/supporting-art` contains nine cutouts generated with the built-in OpenAI image tool, using this project’s `assets/concepts/visual-target/arena-target.png` solely as a material/style reference. Each image has its own subject prompt. Original output identifiers, descriptions, sizes, alpha bounds and SHA-256 hashes accompany the assets. No third-party reference art was introduced. Source PNGs are copied unchanged; Pillow only inspects them. Faint alpha noise outside the silhouette is retained, with alpha >16 bounds used for display sizing.
+
+Godot AnimationPlayer scenes animate whole sprites; these are original presentation motion studies, not hand-painted multi-frame gait animations. Captures are isolated asset previews at 1440x1000, not evidence of gameplay integration. The existing Saint and gameplay renderer are unchanged.
