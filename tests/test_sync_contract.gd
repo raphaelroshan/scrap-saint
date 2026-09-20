@@ -54,6 +54,7 @@ func _initialize():
 		a.start(0,147,"optional")
 		a.state.route = route.id
 		a.enter_destination(route)
+		a.command("begin_site")
 		a.state.wave = int(route.wave_count)
 		a.state.boss_spawned = true
 		a.state.boss_dead = true
@@ -62,6 +63,7 @@ func _initialize():
 		a.start(0,147,"optional")
 		a.state.route = route.id
 		a.enter_destination(route)
+		a.command("begin_site")
 		var scrap = a.state.scrap
 		a.advance_destination_node(0,9999,a.state.position)
 		a.advance_destination_node(0,9999,a.state.position)

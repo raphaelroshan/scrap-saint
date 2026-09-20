@@ -97,6 +97,9 @@ func _initialize():
 			if sim.state.phase == "travel":
 				if choose_free_road_option(sim) != "OK": transition_failed = true; break
 				continue
+			if sim.state.phase == "arrival":
+				if sim.command("begin_site") != "OK": transition_failed = true; break
+				continue
 			if sim.state.phase == "site_clear":
 				if sim.command("continue_site_clear") != "OK": transition_failed = true; break
 				continue

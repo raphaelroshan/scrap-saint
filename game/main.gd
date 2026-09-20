@@ -326,7 +326,9 @@ func handle_checkpoint_boundary(action: String, before_phase: String):
 		checkpoint_run("route commitment")
 	elif action == "choose_road_option":
 		commit_profile_progress()
-		checkpoint_run("destination arrival" if sim.state.phase == "combat" else "road choice")
+		checkpoint_run("destination arrival" if sim.state.phase == "arrival" else "road choice")
+	elif action == "begin_site":
+		checkpoint_run("site start")
 
 func select_map_route(route_id: String):
 	if sim.available_routes().any(func(route): return route.id == route_id):
@@ -652,6 +654,8 @@ func build_ui():
 			option_button.disabled = sim.state.scrap < int(option.cost)
 			if first_affordable == null and not option_button.disabled: first_affordable = option_button
 		if first_affordable != null: first_affordable.grab_focus()
+	elif sim.state.phase == "arrival":
+		button("ENTER %s  →" % str(sim.state.arrival_summary.site_name).to_upper(), Rect2(410, 615, 460, 48), func(): act("begin_site"), true).grab_focus()
 	elif sim.state.phase == "site_clear":
 		var continue_label = "COMPLETE THE CHAPTER  →" if bool(sim.state.site_clear_summary.get("terminal", false)) else ("OPEN THE PILGRIMAGE MAP  →" if str(sim.state.site_id) == str(sim.chapter.expedition_map.origin_site_id) else "CHOOSE THE NEXT DESTINATION  →")
 		button(continue_label, Rect2(410, 615, 460, 48), func(): act("continue_site_clear"), true).grab_focus()
@@ -693,7 +697,7 @@ func build_ui():
 		button("Save shift", Rect2(475, 415, 330, 42), save_run)
 		button("Settings", Rect2(475, 475, 330, 42), func(): open_panel("settings"))
 		button("Save & return to title", Rect2(475, 535, 330, 42), save_and_return_to_title)
-	if screen == "game" and not sim.state.is_empty() and sim.state.phase in ["route", "travel", "shop", "site_clear"]:
+	if screen == "game" and not sim.state.is_empty() and sim.state.phase in ["route", "travel", "arrival", "shop", "site_clear"]:
 		button("SAVE & TITLE", Rect2(1060, 710, 188, 30), save_and_return_to_title)
 	if screen == "game":
 		button("Sound " + ("off" if settings.state.muted else "on"), Rect2(28, 757, 117, 28), func(): toggle_setting("muted"))
@@ -782,6 +786,7 @@ func _draw():
 			else: draw_shop()
 		if sim.state.phase == "route": draw_route_choice()
 		if sim.state.phase == "travel": draw_travel()
+		if sim.state.phase == "arrival": draw_arrival()
 		if sim.state.phase == "site_clear": draw_site_clear()
 		if sim.state.phase in ["won", "lost"]: draw_results()
 		if sim.state.paused and sim.state.phase == "combat":
@@ -1057,6 +1062,7 @@ func draw_header():
 	if sim.is_destination(): instruction = sim.objective_data().description
 	if sim.state.phase == "route": instruction = "Preview a grey assignment, then accept it. Gold marks your selection."
 	if sim.state.phase == "travel": instruction = "Resolve this in-between area. No road node can be bypassed."
+	if sim.state.phase == "arrival": instruction = "Read the site pressure. Combat waits for your signal."
 	if sim.state.phase == "site_clear": instruction = "The site is clear. Review what the pilgrimage carries forward."
 	if sim.state.phase in ["won", "lost"]: instruction = "SHIFT RECORDED / Read the cause. Choose one change. Return quickly."
 	text_at(instruction, Vector2(60, 126), 16, GREEN)
@@ -1563,6 +1569,32 @@ func draw_site_clear():
 		carried.append(str(sim.config.weapons.get(weapon_id, {}).get("short", weapon_id)))
 	text_at("BUILD CARRIES FORWARD", Vector2(100, 582), 9, GOLD)
 	wrapped(", ".join(carried) + " · %d Evolutions · %d Gifts" % [summary.evolution_ids.size(), summary.gift_ids.size()], Vector2(274, 583), 718, 11, PAPER)
+
+func draw_arrival():
+	var summary: Dictionary = sim.state.arrival_summary
+	draw_rect(Rect2(60, 148, 980, 588), Color(0.035, 0.065, 0.07, 0.96))
+	text_at("DESTINATION REACHED · LEVEL %d / 3" % (sim.state.completed_site_ids.size() + 1), Vector2(105, 193), 11, GREEN)
+	text_at(str(summary.site_name), Vector2(100, 239), 36, PAPER, true)
+	wrapped(str(summary.experience), Vector2(104, 272), 880, 13, GREEN)
+	panel(Rect2(96, 326, 360, 221), Color("172a2d"))
+	text_at("ROAD ACCOUNT", Vector2(118, 357), 10, GOLD)
+	text_at("ARRIVAL REST / +%d STRUCTURE" % int(summary.arrival_repair), Vector2(118, 391), 11, GREEN)
+	text_at("STRUCTURE / %d OF %d" % [int(summary.structure), int(summary.max_structure)], Vector2(118, 422), 11, PAPER)
+	text_at("SCRAP / %d" % int(summary.scrap), Vector2(118, 453), 11, GOLD)
+	var road = summary.road_totals
+	text_at("PILGRIMAGE ROAD TOTAL", Vector2(118, 486), 9, MUTED)
+	text_at("%+d Scrap · %+d Structure" % [int(road.scrap_delta), int(road.structure_delta)], Vector2(118, 512), 11, PAPER)
+	panel(Rect2(480, 326, 520, 221), Color("1d2733"))
+	text_at("COMBAT BRIEFING", Vector2(506, 357), 10, RED)
+	text_at(str(summary.boss_name).to_upper(), Vector2(502, 391), 19, PAPER, true)
+	wrapped(str(summary.threat), Vector2(506, 421), 462, 11, PAPER)
+	text_at("%d WAVES · %s" % [int(summary.waves), pilgrimage_duration_text(summary)], Vector2(506, 474), 10, GOLD)
+	wrapped(str(summary.optional), Vector2(506, 502), 462, 10, MUTED)
+	var carried: Array[String] = []
+	for weapon_id in summary.weapon_ids:
+		carried.append(str(sim.config.weapons.get(weapon_id, {}).get("short", weapon_id)))
+	text_at("CARRIED BUILD", Vector2(100, 582), 9, GOLD)
+	wrapped(", ".join(carried) + " · %d Evolutions · %d Gifts" % [summary.evolution_ids.size(), summary.gift_ids.size()], Vector2(230, 583), 760, 11, PAPER)
 
 func draw_optional_machines():
 	for i in range(sim.state.machines.size()):

@@ -33,7 +33,7 @@ func start(doctrine: int = 0, seed_value: int = 147, mode: String = "relay", fra
 	arena.load_file("res://content/arenas/collapsed_workshop.json")
 	if not frames.has(frame_id): frame_id = "frame.pilgrim"
 	var frame = frames[frame_id]
-	state = {"mode": "optional" if mode == "optional" else "relay", "machines": [], "version": 4, "run_id": run_id if run_id != "" else "test-%d-%d-%s" % [seed_value, doctrine, frame_id], "frame_id": frame_id, "max_hp": float(frame.structure), "move_speed": float(frame.speed), "repair_grace_ticks": int(frame.repair_grace_ticks), "knockback_multiplier": float(frame.knockback_multiplier), "keeper_shove_segment": "", "repair_grace_until": 0, "arena_id": arena.data.id, "site_id": "site.collapsed_workshop", "route": "", "route_history": [], "route_origin_site_id": "", "travel_step": 0, "assignment_statuses": {}, "road_history": [], "road_flags": [], "road_totals": {"route_cost": 0, "service_cost": 0, "scrap_delta": 0, "structure_delta": 0.0}, "objective": [], "objective_complete": false, "objective_lock_until": 0, "weapon_lock_until": 0, "memory_id": "", "memory_ids": [], "site_clear_summary": {}, "chapter_complete": false, "pressure_until": 0, "pressure_multiplier": 1.0, "seed": seed_value, "rng": maxi(1, seed_value), "tick": 0, "phase": "combat", "paused": false,
+	state = {"mode": "optional" if mode == "optional" else "relay", "machines": [], "version": 5, "run_id": run_id if run_id != "" else "test-%d-%d-%s" % [seed_value, doctrine, frame_id], "frame_id": frame_id, "max_hp": float(frame.structure), "move_speed": float(frame.speed), "repair_grace_ticks": int(frame.repair_grace_ticks), "knockback_multiplier": float(frame.knockback_multiplier), "keeper_shove_segment": "", "repair_grace_until": 0, "arena_id": arena.data.id, "site_id": "site.collapsed_workshop", "route": "", "route_history": [], "route_origin_site_id": "", "travel_step": 0, "assignment_statuses": {}, "road_history": [], "road_flags": [], "road_totals": {"route_cost": 0, "service_cost": 0, "scrap_delta": 0, "structure_delta": 0.0}, "objective": [], "objective_complete": false, "objective_lock_until": 0, "weapon_lock_until": 0, "memory_id": "", "memory_ids": [], "site_clear_summary": {}, "arrival_summary": {}, "chapter_complete": false, "pressure_until": 0, "pressure_multiplier": 1.0, "seed": seed_value, "rng": maxi(1, seed_value), "tick": 0, "phase": "combat", "paused": false,
 		"wave": 1, "wave_tick": 0, "doctrine": doctrine, "position": arena.point(arena.data.start), "facing": Vector2.UP,
 		"hp": float(frame.structure), "relay_hp": float(config.relay.structure * config.relay.starting_fraction), "progress": 0.0,
 		"scrap": int(config.economy.starting_scrap), "shards": 0, "kills": 0, "next_id": 1,
@@ -159,6 +159,12 @@ func command(action: String, value = null) -> String:
 	if state.phase == "travel":
 		var travel_result = choose_road_option(str(value)) if action == "choose_road_option" else (advance_travel() if action == "advance_travel" else "OUTSIDE_WINDOW")
 		return travel_result
+	if state.phase == "arrival":
+		if action != "begin_site": return "OUTSIDE_WINDOW"
+		state.phase = "combat"
+		state.last_reason = "The Saint enters %s." % site_name(state.site_id)
+		emit("site_started", {"site_id": state.site_id, "route": state.route})
+		return "OK"
 	if state.phase == "site_clear":
 		if action not in ["continue_site_clear", "accept_memory"]: return "OUTSIDE_WINDOW"
 		if not is_destination():
@@ -278,7 +284,7 @@ func available_routes() -> Array:
 	return result
 
 func assignment_status(route_id: String) -> String:
-	if state.get("route", "") == route_id and state.get("phase", "") in ["travel", "combat", "shop", "site_clear", "memory", "won", "lost"]:
+	if state.get("route", "") == route_id and state.get("phase", "") in ["travel", "arrival", "combat", "shop", "site_clear", "memory", "won", "lost"]:
 		return "accepted"
 	if state.get("assignment_statuses", {}).has(route_id):
 		return str(state.assignment_statuses[route_id])
@@ -375,7 +381,7 @@ func enter_destination(route: Dictionary):
 	state.facing = Vector2.UP
 	state.wave = 1
 	state.wave_tick = 0
-	state.phase = "combat"
+	state.phase = "arrival"
 	state.boss_spawned = false
 	state.boss_dead = false
 	state.spawn_count = 0
@@ -397,6 +403,27 @@ func enter_destination(route: Dictionary):
 	state.memory_id = ""
 	state.pressure_until = 0
 	state.pressure_multiplier = 1.0
+	state.arrival_summary = {
+		"site_id": state.site_id,
+		"site_name": site_name(state.site_id),
+		"route_id": state.route,
+		"experience": str(route.description),
+		"threat": str(route.threat_preview),
+		"optional": str(route.optional_preview),
+		"boss_id": str(route.boss),
+		"boss_name": str(bosses.get(str(route.boss), {}).get("name", str(route.boss).trim_prefix("boss.").replace("_", " "))),
+		"waves": int(route.wave_count),
+		"wave_ticks": int(route.wave_ticks),
+		"arrival_floor": float(route.arrival_repair_floor),
+		"arrival_repair": arrival_repair,
+		"scrap": int(state.scrap),
+		"structure": float(state.hp),
+		"max_structure": saint_max_structure(),
+		"road_totals": state.road_totals.duplicate(true),
+		"weapon_ids": state.weapons.map(func(weapon): return weapon.id),
+		"evolution_ids": state.evolutions.duplicate(),
+		"gift_ids": state.gifts.duplicate(),
+	}
 	emit("destination_arrived", {"route": state.route, "site_id": state.site_id, "arrival_repair": arrival_repair})
 
 func objective_data() -> Dictionary:
@@ -1913,7 +1940,7 @@ func snapshot() -> Dictionary:
 	return state.duplicate(true)
 
 func restore(saved: Dictionary) -> bool:
-	if saved.get("version", 0) not in [1, 2, 3, 4] or not saved.has("weapons") or not saved.has("rng"): return false
+	if saved.get("version", 0) not in [1, 2, 3, 4, 5] or not saved.has("weapons") or not saved.has("rng"): return false
 	var saved_version = int(saved.get("version", 0))
 	var saved_route = str(saved.get("route", ""))
 	var saved_site = str(saved.get("site_id", "site.collapsed_workshop"))
@@ -1926,7 +1953,7 @@ func restore(saved: Dictionary) -> bool:
 	else: arena.load_file("res://content/arenas/collapsed_workshop.json")
 	if saved.get("arena_id", "") != arena.data.id: return false
 	state = saved.duplicate(true)
-	state.version = 4
+	state.version = 5
 	if not state.has("mode"): state.mode = "relay"
 	if not state.has("machines"): state.machines = []
 	var legacy_pressure_multiplier = float(routes.get(saved_route, {}).get("pressure", {}).get("cooldown_multiplier", 1.0))
@@ -1935,7 +1962,7 @@ func restore(saved: Dictionary) -> bool:
 		"spawn_count": 0, "active_machine": "", "repair_blocked_until": 0, "signal_reserve": 0, "kills_by_weapon": {}, "damage_taken": {}, "damage_by_wave": {}, "last_damage_source": "",
 		"scrap_sources": {"starting": int(config.economy.starting_scrap)}, "metrics": {"first_contact_tick": -1, "longest_threat_gap": 0, "threat_gap_started": state.get("tick", 0), "had_threat": false, "repairs_started": 0, "repairs_interrupted": 0, "useful_repairs": 0, "wasted_repairs": 0, "dead_shop_visits": 0}, "result_summary": {},
 		"scrap_by_segment": {}, "completed_site_ids": [], "defeated_boss_ids": [],
-		"site_id": "site.collapsed_workshop", "route": "", "route_history": [], "route_origin_site_id": "", "travel_step": 0, "assignment_statuses": {}, "road_history": [], "road_flags": [], "road_totals": {"route_cost": 0, "service_cost": 0, "scrap_delta": 0, "structure_delta": 0.0}, "objective": [], "objective_complete": false, "objective_lock_until": 0, "weapon_lock_until": 0, "memory_id": "", "memory_ids": [], "site_clear_summary": {}, "chapter_complete": false, "pressure_until": 0, "pressure_multiplier": legacy_pressure_multiplier,
+		"site_id": "site.collapsed_workshop", "route": "", "route_history": [], "route_origin_site_id": "", "travel_step": 0, "assignment_statuses": {}, "road_history": [], "road_flags": [], "road_totals": {"route_cost": 0, "service_cost": 0, "scrap_delta": 0, "structure_delta": 0.0}, "objective": [], "objective_complete": false, "objective_lock_until": 0, "weapon_lock_until": 0, "memory_id": "", "memory_ids": [], "site_clear_summary": {}, "arrival_summary": {}, "chapter_complete": false, "pressure_until": 0, "pressure_multiplier": legacy_pressure_multiplier,
 		"evolutions": [], "gifts": [], "component_tag": "", "inspection": "", "scrap_tax_progress": 0, "censer_defeats": 0, "ashen_defeats": 0, "parade_until": 0,
 		"loose_spring_until": 0, "loose_spring_sources": [], "brass_fuse_segment": "",
 		"gift_metrics": {"loose_spring_triggers": 0, "choir_filter_applications": 0, "brass_fuse_triggers": 0}}

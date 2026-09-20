@@ -151,6 +151,7 @@ func _initialize():
 	while s.state.phase == "travel":
 		var free_choice = s.current_road_node().choices.filter(func(choice): return int(choice.cost) == 0)[0]
 		s.command("choose_road_option", free_choice.id)
+	if s.state.phase == "arrival": s.command("begin_site")
 	var pump = Vector2(s.objective_data().nodes[0].position[0], s.objective_data().nodes[0].position[1])
 	s.state.position = pump + Vector2(70, 0)
 	s.state.weapons = [weapon("weapon.welded_halo")]

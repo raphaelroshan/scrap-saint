@@ -125,8 +125,16 @@ func run_checks():
 			if child is Button and child.text.contains("· FREE"):
 				child.pressed.emit()
 				break
-	check(game.sim.state.phase == "combat" and game.sim.state.site_id == "site.rootworks_pump", "travel buttons arrive at selected destination")
+	check(game.sim.state.phase == "arrival" and game.sim.state.site_id == "site.rootworks_pump", "travel buttons reach the selected destination briefing")
 	check(game.notification == "ROAD REST / 59 structure restored", "arrival explains recovery without erasing the road consequence")
+	var arrival = game.sim.state.arrival_summary
+	check(arrival.boss_id == "boss.factory_heart" and arrival.waves == 4 and str(arrival.optional).begins_with("Optional"), "arrival exposes boss, duration and optional-work facts")
+	var arrival_hash = game.sim.state_hash()
+	game._physics_process(0.0)
+	check(game.sim.state_hash() == arrival_hash, "arrival reading cannot advance the simulation")
+	for child in game.ui.get_children():
+		if child is Button and child.text.begins_with("ENTER ROOTWORKS"): child.pressed.emit(); break
+	check(game.sim.state.phase == "combat", "arrival action deliberately begins destination combat")
 	var red_edges = game.sim.chapter.expedition_map.edges.filter(func(edge): return edge.route_id == "route.red_foundry")
 	var brass_red_edge = red_edges.filter(func(edge): return edge.from_site_id == "site.brass_choir_relay")[0]
 	var rootworks_red_edge = red_edges.filter(func(edge): return edge.from_site_id == "site.rootworks_pump")[0]

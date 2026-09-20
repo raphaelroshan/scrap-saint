@@ -111,6 +111,7 @@ func _initialize():
 	destination_spring.state.gifts = ["gift.loose_spring"]
 	destination_spring.state.route = "route.brass_choir"
 	destination_spring.enter_destination(destination_spring.routes["route.brass_choir"])
+	destination_spring.command("begin_site")
 	var objective_data = destination_spring.objective_data()
 	destination_spring.state.objective[0].progress = float(objective_data.required_ticks) - 1.0
 	destination_spring.state.position = Vector2(objective_data.nodes[0].position[0], objective_data.nodes[0].position[1])

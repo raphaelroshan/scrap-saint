@@ -28,10 +28,11 @@ func open_map(game, scrap: int = 28):
 	game.sim.command("continue_site_clear")
 	game.map_selection = "route.brass_choir"
 
-func finish_travel(game):
+func finish_travel(game, begin_combat: bool = true):
 	while game.sim.state.phase == "travel":
 		var free_choice = game.sim.current_road_node().choices.filter(func(choice): return int(choice.cost) == 0)[0]
 		game.sim.command("choose_road_option", free_choice.id)
+	if begin_combat and game.sim.state.phase == "arrival": game.sim.command("begin_site")
 
 func force_site_clear(game):
 	game.sim.state.wave = game.sim.current_wave_count()
@@ -98,6 +99,9 @@ func run_capture():
 	game.map_selection = "route.rootworks"
 	game.sim.command("choose_route", "route.rootworks")
 	await capture(game, directory, "ROOTWORKS_ROAD_ENCOUNTER")
+	finish_travel(game, false)
+	game.capture_label = "M3 ARRIVAL / CONFIGURED FIXTURE"
+	await capture(game, directory, "M3_ROOTWORKS_ARRIVAL")
 
 	configure_second_tier_board(game, "site.brass_choir_relay", "route.red_foundry")
 	game.capture_label = "SCRIPTED SECOND-TIER BOARD / BRASS"
@@ -117,14 +121,23 @@ func run_capture():
 	game.sim.command("continue_site_clear")
 	game.sim.state.scrap = 40
 	game.sim.command("choose_route", "route.brass_choir")
-	finish_travel(game)
+	finish_travel(game, false)
+	game.capture_label = "M3 ARRIVAL / CONFIGURED FIXTURE"
+	await capture(game, directory, "M3_BRASS_ARRIVAL")
+	game.ui_scale = 1.15
+	await capture(game, directory, "M3_BRASS_ARRIVAL_LARGE_TEXT")
+	game.ui_scale = 1.0
+	game.sim.command("begin_site")
 	game.sim.state.objective[0].complete = true
 	game.sim.state.objective[0].progress = float(game.sim.objective_data().required_ticks)
 	force_site_clear(game)
 	await capture(game, directory, "M2_MIDDLE_SITE_CLEAR")
 	game.sim.command("continue_site_clear")
 	game.sim.command("choose_route", "route.pale_archive")
-	finish_travel(game)
+	finish_travel(game, false)
+	game.capture_label = "M3 ARRIVAL / CONFIGURED FIXTURE"
+	await capture(game, directory, "M3_PALE_ARCHIVE_ARRIVAL")
+	game.sim.command("begin_site")
 	for node in game.sim.state.objective:
 		node.complete = true
 		node.progress = float(game.sim.objective_data().required_ticks)

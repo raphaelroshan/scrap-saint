@@ -20,6 +20,7 @@ func finish_travel(sim):
 		var node = sim.current_road_node()
 		var free_choice = node.choices.filter(func(choice): return int(choice.cost) == 0)[0]
 		check(sim.command("choose_road_option", free_choice.id) == "OK", "authored road choice advances")
+	if sim.state.phase == "arrival": check(sim.command("begin_site") == "OK", "arrival begins only through its public command")
 
 func equipped_evolution(sim, evolution_id: String):
 	var recipe = sim.evolution_recipes[evolution_id]

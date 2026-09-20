@@ -15,6 +15,7 @@ func finish_travel(sim):
 	while sim.state.phase == "travel":
 		var free_choice = sim.current_road_node().choices.filter(func(choice): return int(choice.cost) == 0)[0]
 		sim.command("choose_road_option", free_choice.id)
+	if sim.state.phase == "arrival": sim.command("begin_site")
 
 func arrive_terminal(game, parent_site: String, first_route: String, first_memory: String, terminal_route: String):
 	game.sim.start(0, 147, "optional")
