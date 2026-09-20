@@ -47,6 +47,13 @@ func controller_start(game):
 	game._input(event)
 	await process_frame
 
+func controller_back(game):
+	var event = InputEventJoypadButton.new()
+	event.pressed = true
+	event.button_index = JOY_BUTTON_B
+	game._input(event)
+	await process_frame
+
 func _initialize():
 	call_deferred("run_checks")
 
@@ -75,7 +82,11 @@ func run_checks():
 	check(game.screen == "menu", "controller-style accept opens setup")
 	await activate(button_with(game, "Choose Mourner"))
 	check(game.chosen == 2, "setup Blessing button changes the selected doctrine")
-	await activate(button_with(game, "BEGIN THE FIRST SHIFT", true))
+	await activate(button_with(game, "REVIEW THE PILGRIMAGE", true))
+	check(game.screen == "departure_map" and game.sim.state.is_empty(), "setup opens a non-authoritative departure preview")
+	check(root.gui_get_focus_owner() is Button and root.gui_get_focus_owner().text == "COLLAPSED WORKSHOP", "departure map focuses the only launchable site")
+	await activate(root.gui_get_focus_owner())
+	await activate(button_with(game, "BEGIN AT COLLAPSED WORKSHOP", true))
 	check(game.screen == "game" and game.sim.state.phase == "combat", "setup begins the authoritative run")
 
 	await controller_start(game)
@@ -99,13 +110,20 @@ func run_checks():
 	game.sim.state.wave = game.sim.current_wave_count()
 	game.sim.state.boss_dead = true
 	game.sim.step(Vector2.ZERO)
+	game.last_phase = game.sim.state.phase
 	game.build_ui()
 	await process_frame
 	check(game.sim.state.phase == "route", "Foreman completion reaches route selection")
-	check(root.gui_get_focus_owner() is Button and root.gui_get_focus_owner().text == "BRASS CHOIR RELAY", "expedition map has a controller focus target")
+	check(root.gui_get_focus_owner() is Button and root.gui_get_focus_owner().text == "BRASS CHOIR", "expedition map has a controller focus target")
+	var route_map_hash = game.sim.state_hash()
+	await activate(button_with(game, "PALE ARCHIVE"))
+	check(game.map_selection == "", "controller may inspect a future site without arming travel")
+	await controller_back(game)
+	check(game.map_inspection_site == game.sim.state.site_id and game.sim.state_hash() == route_map_hash, "controller Back returns to the current site without mutating the run")
+	await activate(button_with(game, "BRASS CHOIR"))
 	await activate(root.gui_get_focus_owner())
 	check(game.map_selection == "route.brass_choir" and game.sim.state.phase == "route", "controller preview does not accept an assignment implicitly")
-	await activate(button_with(game, "ACCEPT ASSIGNMENT", true))
+	await activate(button_with(game, "TRAVEL TO BRASS CHOIR", true))
 	check(game.sim.state.phase == "travel", "focused route card accepts controller-style input")
 
 	while game.sim.state.phase == "travel":
@@ -127,7 +145,7 @@ func run_checks():
 	check(root.gui_get_focus_owner() is Button and root.gui_get_focus_owner().text in ["PALE ARCHIVE", "RED FOUNDRY", "NULL ASSEMBLY"], "terminal route selection has a controller focus target")
 	await activate(root.gui_get_focus_owner())
 	check(game.sim.state.phase == "route", "terminal route preview does not bypass assignment confirmation")
-	await activate(button_with(game, "ACCEPT ASSIGNMENT", true))
+	await activate(button_with(game, "TRAVEL TO", true))
 	while game.sim.state.phase == "travel":
 		check(root.gui_get_focus_owner() is Button, "each terminal travel beat has a focused continuation")
 		await activate(root.gui_get_focus_owner())

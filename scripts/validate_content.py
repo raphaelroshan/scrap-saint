@@ -187,10 +187,20 @@ def validate_expedition_graph(chapter: dict) -> None:
     assert all(isinstance(site_id, str) and site_id for site_id in route_site_ids), "every route needs a destination site"
     assert len(route_site_ids) == len(set(route_site_ids)), "chapter routes must have unique destination sites"
     assert map_site_ids == {origin_site_id, *route_site_ids}, "expedition map contains an orphan or missing route site"
+    origin_preview = expedition_map.get("origin_preview", {})
+    for field in ("experience", "threat_preview", "optional_preview", "boss"):
+        assert isinstance(origin_preview.get(field), str) and origin_preview[field], f"origin preview missing {field}"
+    assert origin_preview["optional_preview"].startswith("Optional"), "origin preview must identify optional work"
+    assert origin_preview.get("wave_count", 0) > 0 and origin_preview.get("wave_ticks", 0) > 0, "origin preview needs duration data"
 
     expected_edges: set[tuple[str, str, str]] = set()
     expected_pairs: set[tuple[str, str]] = set()
     for route in routes:
+        for field in ("description", "threat_preview", "optional_preview"):
+            assert isinstance(route.get(field), str) and route[field], f"{route['id']}: missing map preview {field}"
+        assert route["optional_preview"].startswith("Optional"), f"{route['id']}: map preview must identify optional work"
+        assert route.get("wave_count", 0) > 0 and route.get("wave_ticks", 0) > 0, f"{route['id']}: map preview needs duration data"
+        assert 0 < route.get("arrival_repair_floor", 0) <= 1, f"{route['id']}: invalid arrival floor"
         from_sites = route.get("from_sites", [])
         assert from_sites, f"{route['id']}: missing graph parent"
         assert len(from_sites) == len(set(from_sites)), f"{route['id']}: duplicate graph parent"

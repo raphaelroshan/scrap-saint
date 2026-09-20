@@ -20,6 +20,8 @@ Rendered fixtures use explicit setup budgets/states, including a Results fixture
 
 SC-15/SC-17 add ten rendered chapter fixtures: the seven opening/mid-site states plus `PALE_ARCHIVE_INDEX`, `RED_FOUNDRY_VENTS`, and `NULL_ASSEMBLY_QUIET`. They are explicit deterministic presentation fixtures, not a natural completed expedition.
 
+M1 pilgrimage navigation adds a presentation-only departure preview plus a full-screen active route map. `test_main_menu.gd`, `test_ui.gd`, `test_flow_input.gd`, `test_expedition_map.gd` and the manifest tests cover non-authoritative inspection, six stable site IDs, mouse/controller-style selection, reversible future-node inspection, exact-once Travel and required preview data. `capture_expedition_map.gd` adds departure and large-text fixtures; these establish layout and control state, not newcomer comprehension or reading pace.
+
 Run:
 
 ```bash
