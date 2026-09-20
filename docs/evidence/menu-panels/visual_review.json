@@ -1,0 +1,57 @@
+{
+  "scope": "Field manual, grouped Settings and contextual Pause",
+  "rubric": [
+    {
+      "criterion": "Information hierarchy",
+      "score": 4,
+      "note": "Manual separates premise, practical actions and a persistent takeaway."
+    },
+    {
+      "criterion": "Large text",
+      "score": 4,
+      "note": "The five pages and settings fit at 1.15 scale without label collisions."
+    },
+    {
+      "criterion": "Pause context",
+      "score": 4,
+      "note": "Site, wave, combat time, health and currencies appear beside the actions."
+    },
+    {
+      "criterion": "Navigation",
+      "score": 4,
+      "note": "Previous disables on page one; final action distinguishes title from paused run."
+    },
+    {
+      "criterion": "Settings clarity",
+      "score": 4,
+      "note": "Grouped preferences include explanatory copy and a visible volume value."
+    },
+    {
+      "criterion": "Input recovery",
+      "score": 4,
+      "note": "Escape and controller Back cancel rebinding; closing clears pending capture."
+    },
+    {
+      "criterion": "Theme cohesion",
+      "score": 4,
+      "note": "Brass, green enamel and retained title backdrop match existing menus."
+    },
+    {
+      "criterion": "Illustration consistency",
+      "score": 3,
+      "note": "Existing Saint remains graphic beside painted machines; no replacement is claimed."
+    },
+    {
+      "criterion": "Contrast",
+      "score": 4,
+      "note": "Cream and gold headings separate from muted supporting text on opaque panels."
+    },
+    {
+      "criterion": "Evidence",
+      "score": 4,
+      "note": "Native normal/large captures at two viewports and identical paused-state hashes; no human test claimed."
+    }
+  ],
+  "limitation": "Rendered fixtures and synthetic input tests do not establish human comprehension or physical controller usability. The retained Saint is a procedural sprite; illustration fidelity remains mixed by design.",
+  "next_task": "Give the Memory Crane and Foreman Engine painted bodies and state-driven mechanical animation."
+}

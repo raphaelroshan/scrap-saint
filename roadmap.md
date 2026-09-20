@@ -1,5 +1,9 @@
 # Scrap Saint roadmap
 
+## Supporting menus completed — 2026-09-21
+
+The field manual, grouped Settings and contextual Pause screen replace their sparse layouts. Manual copy follows the approved origin and optional-repair rules; a real volume control persists through the settings service. Reading from Pause preserves the run. [Review normal and large-text captures](docs/evidence/menu-panels/review.html). The title, setup, relic shop and expedition map already have working flows and remain intact. The next art task remains Memory Crane and Foreman Engine; normal-speed human testing remains a release gate.
+
 ## Painted actor integration — 2026-09-21
 
 The six ordinary enemy families are live in the painted arena. Three Workshop repair fixtures now visibly progress from broken through working feedback to restored artwork. [Review gameplay captures](assets/actors/review.html). Directional poses and articulated gait remain deferred; no rotated or mirrored lighting is used to fake them.

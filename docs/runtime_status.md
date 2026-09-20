@@ -1,5 +1,13 @@
 # First Shift runtime — 0.6.0 preview
 
+## Supporting menus — 2026-09-21
+
+How to Play now has five illustrated pages covering the Saint's manifestation through freely given repairs, movement, optional work, relic assembly and the three-site expedition. It is available from the title and Pause. Completing it from Pause returns to the same paused run; completing it from the title opens setup.
+
+Settings groups sound/display, comfort and movement, exposes the existing persistent master-volume preference and explains effects and camera controls. Controller Back cancels a pending binding first; leaving Settings clears pending input capture. Pause displays the current site, wave, elapsed combat time, structure and currencies beside Resume, Save, Settings, How to Play and Save & Title. The illustrated title, setup, shop and map retain their established flows.
+
+See [the menu packet](task_packets/menu_completion.md) and [native review](evidence/menu-panels/review.html). Human comprehension and physical controller testing remain outstanding.
+
 ## Painted enemies and repairs — 2026-09-21
 
 All six ordinary enemy families now use painted bodies. Rust Pilgrim, Forklift Brute and Cinder Spitter join the earlier Mite, Hound and Drone. Existing charge warnings, support fields, statuses and hit reactions remain. Workshop Salvage Sorter, Coolant Pump and Warning Bell use matched broken/restored artwork, with progress and welding feedback while repairing. Simulation outcomes and optional-work rules are unchanged.

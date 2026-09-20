@@ -2,6 +2,8 @@ extends Node2D
 const Sim = preload("res://game/simulation.gd")
 const ArenaArt = preload("res://game/arena_art.gd")
 var arena_art = ArenaArt.new()
+const MenuPanels = preload("res://game/menu_panels.gd")
+var manual_pages = JSON.parse_string(FileAccess.get_file_as_string("res://content/ui/field_manual.json")).pages
 const ActorArt = preload("res://game/actor_art.gd")
 var actor_art = ActorArt.new()
 const Sound = preload("res://game/sound.gd")
@@ -203,8 +205,7 @@ func _unhandled_key_input(event):
 		close_ledger()
 		return
 	if event.keycode == KEY_ESCAPE and screen in ["settings", "tutorial", "quit_confirm"]:
-		screen = previous_screen
-		build_ui()
+		close_panel()
 		return
 	if event.keycode == KEY_ESCAPE and screen == "game" and evolution_ledger_open:
 		evolution_ledger_open = false
@@ -244,7 +245,10 @@ func _input(event):
 			get_viewport().set_input_as_handled()
 			return
 	if event is InputEventJoypadButton and event.pressed and event.button_index == JOY_BUTTON_B and screen in ["settings", "tutorial", "quit_confirm"]:
-		close_panel()
+		if awaiting_binding != "":
+			awaiting_binding = ""
+			build_ui()
+		else: close_panel()
 		get_viewport().set_input_as_handled()
 	if event is InputEventJoypadButton and event.pressed and event.button_index == JOY_BUTTON_B and screen == "game" and not sim.state.is_empty() and sim.state.phase == "route":
 		select_map_site(str(sim.state.site_id))
@@ -407,6 +411,7 @@ func open_panel(panel_name: String):
 	build_ui()
 
 func close_panel():
+	awaiting_binding = ""
 	screen = previous_screen
 	build_ui()
 
@@ -594,26 +599,21 @@ func build_ui():
 		button("Stay", Rect2(340, 470, 280, 46), close_panel, true).grab_focus()
 		button("Quit game", Rect2(660, 470, 280, 46), func(): get_tree().quit())
 	elif screen == "tutorial":
-		button("Back", Rect2(318, 640, 180, 42), close_panel)
-		if tutorial_page > 0: button("Previous", Rect2(514, 640, 180, 42), func(): tutorial_page -= 1; build_ui())
-		button("Begin setup" if tutorial_page == 4 else "Next", Rect2(710, 640, 250, 42), func():
-			if tutorial_page == 4:
-				screen = "menu"
+		button("Back", Rect2(100, 680, 180, 44), close_panel)
+		var previous = button("Previous", Rect2(680, 680, 180, 44), func(): tutorial_page -= 1; build_ui())
+		previous.disabled = tutorial_page == 0
+		var last_page = tutorial_page == manual_pages.size()-1
+		button(("Return to pause" if previous_screen == "game" else "Begin setup") if last_page else "Next", Rect2(880, 680, 300, 44), func():
+			if last_page:
+				if previous_screen == "game": close_panel()
+				else:
+					screen = "menu"
+					build_ui()
 			else:
 				tutorial_page += 1
-			build_ui(), true).grab_focus()
+				build_ui(), true).grab_focus()
 	elif screen == "settings":
-		button("Sound: " + ("off" if settings.state.muted else "on"), Rect2(250, 280, 360, 42), func(): toggle_setting("muted"))
-		button("Effects: " + ("reduced" if settings.state.reduced_effects else "full"), Rect2(670, 280, 360, 42), func(): toggle_setting("reduced_effects"))
-		button("Text: " + ("large" if settings.state.ui_scale > 1.0 else "normal"), Rect2(250, 338, 360, 42), cycle_text_scale)
-		button("Display: " + ("fullscreen" if settings.state.fullscreen else "windowed"), Rect2(670, 338, 360, 42), func(): toggle_setting("fullscreen"))
-		button("Camera motion: " + ("on" if settings.state.screen_shake else "off"), Rect2(460, 390, 360, 34), func(): toggle_setting("screen_shake"))
-		var labels = {"move_up": "Move up", "move_down": "Move down", "move_left": "Move left", "move_right": "Move right"}
-		for i in range(Settings.ACTIONS.size()):
-			var action = Settings.ACTIONS[i]
-			var key_name = OS.get_keycode_string(int(settings.state.controls[action]))
-			button(labels[action] + ": " + ("press a key…" if awaiting_binding == action else key_name), Rect2(250 + (i % 2) * 420, 430 + int(i / 2) * 58, 360, 42), func(): awaiting_binding = action; build_ui())
-		button("Back", Rect2(470, 590, 340, 46), close_panel, true).grab_focus()
+		MenuPanels.build_settings(self)
 	elif screen == "menu":
 		if dev_mode: button("Optional repairs" if run_mode == "optional" else "Relay defence", Rect2(55, 166, 220, 32), func(): run_mode = "relay" if run_mode == "optional" else "optional"; build_ui())
 		button("Seed %d / change" % seed_value, Rect2(790, 94, 200, 32), func(): seed_value = randi_range(1, 1000000); build_ui())
@@ -697,10 +697,11 @@ func build_ui():
 	elif sim.state.phase in ["won", "lost"]:
 		button("RETURN TO THE WORKSHOP", Rect2(410, 655, 460, 44), func(): screen = "menu"; build_ui(), true).grab_focus()
 	elif sim.state.paused:
-		button("Resume", Rect2(475, 355, 330, 46), func(): sim.command("pause"); build_ui(), true).grab_focus()
-		button("Save shift", Rect2(475, 415, 330, 42), save_run)
-		button("Settings", Rect2(475, 475, 330, 42), func(): open_panel("settings"))
-		button("Save & return to title", Rect2(475, 535, 330, 42), save_and_return_to_title)
+		button("Resume", Rect2(760, 252, 300, 46), func(): sim.command("pause"); build_ui(), true).grab_focus()
+		button("Save shift", Rect2(760, 310, 300, 42), save_run)
+		button("Settings", Rect2(760, 366, 300, 42), func(): open_panel("settings"))
+		button("How to play", Rect2(760, 422, 300, 42), func(): tutorial_page = 0; open_panel("tutorial"))
+		button("Save & return to title", Rect2(760, 494, 300, 42), save_and_return_to_title)
 	if screen == "game" and not sim.state.is_empty() and sim.state.phase in ["route", "travel", "arrival", "shop", "site_clear"]:
 		button("SAVE & TITLE", Rect2(1060, 710, 188, 30), save_and_return_to_title)
 	if screen == "game":
@@ -795,7 +796,7 @@ func _draw():
 		if sim.state.phase in ["won", "lost"]: draw_results()
 		if sim.state.paused and sim.state.phase == "combat":
 			draw_rect(Rect2(0, 0, 1280, 745), Color(0.025, 0.05, 0.06, 0.87))
-			text_at("The machines can wait.", Vector2(432, 300), 34, PAPER, true)
+			MenuPanels.draw_pause(self)
 	if not evolution_showcase.is_empty(): draw_evolution_showcase()
 	if notification != "" and Time.get_ticks_msec() < notice_until:
 		panel(Rect2(430, 699, 600, 34))
@@ -1007,25 +1008,10 @@ func draw_menu():
 		if not unlocked: text_at("COMPLETE A DESTINATION", Vector2(x + 14, 520), 10, GOLD)
 
 func draw_tutorial():
-	draw_rect(Rect2(155, 115, 970, 545), Color(0.035, 0.075, 0.08, 0.97))
-	var titles = ["Wake, little machine.", "Move; the relics answer.", "Repairs are choices.", "Build a doctrine.", "Carry it down the road."]
-	var bodies = [
-		"You are a maintenance automaton assembled from incompatible machines. Reach the First Engine—and decide whether the old order deserves repair.",
-		"Move with your chosen keys or a controller stick. Weapons fire automatically. Positioning decides which geometry reaches which threat.",
-		"Workshop machines are optional. Their reward and work time are shown before you commit. Leave when the risk stops being worth it; progress is preserved.",
-		"Spend Scrap on weapons and Gifts. Recover through field drops and optional repairs. Relic Shards buy catalysts. Combine matching ranks; evolve a Rank III relic with its named catalyst. Gifts change one rule and occupy separate slots.",
-		"Defeat the Foreman, choose Brass Choir or Rootworks, then follow one final authored road. Results explain the full route; Memory unlocks choices, never permanent damage."
-	]
-	text_at("FIELD MANUAL %d / 5" % (tutorial_page + 1), Vector2(220, 190), 12, GOLD)
-	text_at(titles[tutorial_page], Vector2(215, 260), 38, PAPER, true)
-	wrapped(bodies[tutorial_page], Vector2(220, 325), 820, 20, GREEN)
-	text_at(["IDENTITY", "COMBAT", "REPAIR", "ASSEMBLY", "PILGRIMAGE"][tutorial_page], Vector2(220, 545), 12, MUTED)
+	MenuPanels.draw_manual(self)
 
 func draw_settings():
-	draw_rect(Rect2(155, 115, 970, 545), Color(0.035, 0.075, 0.08, 0.97))
-	text_at("SETTINGS", Vector2(220, 190), 12, GOLD)
-	text_at("Make the workshop readable.", Vector2(215, 245), 36, PAPER, true)
-	text_at("Keyboard bindings persist locally. Arrow keys and controller movement remain available.", Vector2(250, 565), 12, MUTED)
+	MenuPanels.draw_settings(self)
 
 func draw_header():
 	text_at("SCRAP SAINT", Vector2(28, 42), 25, PAPER, true)

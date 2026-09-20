@@ -1,0 +1,94 @@
+{
+  "pages": [
+    {
+      "id": "origin",
+      "title": "A kindness left in the metal.",
+      "eyebrow": "THE SAINT",
+      "body": "In a devastated machine world, repairs given freely left something behind. That grace gathered in discarded parts. You are what answered.",
+      "steps": [
+        [
+          "Carry the work forward",
+          "Move through the ruins, gather relics and choose which broken machines receive your care."
+        ],
+        [
+          "Begin with a choice",
+          "Choose a frame and Blessing. Your weapons can take a different direction as the pilgrimage unfolds."
+        ]
+      ],
+      "note": "The first chapter begins at the Collapsed Workshop.",
+      "art": "saint"
+    },
+    {
+      "id": "movement",
+      "title": "Move; the relics answer.",
+      "eyebrow": "SURVIVE",
+      "body": "Weapons attack automatically. Your job is to find room, collect what falls and put each relic where its attack can reach.",
+      "steps": [
+        [
+          "Keep an exit open",
+          "Move around the machinery. Leave marked danger areas before the attack lands."
+        ],
+        [
+          "Read the threat",
+          "Hounds and Brutes show their charge direction. A Choir Drone supports nearby machines."
+        ]
+      ],
+      "note": "Move with your chosen keys, arrow keys or the left stick.",
+      "art": "enemy.forklift_brute"
+    },
+    {
+      "id": "repairs",
+      "title": "Repair when it helps.",
+      "eyebrow": "RESTORE",
+      "body": "Stand near a broken Workshop machine to work on it. Read its reward, watch the approaching enemies and leave whenever you need room.",
+      "steps": [
+        [
+          "Choose the reward",
+          "The Sorter grants Scrap, the Pump restores structure and the Bell staggers enemies."
+        ],
+        [
+          "Keep moving when hurt",
+          "Repair kits also drop in the field. Shops sell relics; repairs never occupy their offer slots."
+        ]
+      ],
+      "note": "Repairs are optional. Survive and defeat the boss to advance.",
+      "art": "repair"
+    },
+    {
+      "id": "assembly",
+      "title": "Make a relic your own.",
+      "eyebrow": "BUILD",
+      "body": "Between waves, spend Scrap on weapons and Gifts. Relic Shards buy catalysts. A Blessing favours a direction while leaving room to experiment.",
+      "steps": [
+        [
+          "Combine, then transform",
+          "Combine matching weapon ranks. A Rank III relic and its named catalyst can unlock an Evolution in the ledger."
+        ],
+        [
+          "Make room deliberately",
+          "Carry four active weapons and one reserve. Gifts have separate slots. Inspect an offer before buying."
+        ]
+      ],
+      "note": "The Evolution Ledger shows recipes and missing ingredients.",
+      "art": "assembly"
+    },
+    {
+      "id": "pilgrimage",
+      "title": "Carry it down the road.",
+      "eyebrow": "CONTINUE",
+      "body": "Defeat the Foreman to leave the Workshop. Choose Brass Choir or Rootworks, then follow one more road to the final site of this expedition.",
+      "steps": [
+        [
+          "Inspect before travelling",
+          "The map explains a destination. Select it to inspect, then confirm separately to travel."
+        ],
+        [
+          "Return when you are ready",
+          "Save from Pause or between waves. Continue on the title restores the expedition you left."
+        ]
+      ],
+      "note": "Memories open new choices. They do not buy permanent damage.",
+      "art": "route"
+    }
+  ]
+}

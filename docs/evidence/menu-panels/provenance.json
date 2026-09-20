@@ -1,0 +1,67 @@
+{
+  "build": "0.6.0-preview + supporting menus",
+  "base_commit": "4ee3130d6123765b1a3f48d3353ac22b992dc834",
+  "godot": "4.5.1-stable official f62fdbde1",
+  "viewport": [
+    1280,
+    800
+  ],
+  "additional_viewport": [
+    1920,
+    1080
+  ],
+  "text_scales": [
+    1.0,
+    1.15
+  ],
+  "seed": 147,
+  "timestamp_utc": "2026-09-20T18:25:22.453368+00:00",
+  "capture_type": "Configured native renderer fixtures; paused seed147 run; no human testing",
+  "source_hashes": {
+    "game/main.gd": "f5e42f1f56e14898bf1fc0e0812245721401d304acdd7447b42b8712821698ed",
+    "game/menu_panels.gd": "5aed6d402bd3c9f7977ce9574cf15578c1d1f7bd0b20629050b33f8c1cb4b84d",
+    "content/ui/field_manual.json": "f47ec9a0671ebd1a3b4ee1c363130b002ae0b82cc55b7ee591ece3af0f7dd603",
+    "tests/test_menu_panels.gd": "ea3fb93611f7904f634d5717f7dd1b5d629b5297934dda2532739fd729633826",
+    "tests/capture_menu_panels.gd": "91bd3664c52144d194bb7f8d2cc765d56a4db29c72911d9a6cf4c693ba53e8ba"
+  },
+  "capture_hashes": {
+    "BINDING_LARGE.png": "69191cb790f2886cd1bc57da61b2fa69c5966be10885d48510f887f682be840b",
+    "BINDING_NORMAL.png": "9a535b91e7d47495d1d4b4e18b86373f03e0760534d148d3ade39eeae74583e2",
+    "MANUAL_0_LARGE.png": "7b7fd8ccfd8cc7b66552afd8cd110e0d2b807857b2d7d13337f59883ed3d5b25",
+    "MANUAL_0_NORMAL.png": "3667f4808c585f9b0c989ce2a2686b2aa58c98aa189dfba5daba235f57921e80",
+    "MANUAL_1_LARGE.png": "49b40b7024148d578e737fbe4283b4af703c7e7fa92e9023b17d18d7dc21531f",
+    "MANUAL_1_NORMAL.png": "3eafc9419679fb288dafaba1c816c79ad9d7f76580027f9e98c7b01033a3ec59",
+    "MANUAL_2_LARGE.png": "60e30861363cbcd756d335909780007fcf207eac718147bb3456062b27662167",
+    "MANUAL_2_NORMAL.png": "d02e442557c2942a895df33ec558e9f5df1d68ecf0a3a5cc75e55c0b68fa4bc7",
+    "MANUAL_3_LARGE.png": "95c15ae2fdc90a768f753bd0430f35768822bd3e03c8f952031e408b49cd0e64",
+    "MANUAL_3_NORMAL.png": "fdcb981a9c218540cd2f9cef4e7058c93f45b9f2b7cdee9a2457b0e23ed9bbfd",
+    "MANUAL_4_LARGE.png": "756d16f28f8bfdc82b2b3082af8b04c4b4bab853f2657d93738e5bae4ede44e8",
+    "MANUAL_4_NORMAL.png": "cb7c24883e6550ff6d3d8a67380f380868cbc0c7b3cec0570f3c5957cd135c05",
+    "PAUSE_LARGE.png": "435c580e5ae8a5647ca9765b2c4d5c801190f083b123b1370a13459336cc0743",
+    "PAUSE_NORMAL.png": "3c58a26043b40c909833923a0a538b6fec3141592d0295ad4477b7bb7c8ec49c",
+    "SETTINGS_1920.png": "e5db6fceb2cb3a5ba71bee97eb2c17e915546fd73f0726f8a72aacd3b53781f1",
+    "SETTINGS_LARGE.png": "fb7b786bb3514917539f9cbaa58f1ad1b2a0471ff101f4bf3a32880da85ed255",
+    "SETTINGS_NORMAL.png": "72f9c45a6c6e75a4db083ae1d585e0f0f8a34b4c34aa54d1f0d45f97244c30fc"
+  },
+  "state_hashes": {
+    "MANUAL_0_NORMAL": "6919967fb2f3b42f50de97aa97a25600b6bd9edf2308c1015ede685ebfcfa87a",
+    "MANUAL_1_NORMAL": "6919967fb2f3b42f50de97aa97a25600b6bd9edf2308c1015ede685ebfcfa87a",
+    "MANUAL_2_NORMAL": "6919967fb2f3b42f50de97aa97a25600b6bd9edf2308c1015ede685ebfcfa87a",
+    "MANUAL_3_NORMAL": "6919967fb2f3b42f50de97aa97a25600b6bd9edf2308c1015ede685ebfcfa87a",
+    "MANUAL_4_NORMAL": "6919967fb2f3b42f50de97aa97a25600b6bd9edf2308c1015ede685ebfcfa87a",
+    "SETTINGS_NORMAL": "6919967fb2f3b42f50de97aa97a25600b6bd9edf2308c1015ede685ebfcfa87a",
+    "BINDING_NORMAL": "6919967fb2f3b42f50de97aa97a25600b6bd9edf2308c1015ede685ebfcfa87a",
+    "PAUSE_NORMAL": "6919967fb2f3b42f50de97aa97a25600b6bd9edf2308c1015ede685ebfcfa87a",
+    "MANUAL_0_LARGE": "6919967fb2f3b42f50de97aa97a25600b6bd9edf2308c1015ede685ebfcfa87a",
+    "MANUAL_1_LARGE": "6919967fb2f3b42f50de97aa97a25600b6bd9edf2308c1015ede685ebfcfa87a",
+    "MANUAL_2_LARGE": "6919967fb2f3b42f50de97aa97a25600b6bd9edf2308c1015ede685ebfcfa87a",
+    "MANUAL_3_LARGE": "6919967fb2f3b42f50de97aa97a25600b6bd9edf2308c1015ede685ebfcfa87a",
+    "MANUAL_4_LARGE": "6919967fb2f3b42f50de97aa97a25600b6bd9edf2308c1015ede685ebfcfa87a",
+    "SETTINGS_LARGE": "6919967fb2f3b42f50de97aa97a25600b6bd9edf2308c1015ede685ebfcfa87a",
+    "BINDING_LARGE": "6919967fb2f3b42f50de97aa97a25600b6bd9edf2308c1015ede685ebfcfa87a",
+    "PAUSE_LARGE": "6919967fb2f3b42f50de97aa97a25600b6bd9edf2308c1015ede685ebfcfa87a",
+    "SETTINGS_1920": "6919967fb2f3b42f50de97aa97a25600b6bd9edf2308c1015ede685ebfcfa87a"
+  },
+  "limitation": "Rendered fixtures and synthetic input tests do not establish human comprehension or physical controller usability. The retained Saint is a procedural sprite; illustration fidelity remains mixed by design.",
+  "next_task": "Give the Memory Crane and Foreman Engine painted bodies and state-driven mechanical animation."
+}
