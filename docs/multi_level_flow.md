@@ -1,6 +1,8 @@
 # Multi-level pilgrimage: review and delivery plan
 
-Status: design plan, not implemented. Reviewed 2026-09-20 against 97d4f4a. Existing manifested relic work is retained; the Saint sprite remains unchanged.
+Status update — 2026-09-21: M1 map navigation, M2 site-clear/checkpoint lifecycle and M3 arrival presentation/policy pacing evidence are implemented in merged main. See [the current roadmap](../roadmap.md) and [runtime delivery records](runtime_status.md#m1--first-pilgrimage-navigation). Human four-path comprehension and pacing remain unverified; practice mode remains deferred.
+
+The review below is preserved as the pre-implementation design record from 2026-09-20 against 97d4f4a. Statements about missing clickable nodes, automatic checkpoints or route-history credit describe that older build, not the current runtime. Existing manifested relic work and the Saint sprite are retained.
 
 ## Recommendation
 

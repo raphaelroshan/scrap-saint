@@ -1,59 +1,66 @@
 # Scrap Saint roadmap
 
-## Painted Workshop majors — 2026-09-21
+## Current roadmap — 2026-09-21
 
-Memory Crane and Foreman Engine now use layered painted machine bodies rather than the shared procedural gear placeholder. The Crane's boom and hook aim into its authoritative copied-geometry warning; the Foreman's press, lamps, hatches and jaws select Schedule, Worker Call and Final Orders from its existing phase. The boss HUD names those phases. Reduced effects preserves silhouettes and gameplay tells. [Review the native captures](assets/actors/review.html).
+Reconciled against merged `main` at `94f63a3`, including the painted Memory Crane/Foreman work in PR #20 and supporting menus in `c352211`. This section is the operating plan; the historical baseline below preserves earlier design decisions without reopening completed implementation.
 
-The bodies are non-destructive composites of existing generated project art because the image generator was unavailable during this pass; bespoke final paintings remain an art-production opportunity, not a missing gameplay state. Exactly one next task: run an uncoached human 1x Workshop session and tune only observed elite/boss recognition, telegraph timing and overlap failures.
+The 0.6 preview has a complete three-site expedition across six authored sites and four route combinations. The remaining work is validation and production finish. A playable loop and passing automated policies do not establish Early Access readiness.
 
-## Supporting menus completed — 2026-09-21
+### Implemented
 
-The field manual, grouped Settings and contextual Pause screen replace their sparse layouts. Manual copy follows the approved origin and optional-repair rules; a real volume control persists through the settings service. Reading from Pause preserves the run. [Review normal and large-text captures](docs/evidence/menu-panels/review.html). The title, setup, relic shop and expedition map already have working flows and remain intact. The major-actor pass above completes the next art task; normal-speed human testing remains a release gate.
-
-## Painted actor integration — 2026-09-21
-
-The six ordinary enemy families are live in the painted arena. Three Workshop repair fixtures now visibly progress from broken through working feedback to restored artwork. [Review gameplay captures](assets/actors/review.html). Directional poses and articulated gait remain deferred; no rotated or mirrored lighting is used to fake them.
-
-## Arena material integration — 2026-09-21
-
-The playfield now uses a painted metal floor at a fixed material scale, footprint-fitted press/boiler/manifold scenery, quieter lane markings and perimeter services. Field Scrap and repair kits use painted icons, with Scrap/Shard icons in the HUD. Compare the [matched gameplay renders](assets/environment/review.html). Collision, navigation, collection, the Saint and enemy rules remain unchanged. The actor pass above completes ordinary enemies and Workshop repair fixtures; bosses, elite and destination objectives remain procedural.
-
-## Supporting art delivery — 2026-09-21
-
-The supporting painted pack adds three enemy cutouts, three field pickup icons and three existing upgrade icons, with reusable Godot motion studies and an isolated gallery. See [the pack and remaining coverage](assets/supporting-art/README.md). This follows the painted industrial diorama direction; prior low-resolution procedural exports are not the final painted style. The environment pass below enables Scrap and Repair Kit icons in the field and currency icons in the HUD. Ordinary enemy artwork is now integrated by the actor pass above; upgrade artwork remains staged and articulated limbs remain pending.
-
-## Current direction — 2026-09-20
-
-This section supersedes the historical implementation sequence below. The current 0.6 preview includes ten weapons, ten Evolutions, seven Gifts, four Blessings, three frames, a branching three-site expedition, and the illustrated main menu. See [runtime status](docs/runtime_status.md) for implemented behavior and verification. Earlier roster counts and failed-policy reports describe their original builds.
-
-User decisions remain authoritative: the Saint manifests through repairs freely given; main-mode shops offer relics; recovery comes from drops and optional work; destination repairs are optional. Preserve the current gameplay and chapter systems. Commit and push completed validated changes.
-
-### Multi-level flow plan
-
-The [multi-level pilgrimage review and plan](docs/multi_level_flow.md) builds on the existing six-site, three-level expedition. First expose the chapter map before departure and clarify reachable destinations, threat previews, optional work, travel costs and chapter endings. Then add a unified site-clear/checkpoint flow with exactly-once discovery credit; verify branch unlocks from route history. Finally review each level's pacing at normal speed. Arbitrary destination starts and a separate practice mode are deferred.
-
-This is planned work, not shipped functionality. Preserve the current route graph, build carryover, economy and optional-repair rules for the first navigation packet. The completed visual work below remains intact; its human readability review joins the level pacing review.
-
-### Visual decision: manifested relics
-
-Keep the current playable Saint sprite unchanged for this phase. Weapons manifest as recognizable objects and attack effects near the Saint or at their authoritative attack origins. Brief manifestations appear, perform the attack and fade; persistent orbiting or area effects remain visible for their active lifetime. Warm brass and restrained cream light connect the relics to the remembered service of discarded tools.
-
-Defer the proposed attachment-arm rig, mount sockets and character-sprite replacement. The character and weapon concept boards remain references, not implementation requirements. Existing targeting, damage, attack cadence, hitboxes and evolution rules remain simulation-owned; visual appearance must not delay or duplicate an attack.
-
-### Ordered visual work
-
-| Order | Work | Completion gate |
+| Area | Current delivery | Evidence |
 |---|---|---|
-| 1 — complete | Manifested Nailer and Mercy Rail on the unchanged Saint | Distinct rivet mechanism, recoil and line resolve; Mercy Rail visibly unfolds longer guides and uses its existing attack geometry. Verified normal and reduced effects, moving/facing changes, event timing and unchanged simulation outcomes. |
-| 2 — complete | Manifested Bell, Cable and Foundry Censer | Bell body and hammer precede readable arcs; clamp/reel accompany the tether; Censer vessel accompanies its low smoke field. Verified authoritative origins, distinct mechanisms, three-relic overlap and reduced-effects parity without changing simulation outcomes. |
-| 3 — complete | Four-weapon overlap and remaining relic families | Candle, Hymn, Mortar and Winch now manifest from authoritative events. Verified distinct base/Evolution mechanisms, prompt cleanup, full/reduced effects and a four-Evolution stress scene while persistent Gear/Halo behavior remains intact. |
-| 4 — next | Workshop Level 1 presentation and pacing review | Test the complete opening level at normal speed with uncoached players; use findings to tune clarity and pacing before expanding art coverage. |
+| Core assembly | Ten base weapons, ten Evolutions, eight catalysts, seven Gifts, four Blessings and three frames; four active weapon slots and one reserve | [Enabled slice](content/slices/first_shift.json), [runtime rules](docs/runtime_status.md) |
+| Main mode | Free movement and automatic attacks; field recovery and optional repairs; six relic-only shop offers; boss defeat advances the expedition | [Runtime status](docs/runtime_status.md) |
+| M1: pilgrimage map | Inspect all six sites before departure; inspect and confirm reachable destinations separately between sites | [Navigation delivery](docs/runtime_status.md#m1--first-pilgrimage-navigation) |
+| M2: completion and saves | Unified site-clear summaries; atomic saves and backup recovery; automatic journey checkpoints; exactly-once discovery credit from route history | [Checkpoint delivery](docs/runtime_status.md#m2--site-clear-and-checkpoint-lifecycle) |
+| M3: arrivals and pacing evidence | Deliberate non-ticking arrival panels; separate Enter action; four-path fixed-tick policy coverage with unevolved, no-repair builds | [Arrival delivery](docs/runtime_status.md#m3--destination-arrival-and-four-path-pacing-evidence) |
+| Relic presentation | Manifested base/Evolution mechanisms, overlap and reduced-effects captures; existing Saint retained | [Art direction](docs/art_direction.md) |
+| Arena and ordinary actors | Painted floor/scenery, field Scrap and repair kits, currency HUD icons, six ordinary enemy bodies and three Workshop repair transformations | [Arena review](assets/environment/review.html), [actor review](assets/actors/review.html) |
+| Workshop elite and boss | Memory Crane and Foreman use layered painted bodies with state-driven mechanical poses and authoritative warning geometry | [Major-actor packet](docs/task_packets/memory_crane_foreman_art.md) |
+| Menus | Illustrated title, setup, shop, map and ledgers; five-page illustrated manual, grouped Settings with persistent volume, contextual Pause and safe manual return | [Menu review](docs/evidence/menu-panels/review.html) |
 
-No character rig, new weapons or balance changes are prerequisites for step 1. Require real Godot captures with build/viewport/seed provenance and event/state regression checks for each runtime slice. Concept boards alone do not satisfy these gates.
+Workshop majors reuse existing painted parts in deterministic composites; they are not newly painted bespoke sheets. Ordinary actors remain fixed-view sprites with whole-body motion, not articulated directional walk cycles. Destination bosses and optional-work structures still need their own visual finish; upgrade artwork is partly staged rather than enabled in the shop.
 
-Exactly one next task: run an uncoached human 1x Workshop session and tune only observed elite/boss recognition, telegraph timing and overlap failures. M1 departure selection, M2 checkpoints and M3 arrival/pacing work are already implemented; retain normal-speed four-path human review as a release gate.
+### Immediate next task
 
-## 1. Roadmap purpose and current truth
+Observe an uncoached human **1x Workshop session**, then fix only observed elite/boss recognition, telegraph timing and effect-overlap failures. Include the first setup, shop, optional repair and pause/manual interaction so the session also exposes onboarding confusion. Record what the player understood and did without coaching; automated runs cannot satisfy this gate.
+
+Completion means a recorded session and a prioritized issue list tied to observed moments, followed by bounded fixes and the relevant regression/capture checks. Do not assume that every observation requires a balance change.
+
+### Work after that gate
+
+| Order | Work | Completion condition |
+|---|---|---|
+| 1 | Validate all four expedition paths with uncoached players | Players understand route commitment, arrival, carried build, optional work and chapter ending; tune only observed pacing/readability problems |
+| 2 | Finish destination and inventory presentation | Distinct destination boss/objective art; remaining catalyst/Gift icons integrated into actual offers and ledgers; preserve silhouettes, warnings and normal/large/reduced-effects readability |
+| 3 | Resolve motion and audio gaps from playtest findings | Prioritize unreadable movement/attacks and weak impact or repair feedback; verify timing against simulation events and check the audio mix in real play |
+| 4 | Harden the release candidate | Save migration/recovery, physical controller navigation, supported display sizes, sustained rendered performance on declared minimum hardware, packaged-build smoke checks and update/rollback readiness |
+| 5 | External Early Access validation | Initial 15–20 uncoached players; multiple viable starter/build choices, voluntary replay and clear failure understanding; no known save-loss or progression blockers |
+
+These are gates, not calendar promises. Broader content is not a substitute for completing the opening level's human validation. Shared scenery can remain where it reads well; bespoke paintings and articulated gait should be prioritized by their observed benefit.
+
+### Evidence and remaining release limits
+
+The latest merged major-actor packet records **1,224 Godot assertions across 27 suites, 34 Python manifest checks and green existing policy matrices**, including the four-path runner. Its 137 actor checks are included in that Godot total. Those results belong to implementation `4b51751` and the upstream Apple M1 Pro capture run; they were not rerun for this documentation update.
+
+The Windows menu delivery separately passed 81 supporting-menu checks, 32 title-flow checks and the 1,087-check autonomous loop. [Menu evidence](docs/evidence/menu-panels/validation.json) includes 17 native captures at normal/large text and a second viewport. These totals describe different suites and builds; do not add them into a new combined-build certification.
+
+Human 1x readability, pacing, replay interest, physical-controller usability, final audio mixing and sustained rendered minimum-hardware performance remain unverified. Existing fixture shutdown leak warnings are recorded in the evidence. No release date or completion percentage is justified yet.
+
+### Preserved direction and deferred scope
+
+The Saint manifests from repairs freely given in a devastated machine world. Keep the current Saint sprite and manifested weapons. Main-mode recovery comes from drops and optional work; shops offer relics. Repairs and Evolutions are optional, and encounters must support alternative builds without Mercy Rail-specific requirements. Relay defence remains a development comparison.
+
+Defer attachment-arm rigs, arbitrary site starts/practice mode, new campaign acts, multiplayer, endless mode and permanent raw-stat grinding. Preserve the current route graph and simulation-owned outcomes. Commit and push completed, validated work.
+
+See the [multi-level design record](docs/multi_level_flow.md), [Early Access gates](docs/early_access_plan.md) and [runtime history](docs/runtime_status.md) for supporting detail.
+
+## Historical implementation baseline
+
+The numbered sections below retain the original dependency plan and its dated evidence. They are not the current backlog. Earlier roster limits, relay/service requirements, timing targets, test totals and next-task instructions are superseded by the current roadmap above.
+
+## 1. Original roadmap purpose
 
 A playable Godot prototype now spans the First Shift loop. See [runtime status](docs/runtime_status.md) for implemented subsets, verification results and deferred mechanics. The accepted launch scope is in the [Early Access delivery plan](docs/early_access_plan.md). Human playtesting and creative-vertical approval remain outstanding.
 
@@ -63,7 +70,7 @@ This roadmap turns the canonical systems design in [`docs/progression_map_weapon
 
 > **First-slice promise:** the player chooses a Blessing, enters a compact industrial workshop, moves and auto-attacks with optional repair rewards, makes meaningful workshop decisions, reaches the visible Mercy Rail evolution, defeats a rule-changing elite and boss, and understands how the Saint’s identity changed.
 
-Current evidence: 129 Godot assertions pass; main-mode automated full runs record 11/12 wins. One Mourner run fails on wave five, so the all-win balance gate remains failed. See runtime status for evidence and limitations.
+Historical evidence from the early prototype: 129 Godot assertions passed; main-mode automated full runs record 11/12 wins. One Mourner run fails on wave five, so that build did not meet its all-win balance gate. This is not the current build result. See runtime status for evidence and limitations.
 
 ## 2. Canonical product and systems lock
 
@@ -655,7 +662,6 @@ Every future implementation request should begin with a packet in this shape:
 [The next dependency-ordered packet.]
 ```
 
-## 17. Immediate next task
-M1 through M3 are shipped: setup and route choice use the complete First Pilgrimage map; every road reaches a deliberate, non-ticking destination arrival; and every boss resolves through one site-clear account of rewards, optional work, memory and the carried build. Expedition/profile saves use atomic primary/backup writes, checkpoint every validated journey boundary, remove terminal runs, and award discoveries through idempotent run/site receipts and route history. A four-path 1× fixed-tick runner records combat/boss pacing and proves every path with an unevolved, no-repair build and zero-Scrap road continuation.
+## 17. Current handoff
 
-The next task is **an uncoached human 1× session across all four paths, followed only by fixes justified by observed pacing, arrival-comprehension or boss-readability failures**. Do not begin M4 practice-mode breadth before this gate. Use [the multi-level flow plan](docs/multi_level_flow.md), [implementation packets](docs/implementation_packets.md) and [runtime status](docs/runtime_status.md) to preserve the existing deterministic contracts.
+Use the current status and immediate next task at the top of this file. M1–M3 and the Workshop visual/menu work are implemented; their human validation remains outstanding.

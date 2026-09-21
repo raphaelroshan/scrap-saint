@@ -1,5 +1,13 @@
 # Early Access delivery plan
 
+## Current delivery status — 2026-09-21
+
+The preview now exceeds the original breadth target below: six authored sites form four three-site paths, with ten weapons, ten Evolutions, eight catalysts, seven Gifts, four Blessings and three frames. Map selection, arrivals, site-clear summaries and automatic checkpoints are implemented. Workshop art and supporting menus are integrated; destination presentation and human release validation remain unfinished. Follow [the current roadmap](../roadmap.md) for delivery order.
+
+The original two-site expedition, older catalogue counts and P08/service priorities below are historical planning targets. They do not replace the current three-site flow, relic-only shops or optional-repair rules. The external-player, save-safety and performance gates still apply; broader content does not establish launch readiness.
+
+## Original launch brief
+
 Accepted direction: 2026-09-14. This is a target scope, not a claim of shipped content or a release-date promise.
 
 The release should offer a polished, replayable first chapter: choose a frame and Blessing, repair the Collapsed Workshop, assemble a build, defeat the Foreman, choose Brass Choir Relay or Rootworks Pump, carry the build into that destination, and finish with a memory and meaningful run summary. Target expedition length is 25–35 minutes including shop choices. The opening site retains the short First Shift format. Suspend/resume supports shorter sessions.
@@ -16,7 +24,7 @@ Three authored sites (two per expedition), three objective patterns, three frame
 4. **First chapter:** two destinations, route consequences, build carryover and an authored chapter conclusion. Gate: complete expedition from selection to ending.
 5. **Release candidate:** deliberate art/audio finish, remapping, text/effect controls, controller support, saves and migrations, declared hardware targets, packaging, external testing and update/rollback readiness.
 
-Early Access follows the first chapter; Acts II–IV and the First Engine endings follow later. This supersedes the older roadmap ordering that placed full campaign expansion before Early Access. The local prototype still lacks most launch breadth, and automated wins do not prove enjoyment.
+Early Access follows the first chapter; Acts II–IV and the First Engine endings follow later. This supersedes the older roadmap ordering that placed full campaign expansion before Early Access. At the time of this brief, the local prototype lacked most launch breadth. Current delivery is summarized above; automated wins still do not prove enjoyment.
 
 ## Release gates
 
@@ -24,7 +32,7 @@ Observe an initial cohort of 15–20 uncoached players for objective/shop/failur
 
 Defer multiplayer, endless mode, broad faction systems and a permanent stat treadmill. Schedule by evidence until team capacity and production throughput support a credible calendar.
 
-Exactly one next task after P08: complete six-role workshop offers and distinct Blessing services.
+Historical next task after P08: complete six-role workshop offers and distinct Blessing services.
 
 
 ## Accepted direction update - 2026-09-15
