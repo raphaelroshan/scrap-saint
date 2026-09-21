@@ -1209,7 +1209,7 @@ func draw_boss_hud():
 			var boss_names = {"boss.foreman_engine": "FOREMAN ENGINE", "boss.choir_regent": "CHOIR REGENT", "boss.factory_heart": "FACTORY HEART", "boss.archivist_prime": "ARCHIVIST PRIME", "boss.red_cardinal": "RED CARDINAL", "boss.null_auditor": "NULL AUDITOR", "elite.memory_crane": "MEMORY CRANE"}
 			text_at(boss_names.get(e.type, str(e.type).trim_prefix("boss.").replace("_", " ").to_upper()), Vector2(309, 186), 12, GOLD)
 			if e.type == sim.current_boss_id():
-				var phase_name = "DEMOLITION" if not sim.is_destination() else sim.boss_phase_name(e)
+				var phase_name = ["SCHEDULE","WORKER CALL","FINAL ORDERS"][clampi(int(e.get("phase",0)),0,2)] if not sim.is_destination() else sim.boss_phase_name(e)
 				text_at(phase_name, Vector2(582, 186), 11, RED)
 			bar(Rect2(309, 196, 458, 6), e.hp / e.max_hp, RED)
 			if e.get("inspected", false): text_at("INSPECTED / " + sim.state.inspection, Vector2(309, 218), 10, Color("8edce0"))
@@ -2340,9 +2340,11 @@ func draw_enemy(e):
 	if e.flash > sim.state.tick: color = PAPER
 	draw_circle(p + Vector2(0, 7), e.radius + 3, Color(0.02, 0.04, 0.05, 0.4))
 	if e.major:
-		draw_gear(p, e.radius, color, sim.state.tick * 0.009)
-		draw_rect(Rect2(p - Vector2(17, 12), Vector2(34, 24)), INK)
-		for i in range(3): draw_circle(p + Vector2(-10 + i * 10, 0), 3, RED)
+		if actor_art.assets.has(e.type): actor_art.draw_major(self,e,p,sim.state.tick,reduced_fx,sim.state.hazards)
+		else:
+			draw_gear(p, e.radius, color, sim.state.tick * 0.009)
+			draw_rect(Rect2(p - Vector2(17, 12), Vector2(34, 24)), INK)
+			for i in range(3): draw_circle(p + Vector2(-10 + i * 10, 0), 3, RED)
 	else:
 		if e.type == "enemy.choir_drone" and sim.enemy_support_ready(e):
 			draw_circle(p, sim.config.enemy_rules.drone_field_radius, Color(0.6, 0.5, 0.8, 0.035))

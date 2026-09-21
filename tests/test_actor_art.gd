@@ -26,6 +26,32 @@ func run():
 		check(art.sprite_rect(id,Vector2.ZERO).size.length() > 0,"nonempty game-size sprite")
 		check(art.idle_offset(enemy,12,true) == Vector2.ZERO,"reduced effects holds idle motion")
 		check(art.assets[id].extent <= float(enemy.radius)*3.0,"silhouette does not dwarf hit footprint")
+	var major_specs = {
+		"elite.memory_crane": ["idle","copy","stunned"],
+		"boss.foreman_engine": ["schedule","workers","final_orders","stunned"],
+	}
+	for id in major_specs:
+		check(art.assets.has(id),"major has painted assembly: "+id)
+		for state in major_specs[id]:
+			check(art.assets[id].states.has(state),"major has state: "+id+"/"+state)
+			for component in art.assets[id].states[state]:
+				check(art.textures.has(component.path),"major component texture is cached")
+				var source = component.region
+				var texture = art.textures[component.path]
+				check(Rect2(Vector2.ZERO,texture.get_size()).encloses(Rect2(source[0],source[1],source[2],source[3])),"major component region is valid")
+				check(art.major_component_rect(component,Vector2.ZERO).size.x > 0 and art.major_component_rect(component,Vector2.ZERO).size.y > 0,"major component has a rendered extent")
+	var crane = {"id": 901, "type": "elite.memory_crane", "phase": 0, "stun": 0, "flash": 0, "p": Vector2(400,400)}
+	check(art.major_state(crane,[],120) == "idle","Memory Crane rests without a copied hazard")
+	var copy_hazard = {"source_id":901,"until":180,"p":Vector2(600,400)}
+	check(art.major_state(crane,[copy_hazard],120) == "copy","Memory Crane aims during an authoritative copied hazard")
+	crane.stun = 180
+	check(art.major_state(crane,[copy_hazard],120) == "stunned","stun overrides Memory Crane copy pose")
+	var foreman = {"id": 902, "type": "boss.foreman_engine", "phase": 0, "stun": 0, "flash": 0, "p": Vector2(400,400)}
+	for phase in range(3):
+		foreman.phase = phase
+		check(art.major_state(foreman,[],120) == ["schedule","workers","final_orders"][phase],"Foreman phase selects mechanical state %d" % phase)
+	foreman.stun = 180
+	check(art.major_state(foreman,[],120) == "stunned","stun overrides Foreman phase pose")
 	for i in range(game.sim.config.optional_repairs.machines.size()):
 		game.sim.start(0,147,"optional")
 		game.sim.state.hp = 50
@@ -47,6 +73,13 @@ func run():
 		game.queue_redraw()
 		await process_frame
 		check(hash_before == game.sim.state_hash(),"rendering repair state does not award or alter anything")
+	game.sim.start(0,147,"optional")
+	game.sim.state.wave = 6
+	game.sim.spawn("elite.memory_crane")
+	var major_hash = game.sim.state_hash()
+	game.queue_redraw()
+	await process_frame
+	check(major_hash == game.sim.state_hash(),"painting a major actor does not alter simulation state")
 	game.queue_free()
 	await process_frame
 	print("ACTOR ART: %d checks, %d failures" % [checks,failures])
