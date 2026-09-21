@@ -1,12 +1,16 @@
 # Scrap Saint — Art and feel direction
 
+## Live painted Workshop majors — 2026-09-21
+
+Memory Crane and Foreman Engine use layered painted machinery with state-driven code-native mechanisms. The Crane's hook points into the authoritative copy warning. The Foreman's press posture and HUD label expose Schedule, Worker Call and Final Orders. Preserve their fixed upper-left painted lighting: component positions may articulate, but source textures are never rotated or mirrored. Reduced effects removes only servo oscillation, not state silhouettes or warning geometry. See [the actor pack](../assets/actors/README.md).
+
 ## Live painted actors — 2026-09-21
 
 Six ordinary enemies and the three Workshop optional repair machines now share the arena material language. Preserve fixed painted lighting, original aspect ratios, compact silhouettes and existing threat overlays. Repair sheets share region bounds so completion keeps its pivot and scale. Working feedback reads simulation progress; art never decides completion. Fine changes need the persistent state markers at gameplay size. See [the actor pack](../assets/actors/README.md).
 
 ## Proposed production target
 
-See [the Saint, four relic designs and arena visual target](visual_target.md) for the current proposed production treatment, concept boards, scale targets and explicit implementation corrections. These remain concept references. The runtime now adopts painted floor material, footprint-fitted machinery and pickup icons through [the arena material pass](task_packets/arena_material_pass.md); actors and objectives are still partly procedural.
+See [the Saint, four relic designs and arena visual target](visual_target.md) for the current proposed production treatment, concept boards, scale targets and explicit implementation corrections. These remain concept references. The runtime now adopts painted floor material, footprint-fitted machinery and pickup icons through [the arena material pass](task_packets/arena_material_pass.md); destination bosses and objectives remain procedural.
 
 ## Manifested weapons — current implementation direction
 

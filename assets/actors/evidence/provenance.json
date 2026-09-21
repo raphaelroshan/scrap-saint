@@ -1,21 +1,20 @@
 {
-  "build": "0.6.0-preview + painted enemies and repairs",
-  "base_commit": "57069e5f6b52709759fb8f3f53584cd73463cce4",
+  "build": "0.6.0-preview + painted Workshop majors",
+  "base_commit": "4b51751ecb04eb7e75a3cbece78b5b4dc78e916d",
   "godot": "4.5.1-stable official f62fdbde1",
-  "viewport": [
-    1280,
-    800
-  ],
+  "renderer": "OpenGL Compatibility on Apple M1 Pro",
+  "viewport": [1280, 800],
   "seed": 147,
-  "timestamp_utc": "2026-09-20T18:06:20.828955+00:00",
-  "capture_type": "Configured native gameplay renderer fixtures; real repair state updates; not human playtest",
+  "timestamp_utc": "2026-09-21T06:01:07Z",
+  "capture_type": "Configured native gameplay renderer fixtures; real authoritative major state supplied; not human playtest",
   "source_hashes": {
-    "game/main.gd": "9813bb5e9ae686705564118343a4629aa54d6947bbe8fb7d99623ef1021c4e48",
-    "game/actor_art.gd": "93965ad72fca27f963cb80c859540ee4927ac8b2f8c6dfb38d9de2bbe68fd81c",
+    "game/main.gd": "f25ec2db1c9c735780bb6344fb55fe25764a710f9f6685d51286ddabbb0583f7",
+    "game/actor_art.gd": "37ab4c4fd7cac68b451bef5595e869245f1c85f5ecc74e844ba36645e879b4c8",
     "assets/actors/manifest.json": "a8f7bebe57bd776a14e72bfbe31a99cd85f20687ef7fa9dcda9544e0343328ee",
     "assets/actors/sources.json": "b2d51e400bb3b25ffb8dcb7fe8ed10fdfa082a280110424760cd90013a1a6f7e",
-    "tests/capture_actor_art.gd": "1a42163ce9b6b164db4fd806f713d7c33a858109c7dc9993d4305f01aafdeb80",
-    "tests/test_actor_art.gd": "1fb9a453d482e2fec459be0b54d8041eb6ab0992d746c831360e9b224c433e4c"
+    "assets/actors/major_assemblies.json": "fdd0d17344b01572fc028175d01475be11907b28643b371ea8a2da0463d673b3",
+    "tests/capture_actor_art.gd": "2199c0248320f217925c87de245cb50e33381c676e875300c0afe7fbee9c0c24",
+    "tests/test_actor_art.gd": "d943e7ea5f7063c81cc2214bfbe5f0eb61d72487c7ffd95ab8d49575168143bb"
   },
   "capture_hashes": {
     "REPAIR_0_BROKEN.png": "a97aaf9603206f302f9c7f578bbaeb6560199f3dbbe27822b060af28fea61dae",
@@ -28,10 +27,15 @@
     "REPAIR_2_RESTORED.png": "bf87b5166b9774ac118691ffc11e0b604bc3694fb62b0f40adf4dbd357bf595d",
     "REPAIR_2_WORKING.png": "10d7373b4677b230c565a1c727590183cf8095f4a68004946d6e880b0801ed3a",
     "ROSTER_COMBAT.png": "fba5b5fb11bbd8d956fe62c9c93abf87c4a1beb2598d0880a1c7200a3133bd1b",
-    "ROSTER_REDUCED.png": "39fc01443c5e17d017587f628f034a0ab966073c942a3410994032bc6d5a448f"
+    "ROSTER_REDUCED.png": "39fc01443c5e17d017587f628f034a0ab966073c942a3410994032bc6d5a448f",
+    "MEMORY_CRANE_IDLE.png": "d7d5cb7aaa086d9764c00c51aea59436bd5cfef618aba7d03c3ca3fc199724e3",
+    "MEMORY_CRANE_COPY.png": "8e2428e9e811cba3c3759bd0cd8e1be39d0b58f7173447bbee50c9e1b3da5eea",
+    "MEMORY_CRANE_COPY_REDUCED.png": "e59df5d2f13e9c740870df8407c8c8696b779e3f0b1cc9b4acd442121fe78e68",
+    "FOREMAN_SCHEDULE.png": "c7ffd66d86533978b4ce2563e8f8ce40854ad3538fbff417792dde2dd2b31100",
+    "FOREMAN_WORKERS.png": "ceee0d06d02aeae0ab9529e412f3baa45bd1cca445c4b71d1ad94c56e07bf99a",
+    "FOREMAN_FINAL_ORDERS.png": "b250c1df7671d2fdbf30ffbc74e8a643b4cb7b694cbbeb79a6e49fb01b2f1bb1",
+    "FOREMAN_FINAL_REDUCED.png": "1d5b91edb696635f4f1d173561b1536a4107c8863de0227a25ea8f1f49e705b1"
   },
-  "limitation": "Fixed-view flattened sprites, not articulated or directional gait. Fine repair details are subtle at gameplay scale; state markers carry completion clarity. Bosses, elite and destination objectives remain procedural. Human 1x readability testing remains outstanding.",
-  "next_task": "Give the Memory Crane and Foreman Engine painted bodies and state-driven mechanical animation.",
   "render_state_hashes": {
     "ROSTER_COMBAT": "db30556b43d2c11d93da346641365f4d43d317b8188544e32f703cdfefe49c53",
     "ROSTER_REDUCED": "db30556b43d2c11d93da346641365f4d43d317b8188544e32f703cdfefe49c53",
@@ -43,6 +47,15 @@
     "REPAIR_1_RESTORED": "e8fb832684045df6ab411573420a8969452ded2c61f6dc29a41835ca9a046734",
     "REPAIR_2_BROKEN": "fe8cc8166f1b4b67be3e3e38c257bee4e1aa717ffc95b33ab1b9885993ce3978",
     "REPAIR_2_WORKING": "53e301c0b0df7cff5aabcb4a31649c9fdcc7afa5f6880f348337a48a281eae29",
-    "REPAIR_2_RESTORED": "8d719cd8e9543a512df5fdfc9af0016252d042b757f0a4530402b4f4c67264ce"
-  }
+    "REPAIR_2_RESTORED": "8d719cd8e9543a512df5fdfc9af0016252d042b757f0a4530402b4f4c67264ce",
+    "MEMORY_CRANE_IDLE": "f3dfacd7277bfc48025dfd4a009a81fc4c0d0eda561d918a16dec0b6a3190dab",
+    "MEMORY_CRANE_COPY": "6068293a0f371469acf594b5f1f316e093c25d3a1d042ff7a82dcd482206a004",
+    "MEMORY_CRANE_COPY_REDUCED": "6068293a0f371469acf594b5f1f316e093c25d3a1d042ff7a82dcd482206a004",
+    "FOREMAN_SCHEDULE": "31f861c3ce2b5a24ab2425b6576d6c03f03e93c05f98d248dd24cc544392bb39",
+    "FOREMAN_WORKERS": "2e60b2f8bb62fa997cbe3dab7184bb1fd52fb5cfb1b16cee753dedd9989770f7",
+    "FOREMAN_FINAL_ORDERS": "fbfeabaace3d85014e2b9cf8aa3d1e40fbb230b8e19c27c3c91c18a113eef5a2",
+    "FOREMAN_FINAL_REDUCED": "fbfeabaace3d85014e2b9cf8aa3d1e40fbb230b8e19c27c3c91c18a113eef5a2"
+  },
+  "limitation": "Major bodies reuse generated project-painted modules rather than bespoke new paintings. Human 1x recognition and reaction timing remain unverified.",
+  "next_task": "Run an uncoached human 1x Workshop session and tune only observed elite/boss recognition, telegraph timing and overlap failures."
 }

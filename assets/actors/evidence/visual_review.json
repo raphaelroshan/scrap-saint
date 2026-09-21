@@ -1,57 +1,19 @@
 {
-  "scope": "Painted ordinary enemies and three Workshop optional repair machines",
+  "scope": "Painted ordinary enemies, Workshop repairs, Memory Crane and Foreman Engine",
+  "score_total": 42,
+  "score_max": 50,
   "rubric": [
-    {
-      "criterion": "Silhouettes",
-      "score": 4,
-      "note": "Brute forks, Pilgrim tank and Spitter furnace distinguish the new families."
-    },
-    {
-      "criterion": "Material cohesion",
-      "score": 4,
-      "note": "Rust and brass actors match the arena; the unchanged Saint retains its graphic treatment."
-    },
-    {
-      "criterion": "Lighting",
-      "score": 4,
-      "note": "Fixed views preserve painted highlights; camera angles vary slightly across assets."
-    },
-    {
-      "criterion": "Gameplay scale",
-      "score": 3,
-      "note": "Major shapes survive downscaling; fine surface details are dense."
-    },
-    {
-      "criterion": "Attack warnings",
-      "score": 4,
-      "note": "Directional charge lines and support radii remain visible around painted bodies."
-    },
-    {
-      "criterion": "Repair identity",
-      "score": 4,
-      "note": "Belt, pump and gong are recognizable distinct fixtures."
-    },
-    {
-      "criterion": "Repair transformation",
-      "score": 3,
-      "note": "Hardware changes are subtle at 64 pixels; progress, labels and checkmarks explain state."
-    },
-    {
-      "criterion": "Status readability",
-      "score": 4,
-      "note": "Marked and quieted overlays remain separable from the sprite."
-    },
-    {
-      "criterion": "Reduced effects",
-      "score": 4,
-      "note": "Decorative body movement and sparks stop; essential state and threat cues persist."
-    },
-    {
-      "criterion": "Evidence",
-      "score": 4,
-      "note": "Actual renderer fixtures and state-hash checks; no human playtest claimed."
-    }
+    {"criterion": "Major silhouettes", "score": 4, "note": "The Crane reads horizontally with boom and hook; the Foreman reads vertically as a heavy mobile press."},
+    {"criterion": "State distinction", "score": 4, "note": "Copy aiming, worker hatches and final-order jaws change the bodies while HUD phase names remove ambiguity."},
+    {"criterion": "Copied-geometry causality", "score": 5, "note": "The Crane hook aims toward the real source hazard and the existing copied boundary remains intact."},
+    {"criterion": "Hazard hierarchy", "score": 4, "note": "Boss bodies remain distinct inside overlapping red warning zones without covering the Saint."},
+    {"criterion": "Material cohesion", "score": 4, "note": "All body pieces inherit the painted rust, brass, cream and oxidised-green arena language."},
+    {"criterion": "Gameplay scale", "score": 4, "note": "Major bodies are larger than ordinary enemies and readable at the actual camera."},
+    {"criterion": "Status readability", "score": 4, "note": "Health, stun, marked and impact overlays remain outside or above the new silhouettes."},
+    {"criterion": "Reduced effects", "score": 4, "note": "Decorative servo motion stops while state silhouette, lamps, hook and danger geometry remain."},
+    {"criterion": "Provenance", "score": 5, "note": "Every reused painted source has an exact path, region and SHA-256; no new generator output is claimed."},
+    {"criterion": "Evidence", "score": 4, "note": "Seven new native fixtures and render-purity tests cover the major states; no human playtest is claimed."}
   ],
-  "limitation": "Fixed-view flattened sprites, not articulated or directional gait. Fine repair details are subtle at gameplay scale; state markers carry completion clarity. Bosses, elite and destination objectives remain procedural. Human 1x readability testing remains outstanding.",
-  "next_task": "Give the Memory Crane and Foreman Engine painted bodies and state-driven mechanical animation."
+  "limitation": "Major bodies reuse generated project-painted modules rather than bespoke new paintings. Human 1x recognition and reaction timing remain unverified.",
+  "next_task": "Run an uncoached human 1x Workshop session and tune only observed elite/boss recognition, telegraph timing and overlap failures."
 }

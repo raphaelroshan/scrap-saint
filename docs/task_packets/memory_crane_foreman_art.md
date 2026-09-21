@@ -12,6 +12,8 @@ Preserve the existing Saint, ordinary actors, collision radii, movement, boss he
 
 Acceptance: both stable IDs map to valid alpha regions and three declared states; each state remains inside its declared gameplay extent and shares a stable pivot. Elite copy preparation follows a real hazard sourced from that elite. Foreman visuals follow authoritative phase and active demolition warnings. Stun and reduced-effects behavior remain readable. Drawing either actor leaves the simulation hash unchanged. Run the focused actor suite, full autonomous loop and policy matrices. Capture Memory Crane idle/copy and Foreman schedule/workers/final-orders in normal and reduced-effects modes at 1280x800, seed 147; record build, renderer, source hashes and capture hashes, then inspect and score the rendered states.
 
+Verification: complete on clean implementation commit `4b51751ecb04eb7e75a3cbece78b5b4dc78e916d`. The focused actor suite passes 137 checks. The autonomous loop exits 0 with 1,224 Godot assertions across 27 suites and 34 Python manifest checks; all normal-economy, assembly, Evolution, Gift and four-path policies remain green. Seven new fixtures were captured through the native Compatibility renderer on Apple M1 Pro at 1280x800, seed 147. The scored visual review is 42/50.
+
 Limitation: the bodies are deterministic composites of the repository's existing generated painted machinery rather than newly generated bespoke paintings because the built-in image generator is unavailable in this session. Normal-speed human recognition and reaction timing remain unverified.
 
 Next task: run an uncoached human 1x Workshop session and tune only observed elite/boss recognition, telegraph timing and overlap failures.
