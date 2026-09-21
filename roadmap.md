@@ -1,8 +1,14 @@
 # Scrap Saint roadmap
 
+## Painted Workshop majors — 2026-09-21
+
+Memory Crane and Foreman Engine now use layered painted machine bodies rather than the shared procedural gear placeholder. The Crane's boom and hook aim into its authoritative copied-geometry warning; the Foreman's press, lamps, hatches and jaws select Schedule, Worker Call and Final Orders from its existing phase. The boss HUD names those phases. Reduced effects preserves silhouettes and gameplay tells. [Review the native captures](assets/actors/review.html).
+
+The bodies are non-destructive composites of existing generated project art because the image generator was unavailable during this pass; bespoke final paintings remain an art-production opportunity, not a missing gameplay state. Exactly one next task: run an uncoached human 1x Workshop session and tune only observed elite/boss recognition, telegraph timing and overlap failures.
+
 ## Supporting menus completed — 2026-09-21
 
-The field manual, grouped Settings and contextual Pause screen replace their sparse layouts. Manual copy follows the approved origin and optional-repair rules; a real volume control persists through the settings service. Reading from Pause preserves the run. [Review normal and large-text captures](docs/evidence/menu-panels/review.html). The title, setup, relic shop and expedition map already have working flows and remain intact. The next art task remains Memory Crane and Foreman Engine; normal-speed human testing remains a release gate.
+The field manual, grouped Settings and contextual Pause screen replace their sparse layouts. Manual copy follows the approved origin and optional-repair rules; a real volume control persists through the settings service. Reading from Pause preserves the run. [Review normal and large-text captures](docs/evidence/menu-panels/review.html). The title, setup, relic shop and expedition map already have working flows and remain intact. The major-actor pass above completes the next art task; normal-speed human testing remains a release gate.
 
 ## Painted actor integration — 2026-09-21
 
@@ -45,7 +51,7 @@ Defer the proposed attachment-arm rig, mount sockets and character-sprite replac
 
 No character rig, new weapons or balance changes are prerequisites for step 1. Require real Godot captures with build/viewport/seed provenance and event/state regression checks for each runtime slice. Concept boards alone do not satisfy these gates.
 
-Exactly one next task: Give the Memory Crane and Foreman Engine painted bodies and state-driven mechanical animation. M1 departure selection, M2 checkpoints and M3 arrival/pacing work are already implemented; retain normal-speed human review as a release gate.
+Exactly one next task: run an uncoached human 1x Workshop session and tune only observed elite/boss recognition, telegraph timing and overlap failures. M1 departure selection, M2 checkpoints and M3 arrival/pacing work are already implemented; retain normal-speed four-path human review as a release gate.
 
 ## 1. Roadmap purpose and current truth
 

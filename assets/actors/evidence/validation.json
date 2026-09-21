@@ -1,11 +1,13 @@
 {
-  "actor_checks": 57,
+  "actor_checks": 137,
   "actor_failures": 0,
-  "regression_suites": 26,
-  "regression_checks": 1087,
+  "regression_suites": 27,
+  "regression_checks": 1224,
   "regression_failures": 0,
+  "python_manifest_checks": 34,
   "full_iteration_exit": 0,
   "scored_evidence": "pass",
+  "policy_matrices": "all existing normal-economy, assembly, Evolution, Gift and four-path matrices green",
   "warning": "Existing ObjectDB shutdown leak warnings in some fixture scripts",
   "human_playtest": false
 }

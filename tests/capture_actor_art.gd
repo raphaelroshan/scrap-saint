@@ -39,6 +39,34 @@ func capture():
 	game.reduced_fx = true
 	await save_frame("ROSTER_REDUCED")
 	game.reduced_fx = false
+	game.sim.start(0,147,"optional")
+	game.sim.state.wave = 6
+	game.sim.spawn("elite.memory_crane")
+	var crane = game.sim.state.enemies[-1]
+	crane.p = Vector2(590,420)
+	game.sim.state.position = Vector2(790,500)
+	await save_frame("MEMORY_CRANE_IDLE")
+	game.sim.state.hazards = [{"p":Vector2(790,500),"from":crane.p,"until":game.sim.state.tick+90,"warning_ticks":90,"radius":62,"source":crane.type,"source_id":crane.id,"copy":true,"copy_evolution":"evolution.mercy_rail","copy_shape":"rail","copy_range":230.0,"copy_width":12.0}]
+	await save_frame("MEMORY_CRANE_COPY")
+	game.reduced_fx = true
+	await save_frame("MEMORY_CRANE_COPY_REDUCED")
+	game.reduced_fx = false
+	game.sim.start(0,147,"optional")
+	game.sim.state.wave = 8
+	game.sim.spawn("boss.foreman_engine")
+	var foreman = game.sim.state.enemies[-1]
+	foreman.p = Vector2(590,410)
+	game.sim.state.position = Vector2(760,515)
+	for phase in range(3):
+		foreman.phase = phase
+		foreman.hp = foreman.max_hp*[0.9,0.5,0.2][phase]
+		game.sim.state.hazards = []
+		for i in range(phase+2):
+			game.sim.state.hazards.append({"p":Vector2(490+i*95,520+(i%2)*70),"from":foreman.p,"until":game.sim.state.tick+90,"warning_ticks":90,"radius":62,"source":foreman.type,"source_id":foreman.id,"copy":false})
+		await save_frame(["FOREMAN_SCHEDULE","FOREMAN_WORKERS","FOREMAN_FINAL_ORDERS"][phase])
+	game.reduced_fx = true
+	await save_frame("FOREMAN_FINAL_REDUCED")
+	game.reduced_fx = false
 	for i in range(3):
 		game.sim.start(0,147,"optional")
 		game.notification = ""

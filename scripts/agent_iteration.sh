@@ -32,6 +32,7 @@ mkdir -p artifacts/agent-iteration
 "$GODOT_BIN" --headless --path . --script res://tests/test_weapon_presentation.gd | tee artifacts/agent-iteration/weapon-presentation.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_presentation_quality.gd | tee artifacts/agent-iteration/presentation-quality.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_gift_breadth.gd | tee artifacts/agent-iteration/gift-breadth.log
+"$GODOT_BIN" --headless --path . --script res://tests/test_actor_art.gd | tee artifacts/agent-iteration/actor-art.log
 "$GODOT_BIN" --headless --path . --script res://tests/run_playthroughs.gd -- --optional | tee artifacts/agent-iteration/optional-playthroughs.log
 "$GODOT_BIN" --headless --path . --script res://tests/run_assembly_playthroughs.gd | tee artifacts/agent-iteration/assembly-playthroughs.log
 "$GODOT_BIN" --headless --path . --script res://tests/run_evolution_playthroughs.gd | tee artifacts/agent-iteration/evolution-playthroughs.log
@@ -51,4 +52,5 @@ mkdir -p artifacts/agent-iteration
 "$GODOT_BIN" --path . --script res://tests/capture_game_feel.gd -- --capture-dir="$PWD/artifacts/game-feel" | tee artifacts/agent-iteration/game-feel-capture.log
 "$GODOT_BIN" --path . --script res://tests/capture_gift_breadth.gd | tee artifacts/agent-iteration/gift-breadth-capture.log
 "$GODOT_BIN" --path . --script res://tests/capture_main_menu.gd | tee artifacts/agent-iteration/main-menu-capture.log
+"$GODOT_BIN" --path . --script res://tests/capture_actor_art.gd | tee artifacts/agent-iteration/actor-art-capture.log
 python3 scripts/write_provenance.py "$GODOT_BIN"

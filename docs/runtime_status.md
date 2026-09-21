@@ -1,5 +1,13 @@
 # First Shift runtime — 0.6.0 preview
 
+## Painted Memory Crane and Foreman — 2026-09-21
+
+The Workshop's two major enemies no longer share the procedural gear body. Memory Crane is a tracked service crane with a painted chassis, boom and inspection lens; its hook aims toward the real copied-geometry hazard while that warning is active. Foreman Engine is a mobile painted demolition press whose ram, lamps, worker hatches and final-order jaws follow its authoritative phase. The boss HUD now names Schedule, Worker Call and Final Orders.
+
+The renderer only reads enemy phase, stun and hazard data. It does not move hazards, spawn workers, apply damage or change state. Reduced effects holds decorative servo oscillation while keeping poses and attack boundaries. The complete loop passes 1,224 Godot assertions across 27 suites and 34 Python manifest checks; all existing natural policy matrices remain green. Seven new native fixtures were captured at 1280x800, seed 147, Godot 4.5.1 Compatibility on Apple M1 Pro. See [the task packet](task_packets/memory_crane_foreman_art.md) and [actor review](../assets/actors/review.html).
+
+The major bodies are deterministic composites of existing generated project-painted assets rather than bespoke new paintings. This preserves source provenance and produces a coherent runtime replacement, but a future art-production pass can give each body unique painted parts. Human 1x recognition and reaction timing remain unverified.
+
 ## Supporting menus — 2026-09-21
 
 How to Play now has five illustrated pages covering the Saint's manifestation through freely given repairs, movement, optional work, relic assembly and the three-site expedition. It is available from the title and Pause. Completing it from Pause returns to the same paused run; completing it from the title opens setup.
@@ -12,7 +20,7 @@ See [the menu packet](task_packets/menu_completion.md) and [native review](evide
 
 All six ordinary enemy families now use painted bodies. Rust Pilgrim, Forklift Brute and Cinder Spitter join the earlier Mite, Hound and Drone. Existing charge warnings, support fields, statuses and hit reactions remain. Workshop Salvage Sorter, Coolant Pump and Warning Bell use matched broken/restored artwork, with progress and welding feedback while repairing. Simulation outcomes and optional-work rules are unchanged.
 
-57 focused checks pass. See [the task packet](task_packets/enemies_and_repairs.md) and [native gameplay review](../assets/actors/review.html). Fixed-view body motion is not an articulated gait. Bosses, elite and destination objectives still use procedural art.
+The original ordinary-actor pass had 57 focused checks; the expanded actor suite now has 137. See [the task packet](task_packets/enemies_and_repairs.md) and [native gameplay review](../assets/actors/review.html). Fixed-view ordinary body motion is not an articulated gait. Destination bosses and objectives still use procedural art.
 
 ## Painted arena material pass — 2026-09-21
 

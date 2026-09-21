@@ -1,5 +1,11 @@
 # Asset provenance
 
+## Painted Workshop major assemblies — 2026-09-21
+
+Memory Crane and Foreman Engine are deterministic, non-destructive runtime composites of project-owned generated PNGs already documented in the actor, environment and supporting-art manifests. `assets/actors/major_assemblies.json` records exact texture paths, source regions, display extents and SHA-256 source hashes. Components are translated and scaled only; none are rotated or mirrored, preserving their baked upper-left lighting. Code-native arms, hooks, rams, lamps, hatches and jaws add state communication without producing gameplay outcomes.
+
+The built-in image generator was unavailable during this implementation session, and the API fallback was not authorized, so no newly generated bitmap is claimed. The composites are a coherent runtime replacement for the procedural gear placeholder; unique bespoke paintings remain a future production opportunity.
+
 ## Painted actors — 2026-09-21
 
 Six original OpenAI image-generation outputs add Rust Pilgrim, Forklift Brute, Cinder Spitter and paired broken/restored sheets for Salvage Sorter, Coolant Pump and Warning Bell. The existing generated Rivet Hound was the material reference. Three earlier enemy PNGs are reused directly. Exact prompts, generator output IDs, references and hashes are in `assets/actors/sources.json` and `manifest.json`. Original PNGs are copied unchanged; Python only inspects alpha bounds. Runtime region drawing, servo/hover offsets, progress and welding sparks are code-driven presentation. No external game artwork was used.

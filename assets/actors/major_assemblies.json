@@ -1,0 +1,65 @@
+{
+  "assets": [
+    {
+      "id": "elite.memory_crane",
+      "name": "Memory Crane",
+      "kind": "major",
+      "extent": 108,
+      "description": "A tracked archive crane assembled from a painted freight chassis, service boom and inspection lens. Its procedural hook points at the authoritative copied hazard.",
+      "states": {
+        "idle": [
+          {"path": "res://assets/actors/forklift_brute.png", "region": [83, 135, 1063, 975], "offset": [0, 13], "extent": 72},
+          {"path": "res://assets/environment/service_manifold.png", "region": [47, 82, 1993, 588], "offset": [0, -28], "extent": 100},
+          {"path": "res://assets/supporting-art/art/inspection_lens.png", "region": [190, 202, 885, 848], "offset": [23, -28], "extent": 25}
+        ],
+        "copy": [
+          {"path": "res://assets/actors/forklift_brute.png", "region": [83, 135, 1063, 975], "offset": [0, 15], "extent": 72},
+          {"path": "res://assets/environment/service_manifold.png", "region": [47, 82, 1993, 588], "offset": [8, -32], "extent": 106},
+          {"path": "res://assets/supporting-art/art/inspection_lens.png", "region": [190, 202, 885, 848], "offset": [32, -31], "extent": 28}
+        ],
+        "stunned": [
+          {"path": "res://assets/actors/forklift_brute.png", "region": [83, 135, 1063, 975], "offset": [0, 16], "extent": 72},
+          {"path": "res://assets/environment/service_manifold.png", "region": [47, 82, 1993, 588], "offset": [-2, -20], "extent": 92},
+          {"path": "res://assets/supporting-art/art/inspection_lens.png", "region": [190, 202, 885, 848], "offset": [18, -20], "extent": 23}
+        ]
+      }
+    },
+    {
+      "id": "boss.foreman_engine",
+      "name": "Foreman Engine",
+      "kind": "major",
+      "extent": 118,
+      "description": "A heavy mobile demolition press assembled from painted freight, press and warning-bell modules. Its ram and shutters follow the authoritative boss phase.",
+      "states": {
+        "schedule": [
+          {"path": "res://assets/actors/forklift_brute.png", "region": [83, 135, 1063, 975], "offset": [0, 19], "extent": 104},
+          {"path": "res://assets/environment/salvage_press.png", "region": [28, 57, 778, 1771], "offset": [0, -19], "extent": 100},
+          {"path": "res://assets/actors/warning_bell.png", "region": [974, 124, 727, 657], "offset": [0, -47], "extent": 36}
+        ],
+        "workers": [
+          {"path": "res://assets/actors/forklift_brute.png", "region": [83, 135, 1063, 975], "offset": [0, 19], "extent": 104},
+          {"path": "res://assets/environment/salvage_press.png", "region": [28, 57, 778, 1771], "offset": [0, -14], "extent": 100},
+          {"path": "res://assets/actors/warning_bell.png", "region": [87, 124, 727, 657], "offset": [0, -44], "extent": 39}
+        ],
+        "final_orders": [
+          {"path": "res://assets/actors/forklift_brute.png", "region": [83, 135, 1063, 975], "offset": [0, 20], "extent": 108},
+          {"path": "res://assets/environment/salvage_press.png", "region": [28, 57, 778, 1771], "offset": [0, -7], "extent": 108},
+          {"path": "res://assets/actors/warning_bell.png", "region": [974, 124, 727, 657], "offset": [0, -39], "extent": 42}
+        ],
+        "stunned": [
+          {"path": "res://assets/actors/forklift_brute.png", "region": [83, 135, 1063, 975], "offset": [0, 21], "extent": 104},
+          {"path": "res://assets/environment/salvage_press.png", "region": [28, 57, 778, 1771], "offset": [0, -7], "extent": 94},
+          {"path": "res://assets/actors/warning_bell.png", "region": [87, 124, 727, 657], "offset": [0, -35], "extent": 34}
+        ]
+      }
+    }
+  ],
+  "source_hashes": {
+    "res://assets/actors/forklift_brute.png": "bc0c8103a7217ebd88cf5ef4737d4f79ebbc6a6cd0d11a0a89d7be86ca5c1c16",
+    "res://assets/environment/salvage_press.png": "9e50b87c8cca15f6302b8a405a6f01ab8b304a781967042d6055249c20bb404a",
+    "res://assets/environment/service_manifold.png": "5e88e7b2cb4683742c4c6adc2db64d59474fdb11e153ee2d870aa5bbe326d720",
+    "res://assets/actors/warning_bell.png": "bb9db85b077c74e0fbee1c961ff27235cb253d170832d15f81237bc8b1acce4b",
+    "res://assets/supporting-art/art/inspection_lens.png": "7cce619a4994c58499d199e16575b8e461e0415cb6bed2e1fb3904e8b8c4f823"
+  },
+  "method": "Deterministic non-destructive runtime composition of existing repository-painted RGBA sources; no source is rotated or mirrored."
+}
