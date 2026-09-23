@@ -16,6 +16,7 @@ mkdir -p artifacts/agent-iteration
 "$GODOT_BIN" --headless --path . --script res://tests/test_arena.gd | tee artifacts/agent-iteration/arena.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_simulation.gd | tee artifacts/agent-iteration/simulation.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_chapter.gd | tee artifacts/agent-iteration/chapter.log
+"$GODOT_BIN" --headless --path . --script res://tests/test_road_echoes.gd | tee artifacts/agent-iteration/road-echoes.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_expedition_map.gd | tee artifacts/agent-iteration/expedition-map.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_optional_repairs.gd | tee artifacts/agent-iteration/optional-repairs.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_shop.gd | tee artifacts/agent-iteration/shop.log

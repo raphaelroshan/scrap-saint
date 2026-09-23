@@ -36,6 +36,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Arena tests failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Simulation tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_chapter.gd 2>&1 | Tee-Object -FilePath "$bundlePath\chapter.log"
 if ($LASTEXITCODE -ne 0) { throw 'Chapter tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_road_echoes.gd 2>&1 | Tee-Object -FilePath "$bundlePath\road-echoes.log"
+if ($LASTEXITCODE -ne 0) { throw 'Road echo tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_expedition_map.gd 2>&1 | Tee-Object -FilePath "$bundlePath\expedition-map.log"
 if ($LASTEXITCODE -ne 0) { throw 'Expedition map tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_roaming_quality.gd 2>&1 | Tee-Object -FilePath "$bundlePath\roaming-quality.log"

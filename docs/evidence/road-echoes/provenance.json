@@ -1,0 +1,54 @@
+{
+  "build": "0.6.0-preview + warning-wire story",
+  "base_commit": "2aff3a0eb0e6a752662e07ab777fa6a87f576e9b",
+  "godot": "4.5.1-stable official f62fdbde1",
+  "viewport": [
+    1280,
+    800
+  ],
+  "text_scales": [
+    1.0,
+    1.15
+  ],
+  "seed": 147,
+  "timestamp_utc": "2026-09-23T17:30:04.401233+00:00",
+  "capture_type": "Configured native travel fixtures; supplied 40-Scrap budget and boss completion, actual route/road commands; not natural play or human testing",
+  "source_hashes": {
+    "game/main.gd": "52a91a897d8b10aa065030c8f0051cd4dd93521d72118dc393f7777932078608",
+    "game/simulation.gd": "d803f5d2667e774cec75cc7f1fba0752b677e8795512631b030b4b1e7206c107",
+    "content/lore/road_echoes.json": "fb011392cd089c5ee3344317d1f0f6291c466cd38ea3e8d1af8c4ab5b41cfad2",
+    "content/chapter/first_chapter.json": "42cfc40096e3063a004dbb7726dab5dbb10e1fdbba90763e536e17b2156267c1",
+    "tests/test_road_echoes.gd": "a7dd6bef801c0f6f0151b7043bd9829270143b35645e74aa9530660473a64fbe",
+    "tests/capture_road_echoes.gd": "f1fd8667000da600a70a12f20136628310f3506980bf1160550013342cbccff0"
+  },
+  "capture_hashes": {
+    "ADA_CROSS_LARGE.png": "2f3f8ae06e40051ea36a51f8f7c699cd19ed86b79c5cc1ee95db2fdf493fc1e3",
+    "ADA_CROSS_NORMAL.png": "704491b7f5aa1b16f1b4c0d57daf8e0b56ccb3ffbcdf0938b1d9fbb342ca2e15",
+    "ADA_SPLICE_LARGE.png": "d34c297590193ed52026c0850a5768afa359421dbccbd8d6514021080c8198e9",
+    "ADA_SPLICE_NORMAL.png": "107724506070aeb6500f1531fcc5c3dfb9dd5b0b737011852b11bd1b75f62624",
+    "ARCHIVE_CROSS_LARGE.png": "1f7c985161620cd43bf284b90509fe9a96e486b81b120dedbed83c95b96fdbaa",
+    "ARCHIVE_CROSS_NORMAL.png": "89591ec1372edb7dc5e69869a64447b15f04de35fabc2059f93cf5fb2d5c06f4",
+    "ARCHIVE_SPLICE_LARGE.png": "d6ef53dfe7d91ac25bcf1f4e9c624163e8b424fd80e35563bc5344c535259d10",
+    "ARCHIVE_SPLICE_NORMAL.png": "f8cae0d5a618815e43f66136bf82bded712ebcc70f01ab073e0d043c27254f9a",
+    "FOUNDRY_CROSS_LARGE.png": "761e7a3a1a0d760a3fa04ddfb6a04ead89acc43a75c399d0e07ed3c426686f06",
+    "FOUNDRY_CROSS_NORMAL.png": "917f574b72fd4792244b9e7d863bcccd0a8fd3124345f3d2e0601299b88f822c",
+    "FOUNDRY_SPLICE_LARGE.png": "63989a47a622dc9001c981f1ca9f5d320baa1c3782a00fb7d0f829cdb5e5c3ba",
+    "FOUNDRY_SPLICE_NORMAL.png": "fbbdb2b10e8a1b274573c7478bd495bbf3a5f07ee978167445eb7e5ec3ed981f"
+  },
+  "state_hashes": {
+    "ADA_SPLICE_NORMAL": "9f3291401a43ae879f2ee14b4040ff3ee22dcd9747c4b0296e264e0fedfcbb7d",
+    "ARCHIVE_SPLICE_NORMAL": "115f6575fefdf58f07e8c4e5d9010b56a39feae44faac94d3ac3b8dd0cb8f1c5",
+    "FOUNDRY_SPLICE_NORMAL": "7ec4b2429601655412057a1e5eccea835ea5b1f48b0aea2a53f69ee1724c5905",
+    "ADA_CROSS_NORMAL": "6c82a521edfd9def2d33787be68cbea54a3b7c657e1570bf7a5a07be507a2555",
+    "ARCHIVE_CROSS_NORMAL": "aaba97f92d13590822bf4c9bcfa776abb094ed501c238da891cfff15f4e83c32",
+    "FOUNDRY_CROSS_NORMAL": "0dcfc8e1e1fbe6a0c979a37b70d14d7b8ed41bf7c62bbfa10c32ace75377ae9f",
+    "ADA_SPLICE_LARGE": "9f3291401a43ae879f2ee14b4040ff3ee22dcd9747c4b0296e264e0fedfcbb7d",
+    "ARCHIVE_SPLICE_LARGE": "115f6575fefdf58f07e8c4e5d9010b56a39feae44faac94d3ac3b8dd0cb8f1c5",
+    "FOUNDRY_SPLICE_LARGE": "7ec4b2429601655412057a1e5eccea835ea5b1f48b0aea2a53f69ee1724c5905",
+    "ADA_CROSS_LARGE": "6c82a521edfd9def2d33787be68cbea54a3b7c657e1570bf7a5a07be507a2555",
+    "ARCHIVE_CROSS_LARGE": "aaba97f92d13590822bf4c9bcfa776abb094ed501c238da891cfff15f4e83c32",
+    "FOUNDRY_CROSS_LARGE": "0dcfc8e1e1fbe6a0c979a37b70d14d7b8ed41bf7c62bbfa10c32ace75377ae9f"
+  },
+  "limitation": "Authored textual consequences, not a simulated NPC encounter. Configured captures and automated branch tests do not establish human causal comprehension.",
+  "next_task": "Observe an uncoached human 1x Workshop-to-Brass session and test recognition of the later wire consequence."
+}

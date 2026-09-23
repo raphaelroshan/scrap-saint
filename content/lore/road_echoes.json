@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "echoes": [
+    {
+      "id": "echo.brass.ada_splice",
+      "node_ids": ["road.brass.ada_waycart"],
+      "requires_flag": "road.brass.warning_restored",
+      "news": "Ada-9 tests the wire you spliced. A distant workshop answers. 'That bell used to announce quotas. I gave the workers the pull-cord. They asked for a warning before the roof falls.'"
+    },
+    {
+      "id": "echo.brass.ada_cross",
+      "node_ids": ["road.brass.ada_waycart"],
+      "requires_flag": "road.brass.warning_endured",
+      "news": "Ada-9 notices the cable marks on your chassis. 'You made it through. Sit if you need a patch.' She puts a handbell beside a spare spool. 'I'll ask the roof crew which signal they can use.'"
+    },
+    {
+      "id": "echo.brass.archive_splice",
+      "node_ids": ["road.archive.misfiled_gate"],
+      "requires_flag": "road.brass.warning_restored",
+      "news": "A roof crew shelters beside the Archive gate. The wire you spliced rang before their rafters fell; everyone got out. Ada's note is tucked into their cart: 'They rang it themselves. Nobody waited for permission.'"
+    },
+    {
+      "id": "echo.brass.archive_cross",
+      "node_ids": ["road.archive.misfiled_gate"],
+      "requires_flag": "road.brass.warning_endured",
+      "news": "A roof crew shelters beside the Archive gate, carrying Ada's handbell. They took turns watching the cracked rafters and called everyone out. A note hangs from its handle: 'They asked for a second bell. Fair enough.'"
+    },
+    {
+      "id": "echo.brass.foundry_splice",
+      "node_ids": ["road.foundry.slag_bridge"],
+      "requires_flag": "road.brass.warning_restored",
+      "news": "At the slag bridge, a roof crew carries the pull-cord from the wire you spliced. Its alarm got them out before their workshop collapsed. Ada's note travels with them: 'They chose when to leave. The bell only told them when to look.'"
+    },
+    {
+      "id": "echo.brass.foundry_cross",
+      "node_ids": ["road.foundry.slag_bridge"],
+      "requires_flag": "road.brass.warning_endured",
+      "news": "A roof crew crosses the slag bridge with Ada's handbell. A lookout spotted their falling rafters in time. They are arguing over whose turn it is to carry the bell. Ada's note says: 'A longer handle, next time.'"
+    }
+  ]
+}

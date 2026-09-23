@@ -100,7 +100,7 @@
           "news": "The wire rings before anything moves. Ada-9's report was accurate.",
           "risk": "Crossing untreated costs 12 Structure; careful splicing costs 2 Scrap.",
           "choices": [
-            {"id": "choice.brass.splice", "label": "Splice the warning wire", "description": "Spend 2 Scrap and leave a working alarm for the return road.", "cost": 2, "structure_delta": 0, "scrap_delta": 0, "flag": "road.brass.warning_restored", "result": "The wire learns one honest note."},
+            {"id": "choice.brass.splice", "label": "Splice the warning wire", "description": "Spend 2 Scrap and leave a working alarm for the roadside workshops.", "cost": 2, "structure_delta": 0, "scrap_delta": 0, "flag": "road.brass.warning_restored", "result": "The wire learns one honest note."},
             {"id": "choice.brass.cross", "label": "Cross beneath the ringing", "description": "Keep your Scrap. Loose cable tears 12 Structure from the chassis.", "cost": 0, "structure_delta": -12, "scrap_delta": 0, "flag": "road.brass.warning_endured", "result": "The Saint crosses before the third false alarm."}
           ]
         },

@@ -1,0 +1,11 @@
+{
+  "story_checks": 86,
+  "story_failures": 0,
+  "regression_checks": 1087,
+  "regression_suites": 26,
+  "regression_failures": 0,
+  "full_iteration_exit": 0,
+  "scored_evidence": "pass",
+  "human_playtest": false,
+  "warning": "Existing ObjectDB shutdown leak warnings in some fixtures"
+}

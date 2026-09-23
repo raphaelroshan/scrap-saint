@@ -1,5 +1,11 @@
 # Scrap Saint roadmap
 
+## Narrative slice — 2026-09-24
+
+The latest story proposal now has one implemented causal chain: Brass wire choice → Ada response → roof-crew report on the Archive or Foundry road. Existing saved flags select the text without changing economy, warnings or route eligibility. [The implementation map](docs/narrative_implementation_map.md) identifies relevant future placements for Morrow, Coil, boss framing and Null recognition. Those remain proposals.
+
+The human validation priority below still applies. Extend the Workshop session through Brass and a later road to check whether the player connects the report to their wire decision. Do not treat authored text or passing branch tests as proof that the story lands.
+
 ## Current roadmap — 2026-09-21
 
 Reconciled against merged `main` at `94f63a3`, including the painted Memory Crane/Foreman work in PR #20 and supporting menus in `c352211`. This section is the operating plan; the historical baseline below preserves earlier design decisions without reopening completed implementation.

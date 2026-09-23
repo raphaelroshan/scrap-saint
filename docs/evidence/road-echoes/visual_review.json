@@ -1,0 +1,57 @@
+{
+  "scope": "Warning wire, Ada response and later roof-crew reports",
+  "rubric": [
+    {
+      "criterion": "Causal setup",
+      "score": 4,
+      "note": "Ada explicitly mentions the spliced wire or the crossing damage."
+    },
+    {
+      "criterion": "Later consequence",
+      "score": 4,
+      "note": "Both later roads identify the crew and the mechanism that warned them."
+    },
+    {
+      "criterion": "Optionality",
+      "score": 4,
+      "note": "Crossing gets a humane alternative account without extra penalties or reduced warnings."
+    },
+    {
+      "criterion": "Local context",
+      "score": 3,
+      "note": "The story replaces generic road news; the current gate or bridge is retained through title and risk."
+    },
+    {
+      "criterion": "Text fit",
+      "score": 4,
+      "note": "All six passages fit above the risk panel at large text."
+    },
+    {
+      "criterion": "Choice readability",
+      "score": 4,
+      "note": "Prices and free options retain their existing locations and labels."
+    },
+    {
+      "criterion": "Hierarchy",
+      "score": 4,
+      "note": "Story news remains separate from the risk panel and carried resources."
+    },
+    {
+      "criterion": "Tone",
+      "score": 4,
+      "note": "Workers retain agency; practical Ada dialogue balances devotional themes."
+    },
+    {
+      "criterion": "Visual finish",
+      "score": 3,
+      "note": "Existing travel illustration remains abstract; the crew is represented only through prose."
+    },
+    {
+      "criterion": "Evidence",
+      "score": 4,
+      "note": "Twelve native captures, save/reload and branch coverage; human understanding unverified."
+    }
+  ],
+  "limitation": "Authored textual consequences, not a simulated NPC encounter. Configured captures and automated branch tests do not establish human causal comprehension.",
+  "next_task": "Observe an uncoached human 1x Workshop-to-Brass session and test recognition of the later wire consequence."
+}

@@ -1467,7 +1467,7 @@ func draw_travel():
 	var node = sim.current_road_node()
 	var nodes = sim.road_nodes_for(route)
 	text_at("ACCEPTED / " + route.name.to_upper(), Vector2(92, 188), 11, GREEN)
-	text_at("ROAD %d OF %d / %s" % [sim.state.travel_step + 1, nodes.size(), str(node.kind).to_upper()], Vector2(92, 218), 10, GOLD)
+	text_at("ROAD %d OF %d / %s" % [sim.state.travel_step + 1, nodes.size(), ("WORD FROM THE ROAD" if node.has("story_id") else str(node.kind).to_upper())], Vector2(92, 218), 10, GOLD)
 	text_at(node.name, Vector2(88, 266), 34, PAPER, true)
 	wrapped(node.news, Vector2(92, 300), 820, 16, GREEN)
 	panel(Rect2(92, 353, 910, 62), Color("233236"))

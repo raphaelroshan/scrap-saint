@@ -6,6 +6,7 @@ var catalogue = {}
 var evolution_recipes = {}
 var frames = {}
 var bosses = {}
+var road_echoes = JSON.parse_string(FileAccess.get_file_as_string("res://content/lore/road_echoes.json")).echoes
 var chapter = {}
 var routes = {}
 var state = {}
@@ -311,7 +312,15 @@ func current_road_node() -> Dictionary:
 	if route.is_empty(): return {}
 	var nodes = road_nodes_for(route)
 	var index = int(state.get("travel_step", 0))
-	return nodes[index] if index >= 0 and index < nodes.size() else {}
+	if index < 0 or index >= nodes.size(): return {}
+	# Select authored road copy from existing saved decisions; never mutate content or state.
+	var node: Dictionary = nodes[index].duplicate(true)
+	for echo in road_echoes:
+		if str(node.id) in echo.node_ids and str(echo.requires_flag) in state.get("road_flags", []):
+			node.news = str(echo.news)
+			node.story_id = str(echo.id)
+			break
+	return node
 
 func choose_route(route_id: String) -> String:
 	if not routes.has(route_id): return "INVALID_ROUTE"

@@ -1,5 +1,11 @@
 # First Shift runtime — 0.6.0 preview
 
+## Warning-wire story consequence — 2026-09-24
+
+The Brass wire decision now selects Ada's immediate response and a later roof-crew report on either the Archive or Foundry road. Six authored passages use existing persisted road flags; Rootworks and old saves without matching flags keep default news. Existing risks, prices, free options, damage, warnings and progression are unchanged. Reading is deterministic and read-only; no new save fields or moral score are introduced.
+
+See [where the broader story fits](narrative_implementation_map.md), [the implementation packet](task_packets/warning_wire_story.md) and [native captures](evidence/road-echoes/review.html). The consequence is conveyed through text; there is no simulated roof-crew encounter. Human causal comprehension remains unverified.
+
 ## Painted Memory Crane and Foreman — 2026-09-21
 
 The Workshop's two major enemies no longer share the procedural gear body. Memory Crane is a tracked service crane with a painted chassis, boom and inspection lens; its hook aims toward the real copied-geometry hazard while that warning is active. Foreman Engine is a mobile painted demolition press whose ram, lamps, worker hatches and final-order jaws follow its authoritative phase. The boss HUD now names Schedule, Worker Call and Final Orders.
