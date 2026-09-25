@@ -1,5 +1,7 @@
 # Scrap Saint — First playable vertical slice
 
+> Historical scope below: mandatory relay protection and repair-service wording do not govern the main mode. Current user decisions require free movement, optional repairs, field recovery and relic-only shops. See [current production state](production_state.md) and AGENTS.md for precedence and actual acceptance status.
+
 ## Goal
 
 Create a complete 8–10 minute playable called **The First Shift**. The player chooses one of three Blessings, enters a compact industrial arena, protects a repair relay, visits the relic shop, pursues one visible evolution, defeats an elite and the Foreman Engine, and receives one memory fragment about the Saint’s construction.

@@ -1,0 +1,2 @@
+PASS: Scrap Saint first-slice and first-chapter content contracts
+  items=25 evolutions=10 blessings=4 frames=3 enemies=7 bosses=7

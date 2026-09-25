@@ -1,0 +1,64 @@
+{
+  "source_commit": "3464991aa6f0518739fb373645a0e89b2749973e",
+  "date": "2026-09-25",
+  "engine": "Godot 4.5.1 stable",
+  "renderer": "Compatibility / OpenGL 3.3 / NVIDIA RTX 4060 / driver 616.92",
+  "method": "Native Godot runtime captures; natural fixed-tick policy or injected actor/menu fixture; no human session",
+  "gameplay_changes_after_capture": false,
+  "files": [
+    {
+      "file": "NATURAL_REPAIR_DECISION.png",
+      "source": "artifacts/core-quality/NATURAL_REPAIR_DECISION.png",
+      "sha256": "0503babb1273fef032fb1bd12b0d18900a5dbab7ab2c35efeddc27b8a834ab7b",
+      "viewport": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "NATURAL_REPAIR_REWARD.png",
+      "source": "artifacts/core-quality/NATURAL_REPAIR_REWARD.png",
+      "sha256": "1e6b03cdaf22c17f63555913878497d9e3e2a965669fc242bfe05b4512387c98",
+      "viewport": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "NATURAL_RESULTS.png",
+      "source": "artifacts/core-quality/NATURAL_RESULTS.png",
+      "sha256": "3a85531d892d676e62cbecf26406e70efe49c2abe5d641ebcc039ffa10ea3c2a",
+      "viewport": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "TITLE_1280x800.png",
+      "source": "artifacts/main-menu/TITLE_1280x800.png",
+      "sha256": "b15adf94d285538a5df5d41bc8a83bbf6f9591585915ebabe74428935fa1121f",
+      "viewport": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "SETTINGS_1280x800.png",
+      "source": "artifacts/main-menu/SETTINGS_1280x800.png",
+      "sha256": "72f9c45a6c6e75a4db083ae1d585e0f0f8a34b4c34aa54d1f0d45f97244c30fc",
+      "viewport": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "FOREMAN_FINAL_ORDERS.png",
+      "source": "artifacts/actor-art/FOREMAN_FINAL_ORDERS.png",
+      "sha256": "c7ea42d7496469e56fcce5baef367b62ac51cb256374f132ae9f3e07453bdcf7",
+      "viewport": [
+        1280,
+        800
+      ]
+    }
+  ]
+}

@@ -1,5 +1,9 @@
 # First Shift runtime — 0.6.0 preview
 
+## Ownership audit — 2026-09-25
+
+No gameplay changes. The [production ledger](production_state.md) distinguishes implemented technical milestones from pending creative acceptance. [Fresh QA](qa_current.md) verifies content/import, 400 focused assertions and native captures at source `3464991`. The known Warning Bell description clipping remains open under the [next bounded packet](task_packets/workshop_repair_readability.md).
+
 ## Warning-wire story consequence — 2026-09-24
 
 The Brass wire decision now selects Ada's immediate response and a later roof-crew report on either the Archive or Foundry road. Six authored passages use existing persisted road flags; Rootworks and old saves without matching flags keep default news. Existing risks, prices, free options, damage, warnings and progression are unchanged. Reading is deterministic and read-only; no new save fields or moral score are introduced.

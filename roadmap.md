@@ -1,5 +1,9 @@
 # Scrap Saint roadmap
 
+## Ownership audit — 2026-09-25
+
+[Current production state](docs/production_state.md) reconciles main at `3464991`: the technical first-chapter loop and M1–M3 are implemented; creative acceptance and Early Access readiness are not established. Fresh native audit found a clipped Warning Bell reward description. Execute the bounded [Workshop repair-readability packet](docs/task_packets/workshop_repair_readability.md) before the existing uncoached 1x Workshop session below. This observed feedback defect takes precedence over broader content or polish. [Fresh QA](docs/qa_current.md): 400 focused checks pass, native natural policy wins; no human-session claim.
+
 ## Narrative slice — 2026-09-24
 
 The latest story proposal now has one implemented causal chain: Brass wire choice → Ada response → roof-crew report on the Archive or Foundry road. Existing saved flags select the text without changing economy, warnings or route eligibility. [The implementation map](docs/narrative_implementation_map.md) identifies relevant future placements for Morrow, Coil, boss framing and Null recognition. Those remain proposals.

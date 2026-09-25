@@ -1,5 +1,7 @@
 # Scrap Saint — Gameplay contract
 
+> Historical scope below: mandatory relay protection and repair-service wording do not govern the main mode. Current user decisions require free movement, optional repairs, field recovery and relic-only shops. See [current production state](../docs/production_state.md) and AGENTS.md for precedence and actual acceptance status.
+
 The current executable subset, exact repair/victory rules, and deferred secondary effects are listed in [runtime status](../docs/runtime_status.md).
 
 ## Authority

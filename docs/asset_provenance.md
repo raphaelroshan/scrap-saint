@@ -1,5 +1,9 @@
 # Asset provenance
 
+## Prompt 0 audit — 2026-09-25
+
+No production art, animation or audio was created or changed. Six unedited native screenshots are preserved solely as QA evidence in [the audit review](evidence/prompt0-audit/review.md), with source commit, capture method, viewport and SHA-256 provenance. They reuse existing runtime assets; they are not new generated assets. Existing manifests and art direction remain authoritative.
+
 ## Painted Workshop major assemblies — 2026-09-21
 
 Memory Crane and Foreman Engine are deterministic, non-destructive runtime composites of project-owned generated PNGs already documented in the actor, environment and supporting-art manifests. `assets/actors/major_assemblies.json` records exact texture paths, source regions, display extents and SHA-256 source hashes. Components are translated and scaled only; none are rotated or mirrored, preserving their baked upper-left lighting. Code-native arms, hooks, rams, lamps, hatches and jaws add state communication without producing gameplay outcomes.

@@ -1,5 +1,9 @@
 # Scrap Saint agent rules
 
+## Lead implementation procedure
+
+Read and apply the complete [prompt-pack entry point](docs/agent_prompt_pack.md), [production state](docs/production_state.md), [agent memory](docs/agent_memory.md) and [current QA](docs/qa_current.md). Execute Prompt 0 on resumption; write a bounded packet before implementation, then choose the smallest appropriate prompt. Every response must contain Intent; Plan; Changed files; Verification with exact commands and results; Risks; Exactly one next small task. Update planning, memory, asset provenance, changelog and QA records each iteration. Runtime completion requires inspected runtime evidence.
+
 ## Current user decisions and repository sync
 
 The Saint manifests from the grace of repairs freely given in a devastated machine world. See docs/saint_of_freely_given_repairs.md. This supersedes older engineered-origin passages.

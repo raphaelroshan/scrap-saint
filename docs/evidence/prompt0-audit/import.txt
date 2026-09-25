@@ -1,0 +1,620 @@
+Godot Engine v4.5.1.stable.official.f62fdbde1 - https://godotengine.org
+
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Started Project initialization (5 steps)[39m[0m
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Scanning file structure...[39m[0m
+[  16% ] [90m[1mfirst_scan_filesystem[22m | Loading global class names...[39m[0m
+[  33% ] [90m[1mfirst_scan_filesystem[22m | Verifying GDExtensions...[39m[0m
+[  50% ] [90m[1mfirst_scan_filesystem[22m | Creating autoload scripts...[39m[0m
+[  66% ] [90m[1mfirst_scan_filesystem[22m | Initializing plugins...[39m[0m
+[  83% ] [90m[1mfirst_scan_filesystem[22m | Starting file scan...[39m[0m
+[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
+[0m
+WARNING: Missing .uid file for path "res://game/arena.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://game/arena_art.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://game/profile.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://game/save_store.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://game/settings.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/benchmark_peak_density.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/capture_arena_art.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/capture_assembly.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/capture_chapter.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/capture_core_quality.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/capture_ea_ui.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/capture_evolutions.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/capture_expedition_map.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/capture_game_feel.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/capture_gift_breadth.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/capture_main_menu.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/capture_manifested_nailer.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/capture_manifested_relics.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/capture_optional.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/capture_remaining_manifested_relics.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/capture_services.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/capture_sync_contract.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/capture_variety.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/capture_weapon_animation.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/capture_weapon_ranks.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/run_assembly_playthroughs.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/run_evolution_playthroughs.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/run_four_path_pacing.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/run_gift_playthroughs.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/run_playthroughs.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_acquisition.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_arena.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_arena_art.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_assembly.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_chapter.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_checkpoint_lifecycle.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_dev_speed.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_evolutions.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_expedition_map.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_flow_input.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_frames_progression.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_gift_breadth.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_main_menu.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_optional_repairs.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_presentation_quality.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_profile.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_relay.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_relic_assets.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_roaming_quality.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_save_flow.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_settings.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_shop.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_simulation.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_supporting_assets.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_sync_contract.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_ui.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_variety.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_weapon_presentation.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tests/test_weapon_ranks.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tools/bake_relic_assets.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tools/preview_supporting_assets.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+WARNING: Missing .uid file for path "res://tools/relic_asset_canvas.gd". The file was re-created from cache.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1363)
+[   0% ] [90m[1mupdate_scripts_classes[22m | Started Registering global classes... (10 steps)[39m[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[   9% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  18% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  27% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  36% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  45% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  54% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  63% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  72% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  81% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[92m[ DONE ][39m [1mupdate_scripts_classes[22m
+[0m
+[   0% ] [90m[1m_update_scan_actions[22m | Started Scanning actions... (238 steps)[39m[0m
+[   0% ] [90m[1m_update_scan_actions[22m | BRASS_OBJECTIVE.png[39m[0m
+[   0% ] [90m[1m_update_scan_actions[22m | BRASS_ROADSIDE_SERVICE.png[39m[0m
+[   0% ] [90m[1m_update_scan_actions[22m | BRASS_ROAD_ENCOUNTER.png[39m[0m
+[   1% ] [90m[1m_update_scan_actions[22m | CHAPTER_MEMORY.png[39m[0m
+[   1% ] [90m[1m_update_scan_actions[22m | CHOIR_REGENT_TOLL.png[39m[0m
+[   2% ] [90m[1m_update_scan_actions[22m | EXPEDITION_MAP_ACCEPTED.png[39m[0m
+[   2% ] [90m[1m_update_scan_actions[22m | EXPEDITION_MAP_AVAILABLE.png[39m[0m
+[   2% ] [90m[1m_update_scan_actions[22m | FACTORY_HEART_FEED.png[39m[0m
+[   3% ] [90m[1m_update_scan_actions[22m | FOREMAN_ENGINE_PHASE_TWO.png[39m[0m
+[   3% ] [90m[1m_update_scan_actions[22m | M1_DEPARTURE_LARGE_TEXT.png[39m[0m
+[   4% ] [90m[1m_update_scan_actions[22m | M1_DEPARTURE_NULL_PREVIEW.png[39m[0m
+[   4% ] [90m[1m_update_scan_actions[22m | M1_DEPARTURE_WORKSHOP.png[39m[0m
+[   5% ] [90m[1m_update_scan_actions[22m | M1_ROUTE_LARGE_TEXT.png[39m[0m
+[   5% ] [90m[1m_update_scan_actions[22m | M2_MIDDLE_SITE_CLEAR.png[39m[0m
+[   5% ] [90m[1m_update_scan_actions[22m | M2_TERMINAL_SITE_CLEAR.png[39m[0m
+[   6% ] [90m[1m_update_scan_actions[22m | M2_WORKSHOP_SITE_CLEAR.png[39m[0m
+[   6% ] [90m[1m_update_scan_actions[22m | M2_WORKSHOP_SITE_CLEAR_LARGE_TEXT.png[39m[0m
+[   7% ] [90m[1m_update_scan_actions[22m | M3_BRASS_ARRIVAL.png[39m[0m
+[   7% ] [90m[1m_update_scan_actions[22m | M3_BRASS_ARRIVAL_LARGE_TEXT.png[39m[0m
+[   7% ] [90m[1m_update_scan_actions[22m | M3_PALE_ARCHIVE_ARRIVAL.png[39m[0m
+[   8% ] [90m[1m_update_scan_actions[22m | M3_ROOTWORKS_ARRIVAL.png[39m[0m
+[   8% ] [90m[1m_update_scan_actions[22m | MERCY_RAIL_EVOLUTION.png[39m[0m
+[   9% ] [90m[1m_update_scan_actions[22m | NULL_ASSEMBLY_QUIET.png[39m[0m
+[   9% ] [90m[1m_update_scan_actions[22m | PALE_ARCHIVE_INDEX.png[39m[0m
+[  10% ] [90m[1m_update_scan_actions[22m | RED_FOUNDRY_VENTS.png[39m[0m
+[  10% ] [90m[1m_update_scan_actions[22m | RELAY_REPAIR_WAVE.png[39m[0m
+[  10% ] [90m[1m_update_scan_actions[22m | RELAY_THREAT_WARNING.png[39m[0m
+[  11% ] [90m[1m_update_scan_actions[22m | RESULTS_MEMORY_FRAGMENT.png[39m[0m
+[  11% ] [90m[1m_update_scan_actions[22m | ROOTWORKS_OBJECTIVE.png[39m[0m
+[  12% ] [90m[1m_update_scan_actions[22m | ROOTWORKS_ROAD_ENCOUNTER.png[39m[0m
+[  12% ] [90m[1m_update_scan_actions[22m | ROUTE_CHOICE.png[39m[0m
+[  12% ] [90m[1m_update_scan_actions[22m | SECOND_TIER_BRASS_RED_SELECTED.png[39m[0m
+[  13% ] [90m[1m_update_scan_actions[22m | SECOND_TIER_ROOT_RED_ACCEPTED.png[39m[0m
+[  13% ] [90m[1m_update_scan_actions[22m | SHOP_MERCY_RAIL_PATH.png[39m[0m
+[  14% ] [90m[1m_update_scan_actions[22m | TRAVEL_BRASS.png[39m[0m
+[  14% ] [90m[1m_update_scan_actions[22m | WEAPON_RANK_I.png[39m[0m
+[  15% ] [90m[1m_update_scan_actions[22m | WEAPON_RANK_II.png[39m[0m
+[  15% ] [90m[1m_update_scan_actions[22m | WEAPON_RANK_III.png[39m[0m
+[  15% ] [90m[1m_update_scan_actions[22m | WORKSHOP_BLESSING_SELECT.png[39m[0m
+[  16% ] [90m[1m_update_scan_actions[22m | P14_EXPANSION_A.png[39m[0m
+[  16% ] [90m[1m_update_scan_actions[22m | P14_GIFTS.png[39m[0m
+[  17% ] [90m[1m_update_scan_actions[22m | P14_GREAT_TOLL.png[39m[0m
+[  17% ] [90m[1m_update_scan_actions[22m | NATURAL_REPAIR_DECISION.png[39m[0m
+[  17% ] [90m[1m_update_scan_actions[22m | NATURAL_REPAIR_REWARD.png[39m[0m
+[  18% ] [90m[1m_update_scan_actions[22m | NATURAL_RESULTS.png[39m[0m
+[  18% ] [90m[1m_update_scan_actions[22m | EVOLUTION_LEDGER.png[39m[0m
+[  19% ] [90m[1m_update_scan_actions[22m | EVOLVED_GEOMETRIES_A.png[39m[0m
+[  19% ] [90m[1m_update_scan_actions[22m | EVOLVED_GEOMETRIES_B.png[39m[0m
+[  20% ] [90m[1m_update_scan_actions[22m | EVOLVED_GEOMETRIES_C.png[39m[0m
+[  20% ] [90m[1m_update_scan_actions[22m | P20_CITY_REVEAL.png[39m[0m
+[  20% ] [90m[1m_update_scan_actions[22m | P20_COMBAT_FULL.png[39m[0m
+[  21% ] [90m[1m_update_scan_actions[22m | P20_COMBAT_REDUCED.png[39m[0m
+[  21% ] [90m[1m_update_scan_actions[22m | P20_ENEMY_WINDUP.png[39m[0m
+[  22% ] [90m[1m_update_scan_actions[22m | P20_EVOLUTION_REVEAL.png[39m[0m
+[  22% ] [90m[1m_update_scan_actions[22m | P20_IMPACT_REACTION.png[39m[0m
+[  23% ] [90m[1m_update_scan_actions[22m | P20_LIVING_WORKSHOP.png[39m[0m
+[  23% ] [90m[1m_update_scan_actions[22m | P20_MEDITATION_TITLE.png[39m[0m
+[  23% ] [90m[1m_update_scan_actions[22m | P16_CHOIR_FILTER_RECOVERY.png[39m[0m
+[  24% ] [90m[1m_update_scan_actions[22m | P16_HONEST_SCALE_SHOP.png[39m[0m
+[  24% ] [90m[1m_update_scan_actions[22m | P16_SPRING_FUSE_COMBAT.png[39m[0m
+[  25% ] [90m[1m_update_scan_actions[22m | AWAKE_1280x800.png[39m[0m
+[  25% ] [90m[1m_update_scan_actions[22m | AWAKE_1920x1080.png[39m[0m
+[  25% ] [90m[1m_update_scan_actions[22m | CONTINUE_1920x1080.png[39m[0m
+[  26% ] [90m[1m_update_scan_actions[22m | QUIT_1280x800.png[39m[0m
+[  26% ] [90m[1m_update_scan_actions[22m | QUIT_1920x1080.png[39m[0m
+[  27% ] [90m[1m_update_scan_actions[22m | SETTINGS_1280x800.png[39m[0m
+[  27% ] [90m[1m_update_scan_actions[22m | SETTINGS_1920x1080.png[39m[0m
+[  28% ] [90m[1m_update_scan_actions[22m | TITLE_1280x800.png[39m[0m
+[  28% ] [90m[1m_update_scan_actions[22m | TITLE_1920x1080.png[39m[0m
+[  28% ] [90m[1m_update_scan_actions[22m | TITLE_LARGE_1280x800.png[39m[0m
+[  29% ] [90m[1m_update_scan_actions[22m | TITLE_LARGE_1920x1080.png[39m[0m
+[  29% ] [90m[1m_update_scan_actions[22m | P21_MERCY_MOVING_RESOLVE.png[39m[0m
+[  30% ] [90m[1m_update_scan_actions[22m | P21_MERCY_OVERLAP.png[39m[0m
+[  30% ] [90m[1m_update_scan_actions[22m | P21_MERCY_REDUCED.png[39m[0m
+[  30% ] [90m[1m_update_scan_actions[22m | P21_MERCY_UNFOLD.png[39m[0m
+[  31% ] [90m[1m_update_scan_actions[22m | P21_NAILER_COMMIT.png[39m[0m
+[  31% ] [90m[1m_update_scan_actions[22m | P21_NAILER_PREPARE.png[39m[0m
+[  32% ] [90m[1m_update_scan_actions[22m | P22_BELL_STRIKE.png[39m[0m
+[  32% ] [90m[1m_update_scan_actions[22m | P22_CABLE_CLAMP.png[39m[0m
+[  33% ] [90m[1m_update_scan_actions[22m | P22_CENSER_VENT.png[39m[0m
+[  33% ] [90m[1m_update_scan_actions[22m | P22_GREAT_TOLL.png[39m[0m
+[  33% ] [90m[1m_update_scan_actions[22m | P22_THREE_RELIC_OVERLAP.png[39m[0m
+[  34% ] [90m[1m_update_scan_actions[22m | P22_THREE_RELIC_REDUCED.png[39m[0m
+[  34% ] [90m[1m_update_scan_actions[22m | BINDING_LARGE.png[39m[0m
+[  35% ] [90m[1m_update_scan_actions[22m | BINDING_NORMAL.png[39m[0m
+[  35% ] [90m[1m_update_scan_actions[22m | MANUAL_0_LARGE.png[39m[0m
+[  35% ] [90m[1m_update_scan_actions[22m | MANUAL_0_NORMAL.png[39m[0m
+[  36% ] [90m[1m_update_scan_actions[22m | MANUAL_1_LARGE.png[39m[0m
+[  36% ] [90m[1m_update_scan_actions[22m | MANUAL_1_NORMAL.png[39m[0m
+[  37% ] [90m[1m_update_scan_actions[22m | MANUAL_2_LARGE.png[39m[0m
+[  37% ] [90m[1m_update_scan_actions[22m | MANUAL_2_NORMAL.png[39m[0m
+[  38% ] [90m[1m_update_scan_actions[22m | MANUAL_3_LARGE.png[39m[0m
+[  38% ] [90m[1m_update_scan_actions[22m | MANUAL_3_NORMAL.png[39m[0m
+[  38% ] [90m[1m_update_scan_actions[22m | MANUAL_4_LARGE.png[39m[0m
+[  39% ] [90m[1m_update_scan_actions[22m | MANUAL_4_NORMAL.png[39m[0m
+[  39% ] [90m[1m_update_scan_actions[22m | PAUSE_LARGE.png[39m[0m
+[  40% ] [90m[1m_update_scan_actions[22m | PAUSE_NORMAL.png[39m[0m
+[  40% ] [90m[1m_update_scan_actions[22m | SETTINGS_1920.png[39m[0m
+[  41% ] [90m[1m_update_scan_actions[22m | SETTINGS_LARGE.png[39m[0m
+[  41% ] [90m[1m_update_scan_actions[22m | SETTINGS_NORMAL.png[39m[0m
+[  41% ] [90m[1m_update_scan_actions[22m | P23_ALTAR_MORTAR.png[39m[0m
+[  42% ] [90m[1m_update_scan_actions[22m | P23_CANDLE_NAILER.png[39m[0m
+[  42% ] [90m[1m_update_scan_actions[22m | P23_CANDLE_UNRETURNED.png[39m[0m
+[  43% ] [90m[1m_update_scan_actions[22m | P23_FOUR_RELIC_OVERLAP.png[39m[0m
+[  43% ] [90m[1m_update_scan_actions[22m | P23_FOUR_RELIC_REDUCED.png[39m[0m
+[  43% ] [90m[1m_update_scan_actions[22m | P23_HYMN_COIL.png[39m[0m
+[  44% ] [90m[1m_update_scan_actions[22m | P23_LONG_HAND.png[39m[0m
+[  44% ] [90m[1m_update_scan_actions[22m | P23_PENANCE_WINCH.png[39m[0m
+[  45% ] [90m[1m_update_scan_actions[22m | P23_QUIET_SERMON.png[39m[0m
+[  45% ] [90m[1m_update_scan_actions[22m | P23_WORKSHOP_BENEDICTION.png[39m[0m
+[  46% ] [90m[1m_update_scan_actions[22m | ADA_CROSS_LARGE.png[39m[0m
+[  46% ] [90m[1m_update_scan_actions[22m | ADA_CROSS_NORMAL.png[39m[0m
+[  46% ] [90m[1m_update_scan_actions[22m | ADA_SPLICE_LARGE.png[39m[0m
+[  47% ] [90m[1m_update_scan_actions[22m | ADA_SPLICE_NORMAL.png[39m[0m
+[  47% ] [90m[1m_update_scan_actions[22m | ARCHIVE_CROSS_LARGE.png[39m[0m
+[  48% ] [90m[1m_update_scan_actions[22m | ARCHIVE_CROSS_NORMAL.png[39m[0m
+[  48% ] [90m[1m_update_scan_actions[22m | ARCHIVE_SPLICE_LARGE.png[39m[0m
+[  48% ] [90m[1m_update_scan_actions[22m | ARCHIVE_SPLICE_NORMAL.png[39m[0m
+[  49% ] [90m[1m_update_scan_actions[22m | FOUNDRY_CROSS_LARGE.png[39m[0m
+[  49% ] [90m[1m_update_scan_actions[22m | FOUNDRY_CROSS_NORMAL.png[39m[0m
+[  50% ] [90m[1m_update_scan_actions[22m | FOUNDRY_SPLICE_LARGE.png[39m[0m
+[  50% ] [90m[1m_update_scan_actions[22m | FOUNDRY_SPLICE_NORMAL.png[39m[0m
+[  51% ] [90m[1m_update_scan_actions[22m | creatures_0_1.0.png[39m[0m
+[  51% ] [90m[1m_update_scan_actions[22m | creatures_0_1.15.png[39m[0m
+[  51% ] [90m[1m_update_scan_actions[22m | creatures_1_1.0.png[39m[0m
+[  52% ] [90m[1m_update_scan_actions[22m | creatures_1_1.15.png[39m[0m
+[  52% ] [90m[1m_update_scan_actions[22m | creatures_2_1.0.png[39m[0m
+[  53% ] [90m[1m_update_scan_actions[22m | creatures_2_1.15.png[39m[0m
+[  53% ] [90m[1m_update_scan_actions[22m | creatures_3_1.0.png[39m[0m
+[  53% ] [90m[1m_update_scan_actions[22m | creatures_3_1.15.png[39m[0m
+[  54% ] [90m[1m_update_scan_actions[22m | creatures_4_1.0.png[39m[0m
+[  54% ] [90m[1m_update_scan_actions[22m | creatures_4_1.15.png[39m[0m
+[  55% ] [90m[1m_update_scan_actions[22m | creatures_5_1.0.png[39m[0m
+[  55% ] [90m[1m_update_scan_actions[22m | creatures_5_1.15.png[39m[0m
+[  56% ] [90m[1m_update_scan_actions[22m | FIELD_KIT.png[39m[0m
+[  56% ] [90m[1m_update_scan_actions[22m | ORIGIN.png[39m[0m
+[  56% ] [90m[1m_update_scan_actions[22m | origin_0_1.0.png[39m[0m
+[  57% ] [90m[1m_update_scan_actions[22m | origin_0_1.15.png[39m[0m
+[  57% ] [90m[1m_update_scan_actions[22m | relics_0_1.0.png[39m[0m
+[  58% ] [90m[1m_update_scan_actions[22m | relics_0_1.15.png[39m[0m
+[  58% ] [90m[1m_update_scan_actions[22m | relics_1_1.0.png[39m[0m
+[  58% ] [90m[1m_update_scan_actions[22m | relics_1_1.15.png[39m[0m
+[  59% ] [90m[1m_update_scan_actions[22m | relics_2_1.0.png[39m[0m
+[  59% ] [90m[1m_update_scan_actions[22m | relics_2_1.15.png[39m[0m
+[  60% ] [90m[1m_update_scan_actions[22m | relics_3_1.0.png[39m[0m
+[  60% ] [90m[1m_update_scan_actions[22m | relics_3_1.15.png[39m[0m
+[  61% ] [90m[1m_update_scan_actions[22m | relics_4_1.0.png[39m[0m
+[  61% ] [90m[1m_update_scan_actions[22m | relics_4_1.15.png[39m[0m
+[  61% ] [90m[1m_update_scan_actions[22m | relics_5_1.0.png[39m[0m
+[  62% ] [90m[1m_update_scan_actions[22m | relics_5_1.15.png[39m[0m
+[  62% ] [90m[1m_update_scan_actions[22m | relics_6_1.0.png[39m[0m
+[  63% ] [90m[1m_update_scan_actions[22m | relics_6_1.15.png[39m[0m
+[  63% ] [90m[1m_update_scan_actions[22m | relics_7_1.0.png[39m[0m
+[  64% ] [90m[1m_update_scan_actions[22m | relics_7_1.15.png[39m[0m
+[  64% ] [90m[1m_update_scan_actions[22m | relics_8_1.0.png[39m[0m
+[  64% ] [90m[1m_update_scan_actions[22m | relics_8_1.15.png[39m[0m
+[  65% ] [90m[1m_update_scan_actions[22m | relics_9_1.0.png[39m[0m
+[  65% ] [90m[1m_update_scan_actions[22m | relics_9_1.15.png[39m[0m
+[  66% ] [90m[1m_update_scan_actions[22m | SHOP.png[39m[0m
+[  66% ] [90m[1m_update_scan_actions[22m | SHOP_LARGE.png[39m[0m
+[  66% ] [90m[1m_update_scan_actions[22m | TITLE.png[39m[0m
+[  67% ] [90m[1m_update_scan_actions[22m | P18_BELL_COMMIT.png[39m[0m
+[  67% ] [90m[1m_update_scan_actions[22m | P18_GREAT_TOLL_RESOLVE.png[39m[0m
+[  68% ] [90m[1m_update_scan_actions[22m | P18_MERCY_RAIL_RESOLVE.png[39m[0m
+[  68% ] [90m[1m_update_scan_actions[22m | P18_NAILER_BELL_OVERLAP.png[39m[0m
+[  69% ] [90m[1m_update_scan_actions[22m | P18_NAILER_COMMIT.png[39m[0m
+[  69% ] [90m[1m_update_scan_actions[22m | P18_REDUCED_OVERLAP.png[39m[0m
+[  69% ] [90m[1m_update_scan_actions[22m | P19_FULL_OVERLAP.png[39m[0m
+[  70% ] [90m[1m_update_scan_actions[22m | P19_LINKED_BASES.png[39m[0m
+[  70% ] [90m[1m_update_scan_actions[22m | P19_LINKED_EVOLUTIONS.png[39m[0m
+[  71% ] [90m[1m_update_scan_actions[22m | P19_MORTAR_BASE.png[39m[0m
+[  71% ] [90m[1m_update_scan_actions[22m | P19_PERSISTENT_BASES.png[39m[0m
+[  71% ] [90m[1m_update_scan_actions[22m | P19_PERSISTENT_EVOLUTIONS.png[39m[0m
+[  72% ] [90m[1m_update_scan_actions[22m | P19_REDUCED_OVERLAP.png[39m[0m
+[  72% ] [90m[1m_update_scan_actions[22m | P19_WORKSHOP_BENEDICTION.png[39m[0m
+[  73% ] [90m[1m_update_scan_actions[22m | FOREMAN_FINAL_ORDERS.png[39m[0m
+[  73% ] [90m[1m_update_scan_actions[22m | FOREMAN_FINAL_REDUCED.png[39m[0m
+[  74% ] [90m[1m_update_scan_actions[22m | FOREMAN_SCHEDULE.png[39m[0m
+[  74% ] [90m[1m_update_scan_actions[22m | FOREMAN_WORKERS.png[39m[0m
+[  74% ] [90m[1m_update_scan_actions[22m | MEMORY_CRANE_COPY.png[39m[0m
+[  75% ] [90m[1m_update_scan_actions[22m | MEMORY_CRANE_COPY_REDUCED.png[39m[0m
+[  75% ] [90m[1m_update_scan_actions[22m | MEMORY_CRANE_IDLE.png[39m[0m
+[  76% ] [90m[1m_update_scan_actions[22m | REPAIR_0_BROKEN.png[39m[0m
+[  76% ] [90m[1m_update_scan_actions[22m | REPAIR_0_RESTORED.png[39m[0m
+[  76% ] [90m[1m_update_scan_actions[22m | REPAIR_0_WORKING.png[39m[0m
+[  77% ] [90m[1m_update_scan_actions[22m | REPAIR_1_BROKEN.png[39m[0m
+[  77% ] [90m[1m_update_scan_actions[22m | REPAIR_1_RESTORED.png[39m[0m
+[  78% ] [90m[1m_update_scan_actions[22m | REPAIR_1_WORKING.png[39m[0m
+[  78% ] [90m[1m_update_scan_actions[22m | REPAIR_2_BROKEN.png[39m[0m
+[  79% ] [90m[1m_update_scan_actions[22m | REPAIR_2_RESTORED.png[39m[0m
+[  79% ] [90m[1m_update_scan_actions[22m | REPAIR_2_WORKING.png[39m[0m
+[  79% ] [90m[1m_update_scan_actions[22m | ROSTER_COMBAT.png[39m[0m
+[  80% ] [90m[1m_update_scan_actions[22m | ROSTER_REDUCED.png[39m[0m
+[  80% ] [90m[1m_update_scan_actions[22m | arena-target.png[39m[0m
+[  81% ] [90m[1m_update_scan_actions[22m | relics.png[39m[0m
+[  81% ] [90m[1m_update_scan_actions[22m | saint.png[39m[0m
+[  82% ] [90m[1m_update_scan_actions[22m | after-ROOTWORKS.png[39m[0m
+[  82% ] [90m[1m_update_scan_actions[22m | after-WORKSHOP_CENTRE.png[39m[0m
+[  82% ] [90m[1m_update_scan_actions[22m | after-WORKSHOP_COMBAT.png[39m[0m
+[  83% ] [90m[1m_update_scan_actions[22m | after-WORKSHOP_EDGE.png[39m[0m
+[  83% ] [90m[1m_update_scan_actions[22m | after-WORKSHOP_REDUCED.png[39m[0m
+[  84% ] [90m[1m_update_scan_actions[22m | before-ROOTWORKS.png[39m[0m
+[  84% ] [90m[1m_update_scan_actions[22m | before-WORKSHOP_CENTRE.png[39m[0m
+[  84% ] [90m[1m_update_scan_actions[22m | before-WORKSHOP_COMBAT.png[39m[0m
+[  85% ] [90m[1m_update_scan_actions[22m | before-WORKSHOP_EDGE.png[39m[0m
+[  85% ] [90m[1m_update_scan_actions[22m | before-WORKSHOP_REDUCED.png[39m[0m
+[  86% ] [90m[1m_update_scan_actions[22m | gallery-120.png[39m[0m
+[  86% ] [90m[1m_update_scan_actions[22m | gallery-360.png[39m[0m
+[  87% ] [90m[1m_update_scan_actions[22m | gallery-720.png[39m[0m
+[  87% ] [90m[1m_update_scan_actions[22m | BINDING_LARGE.png[39m[0m
+[  87% ] [90m[1m_update_scan_actions[22m | BINDING_NORMAL.png[39m[0m
+[  88% ] [90m[1m_update_scan_actions[22m | MANUAL_0_LARGE.png[39m[0m
+[  88% ] [90m[1m_update_scan_actions[22m | MANUAL_0_NORMAL.png[39m[0m
+[  89% ] [90m[1m_update_scan_actions[22m | MANUAL_1_LARGE.png[39m[0m
+[  89% ] [90m[1m_update_scan_actions[22m | MANUAL_1_NORMAL.png[39m[0m
+[  89% ] [90m[1m_update_scan_actions[22m | MANUAL_2_LARGE.png[39m[0m
+[  90% ] [90m[1m_update_scan_actions[22m | MANUAL_2_NORMAL.png[39m[0m
+[  90% ] [90m[1m_update_scan_actions[22m | MANUAL_3_LARGE.png[39m[0m
+[  91% ] [90m[1m_update_scan_actions[22m | MANUAL_3_NORMAL.png[39m[0m
+[  91% ] [90m[1m_update_scan_actions[22m | MANUAL_4_LARGE.png[39m[0m
+[  92% ] [90m[1m_update_scan_actions[22m | MANUAL_4_NORMAL.png[39m[0m
+[  92% ] [90m[1m_update_scan_actions[22m | PAUSE_LARGE.png[39m[0m
+[  92% ] [90m[1m_update_scan_actions[22m | PAUSE_NORMAL.png[39m[0m
+[  93% ] [90m[1m_update_scan_actions[22m | SETTINGS_1920.png[39m[0m
+[  93% ] [90m[1m_update_scan_actions[22m | SETTINGS_LARGE.png[39m[0m
+[  94% ] [90m[1m_update_scan_actions[22m | SETTINGS_NORMAL.png[39m[0m
+[  94% ] [90m[1m_update_scan_actions[22m | ADA_CROSS_LARGE.png[39m[0m
+[  94% ] [90m[1m_update_scan_actions[22m | ADA_CROSS_NORMAL.png[39m[0m
+[  95% ] [90m[1m_update_scan_actions[22m | ADA_SPLICE_LARGE.png[39m[0m
+[  95% ] [90m[1m_update_scan_actions[22m | ADA_SPLICE_NORMAL.png[39m[0m
+[  96% ] [90m[1m_update_scan_actions[22m | ARCHIVE_CROSS_LARGE.png[39m[0m
+[  96% ] [90m[1m_update_scan_actions[22m | ARCHIVE_CROSS_NORMAL.png[39m[0m
+[  97% ] [90m[1m_update_scan_actions[22m | ARCHIVE_SPLICE_LARGE.png[39m[0m
+[  97% ] [90m[1m_update_scan_actions[22m | ARCHIVE_SPLICE_NORMAL.png[39m[0m
+[  97% ] [90m[1m_update_scan_actions[22m | FOUNDRY_CROSS_LARGE.png[39m[0m
+[  98% ] [90m[1m_update_scan_actions[22m | FOUNDRY_CROSS_NORMAL.png[39m[0m
+[  98% ] [90m[1m_update_scan_actions[22m | FOUNDRY_SPLICE_LARGE.png[39m[0m
+[  99% ] [90m[1m_update_scan_actions[22m | FOUNDRY_SPLICE_NORMAL.png[39m[0m
+[92m[ DONE ][39m [1m_update_scan_actions[22m
+[0m
+[   0% ] [90m[1mreimport[22m | Started (Re)Importing Assets (109 steps)[39m[0m
+[   0% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[   0% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[   1% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[   2% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[   3% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[   4% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[   5% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[   6% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[   7% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[   8% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[   9% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  10% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  10% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  11% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  12% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  13% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  14% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  15% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  16% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  17% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  18% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  19% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  20% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  20% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  21% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  22% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  23% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  24% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  25% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  26% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  27% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  28% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  29% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  30% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  30% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  31% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  32% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  33% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  34% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  35% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  36% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  37% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  38% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  39% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  40% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  40% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  41% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  42% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  43% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  44% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  45% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  46% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  47% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  48% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  49% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  50% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  50% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  51% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  52% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  53% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  54% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  55% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  56% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  57% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  58% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  59% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  60% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  60% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  61% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  62% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  63% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  64% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  65% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  66% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  67% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  68% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  69% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  70% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  70% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  71% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  72% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  73% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  74% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  75% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  76% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  77% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  78% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  79% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  80% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  80% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  81% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  82% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  83% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  84% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  85% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  86% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  87% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  88% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  89% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  90% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  90% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  91% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  92% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  93% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  94% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  95% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  96% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  97% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  98% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[   0% ] [90m[1mreimport[22m | Executing pre-reimport operations...[39m[0m
+[   0% ] [90m[1mreimport[22m | BINDING_NORMAL.png[39m[0m
+[   0% ] [90m[1mreimport[22m | BINDING_LARGE.png[39m[0m
+[   1% ] [90m[1mreimport[22m | gallery-720.png[39m[0m
+[   2% ] [90m[1mreimport[22m | gallery-360.png[39m[0m
+[   3% ] [90m[1mreimport[22m | gallery-120.png[39m[0m
+[   4% ] [90m[1mreimport[22m | before-WORKSHOP_REDUCED.png[39m[0m
+[   5% ] [90m[1mreimport[22m | before-WORKSHOP_EDGE.png[39m[0m
+[   6% ] [90m[1mreimport[22m | before-WORKSHOP_COMBAT.png[39m[0m
+[   7% ] [90m[1mreimport[22m | before-WORKSHOP_CENTRE.png[39m[0m
+[   8% ] [90m[1mreimport[22m | before-ROOTWORKS.png[39m[0m
+[   9% ] [90m[1mreimport[22m | after-WORKSHOP_REDUCED.png[39m[0m
+[  10% ] [90m[1mreimport[22m | after-WORKSHOP_EDGE.png[39m[0m
+[  10% ] [90m[1mreimport[22m | after-WORKSHOP_COMBAT.png[39m[0m
+[  11% ] [90m[1mreimport[22m | after-WORKSHOP_CENTRE.png[39m[0m
+[  12% ] [90m[1mreimport[22m | after-ROOTWORKS.png[39m[0m
+[  13% ] [90m[1mreimport[22m | saint.png[39m[0m
+[  14% ] [90m[1mreimport[22m | relics.png[39m[0m
+[  15% ] [90m[1mreimport[22m | arena-target.png[39m[0m
+[  16% ] [90m[1mreimport[22m | ROSTER_REDUCED.png[39m[0m
+[  17% ] [90m[1mreimport[22m | ROSTER_COMBAT.png[39m[0m
+[  18% ] [90m[1mreimport[22m | REPAIR_2_WORKING.png[39m[0m
+[  19% ] [90m[1mreimport[22m | REPAIR_2_RESTORED.png[39m[0m
+[  20% ] [90m[1mreimport[22m | REPAIR_2_BROKEN.png[39m[0m
+[  20% ] [90m[1mreimport[22m | REPAIR_1_WORKING.png[39m[0m
+[  21% ] [90m[1mreimport[22m | REPAIR_1_RESTORED.png[39m[0m
+[  22% ] [90m[1mreimport[22m | REPAIR_1_BROKEN.png[39m[0m
+[  23% ] [90m[1mreimport[22m | REPAIR_0_WORKING.png[39m[0m
+[  24% ] [90m[1mreimport[22m | FOUNDRY_SPLICE_NORMAL.png[39m[0m
+[  25% ] [90m[1mreimport[22m | FOUNDRY_SPLICE_LARGE.png[39m[0m
+[  26% ] [90m[1mreimport[22m | FOUNDRY_CROSS_NORMAL.png[39m[0m
+[  27% ] [90m[1mreimport[22m | FOUNDRY_CROSS_LARGE.png[39m[0m
+[  28% ] [90m[1mreimport[22m | ARCHIVE_SPLICE_NORMAL.png[39m[0m
+[  29% ] [90m[1mreimport[22m | ARCHIVE_SPLICE_LARGE.png[39m[0m
+[  30% ] [90m[1mreimport[22m | ARCHIVE_CROSS_NORMAL.png[39m[0m
+[  30% ] [90m[1mreimport[22m | ARCHIVE_CROSS_LARGE.png[39m[0m
+[  31% ] [90m[1mreimport[22m | ADA_SPLICE_NORMAL.png[39m[0m
+[  32% ] [90m[1mreimport[22m | ADA_SPLICE_LARGE.png[39m[0m
+[  33% ] [90m[1mreimport[22m | ADA_CROSS_NORMAL.png[39m[0m
+[  34% ] [90m[1mreimport[22m | ADA_CROSS_LARGE.png[39m[0m
+[  35% ] [90m[1mreimport[22m | SETTINGS_NORMAL.png[39m[0m
+[  36% ] [90m[1mreimport[22m | SETTINGS_LARGE.png[39m[0m
+[  37% ] [90m[1mreimport[22m | SETTINGS_1920.png[39m[0m
+[  38% ] [90m[1mreimport[22m | PAUSE_NORMAL.png[39m[0m
+[  39% ] [90m[1mreimport[22m | PAUSE_LARGE.png[39m[0m
+[  40% ] [90m[1mreimport[22m | MANUAL_4_NORMAL.png[39m[0m
+[  40% ] [90m[1mreimport[22m | MANUAL_4_LARGE.png[39m[0m
+[  41% ] [90m[1mreimport[22m | MANUAL_3_NORMAL.png[39m[0m
+[  42% ] [90m[1mreimport[22m | MANUAL_3_LARGE.png[39m[0m
+[  43% ] [90m[1mreimport[22m | MANUAL_2_NORMAL.png[39m[0m
+[  44% ] [90m[1mreimport[22m | MANUAL_2_LARGE.png[39m[0m
+[  45% ] [90m[1mreimport[22m | MANUAL_1_NORMAL.png[39m[0m
+[  46% ] [90m[1mreimport[22m | MANUAL_1_LARGE.png[39m[0m
+[  47% ] [90m[1mreimport[22m | MANUAL_0_NORMAL.png[39m[0m
+[  48% ] [90m[1mreimport[22m | MANUAL_0_LARGE.png[39m[0m
+[  49% ] [90m[1mreimport[22m | MANUAL_3_NORMAL.png[39m[0m
+[  50% ] [90m[1mreimport[22m | MANUAL_3_LARGE.png[39m[0m
+[  50% ] [90m[1mreimport[22m | MANUAL_2_NORMAL.png[39m[0m
+[  51% ] [90m[1mreimport[22m | MANUAL_2_LARGE.png[39m[0m
+[  52% ] [90m[1mreimport[22m | MANUAL_1_NORMAL.png[39m[0m
+[  53% ] [90m[1mreimport[22m | MANUAL_1_LARGE.png[39m[0m
+[  54% ] [90m[1mreimport[22m | MANUAL_0_NORMAL.png[39m[0m
+[  55% ] [90m[1mreimport[22m | MANUAL_0_LARGE.png[39m[0m
+[  56% ] [90m[1mreimport[22m | BINDING_NORMAL.png[39m[0m
+[  57% ] [90m[1mreimport[22m | BINDING_LARGE.png[39m[0m
+[  58% ] [90m[1mreimport[22m | SETTINGS_1920x1080.png[39m[0m
+[  59% ] [90m[1mreimport[22m | SETTINGS_1280x800.png[39m[0m
+[  60% ] [90m[1mreimport[22m | P16_CHOIR_FILTER_RECOVERY.png[39m[0m
+[  60% ] [90m[1mreimport[22m | EVOLVED_GEOMETRIES_A.png[39m[0m
+[  61% ] [90m[1mreimport[22m | NATURAL_REPAIR_REWARD.png[39m[0m
+[  62% ] [90m[1mreimport[22m | P14_GREAT_TOLL.png[39m[0m
+[  63% ] [90m[1mreimport[22m | P14_EXPANSION_A.png[39m[0m
+[  64% ] [90m[1mreimport[22m | WEAPON_RANK_III.png[39m[0m
+[  65% ] [90m[1mreimport[22m | WEAPON_RANK_I.png[39m[0m
+[  66% ] [90m[1mreimport[22m | ROOTWORKS_OBJECTIVE.png[39m[0m
+[  67% ] [90m[1mreimport[22m | RESULTS_MEMORY_FRAGMENT.png[39m[0m
+[  68% ] [90m[1mreimport[22m | RED_FOUNDRY_VENTS.png[39m[0m
+[  69% ] [90m[1mreimport[22m | PALE_ARCHIVE_INDEX.png[39m[0m
+[  70% ] [90m[1mreimport[22m | MERCY_RAIL_EVOLUTION.png[39m[0m
+[  70% ] [90m[1mreimport[22m | FOREMAN_ENGINE_PHASE_TWO.png[39m[0m
+[  71% ] [90m[1mreimport[22m | CHAPTER_MEMORY.png[39m[0m
+[  72% ] [90m[1mreimport[22m | BRASS_ROADSIDE_SERVICE.png[39m[0m
+[  73% ] [90m[1mreimport[22m | REPAIR_0_RESTORED.png[39m[0m
+[  74% ] [90m[1mreimport[22m | REPAIR_0_BROKEN.png[39m[0m
+[  75% ] [90m[1mreimport[22m | MEMORY_CRANE_IDLE.png[39m[0m
+[  76% ] [90m[1mreimport[22m | MEMORY_CRANE_COPY_REDUCED.png[39m[0m
+[  77% ] [90m[1mreimport[22m | MEMORY_CRANE_COPY.png[39m[0m
+[  78% ] [90m[1mreimport[22m | FOREMAN_WORKERS.png[39m[0m
+[  79% ] [90m[1mreimport[22m | FOREMAN_SCHEDULE.png[39m[0m
+[  80% ] [90m[1mreimport[22m | FOREMAN_FINAL_REDUCED.png[39m[0m
+[  80% ] [90m[1mreimport[22m | FOREMAN_FINAL_ORDERS.png[39m[0m
+[  81% ] [90m[1mreimport[22m | FOUNDRY_SPLICE_NORMAL.png[39m[0m
+[  82% ] [90m[1mreimport[22m | FOUNDRY_SPLICE_LARGE.png[39m[0m
+[  83% ] [90m[1mreimport[22m | FOUNDRY_CROSS_NORMAL.png[39m[0m
+[  84% ] [90m[1mreimport[22m | FOUNDRY_CROSS_LARGE.png[39m[0m
+[  85% ] [90m[1mreimport[22m | ARCHIVE_SPLICE_NORMAL.png[39m[0m
+[  86% ] [90m[1mreimport[22m | ARCHIVE_SPLICE_LARGE.png[39m[0m
+[  87% ] [90m[1mreimport[22m | ARCHIVE_CROSS_NORMAL.png[39m[0m
+[  88% ] [90m[1mreimport[22m | ARCHIVE_CROSS_LARGE.png[39m[0m
+[  89% ] [90m[1mreimport[22m | ADA_SPLICE_NORMAL.png[39m[0m
+[  90% ] [90m[1mreimport[22m | ADA_SPLICE_LARGE.png[39m[0m
+[  90% ] [90m[1mreimport[22m | ADA_CROSS_NORMAL.png[39m[0m
+[  91% ] [90m[1mreimport[22m | ADA_CROSS_LARGE.png[39m[0m
+[  92% ] [90m[1mreimport[22m | SETTINGS_NORMAL.png[39m[0m
+[  93% ] [90m[1mreimport[22m | SETTINGS_LARGE.png[39m[0m
+[  94% ] [90m[1mreimport[22m | SETTINGS_1920.png[39m[0m
+[  95% ] [90m[1mreimport[22m | PAUSE_NORMAL.png[39m[0m
+[  96% ] [90m[1mreimport[22m | PAUSE_LARGE.png[39m[0m
+[  97% ] [90m[1mreimport[22m | MANUAL_4_NORMAL.png[39m[0m
+[  98% ] [90m[1mreimport[22m | MANUAL_4_LARGE.png[39m[0m
+[  99% ] [90m[1mreimport[22m | Finalizing Asset Import...[39m[0m
+[92m[ DONE ][39m [1mreimport[22m
+[0m
+[   0% ] [90m[1mreimport[22m | Started (Re)Importing Assets (109 steps)[39m[0m
+[   0% ] [90m[1mreimport[22m | Executing post-reimport operations...[39m[0m
+[92m[ DONE ][39m [1mreimport[22m
+[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Started Loading editor (5 steps)[39m[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Loading editor layout...[39m[0m
+[92m[ DONE ][39m [1mloading_editor_layout[22m
+[0m

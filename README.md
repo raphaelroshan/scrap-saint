@@ -6,11 +6,13 @@
 
 The project combines short survivor-like runs, a Slime 3K-style relic shop, visible weapon evolutions, and a warm industrial story about repair, purpose, and self-determination. It is not a conventional military mech game. The Saint is a maintenance automaton that treats bells, rivets, cables, manuals, and ruined machines as sacred because they once helped people.
 
+For agent resumption, apply the complete [prompt pack](docs/agent_prompt_pack.md) and read the [current production state](docs/production_state.md) and [QA record](docs/qa_current.md).
+
 ## Play the prototype
 
 Open `project.godot` in **Godot 4.5.1** and run the project. In this workspace, double-click **Play Scrap Saint.cmd** to launch using the downloaded portable runtime.
 
-For faster development, use **Play Scrap Saint 5x Dev.cmd**. Combat runs at 5× speed, including movement, weapons, enemies, repair and wave timers. Shops and pause remain stopped. **F6** toggles 1×/5× in this development version; the on-screen badge shows the active speed. An 8½-minute combat run takes about 1 minute 42 seconds at 5×, excluding shops. The normal launcher remains 1×. CLI equivalent: `godot --path . -- --dev-speed=5`.
+For faster development, use **Play Scrap Saint 5x Dev.cmd**. Combat runs at 5× speed, including movement, weapons, enemies, repair and wave timers. Shops and pause remain stopped. **F6** toggles 1×/5× in this development version; the on-screen badge shows the active speed. The Workshop schedules eight 70-second waves: 9 minutes 20 seconds of scheduled combat, or 1 minute 52 seconds at 5×, excluding shops; boss defeat can end its wave early. The normal launcher remains 1×. CLI equivalent: `godot --path . -- --dev-speed=5`.
 
 - **Optional repairs is the main game.** The 5x development launcher retains the relay-defence comparison toggle. New runs use the displayed seed; change it on the title screen. Existing saves retain their mode.
 - WASD or arrows: move; weapons attack automatically. In Optional repairs, short repairs reward Scrap, healing or a stagger pulse. Machines cannot be destroyed and repairs are never required to win. In Relay defence, stay near the relay to repair it and keep it alive.
@@ -89,7 +91,7 @@ The transformation must change attack geometry, target rules, area control, obje
 
 ## Scope and quality bar
 
-The current early-access preview is a complete first-chapter vertical: three Saint frames, four Blessings, ten base weapons, eight catalysts, seven run-local Gifts, ten visible Evolutions, a Workshop plus five destination sites, seven enemy families, an elite and six bosses. Runs carry their build and economy through a mid-site and one of three terminal objectives, bosses and Memories across four authored route chains. Combine, Evolution, and future Confluence recipes remain separate systems; no Confluence is enabled.
+The current preview implements the first-chapter technical loop; creative acceptance and Early Access readiness remain unverified (see [production state](docs/production_state.md)): three Saint frames, four Blessings, ten base weapons, eight catalysts, seven run-local Gifts, ten visible Evolutions, a Workshop plus five destination sites, seven enemy families, an elite and six bosses. Runs carry their build and economy through a mid-site and one of three terminal objectives, bosses and Memories across four authored route chains. Combine, Evolution, and future Confluence recipes remain separate systems; no Confluence is enabled.
 
 The project is not complete when the content validator passes. Game quality requires a running build, readable combat, visible build transformation, causal Results, exact screenshot provenance, and evidence-led iteration. Technical tests establish simulation correctness; screenshots establish presentation evidence; neither is a substitute for the other.
 
