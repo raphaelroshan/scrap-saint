@@ -1,5 +1,10 @@
 # Asset provenance
 
+## Repair feedback and preview delivery — 2026-09-25
+
+No new production art, animation or audio was generated. Repair cards, connectors and shop/footer layout are code-native presentation using existing fonts, palette and assets. Unedited native screenshots and source hashes are in [delivery evidence](evidence/repair-readability/provenance.json). Windows export uses the official Godot 4.5.1 templates; engine/component license notices accompany the local package. QA screenshots are not game assets.
+
+
 ## Prompt 0 audit — 2026-09-25
 
 No production art, animation or audio was created or changed. Six unedited native screenshots are preserved solely as QA evidence in [the audit review](evidence/prompt0-audit/review.md), with source commit, capture method, viewport and SHA-256 provenance. They reuse existing runtime assets; they are not new generated assets. Existing manifests and art direction remain authoritative.

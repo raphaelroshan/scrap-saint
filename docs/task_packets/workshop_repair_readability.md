@@ -1,6 +1,8 @@
 # Next production packet: Workshop repair readability
 
-Status: READY, not implemented. Prompt 3. Priority: observed feedback failure before the uncoached Workshop gate. Baseline capture: [Foreman final orders](../evidence/prompt0-audit/FOREMAN_FINAL_ORDERS.png).
+Delivery status: implemented and verified; [final evidence](../evidence/repair-readability/review.md). Human acceptance remains open.
+
+Status: IMPLEMENTED and native-verified. Prompt 3. Priority: observed feedback failure before the uncoached Workshop gate. Baseline capture: [Foreman final orders](../evidence/prompt0-audit/FOREMAN_FINAL_ORDERS.png).
 
 ## Player objective
 

@@ -100,6 +100,32 @@ func run_checks():
 	game.last_phase = game.sim.state.phase
 	game.build_ui()
 	await process_frame
+	game.sim.state.gifts = ["gift.spare_hand", "gift.inspection_lens"]
+	for scale in [1.0, 1.15]:
+		game.ui_scale = scale
+		game.build_ui()
+		var shop_save = button_with(game, "SAVE & TITLE")
+		check(shop_save != null, "two-Gift shop exposes Save & Title at scale %s" % scale)
+		var gift_names: Array[Rect2] = []
+		for i in range(2):
+			var name = str(game.sim.config.gifts[game.sim.state.gifts[i]].short)
+			var size = int(10 * scale)
+			var baseline = 660 + i * 44
+			var extent = game.font.get_string_size(name, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x
+			gift_names.append(Rect2(1068, baseline - game.font.get_ascent(size), extent, game.font.get_ascent(size) + game.font.get_descent(size)))
+			check(gift_names[i].position.y >= 645 and gift_names[i].end.x <= 1252, "Gift name fits shop sidebar at scale %s" % scale)
+		var gift_actions = 0
+		for child in game.ui.get_children():
+			if child is Button and child.text in ["Sell", "Dism."] and child.position.y >= 667:
+				gift_actions += 1
+				check(child.get_rect().end.y <= 736, "Gift action stays inside shop sidebar at scale %s" % scale)
+				check(shop_save != null and not shop_save.get_rect().intersects(child.get_rect()), "Save & Title does not cover two-Gift shop action")
+				for name_rect in gift_names:
+					check(not name_rect.intersects(child.get_rect()), "Gift name clears both action rows at scale %s: %s vs %s" % [scale, name_rect, child.get_rect()])
+		check(gift_actions == 4, "two-Gift shop exposes both sell and dismantle rows")
+	game.sim.state.gifts.clear()
+	game.ui_scale = 1.0
+	game.build_ui()
 	var transactions_before = game.sim.state.transactions.size()
 	await activate(button_with(game, "BUY / COMBINE"))
 	check(game.sim.state.transactions.size() == transactions_before + 1, "controller-style shop input purchases an authoritative offer")
@@ -126,6 +152,11 @@ func run_checks():
 	await activate(button_with(game, "BRASS CHOIR"))
 	await activate(root.gui_get_focus_owner())
 	check(game.map_selection == "route.brass_choir" and game.sim.state.phase == "route", "controller preview does not accept an assignment implicitly")
+	var route_save = button_with(game, "SAVE & TITLE")
+	var route_travel = button_with(game, "TRAVEL TO BRASS CHOIR", true)
+	check(route_save != null and route_travel != null, "route map exposes Save & Title and Travel")
+	if route_save != null and route_travel != null:
+		check(not route_save.get_rect().intersects(route_travel.get_rect()), "Save & Title leaves route confirmation clear")
 	await activate(button_with(game, "TRAVEL TO BRASS CHOIR", true))
 	check(game.sim.state.phase == "travel", "focused route card accepts controller-style input")
 

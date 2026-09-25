@@ -12,6 +12,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Content validation failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Manifest tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_main_menu.gd 2>&1 | Tee-Object -FilePath "$bundlePath\main-menu.log"
 if ($LASTEXITCODE -ne 0) { throw 'Main menu tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_menu_panels.gd 2>&1 | Tee-Object -FilePath "$bundlePath\menu-panels.log"
+if ($LASTEXITCODE -ne 0) { throw 'Menu panel tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_dev_speed.gd 2>&1 | Tee-Object -FilePath "$bundlePath\dev-speed.log"
 if ($LASTEXITCODE -ne 0) { throw 'Development speed tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_frames_progression.gd 2>&1 | Tee-Object -FilePath "$bundlePath\frames-progression.log"
@@ -62,6 +64,10 @@ if ($LASTEXITCODE -ne 0) { throw 'Weapon rank tests failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Weapon presentation tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_presentation_quality.gd 2>&1 | Tee-Object -FilePath "$bundlePath\presentation-quality.log"
 if ($LASTEXITCODE -ne 0) { throw 'Presentation quality tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_actor_art.gd 2>&1 | Tee-Object -FilePath "$bundlePath\actor-art.log"
+if ($LASTEXITCODE -ne 0) { throw 'Actor art tests failed' }
+& $GodotBin --headless --path $projectRoot --script res://tests/test_repair_readability.gd 2>&1 | Tee-Object -FilePath "$bundlePath\repair-readability.log"
+if ($LASTEXITCODE -ne 0) { throw 'Repair readability tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/test_gift_breadth.gd 2>&1 | Tee-Object -FilePath "$bundlePath\gift-breadth.log"
 if ($LASTEXITCODE -ne 0) { throw 'Gift breadth tests failed' }
 & $GodotBin --headless --path $projectRoot --script res://tests/run_playthroughs.gd -- --optional 2>&1 | Tee-Object -FilePath "$bundlePath\playthroughs.log"

@@ -1,0 +1,202 @@
+{
+  "godot_suites": 33,
+  "numbered_assertions": 2009,
+  "numbered_suites": 31,
+  "failures": 0,
+  "other_asset_validation": "120 atlas frames, 10 animation resources and nine supporting scenes passed",
+  "python_tests": 34,
+  "full_iteration_exit": 0,
+  "final_export_exit": 0,
+  "package_natural_run_exit": 0,
+  "package_result": "won; 12 shops; Results returned to setup with earned unlocks",
+  "policies": {
+    "playthroughs": {
+      "runs": 12,
+      "won": 12
+    },
+    "assembly-playthroughs": {
+      "runs": 4,
+      "won": 4
+    },
+    "evolution-playthroughs": {
+      "runs": 10,
+      "won": 10
+    },
+    "gift-playthroughs": {
+      "runs": 4,
+      "won": 4
+    },
+    "four-path-pacing": {
+      "runs": 4,
+      "won": 4
+    }
+  },
+  "suites": [
+    {
+      "suite": "test_acquisition",
+      "checks": 96,
+      "failures": 0
+    },
+    {
+      "suite": "test_actor_art",
+      "checks": 137,
+      "failures": 0
+    },
+    {
+      "suite": "test_arena",
+      "checks": 27,
+      "failures": 0
+    },
+    {
+      "suite": "test_arena_art",
+      "checks": 61,
+      "failures": 0
+    },
+    {
+      "suite": "test_assembly",
+      "checks": 34,
+      "failures": 0
+    },
+    {
+      "suite": "test_chapter",
+      "checks": 138,
+      "failures": 0
+    },
+    {
+      "suite": "test_checkpoint_lifecycle",
+      "checks": 33,
+      "failures": 0
+    },
+    {
+      "suite": "test_dev_speed",
+      "checks": 7,
+      "failures": 0
+    },
+    {
+      "suite": "test_evolutions",
+      "checks": 51,
+      "failures": 0
+    },
+    {
+      "suite": "test_expedition_map",
+      "checks": 44,
+      "failures": 0
+    },
+    {
+      "suite": "test_flow_input",
+      "checks": 107,
+      "failures": 0
+    },
+    {
+      "suite": "test_frames_progression",
+      "checks": 15,
+      "failures": 0
+    },
+    {
+      "suite": "test_gift_breadth",
+      "checks": 74,
+      "failures": 0
+    },
+    {
+      "suite": "test_main_menu",
+      "checks": 32,
+      "failures": 0
+    },
+    {
+      "suite": "test_menu_panels",
+      "checks": 81,
+      "failures": 0
+    },
+    {
+      "suite": "test_optional_repairs",
+      "checks": 17,
+      "failures": 0
+    },
+    {
+      "suite": "test_presentation_quality",
+      "checks": 14,
+      "failures": 0
+    },
+    {
+      "suite": "test_profile",
+      "checks": 19,
+      "failures": 0
+    },
+    {
+      "suite": "test_relay",
+      "checks": 18,
+      "failures": 0
+    },
+    {
+      "suite": "test_relic_assets",
+      "checks": null,
+      "failures": 0
+    },
+    {
+      "suite": "test_repair_readability",
+      "checks": 515,
+      "failures": 0
+    },
+    {
+      "suite": "test_road_echoes",
+      "checks": 86,
+      "failures": 0
+    },
+    {
+      "suite": "test_roaming_quality",
+      "checks": 49,
+      "failures": 0
+    },
+    {
+      "suite": "test_save_flow",
+      "checks": 53,
+      "failures": 0
+    },
+    {
+      "suite": "test_settings",
+      "checks": 14,
+      "failures": 0
+    },
+    {
+      "suite": "test_shop",
+      "checks": 25,
+      "failures": 0
+    },
+    {
+      "suite": "test_simulation",
+      "checks": 31,
+      "failures": 0
+    },
+    {
+      "suite": "test_supporting_assets",
+      "checks": null,
+      "failures": 0
+    },
+    {
+      "suite": "test_sync_contract",
+      "checks": 64,
+      "failures": 0
+    },
+    {
+      "suite": "test_ui",
+      "checks": 45,
+      "failures": 0
+    },
+    {
+      "suite": "test_variety",
+      "checks": 18,
+      "failures": 0
+    },
+    {
+      "suite": "test_weapon_presentation",
+      "checks": 48,
+      "failures": 0
+    },
+    {
+      "suite": "test_weapon_ranks",
+      "checks": 56,
+      "failures": 0
+    }
+  ],
+  "human_playtest": false
+}

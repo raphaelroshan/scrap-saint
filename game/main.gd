@@ -692,8 +692,12 @@ func build_ui():
 				button("Dism.", Rect2(1118, 243 + i * 79, 59, 26), func(): act("dismantle", i))
 				button("Store", Rect2(1183, 243 + i * 79, 65, 26), func(): act("reserve", i))
 			for i in range(sim.state.gifts.size()):
-				button("Sell", Rect2(1068, 674 + i * 40, 78, 23), func(): act("sell_gift", i))
-				button("Dism.", Rect2(1151, 674 + i * 40, 81, 23), func(): act("dismantle_gift", i))
+				var sell_gift_button = button("Sell", Rect2(1068, 667 + i * 44, 78, 24), func(): act("sell_gift", i))
+				sell_gift_button.add_theme_font_size_override("font_size", int(12 * ui_scale))
+				sell_gift_button.size = Vector2(78, 24)
+				var dismantle_gift_button = button("Dism.", Rect2(1151, 667 + i * 44, 81, 24), func(): act("dismantle_gift", i))
+				dismantle_gift_button.add_theme_font_size_override("font_size", int(12 * ui_scale))
+				dismantle_gift_button.size = Vector2(81, 24)
 	elif sim.state.phase in ["won", "lost"]:
 		button("RETURN TO THE WORKSHOP", Rect2(410, 655, 460, 44), func(): screen = "menu"; build_ui(), true).grab_focus()
 	elif sim.state.paused:
@@ -703,7 +707,7 @@ func build_ui():
 		button("How to play", Rect2(760, 422, 300, 42), func(): tutorial_page = 0; open_panel("tutorial"))
 		button("Save & return to title", Rect2(760, 494, 300, 42), save_and_return_to_title)
 	if screen == "game" and not sim.state.is_empty() and sim.state.phase in ["route", "travel", "arrival", "shop", "site_clear"]:
-		button("SAVE & TITLE", Rect2(1060, 710, 188, 30), save_and_return_to_title)
+		button("SAVE & TITLE", Rect2(1060, 757, 188, 28), save_and_return_to_title)
 	if screen == "game":
 		button("Sound " + ("off" if settings.state.muted else "on"), Rect2(28, 757, 117, 28), func(): toggle_setting("muted"))
 		button("Effects " + ("low" if reduced_fx else "full"), Rect2(153, 757, 122, 28), func(): toggle_setting("reduced_effects"))
@@ -1544,13 +1548,75 @@ func draw_optional_machines():
 			draw_arc(p, sim.config.optional_repairs.radius, 0, TAU, 40, Color("506657"), 1)
 			draw_arc(p, sim.config.optional_repairs.radius, -PI / 2, -PI / 2 + TAU * maxf(0.001, machine.progress / sim.config.optional_repairs.required_ticks), 40, color, 3)
 		actor_art.draw_repair(self, machine, p, sim.state.active_machine, sim.state.tick, reduced_fx, sim.config.optional_repairs.required_ticks)
-		panel(Rect2(p + Vector2(-70, -57), Vector2(148, 17)), PANEL)
-		text_at(data.name, p + Vector2(-64, -44), 11, color)
-		text_at("RESTORED" if machine.complete else data.description, p + Vector2(-75, 76), 10, color)
-		if machine.get("deferred", "") == "INTEGRITY_FULL": text_at("SAVE FOR DAMAGE", p + Vector2(-67, 94), 10, MUTED)
+		if not Rect2(WORLD_VIEW.position - camera_offset, WORLD_VIEW.size).grow(sim.config.optional_repairs.radius).has_point(p): continue
+		var layout = optional_machine_layout(i)
+		var card: Rect2 = layout.rect
+		draw_line(p, Vector2(clampf(p.x, card.position.x, card.end.x), clampf(p.y, card.position.y, card.end.y)), color.darkened(0.25), 1.5)
+		panel(card, Color("17292dcc"))
+		var baseline = card.position + Vector2(10, 10 + layout.line_height)
+		text_at(data.name, baseline, 11, color)
+		baseline.y += layout.line_height
+		text_at(layout.status, baseline, 10, GREEN if working or machine.complete else MUTED)
+		baseline.y += layout.line_height
+		for line in layout.description_lines:
+			text_at(line, baseline, 10, PAPER)
+			baseline.y += layout.line_height
 		if working:
 			draw_line(sim.state.position, p, GREEN, 2)
-			text_at("REPAIRING · %.1fs" % ((sim.config.optional_repairs.required_ticks - machine.progress) / sim.config.tick_rate), p + Vector2(-52, -68), 10, GREEN)
+
+func optional_machine_lines(value: String, width: float, size: int) -> Array[String]:
+	var lines: Array[String] = []
+	var line = ""
+	var pixel_size = int(size * ui_scale)
+	for word in value.split(" "):
+		var candidate = word if line == "" else line + " " + word
+		if line != "" and font.get_string_size(candidate, HORIZONTAL_ALIGNMENT_LEFT, -1, pixel_size).x > width:
+			lines.append(line)
+			line = word
+		else:
+			line = candidate
+	if line != "": lines.append(line)
+	return lines
+
+func optional_machine_layout(index: int) -> Dictionary:
+	var machine = sim.state.machines[index]
+	var data = sim.config.optional_repairs.machines[index]
+	var p = Vector2(data.position[0], data.position[1])
+	var visible = Rect2(WORLD_VIEW.position - camera_offset, WORLD_VIEW.size).grow(-8)
+	var width = minf(274.0, visible.size.x)
+	var line_height = maxf(16.0, font.get_height(int(11 * ui_scale)) + 2.0)
+	var lines = optional_machine_lines(data.description, width - 20.0, 10)
+	var status = "OPTIONAL · RESTORED" if machine.complete else "OPTIONAL · READY"
+	if not machine.complete and machine.get("deferred", "") == "INTEGRITY_FULL":
+		status = "OPTIONAL · SAVE FOR DAMAGE"
+	elif not machine.complete and sim.state.active_machine == machine.id:
+		status = "REPAIRING · %.1fs" % ((sim.config.optional_repairs.required_ticks - machine.progress) / sim.config.tick_rate)
+	elif not machine.complete and machine.progress > 0:
+		status = "OPTIONAL · PAUSED %d%%" % int(100.0 * machine.progress / sim.config.optional_repairs.required_ticks)
+	var height = 20.0 + line_height * (2 + lines.size())
+	var best = Rect2()
+	var best_score = INF
+	for gap in [8.0, 40.0, 72.0]:
+		for y in [p.y + sim.config.optional_repairs.radius + gap, p.y - sim.config.optional_repairs.radius - gap - height]:
+			if y < visible.position.y or y + height > visible.end.y: continue
+			for proposed_x in [p.x - width * 0.5, p.x + 48.0, p.x - width - 48.0]:
+				var x = clampf(proposed_x, visible.position.x, visible.end.x - width)
+				var candidate = Rect2(x, y, width, height)
+				var score = gap + absf(candidate.get_center().x - p.x) * 0.2
+				for hazard in sim.state.hazards:
+					var radius = float(hazard.get("radius", 0.0))
+					var hazard_box = Rect2(hazard.p - Vector2.ONE * radius, Vector2.ONE * radius * 2.0)
+					var overlap = candidate.intersection(hazard_box)
+					if overlap.has_area(): score += overlap.get_area() * 10.0
+				var saint_box = Rect2(sim.state.position - Vector2(30, 30), Vector2(60, 60))
+				var saint_overlap = candidate.intersection(saint_box)
+				if saint_overlap.has_area(): score += saint_overlap.get_area() * 10.0
+				if score < best_score:
+					best_score = score
+					best = candidate
+	if best.size == Vector2.ZERO:
+		best = Rect2(clampf(p.x - width * 0.5, visible.position.x, visible.end.x - width), clampf(p.y + sim.config.optional_repairs.radius + 8.0, visible.position.y, visible.end.y - height), width, height)
+	return {"rect": best, "status": status, "description_lines": lines, "line_height": line_height}
 
 func draw_gear(p: Vector2, radius: float, color: Color, angle: float):
 	for i in range(8):
@@ -2524,11 +2590,11 @@ func draw_loadout():
 	text_at("RESERVE", Vector2(1068, 539), 11, GOLD)
 	if not sim.state.reserve.is_empty(): text_at(sim.config.weapons[sim.state.reserve[0].id].short, Vector2(1068, 558), 12)
 	else: text_at("One open place", Vector2(1068, 558), 12, MUTED)
-	var gifts_y = 638 if sim.state.phase == "shop" else 589
-	text_at("GIFTS  %d / %d" % [sim.state.gifts.size(), sim.config.gift_slots], Vector2(1068, gifts_y), 11, GOLD)
+	var gifts_y = 589
+	if sim.state.phase != "shop": text_at("GIFTS  %d / %d" % [sim.state.gifts.size(), sim.config.gift_slots], Vector2(1068, gifts_y), 11, GOLD)
 	for i in range(sim.state.gifts.size()):
 		var gift_id = str(sim.state.gifts[i])
-		var line_y = gifts_y + 21 + i * (40 if sim.state.phase == "shop" else 29)
+		var line_y = 660 + i * 44 if sim.state.phase == "shop" else gifts_y + 21 + i * 29
 		text_at(sim.config.gifts[gift_id].short, Vector2(1068, line_y), 10, Color("8edce0"))
 		if sim.state.phase != "shop": text_at(gift_activity_label(gift_id), Vector2(1068, line_y + 12), 8, gift_activity_color(gift_id))
 	if sim.state.phase != "shop":

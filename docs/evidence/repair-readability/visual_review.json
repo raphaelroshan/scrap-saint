@@ -1,0 +1,57 @@
+{
+  "scope": "Repair interaction and end-to-end preview delivery",
+  "rubric": [
+    {
+      "criterion": "Repair benefit",
+      "score": 5,
+      "note": "Complete benefit text fits, including Warning Bell."
+    },
+    {
+      "criterion": "Progress and departure",
+      "score": 4,
+      "note": "Progress remains visible and paused progress is named."
+    },
+    {
+      "criterion": "Deferral and restoration",
+      "score": 4,
+      "note": "Pump states distinguish saving healing from awarded restoration."
+    },
+    {
+      "criterion": "Threat hierarchy",
+      "score": 4,
+      "note": "Inspected Foreman cards avoid warning boundaries and Saint; crowded fallback remains a limit."
+    },
+    {
+      "criterion": "Text and scaling",
+      "score": 4,
+      "note": "Normal/large text inspected at both requested windows with actual raster dimensions recorded."
+    },
+    {
+      "criterion": "Machine association",
+      "score": 4,
+      "note": "Connector and card placement identify the source machine."
+    },
+    {
+      "criterion": "Shop decisions",
+      "score": 4,
+      "note": "Six relic offers and both Gift names/actions remain readable in final packaged captures."
+    },
+    {
+      "criterion": "Travel and recovery",
+      "score": 4,
+      "note": "Travel confirmation and Save & Title have separate locations; Results returns to setup."
+    },
+    {
+      "criterion": "Visual consistency",
+      "score": 4,
+      "note": "Cards retain the existing restrained metal/ivory/teal presentation; no new production art."
+    },
+    {
+      "criterion": "Evidence provenance",
+      "score": 5,
+      "note": "Native fixtures, actual exported policy run, hashes and explicit human-testing limitation."
+    }
+  ],
+  "limitation": "Automated policies and native captures do not establish uncoached comprehension, physical controller comfort, final audio quality or minimum-hardware performance.",
+  "next_task": "Observe one uncoached 1x Workshop acceptance session using the delivered preview."
+}

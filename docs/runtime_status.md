@@ -1,5 +1,12 @@
 # First Shift runtime — 0.6.0 preview
 
+## End-to-end preview delivery — 2026-09-25
+
+Optional repair cards now show full rewards, retained progress, healing deferral and restoration within the camera bounds, choosing placement away from the Saint and active warnings when possible. Save & Title occupies the footer; shop Gift names/actions no longer cover each other. No simulation, rewards, data IDs or save schema changed.
+
+All 33 Godot suites pass (2009 counted assertions plus asset validators), 34 Python tests pass and all 34 policy scenarios win. A native exported Windows run completes a normal-economy seed-147 expedition with 12 shops and returns from Results to setup with earned unlocks. [Exact evidence and limitations](evidence/repair-readability/review.md). Human acceptance remains outstanding.
+
+
 ## Ownership audit — 2026-09-25
 
 No gameplay changes. The [production ledger](production_state.md) distinguishes implemented technical milestones from pending creative acceptance. [Fresh QA](qa_current.md) verifies content/import, 400 focused assertions and native captures at source `3464991`. The known Warning Bell description clipping remains open under the [next bounded packet](task_packets/workshop_repair_readability.md).

@@ -10,6 +10,8 @@ For agent resumption, apply the complete [prompt pack](docs/agent_prompt_pack.md
 
 ## Play the prototype
 
+A standalone Windows preview was verified on 2026-09-25. The local delivery is in `build/releases/scrap-saint-0.6.0-preview-20260925/windows`: extract the ZIP and launch `ScrapSaint.exe` with its PCK beside it. Binaries are local build artifacts, not Git-tracked files. See [verification and limits](docs/qa_current.md).
+
 Open `project.godot` in **Godot 4.5.1** and run the project. In this workspace, double-click **Play Scrap Saint.cmd** to launch using the downloaded portable runtime.
 
 For faster development, use **Play Scrap Saint 5x Dev.cmd**. Combat runs at 5× speed, including movement, weapons, enemies, repair and wave timers. Shops and pause remain stopped. **F6** toggles 1×/5× in this development version; the on-screen badge shows the active speed. The Workshop schedules eight 70-second waves: 9 minutes 20 seconds of scheduled combat, or 1 minute 52 seconds at 5×, excluding shops; boss defeat can end its wave early. The normal launcher remains 1×. CLI equivalent: `godot --path . -- --dev-speed=5`.

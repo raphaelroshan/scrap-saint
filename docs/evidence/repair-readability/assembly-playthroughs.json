@@ -1,0 +1,111 @@
+[
+  {
+    "chapter_complete": true,
+    "damage": {
+      "weapon.altar_mortar": 22883.5999999998,
+      "weapon.bell_last_shift": 2498.4,
+      "weapon.foundry_censer": 2739.79999999999,
+      "weapon.nailer_small_mercies": 11388.8,
+      "weapon.penance_winch": 5632.0
+    },
+    "evolutions": [],
+    "gifts": [
+      "gift.black_ledger",
+      "gift.honest_scale"
+    ],
+    "hp": 73.0,
+    "id": "CENSER_CLOSE_CONTROL",
+    "kills": 440,
+    "outcome": "won",
+    "repairs": 1,
+    "route": "route.pale_archive",
+    "route_history": [
+      "route.brass_choir",
+      "route.pale_archive"
+    ],
+    "seconds": 762.25,
+    "wave": 3
+  },
+  {
+    "chapter_complete": true,
+    "damage": {
+      "weapon.bell_last_shift": 2271.36,
+      "weapon.cable_contrition": 2200.4,
+      "weapon.candle_nailer": 19998.4,
+      "weapon.nailer_small_mercies": 11233.2800000001,
+      "weapon.penance_winch": 11441.6
+    },
+    "evolutions": [],
+    "gifts": [
+      "gift.inspection_lens",
+      "gift.black_ledger"
+    ],
+    "hp": 93.0,
+    "id": "WINCH_PRIORITY_CONTROL",
+    "kills": 471,
+    "outcome": "won",
+    "repairs": 0,
+    "route": "route.null_assembly",
+    "route_history": [
+      "route.rootworks",
+      "route.null_assembly"
+    ],
+    "seconds": 768.35,
+    "wave": 3
+  },
+  {
+    "chapter_complete": true,
+    "damage": {
+      "weapon.cable_contrition": 2798.0,
+      "weapon.hymn_coil": 16947.1999999995,
+      "weapon.nailer_small_mercies": 18966.4,
+      "weapon.procession_gear": 1740.8,
+      "weapon.welded_halo": 538.2
+    },
+    "evolutions": [],
+    "gifts": [
+      "gift.spare_hand"
+    ],
+    "hp": 100.0,
+    "id": "HALO_REPAIR_ROAMING",
+    "kills": 430,
+    "outcome": "won",
+    "repairs": 1,
+    "route": "route.red_foundry",
+    "route_history": [
+      "route.brass_choir",
+      "route.red_foundry"
+    ],
+    "seconds": 765.7,
+    "wave": 3
+  },
+  {
+    "chapter_complete": true,
+    "damage": {
+      "weapon.altar_mortar": 16612.0799999999,
+      "weapon.bell_last_shift": 6853.0,
+      "weapon.cable_contrition": 1910.8,
+      "weapon.foundry_censer": 873.600000000001,
+      "weapon.hymn_coil": 20112.6400000003
+    },
+    "evolutions": [
+      "evolution.great_toll"
+    ],
+    "gifts": [
+      "gift.inspection_lens",
+      "gift.black_ledger"
+    ],
+    "hp": 81.0,
+    "id": "GREAT_TOLL_INFORMATION",
+    "kills": 451,
+    "outcome": "won",
+    "repairs": 1,
+    "route": "route.red_foundry",
+    "route_history": [
+      "route.rootworks",
+      "route.red_foundry"
+    ],
+    "seconds": 759.983333333333,
+    "wave": 3
+  }
+]

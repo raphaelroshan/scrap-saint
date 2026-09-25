@@ -1,5 +1,12 @@
 # Scrap Saint roadmap
 
+## End-to-end preview delivery — 2026-09-25
+
+The repair-feedback slice and the follow-up travel/two-Gift control fixes are implemented and runtime verified. A standalone Windows preview now completes an exported normal-economy three-site expedition through Results and restart with earned unlocks. [Current production state](docs/production_state.md), [QA and exact commands](docs/qa_current.md), [native evidence](docs/evidence/repair-readability/review.md).
+
+The audit and narrative sections below are historical context. The immediate next task is the [uncoached 1x Workshop session](docs/playtests/workshop_acceptance.md), not further content expansion. Technical end-to-end delivery does not close human creative acceptance or commercial release gates.
+
+
 ## Ownership audit — 2026-09-25
 
 [Current production state](docs/production_state.md) reconciles main at `3464991`: the technical first-chapter loop and M1–M3 are implemented; creative acceptance and Early Access readiness are not established. Fresh native audit found a clipped Warning Bell reward description. Execute the bounded [Workshop repair-readability packet](docs/task_packets/workshop_repair_readability.md) before the existing uncoached 1x Workshop session below. This observed feedback defect takes precedence over broader content or polish. [Fresh QA](docs/qa_current.md): 400 focused checks pass, native natural policy wins; no human-session claim.

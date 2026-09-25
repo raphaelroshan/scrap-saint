@@ -1,0 +1,6890 @@
+[
+  {
+    "backup_absorbed": 0.0,
+    "chapter_complete": true,
+    "damage_by_wave": {
+      "site.brass_choir_relay:wave_2": 40.0,
+      "site.brass_choir_relay:wave_3": 32.0,
+      "site.collapsed_workshop:wave_7": 7.0,
+      "site.collapsed_workshop:wave_8": 7.0,
+      "site.pale_archive:wave_1": 24.0,
+      "site.pale_archive:wave_2": 16.0
+    },
+    "damage_taken": {
+      "boss.foreman_engine": 7.0,
+      "enemy.cinder_spitter": 112.0,
+      "enemy.rivet_hound": 7.0
+    },
+    "doctrine": 0,
+    "evolution_policy": true,
+    "frame_id": "frame.pilgrim",
+    "gifts": [
+      "gift.brass_fuse",
+      "gift.black_ledger"
+    ],
+    "hp": 40.0,
+    "kills": 427,
+    "mode": "optional",
+    "objective": [
+      {
+        "complete": true,
+        "id": "record.origin",
+        "progress": 105.0
+      },
+      {
+        "complete": true,
+        "id": "record.purpose",
+        "progress": 105.0
+      },
+      {
+        "complete": true,
+        "id": "record.name",
+        "progress": 105.0
+      }
+    ],
+    "outcome": "won",
+    "policy": "evolution",
+    "progress": 0.0,
+    "reason": "The Archive keeps your blank line. You leave with every borrowed purpose still attached.",
+    "relay": 126.0,
+    "relay_damage_sources": {},
+    "repair_metrics": {
+      "dead_shop_visits": 0,
+      "first_contact_tick": 96,
+      "had_threat": true,
+      "longest_threat_gap": 131,
+      "repairs_interrupted": 0,
+      "repairs_started": 0,
+      "threat_gap_started": 42156,
+      "useful_repairs": 0,
+      "wasted_repairs": 0
+    },
+    "repairs_completed": 0,
+    "result_summary": {
+      "assignment_id": "assignment.pale_archive",
+      "assignment_ids": [
+        "assignment.brass_choir",
+        "assignment.pale_archive"
+      ],
+      "blessing_fulfilled": true,
+      "boss_id": "boss.archivist_prime",
+      "completed_site_ids": [
+        "site.collapsed_workshop",
+        "site.brass_choir_relay",
+        "site.pale_archive"
+      ],
+      "defeated_boss_ids": [
+        "boss.foreman_engine",
+        "boss.choir_regent",
+        "boss.archivist_prime"
+      ],
+      "evolution": "MERCY_RAIL_PURSUED",
+      "evolution_ids": [],
+      "failure_cause": "",
+      "gift_ids": [
+        "gift.brass_fuse",
+        "gift.black_ledger"
+      ],
+      "gift_metrics": {
+        "brass_fuse_triggers": 4,
+        "choir_filter_applications": 0,
+        "loose_spring_triggers": 0
+      },
+      "memory_ids": [
+        "memory.first_shift",
+        "memory.borrowed_bell",
+        "memory.borrowed_lens"
+      ],
+      "optional_repairs": 0,
+      "repairs": [],
+      "replay_cue": "Repeat the pilgrimage through a different chain of sites and compare what this build preserves.",
+      "road_flags": [
+        "road.brass.warning_restored",
+        "road.brass.passed_waycart",
+        "road.archive.record_corrected",
+        "road.archive.repaired"
+      ],
+      "road_history": [
+        {
+          "choice_id": "choice.brass.splice",
+          "flag": "road.brass.warning_restored",
+          "kind": "encounter",
+          "node_id": "road.brass.warning_wire",
+          "result": "The wire learns one honest note.",
+          "route_id": "route.brass_choir",
+          "scrap_delta": -2,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.brass.pass",
+          "flag": "road.brass.passed_waycart",
+          "kind": "merchant",
+          "node_id": "road.brass.ada_waycart",
+          "result": "Ada-9 salutes with a wrench.",
+          "route_id": "route.brass_choir",
+          "scrap_delta": 0,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.archive.correct",
+          "flag": "road.archive.record_corrected",
+          "kind": "encounter",
+          "node_id": "road.archive.misfiled_gate",
+          "result": "The reader files one living machine under itself.",
+          "route_id": "route.pale_archive",
+          "scrap_delta": -2,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.archive.repair",
+          "flag": "road.archive.repaired",
+          "kind": "merchant",
+          "node_id": "road.archive.margin_clerk",
+          "result": "The clerk stitches the chassis and cites no authority.",
+          "route_id": "route.pale_archive",
+          "scrap_delta": -4,
+          "structure_delta": 20.0
+        }
+      ],
+      "road_totals": {
+        "route_cost": 15,
+        "scrap_delta": -23,
+        "service_cost": 8,
+        "structure_delta": 20.0
+      },
+      "route_history": [
+        "route.brass_choir",
+        "route.pale_archive"
+      ],
+      "route_id": "route.brass_choir",
+      "route_ids": [
+        "route.brass_choir",
+        "route.pale_archive"
+      ],
+      "run_id": "test-147-0-frame.pilgrim",
+      "scrap_by_segment": {
+        "site.brass_choir_relay:wave_1": 23,
+        "site.brass_choir_relay:wave_2": 13,
+        "site.brass_choir_relay:wave_3": 13,
+        "site.brass_choir_relay:wave_4": 7,
+        "site.collapsed_workshop:wave_1": 36,
+        "site.collapsed_workshop:wave_2": 18,
+        "site.collapsed_workshop:wave_3": 19,
+        "site.collapsed_workshop:wave_4": 24,
+        "site.collapsed_workshop:wave_5": 22,
+        "site.collapsed_workshop:wave_6": 19,
+        "site.collapsed_workshop:wave_7": 21,
+        "site.collapsed_workshop:wave_8": 8,
+        "site.pale_archive:wave_1": 21,
+        "site.pale_archive:wave_2": 12
+      },
+      "scrap_sources": {
+        "foreman_travel": 8,
+        "optional_site_work": 18,
+        "pickups": 21,
+        "route_salvage": 7,
+        "starting": 12,
+        "uncollected_pickups": 82,
+        "wave": 108
+      },
+      "site_id": "site.pale_archive",
+      "terminal_route_id": "route.pale_archive",
+      "top_weapon": "weapon.nailer_small_mercies",
+      "top_weapon_damage": 29363.1999999996,
+      "won": true,
+      "worst_damage_segment": "site.brass_choir_relay:wave_2",
+      "worst_damage_wave": 2,
+      "worst_wave_damage": 40.0
+    },
+    "route": "route.pale_archive",
+    "route_history": [
+      "route.brass_choir",
+      "route.pale_archive"
+    ],
+    "scrap_sources": {
+      "foreman_travel": 8,
+      "optional_site_work": 18,
+      "pickups": 21,
+      "route_salvage": 7,
+      "starting": 12,
+      "uncollected_pickups": 82,
+      "wave": 108
+    },
+    "seconds": 753.95,
+    "seed": 147,
+    "shops": 12,
+    "transactions": [
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 1,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": 0,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 0,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 1,
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 0,
+        "wave": 4
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": 0,
+        "wave": 5
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 0,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 2,
+        "wave": 6
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": 0,
+        "wave": 7
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": 1,
+        "wave": 7
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 8
+      },
+      {
+        "action": "choose_route",
+        "cost": 8,
+        "site_id": "site.collapsed_workshop",
+        "tick": 30172,
+        "value": "route.brass_choir",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.brass.warning_wire",
+        "scrap_delta": -2,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30172,
+        "value": "choice.brass.splice",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.brass.ada_waycart",
+        "scrap_delta": 0,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30172,
+        "value": "choice.brass.pass",
+        "wave": 8
+      },
+      {
+        "action": "buy",
+        "site_id": "site.brass_choir_relay",
+        "tick": 33172,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.brass_choir_relay",
+        "tick": 33172,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.brass_choir_relay",
+        "tick": 33172,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36172,
+        "value": 2,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36172,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36172,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.brass_choir_relay",
+        "tick": 39172,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.brass_choir_relay",
+        "tick": 39172,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "choose_route",
+        "cost": 7,
+        "site_id": "site.brass_choir_relay",
+        "tick": 39755,
+        "value": "route.pale_archive",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.archive.misfiled_gate",
+        "scrap_delta": -2,
+        "site_id": "site.brass_choir_relay",
+        "structure_delta": 0.0,
+        "tick": 39755,
+        "value": "choice.archive.correct",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.archive.margin_clerk",
+        "scrap_delta": -4,
+        "site_id": "site.brass_choir_relay",
+        "structure_delta": 20.0,
+        "tick": 39755,
+        "value": "choice.archive.repair",
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.pale_archive",
+        "tick": 42155,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.pale_archive",
+        "tick": 42155,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.pale_archive",
+        "tick": 44555,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.pale_archive",
+        "tick": 44555,
+        "value": null,
+        "wave": 3
+      }
+    ],
+    "wave": 3,
+    "weapon_damage": {
+      "weapon.bell_last_shift": 2672.64,
+      "weapon.cable_contrition": 3132.79999999999,
+      "weapon.foundry_censer": 2697.52000000001,
+      "weapon.nailer_small_mercies": 29363.1999999996,
+      "weapon.procession_gear": 1740.8
+    },
+    "weapon_kills": {
+      "weapon.bell_last_shift": 42,
+      "weapon.cable_contrition": 33,
+      "weapon.foundry_censer": 28,
+      "weapon.nailer_small_mercies": 313,
+      "weapon.procession_gear": 11
+    },
+    "weapon_ranks": [
+      {
+        "evolved": "",
+        "id": "weapon.bell_last_shift",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.foundry_censer",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.cable_contrition",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.nailer_small_mercies",
+        "rank": 2
+      }
+    ]
+  },
+  {
+    "backup_absorbed": 0.0,
+    "chapter_complete": true,
+    "damage_by_wave": {
+      "site.brass_choir_relay:wave_2": 40.0,
+      "site.brass_choir_relay:wave_3": 32.0,
+      "site.collapsed_workshop:wave_1": 4.0,
+      "site.collapsed_workshop:wave_7": 12.0
+    },
+    "damage_taken": {
+      "enemy.cinder_spitter": 72.0,
+      "enemy.forklift_brute": 12.0,
+      "enemy.scrap_mite": 4.0
+    },
+    "doctrine": 1,
+    "evolution_policy": false,
+    "frame_id": "frame.pilgrim",
+    "gifts": [
+      "gift.honest_scale",
+      "gift.black_ledger"
+    ],
+    "hp": 95.0,
+    "kills": 444,
+    "mode": "optional",
+    "objective": [
+      {
+        "complete": true,
+        "id": "vent.cinder",
+        "progress": 120.0
+      },
+      {
+        "complete": true,
+        "id": "vent.press",
+        "progress": 120.0
+      },
+      {
+        "complete": true,
+        "id": "vent.quench",
+        "progress": 120.0
+      }
+    ],
+    "outcome": "won",
+    "policy": "survival",
+    "progress": 0.0,
+    "reason": "The furnaces cool unevenly. The Red Foundry records mercy as an unauthorized material.",
+    "relay": 126.0,
+    "relay_damage_sources": {},
+    "repair_metrics": {
+      "dead_shop_visits": 0,
+      "first_contact_tick": 96,
+      "had_threat": true,
+      "longest_threat_gap": 155,
+      "repairs_interrupted": 0,
+      "repairs_started": 0,
+      "threat_gap_started": 42896,
+      "useful_repairs": 0,
+      "wasted_repairs": 0
+    },
+    "repairs_completed": 0,
+    "result_summary": {
+      "assignment_id": "assignment.red_foundry",
+      "assignment_ids": [
+        "assignment.brass_choir",
+        "assignment.red_foundry"
+      ],
+      "blessing_fulfilled": false,
+      "boss_id": "boss.red_cardinal",
+      "completed_site_ids": [
+        "site.collapsed_workshop",
+        "site.brass_choir_relay",
+        "site.red_foundry"
+      ],
+      "defeated_boss_ids": [
+        "boss.foreman_engine",
+        "boss.choir_regent",
+        "boss.red_cardinal"
+      ],
+      "evolution": "MERCY_RAIL_PURSUED",
+      "evolution_ids": [],
+      "failure_cause": "",
+      "gift_ids": [
+        "gift.honest_scale",
+        "gift.black_ledger"
+      ],
+      "gift_metrics": {
+        "brass_fuse_triggers": 0,
+        "choir_filter_applications": 0,
+        "loose_spring_triggers": 0
+      },
+      "memory_ids": [
+        "memory.first_shift",
+        "memory.borrowed_bell",
+        "memory.borrowed_shell"
+      ],
+      "optional_repairs": 0,
+      "repairs": [],
+      "replay_cue": "Repeat the pilgrimage through a different chain of sites and compare what this build preserves.",
+      "road_flags": [
+        "road.brass.warning_restored",
+        "road.brass.repaired",
+        "road.foundry.bridge_cooled",
+        "road.foundry.repaired"
+      ],
+      "road_history": [
+        {
+          "choice_id": "choice.brass.splice",
+          "flag": "road.brass.warning_restored",
+          "kind": "encounter",
+          "node_id": "road.brass.warning_wire",
+          "result": "The wire learns one honest note.",
+          "route_id": "route.brass_choir",
+          "scrap_delta": -2,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.brass.repair",
+          "flag": "road.brass.repaired",
+          "kind": "merchant",
+          "node_id": "road.brass.ada_waycart",
+          "result": "Ada-9 tightens every bolt that still believes in threads.",
+          "route_id": "route.brass_choir",
+          "scrap_delta": -4,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.foundry.cool",
+          "flag": "road.foundry.bridge_cooled",
+          "kind": "encounter",
+          "node_id": "road.foundry.slag_bridge",
+          "result": "Steam writes a brief white road across the slag.",
+          "route_id": "route.red_foundry",
+          "scrap_delta": -3,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.foundry.repair",
+          "flag": "road.foundry.repaired",
+          "kind": "service",
+          "node_id": "road.foundry.red13_cart",
+          "result": "Red-13 welds by ear until the chassis rings true.",
+          "route_id": "route.red_foundry",
+          "scrap_delta": -4,
+          "structure_delta": 22.0
+        }
+      ],
+      "road_totals": {
+        "route_cost": 14,
+        "scrap_delta": -27,
+        "service_cost": 13,
+        "structure_delta": 22.0
+      },
+      "route_history": [
+        "route.brass_choir",
+        "route.red_foundry"
+      ],
+      "route_id": "route.brass_choir",
+      "route_ids": [
+        "route.brass_choir",
+        "route.red_foundry"
+      ],
+      "run_id": "test-147-1-frame.pilgrim",
+      "scrap_by_segment": {
+        "site.brass_choir_relay:wave_1": 23,
+        "site.brass_choir_relay:wave_2": 13,
+        "site.brass_choir_relay:wave_3": 13,
+        "site.brass_choir_relay:wave_4": 7,
+        "site.collapsed_workshop:wave_1": 32,
+        "site.collapsed_workshop:wave_2": 19,
+        "site.collapsed_workshop:wave_3": 19,
+        "site.collapsed_workshop:wave_4": 20,
+        "site.collapsed_workshop:wave_5": 24,
+        "site.collapsed_workshop:wave_6": 19,
+        "site.collapsed_workshop:wave_7": 18,
+        "site.collapsed_workshop:wave_8": 9,
+        "site.red_foundry:wave_1": 21,
+        "site.red_foundry:wave_2": 13
+      },
+      "scrap_sources": {
+        "foreman_travel": 8,
+        "optional_site_work": 18,
+        "pickups": 15,
+        "route_salvage": 7,
+        "starting": 12,
+        "uncollected_pickups": 82,
+        "wave": 108
+      },
+      "site_id": "site.red_foundry",
+      "terminal_route_id": "route.red_foundry",
+      "top_weapon": "weapon.nailer_small_mercies",
+      "top_weapon_damage": 22550.3999999997,
+      "won": true,
+      "worst_damage_segment": "site.brass_choir_relay:wave_2",
+      "worst_damage_wave": 2,
+      "worst_wave_damage": 40.0
+    },
+    "route": "route.red_foundry",
+    "route_history": [
+      "route.brass_choir",
+      "route.red_foundry"
+    ],
+    "scrap_sources": {
+      "foreman_travel": 8,
+      "optional_site_work": 18,
+      "pickups": 15,
+      "route_salvage": 7,
+      "starting": 12,
+      "uncollected_pickups": 82,
+      "wave": 108
+    },
+    "seconds": 769.416666666667,
+    "seed": 147,
+    "shops": 12,
+    "transactions": [
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": 0,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 0,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 2,
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": 0,
+        "wave": 5
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": 1,
+        "wave": 5
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 0,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 1,
+        "wave": 6
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": 0,
+        "wave": 7
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 8
+      },
+      {
+        "action": "choose_route",
+        "cost": 8,
+        "site_id": "site.collapsed_workshop",
+        "tick": 30677,
+        "value": "route.brass_choir",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.brass.warning_wire",
+        "scrap_delta": -2,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30677,
+        "value": "choice.brass.splice",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.brass.ada_waycart",
+        "scrap_delta": -4,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30677,
+        "value": "choice.brass.repair",
+        "wave": 8
+      },
+      {
+        "action": "buy",
+        "site_id": "site.brass_choir_relay",
+        "tick": 33677,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.brass_choir_relay",
+        "tick": 33677,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.brass_choir_relay",
+        "tick": 33677,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36677,
+        "value": 1,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36677,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36677,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36677,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.brass_choir_relay",
+        "tick": 39677,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.brass_choir_relay",
+        "tick": 39677,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "choose_route",
+        "cost": 6,
+        "site_id": "site.brass_choir_relay",
+        "tick": 40495,
+        "value": "route.red_foundry",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.foundry.slag_bridge",
+        "scrap_delta": -3,
+        "site_id": "site.brass_choir_relay",
+        "structure_delta": 0.0,
+        "tick": 40495,
+        "value": "choice.foundry.cool",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.foundry.red13_cart",
+        "scrap_delta": -4,
+        "site_id": "site.brass_choir_relay",
+        "structure_delta": 22.0,
+        "tick": 40495,
+        "value": "choice.foundry.repair",
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.red_foundry",
+        "tick": 42895,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.red_foundry",
+        "tick": 42895,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.red_foundry",
+        "tick": 45295,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.red_foundry",
+        "tick": 45295,
+        "value": null,
+        "wave": 3
+      }
+    ],
+    "wave": 3,
+    "weapon_damage": {
+      "weapon.bell_last_shift": 5296.79999999997,
+      "weapon.cable_contrition": 5150.0,
+      "weapon.nailer_small_mercies": 22550.3999999997,
+      "weapon.penance_winch": 8640.0,
+      "weapon.procession_gear": 489.6
+    },
+    "weapon_kills": {
+      "weapon.bell_last_shift": 91,
+      "weapon.cable_contrition": 55,
+      "weapon.nailer_small_mercies": 267,
+      "weapon.penance_winch": 29,
+      "weapon.procession_gear": 2
+    },
+    "weapon_ranks": [
+      {
+        "evolved": "",
+        "id": "weapon.procession_gear",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.nailer_small_mercies",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.bell_last_shift",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.cable_contrition",
+        "rank": 2
+      }
+    ]
+  },
+  {
+    "backup_absorbed": 0.0,
+    "chapter_complete": true,
+    "damage_by_wave": {
+      "site.red_foundry:wave_3": 7.0
+    },
+    "damage_taken": {
+      "boss.red_cardinal": 7.0
+    },
+    "doctrine": 2,
+    "evolution_policy": false,
+    "frame_id": "frame.pilgrim",
+    "gifts": [
+      "gift.black_ledger",
+      "gift.choir_filter"
+    ],
+    "hp": 93.0,
+    "kills": 482,
+    "mode": "optional",
+    "objective": [
+      {
+        "complete": true,
+        "id": "vent.cinder",
+        "progress": 120.0
+      },
+      {
+        "complete": true,
+        "id": "vent.press",
+        "progress": 120.0
+      },
+      {
+        "complete": true,
+        "id": "vent.quench",
+        "progress": 120.0
+      }
+    ],
+    "outcome": "won",
+    "policy": "mourner",
+    "progress": 0.0,
+    "reason": "The furnaces cool unevenly. The Red Foundry records mercy as an unauthorized material.",
+    "relay": 126.0,
+    "relay_damage_sources": {},
+    "repair_metrics": {
+      "dead_shop_visits": 0,
+      "first_contact_tick": 96,
+      "had_threat": true,
+      "longest_threat_gap": 218,
+      "repairs_interrupted": 0,
+      "repairs_started": 0,
+      "threat_gap_started": 44533,
+      "useful_repairs": 0,
+      "wasted_repairs": 0
+    },
+    "repairs_completed": 0,
+    "result_summary": {
+      "assignment_id": "assignment.red_foundry",
+      "assignment_ids": [
+        "assignment.rootworks",
+        "assignment.red_foundry"
+      ],
+      "blessing_fulfilled": false,
+      "boss_id": "boss.red_cardinal",
+      "completed_site_ids": [
+        "site.collapsed_workshop",
+        "site.rootworks_pump",
+        "site.red_foundry"
+      ],
+      "defeated_boss_ids": [
+        "boss.foreman_engine",
+        "boss.factory_heart",
+        "boss.red_cardinal"
+      ],
+      "evolution": "MERCY_RAIL_PURSUED",
+      "evolution_ids": [],
+      "failure_cause": "",
+      "gift_ids": [
+        "gift.black_ledger",
+        "gift.choir_filter"
+      ],
+      "gift_metrics": {
+        "brass_fuse_triggers": 0,
+        "choir_filter_applications": 0,
+        "loose_spring_triggers": 0
+      },
+      "memory_ids": [
+        "memory.first_shift",
+        "memory.borrowed_arm",
+        "memory.borrowed_shell"
+      ],
+      "optional_repairs": 0,
+      "repairs": [],
+      "replay_cue": "Repeat the pilgrimage through a different chain of sites and compare what this build preserves.",
+      "road_flags": [
+        "road.rootworks.ford_endured",
+        "road.rootworks.valve_sold",
+        "road.foundry.bridge_cooled",
+        "road.foundry.repaired"
+      ],
+      "road_history": [
+        {
+          "choice_id": "choice.rootworks.ford",
+          "flag": "road.rootworks.ford_endured",
+          "kind": "encounter",
+          "node_id": "road.rootworks.flooded_culvert",
+          "result": "Water drains from the Saint in patient red lines.",
+          "route_id": "route.rootworks",
+          "scrap_delta": 0,
+          "structure_delta": -10.0
+        },
+        {
+          "choice_id": "choice.rootworks.sell_valve",
+          "flag": "road.rootworks.valve_sold",
+          "kind": "service",
+          "node_id": "road.rootworks.morrow_cart",
+          "result": "The cart keeps the valve; the Saint keeps moving.",
+          "route_id": "route.rootworks",
+          "scrap_delta": 4,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.foundry.cool",
+          "flag": "road.foundry.bridge_cooled",
+          "kind": "encounter",
+          "node_id": "road.foundry.slag_bridge",
+          "result": "Steam writes a brief white road across the slag.",
+          "route_id": "route.red_foundry",
+          "scrap_delta": -3,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.foundry.repair",
+          "flag": "road.foundry.repaired",
+          "kind": "service",
+          "node_id": "road.foundry.red13_cart",
+          "result": "Red-13 welds by ear until the chassis rings true.",
+          "route_id": "route.red_foundry",
+          "scrap_delta": -4,
+          "structure_delta": 10.0
+        }
+      ],
+      "road_totals": {
+        "route_cost": 12,
+        "scrap_delta": -15,
+        "service_cost": 7,
+        "structure_delta": 0.0
+      },
+      "route_history": [
+        "route.rootworks",
+        "route.red_foundry"
+      ],
+      "route_id": "route.rootworks",
+      "route_ids": [
+        "route.rootworks",
+        "route.red_foundry"
+      ],
+      "run_id": "test-147-2-frame.pilgrim",
+      "scrap_by_segment": {
+        "site.collapsed_workshop:wave_1": 32,
+        "site.collapsed_workshop:wave_2": 18,
+        "site.collapsed_workshop:wave_3": 19,
+        "site.collapsed_workshop:wave_4": 19,
+        "site.collapsed_workshop:wave_5": 19,
+        "site.collapsed_workshop:wave_6": 20,
+        "site.collapsed_workshop:wave_7": 20,
+        "site.collapsed_workshop:wave_8": 8,
+        "site.red_foundry:wave_1": 21,
+        "site.red_foundry:wave_2": 13,
+        "site.rootworks_pump:wave_1": 17,
+        "site.rootworks_pump:wave_2": 14,
+        "site.rootworks_pump:wave_3": 15,
+        "site.rootworks_pump:wave_4": 7
+      },
+      "scrap_sources": {
+        "foreman_travel": 8,
+        "optional_site_work": 12,
+        "pickups": 1,
+        "route_salvage": 7,
+        "starting": 12,
+        "uncollected_pickups": 94,
+        "wave": 108
+      },
+      "site_id": "site.red_foundry",
+      "terminal_route_id": "route.red_foundry",
+      "top_weapon": "weapon.candle_nailer",
+      "top_weapon_damage": 21199.0000000001,
+      "won": true,
+      "worst_damage_segment": "site.red_foundry:wave_3",
+      "worst_damage_wave": 3,
+      "worst_wave_damage": 7.0
+    },
+    "route": "route.red_foundry",
+    "route_history": [
+      "route.rootworks",
+      "route.red_foundry"
+    ],
+    "scrap_sources": {
+      "foreman_travel": 8,
+      "optional_site_work": 12,
+      "pickups": 1,
+      "route_salvage": 7,
+      "starting": 12,
+      "uncollected_pickups": 94,
+      "wave": 108
+    },
+    "seconds": 758.783333333333,
+    "seed": 147,
+    "shops": 12,
+    "transactions": [
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": 0,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 0,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 2,
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": 0,
+        "wave": 5
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 0,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 2,
+        "wave": 6
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": 0,
+        "wave": 7
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": 1,
+        "wave": 7
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 8
+      },
+      {
+        "action": "choose_route",
+        "cost": 6,
+        "site_id": "site.collapsed_workshop",
+        "tick": 30208,
+        "value": "route.rootworks",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.rootworks.flooded_culvert",
+        "scrap_delta": 0,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": -10.0,
+        "tick": 30208,
+        "value": "choice.rootworks.ford",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.rootworks.morrow_cart",
+        "scrap_delta": 4,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30208,
+        "value": "choice.rootworks.sell_valve",
+        "wave": 8
+      },
+      {
+        "action": "buy",
+        "site_id": "site.rootworks_pump",
+        "tick": 33208,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.rootworks_pump",
+        "tick": 33208,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.rootworks_pump",
+        "tick": 33208,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.rootworks_pump",
+        "tick": 36208,
+        "value": 1,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.rootworks_pump",
+        "tick": 36208,
+        "value": 2,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.rootworks_pump",
+        "tick": 36208,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.rootworks_pump",
+        "tick": 36208,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.rootworks_pump",
+        "tick": 39208,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.rootworks_pump",
+        "tick": 39208,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "choose_route",
+        "cost": 6,
+        "site_id": "site.rootworks_pump",
+        "tick": 39900,
+        "value": "route.red_foundry",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.foundry.slag_bridge",
+        "scrap_delta": -3,
+        "site_id": "site.rootworks_pump",
+        "structure_delta": 0.0,
+        "tick": 39900,
+        "value": "choice.foundry.cool",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.foundry.red13_cart",
+        "scrap_delta": -4,
+        "site_id": "site.rootworks_pump",
+        "structure_delta": 10.0,
+        "tick": 39900,
+        "value": "choice.foundry.repair",
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.red_foundry",
+        "tick": 42300,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.red_foundry",
+        "tick": 42300,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.red_foundry",
+        "tick": 44700,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.red_foundry",
+        "tick": 44700,
+        "value": null,
+        "wave": 3
+      }
+    ],
+    "wave": 3,
+    "weapon_damage": {
+      "weapon.bell_last_shift": 708.0,
+      "weapon.candle_nailer": 21199.0000000001,
+      "weapon.hymn_coil": 7032.31999999983,
+      "weapon.nailer_small_mercies": 7728.00000000005,
+      "weapon.penance_winch": 10252.0
+    },
+    "weapon_kills": {
+      "weapon.bell_last_shift": 1,
+      "weapon.candle_nailer": 214,
+      "weapon.hymn_coil": 49,
+      "weapon.nailer_small_mercies": 76,
+      "weapon.penance_winch": 142
+    },
+    "weapon_ranks": [
+      {
+        "evolved": "",
+        "id": "weapon.nailer_small_mercies",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.bell_last_shift",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.hymn_coil",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.penance_winch",
+        "rank": 2
+      }
+    ]
+  },
+  {
+    "backup_absorbed": 0.0,
+    "chapter_complete": true,
+    "damage_by_wave": {
+      "site.collapsed_workshop:wave_7": 36.0
+    },
+    "damage_taken": {
+      "enemy.forklift_brute": 36.0
+    },
+    "doctrine": 0,
+    "evolution_policy": false,
+    "frame_id": "frame.pilgrim",
+    "gifts": [
+      "gift.honest_scale",
+      "gift.inspection_lens"
+    ],
+    "hp": 100.0,
+    "kills": 452,
+    "mode": "optional",
+    "objective": [
+      {
+        "complete": true,
+        "id": "anchor.list",
+        "progress": 135.0
+      },
+      {
+        "complete": true,
+        "id": "anchor.name",
+        "progress": 135.0
+      }
+    ],
+    "outcome": "won",
+    "policy": "repair_explorer",
+    "progress": 0.0,
+    "reason": "The Null Assembly cannot name what left through its gate. The Saint keeps moving anyway.",
+    "relay": 126.0,
+    "relay_damage_sources": {},
+    "repair_metrics": {
+      "dead_shop_visits": 0,
+      "first_contact_tick": 96,
+      "had_threat": true,
+      "longest_threat_gap": 131,
+      "repairs_interrupted": 0,
+      "repairs_started": 1,
+      "threat_gap_started": 43178,
+      "useful_repairs": 1,
+      "wasted_repairs": 0
+    },
+    "repairs_completed": 1,
+    "result_summary": {
+      "assignment_id": "assignment.null_assembly",
+      "assignment_ids": [
+        "assignment.rootworks",
+        "assignment.null_assembly"
+      ],
+      "blessing_fulfilled": true,
+      "boss_id": "boss.null_auditor",
+      "completed_site_ids": [
+        "site.collapsed_workshop",
+        "site.rootworks_pump",
+        "site.null_assembly"
+      ],
+      "defeated_boss_ids": [
+        "boss.foreman_engine",
+        "boss.factory_heart",
+        "boss.null_auditor"
+      ],
+      "evolution": "MERCY_RAIL_PURSUED",
+      "evolution_ids": [],
+      "failure_cause": "",
+      "gift_ids": [
+        "gift.honest_scale",
+        "gift.inspection_lens"
+      ],
+      "gift_metrics": {
+        "brass_fuse_triggers": 0,
+        "choir_filter_applications": 0,
+        "loose_spring_triggers": 0
+      },
+      "memory_ids": [
+        "memory.first_shift",
+        "memory.borrowed_arm",
+        "memory.unwritten_instruction"
+      ],
+      "optional_repairs": 1,
+      "repairs": [
+        {
+          "id": "repair.salvage",
+          "reward": "+8 Scrap"
+        }
+      ],
+      "replay_cue": "Repeat the pilgrimage through a different chain of sites and compare what this build preserves.",
+      "road_flags": [
+        "road.rootworks.culvert_braced",
+        "road.rootworks.repaired",
+        "road.null.variance_filed",
+        "road.null.repaired"
+      ],
+      "road_history": [
+        {
+          "choice_id": "choice.rootworks.brace",
+          "flag": "road.rootworks.culvert_braced",
+          "kind": "encounter",
+          "node_id": "road.rootworks.flooded_culvert",
+          "result": "The old brace takes weight again.",
+          "route_id": "route.rootworks",
+          "scrap_delta": -3,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.rootworks.repair",
+          "flag": "road.rootworks.repaired",
+          "kind": "service",
+          "node_id": "road.rootworks.morrow_cart",
+          "result": "Morrow seals the chassis with a strip of old boiler prayer.",
+          "route_id": "route.rootworks",
+          "scrap_delta": -4,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.null.variance",
+          "flag": "road.null.variance_filed",
+          "kind": "encounter",
+          "node_id": "road.null.inventory_arch",
+          "result": "The arch stamps ERROR, then opens anyway.",
+          "route_id": "route.null_assembly",
+          "scrap_delta": -2,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.null.repair",
+          "flag": "road.null.repaired",
+          "kind": "service",
+          "node_id": "road.null.nameless_bench",
+          "result": "The tools return themselves to an order no record names.",
+          "route_id": "route.null_assembly",
+          "scrap_delta": -4,
+          "structure_delta": 0.0
+        }
+      ],
+      "road_totals": {
+        "route_cost": 11,
+        "scrap_delta": -24,
+        "service_cost": 13,
+        "structure_delta": 0.0
+      },
+      "route_history": [
+        "route.rootworks",
+        "route.null_assembly"
+      ],
+      "route_id": "route.rootworks",
+      "route_ids": [
+        "route.rootworks",
+        "route.null_assembly"
+      ],
+      "run_id": "test-147-0-frame.pilgrim",
+      "scrap_by_segment": {
+        "site.collapsed_workshop:wave_1": 40,
+        "site.collapsed_workshop:wave_2": 19,
+        "site.collapsed_workshop:wave_3": 18,
+        "site.collapsed_workshop:wave_4": 22,
+        "site.collapsed_workshop:wave_5": 20,
+        "site.collapsed_workshop:wave_6": 18,
+        "site.collapsed_workshop:wave_7": 19,
+        "site.collapsed_workshop:wave_8": 9,
+        "site.null_assembly:wave_1": 17,
+        "site.null_assembly:wave_2": 13,
+        "site.null_assembly:wave_3": 0,
+        "site.rootworks_pump:wave_1": 17,
+        "site.rootworks_pump:wave_2": 13,
+        "site.rootworks_pump:wave_3": 15,
+        "site.rootworks_pump:wave_4": 7
+      },
+      "scrap_sources": {
+        "foreman_travel": 8,
+        "optional_repair": 8,
+        "optional_site_work": 9,
+        "pickups": 8,
+        "route_salvage": 7,
+        "starting": 12,
+        "uncollected_pickups": 87,
+        "wave": 108
+      },
+      "site_id": "site.null_assembly",
+      "terminal_route_id": "route.null_assembly",
+      "top_weapon": "weapon.nailer_small_mercies",
+      "top_weapon_damage": 19964.7999999998,
+      "won": true,
+      "worst_damage_segment": "site.collapsed_workshop:wave_7",
+      "worst_damage_wave": 7,
+      "worst_wave_damage": 36.0
+    },
+    "route": "route.null_assembly",
+    "route_history": [
+      "route.rootworks",
+      "route.null_assembly"
+    ],
+    "scrap_sources": {
+      "foreman_travel": 8,
+      "optional_repair": 8,
+      "optional_site_work": 9,
+      "pickups": 8,
+      "route_salvage": 7,
+      "starting": 12,
+      "uncollected_pickups": 87,
+      "wave": 108
+    },
+    "seconds": 777.633333333333,
+    "seed": 147,
+    "shops": 12,
+    "transactions": [
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 1,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": 0,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 0,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 1,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 3,
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": 0,
+        "wave": 5
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 0,
+        "wave": 6
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": 0,
+        "wave": 7
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": 1,
+        "wave": 7
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 8
+      },
+      {
+        "action": "choose_route",
+        "cost": 6,
+        "site_id": "site.collapsed_workshop",
+        "tick": 30827,
+        "value": "route.rootworks",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.rootworks.flooded_culvert",
+        "scrap_delta": -3,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30827,
+        "value": "choice.rootworks.brace",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.rootworks.morrow_cart",
+        "scrap_delta": -4,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30827,
+        "value": "choice.rootworks.repair",
+        "wave": 8
+      },
+      {
+        "action": "buy",
+        "site_id": "site.rootworks_pump",
+        "tick": 33827,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.rootworks_pump",
+        "tick": 33827,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.rootworks_pump",
+        "tick": 33827,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.rootworks_pump",
+        "tick": 36827,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.rootworks_pump",
+        "tick": 36827,
+        "value": 2,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.rootworks_pump",
+        "tick": 36827,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.rootworks_pump",
+        "tick": 36827,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.rootworks_pump",
+        "tick": 39827,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.rootworks_pump",
+        "tick": 39827,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "choose_route",
+        "cost": 5,
+        "site_id": "site.rootworks_pump",
+        "tick": 40777,
+        "value": "route.null_assembly",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.null.inventory_arch",
+        "scrap_delta": -2,
+        "site_id": "site.rootworks_pump",
+        "structure_delta": 0.0,
+        "tick": 40777,
+        "value": "choice.null.variance",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.null.nameless_bench",
+        "scrap_delta": -4,
+        "site_id": "site.rootworks_pump",
+        "structure_delta": 0.0,
+        "tick": 40777,
+        "value": "choice.null.repair",
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.null_assembly",
+        "tick": 43177,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.null_assembly",
+        "tick": 43177,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.null_assembly",
+        "tick": 45577,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.null_assembly",
+        "tick": 45577,
+        "value": null,
+        "wave": 3
+      }
+    ],
+    "wave": 3,
+    "weapon_damage": {
+      "weapon.altar_mortar": 14394.3999999999,
+      "weapon.bell_last_shift": 4987.19999999998,
+      "weapon.nailer_small_mercies": 19964.7999999998,
+      "weapon.procession_gear": 4253.39999999999,
+      "weapon.welded_halo": 1144.0
+    },
+    "weapon_kills": {
+      "weapon.altar_mortar": 134,
+      "weapon.bell_last_shift": 45,
+      "weapon.nailer_small_mercies": 236,
+      "weapon.procession_gear": 33,
+      "weapon.welded_halo": 4
+    },
+    "weapon_ranks": [
+      {
+        "evolved": "",
+        "id": "weapon.nailer_small_mercies",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.altar_mortar",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.procession_gear",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.welded_halo",
+        "rank": 2
+      }
+    ]
+  },
+  {
+    "backup_absorbed": 0.0,
+    "chapter_complete": true,
+    "damage_by_wave": {
+      "site.brass_choir_relay:wave_2": 24.0,
+      "site.brass_choir_relay:wave_3": 32.0,
+      "site.collapsed_workshop:wave_7": 12.0,
+      "site.collapsed_workshop:wave_8": 14.0,
+      "site.pale_archive:wave_1": 16.0,
+      "site.pale_archive:wave_2": 16.0
+    },
+    "damage_taken": {
+      "enemy.cinder_spitter": 88.0,
+      "enemy.forklift_brute": 12.0,
+      "enemy.rivet_hound": 14.0
+    },
+    "doctrine": 0,
+    "evolution_policy": true,
+    "frame_id": "frame.pilgrim",
+    "gifts": [
+      "gift.loose_spring",
+      "gift.black_ledger"
+    ],
+    "hp": 48.0,
+    "kills": 430,
+    "mode": "optional",
+    "objective": [
+      {
+        "complete": true,
+        "id": "record.origin",
+        "progress": 105.0
+      },
+      {
+        "complete": true,
+        "id": "record.purpose",
+        "progress": 105.0
+      },
+      {
+        "complete": true,
+        "id": "record.name",
+        "progress": 105.0
+      }
+    ],
+    "outcome": "won",
+    "policy": "evolution",
+    "progress": 0.0,
+    "reason": "The Archive keeps your blank line. You leave with every borrowed purpose still attached.",
+    "relay": 126.0,
+    "relay_damage_sources": {},
+    "repair_metrics": {
+      "dead_shop_visits": 0,
+      "first_contact_tick": 96,
+      "had_threat": true,
+      "longest_threat_gap": 131,
+      "repairs_interrupted": 1,
+      "repairs_started": 1,
+      "threat_gap_started": 44480,
+      "useful_repairs": 0,
+      "wasted_repairs": 0
+    },
+    "repairs_completed": 0,
+    "result_summary": {
+      "assignment_id": "assignment.pale_archive",
+      "assignment_ids": [
+        "assignment.brass_choir",
+        "assignment.pale_archive"
+      ],
+      "blessing_fulfilled": true,
+      "boss_id": "boss.archivist_prime",
+      "completed_site_ids": [
+        "site.collapsed_workshop",
+        "site.brass_choir_relay",
+        "site.pale_archive"
+      ],
+      "defeated_boss_ids": [
+        "boss.foreman_engine",
+        "boss.choir_regent",
+        "boss.archivist_prime"
+      ],
+      "evolution": "MERCY_RAIL_PURSUED",
+      "evolution_ids": [],
+      "failure_cause": "",
+      "gift_ids": [
+        "gift.loose_spring",
+        "gift.black_ledger"
+      ],
+      "gift_metrics": {
+        "brass_fuse_triggers": 0,
+        "choir_filter_applications": 0,
+        "loose_spring_triggers": 6
+      },
+      "memory_ids": [
+        "memory.first_shift",
+        "memory.borrowed_bell",
+        "memory.borrowed_lens"
+      ],
+      "optional_repairs": 0,
+      "repairs": [],
+      "replay_cue": "Repeat the pilgrimage through a different chain of sites and compare what this build preserves.",
+      "road_flags": [
+        "road.brass.warning_restored",
+        "road.brass.choir_timings",
+        "road.archive.record_corrected",
+        "road.archive.repaired"
+      ],
+      "road_history": [
+        {
+          "choice_id": "choice.brass.splice",
+          "flag": "road.brass.warning_restored",
+          "kind": "encounter",
+          "node_id": "road.brass.warning_wire",
+          "result": "The wire learns one honest note.",
+          "route_id": "route.brass_choir",
+          "scrap_delta": -2,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.brass.news",
+          "flag": "road.brass.choir_timings",
+          "kind": "merchant",
+          "node_id": "road.brass.ada_waycart",
+          "result": "Three bad timings become one useful warning.",
+          "route_id": "route.brass_choir",
+          "scrap_delta": -1,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.archive.correct",
+          "flag": "road.archive.record_corrected",
+          "kind": "encounter",
+          "node_id": "road.archive.misfiled_gate",
+          "result": "The reader files one living machine under itself.",
+          "route_id": "route.pale_archive",
+          "scrap_delta": -2,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.archive.repair",
+          "flag": "road.archive.repaired",
+          "kind": "merchant",
+          "node_id": "road.archive.margin_clerk",
+          "result": "The clerk stitches the chassis and cites no authority.",
+          "route_id": "route.pale_archive",
+          "scrap_delta": -4,
+          "structure_delta": 20.0
+        }
+      ],
+      "road_totals": {
+        "route_cost": 15,
+        "scrap_delta": -24,
+        "service_cost": 9,
+        "structure_delta": 20.0
+      },
+      "route_history": [
+        "route.brass_choir",
+        "route.pale_archive"
+      ],
+      "route_id": "route.brass_choir",
+      "route_ids": [
+        "route.brass_choir",
+        "route.pale_archive"
+      ],
+      "run_id": "test-104729-0-frame.pilgrim",
+      "scrap_by_segment": {
+        "site.brass_choir_relay:wave_1": 23,
+        "site.brass_choir_relay:wave_2": 13,
+        "site.brass_choir_relay:wave_3": 13,
+        "site.brass_choir_relay:wave_4": 7,
+        "site.collapsed_workshop:wave_1": 30,
+        "site.collapsed_workshop:wave_2": 20,
+        "site.collapsed_workshop:wave_3": 18,
+        "site.collapsed_workshop:wave_4": 17,
+        "site.collapsed_workshop:wave_5": 22,
+        "site.collapsed_workshop:wave_6": 19,
+        "site.collapsed_workshop:wave_7": 19,
+        "site.collapsed_workshop:wave_8": 8,
+        "site.pale_archive:wave_1": 21,
+        "site.pale_archive:wave_2": 12
+      },
+      "scrap_sources": {
+        "foreman_travel": 8,
+        "optional_site_work": 18,
+        "pickups": 16,
+        "route_salvage": 7,
+        "starting": 12,
+        "uncollected_pickups": 73,
+        "wave": 108
+      },
+      "site_id": "site.pale_archive",
+      "terminal_route_id": "route.pale_archive",
+      "top_weapon": "weapon.nailer_small_mercies",
+      "top_weapon_damage": 22281.5999999997,
+      "won": true,
+      "worst_damage_segment": "site.brass_choir_relay:wave_3",
+      "worst_damage_wave": 3,
+      "worst_wave_damage": 32.0
+    },
+    "route": "route.pale_archive",
+    "route_history": [
+      "route.brass_choir",
+      "route.pale_archive"
+    ],
+    "scrap_sources": {
+      "foreman_travel": 8,
+      "optional_site_work": 18,
+      "pickups": 16,
+      "route_salvage": 7,
+      "starting": 12,
+      "uncollected_pickups": 73,
+      "wave": 108
+    },
+    "seconds": 759.233333333333,
+    "seed": 104729,
+    "shops": 12,
+    "transactions": [
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 3,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": 0,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 0,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 2,
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": 0,
+        "wave": 5
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 0,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 2,
+        "wave": 6
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 0,
+        "wave": 6
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": 0,
+        "wave": 7
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 8
+      },
+      {
+        "action": "choose_route",
+        "cost": 8,
+        "site_id": "site.collapsed_workshop",
+        "tick": 30370,
+        "value": "route.brass_choir",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.brass.warning_wire",
+        "scrap_delta": -2,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30370,
+        "value": "choice.brass.splice",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.brass.ada_waycart",
+        "scrap_delta": -1,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30370,
+        "value": "choice.brass.news",
+        "wave": 8
+      },
+      {
+        "action": "buy",
+        "site_id": "site.brass_choir_relay",
+        "tick": 33370,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.brass_choir_relay",
+        "tick": 33370,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.brass_choir_relay",
+        "tick": 33370,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36370,
+        "value": 1,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36370,
+        "value": 2,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36370,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36370,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.brass_choir_relay",
+        "tick": 39370,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.brass_choir_relay",
+        "tick": 39370,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "choose_route",
+        "cost": 7,
+        "site_id": "site.brass_choir_relay",
+        "tick": 40072,
+        "value": "route.pale_archive",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.archive.misfiled_gate",
+        "scrap_delta": -2,
+        "site_id": "site.brass_choir_relay",
+        "structure_delta": 0.0,
+        "tick": 40072,
+        "value": "choice.archive.correct",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.archive.margin_clerk",
+        "scrap_delta": -4,
+        "site_id": "site.brass_choir_relay",
+        "structure_delta": 20.0,
+        "tick": 40072,
+        "value": "choice.archive.repair",
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.pale_archive",
+        "tick": 42472,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.pale_archive",
+        "tick": 42472,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.pale_archive",
+        "tick": 44872,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.pale_archive",
+        "tick": 44872,
+        "value": null,
+        "wave": 3
+      }
+    ],
+    "wave": 3,
+    "weapon_damage": {
+      "weapon.altar_mortar": 4985.60000000001,
+      "weapon.bell_last_shift": 3659.99999999999,
+      "weapon.cable_contrition": 6530.0,
+      "weapon.nailer_small_mercies": 22281.5999999997,
+      "weapon.procession_gear": 2730.2
+    },
+    "weapon_kills": {
+      "weapon.altar_mortar": 52,
+      "weapon.bell_last_shift": 25,
+      "weapon.cable_contrition": 66,
+      "weapon.nailer_small_mercies": 254,
+      "weapon.procession_gear": 33
+    },
+    "weapon_ranks": [
+      {
+        "evolved": "",
+        "id": "weapon.altar_mortar",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.procession_gear",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.bell_last_shift",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.nailer_small_mercies",
+        "rank": 2
+      }
+    ]
+  },
+  {
+    "backup_absorbed": 0.0,
+    "chapter_complete": true,
+    "damage_by_wave": {
+      "site.brass_choir_relay:wave_2": 24.0,
+      "site.brass_choir_relay:wave_3": 24.0,
+      "site.collapsed_workshop:wave_1": 18.0,
+      "site.collapsed_workshop:wave_8": 7.0
+    },
+    "damage_taken": {
+      "boss.foreman_engine": 7.0,
+      "enemy.cinder_spitter": 48.0,
+      "enemy.rivet_hound": 14.0,
+      "enemy.scrap_mite": 4.0
+    },
+    "doctrine": 1,
+    "evolution_policy": false,
+    "frame_id": "frame.pilgrim",
+    "gifts": [
+      "gift.honest_scale",
+      "gift.black_ledger"
+    ],
+    "hp": 80.0,
+    "kills": 456,
+    "mode": "optional",
+    "objective": [
+      {
+        "complete": true,
+        "id": "vent.cinder",
+        "progress": 120.0
+      },
+      {
+        "complete": true,
+        "id": "vent.press",
+        "progress": 120.0
+      },
+      {
+        "complete": true,
+        "id": "vent.quench",
+        "progress": 120.0
+      }
+    ],
+    "outcome": "won",
+    "policy": "survival",
+    "progress": 0.0,
+    "reason": "The furnaces cool unevenly. The Red Foundry records mercy as an unauthorized material.",
+    "relay": 126.0,
+    "relay_damage_sources": {},
+    "repair_metrics": {
+      "dead_shop_visits": 0,
+      "first_contact_tick": 96,
+      "had_threat": true,
+      "longest_threat_gap": 196,
+      "repairs_interrupted": 0,
+      "repairs_started": 0,
+      "threat_gap_started": 44868,
+      "useful_repairs": 0,
+      "wasted_repairs": 0
+    },
+    "repairs_completed": 0,
+    "result_summary": {
+      "assignment_id": "assignment.red_foundry",
+      "assignment_ids": [
+        "assignment.brass_choir",
+        "assignment.red_foundry"
+      ],
+      "blessing_fulfilled": true,
+      "boss_id": "boss.red_cardinal",
+      "completed_site_ids": [
+        "site.collapsed_workshop",
+        "site.brass_choir_relay",
+        "site.red_foundry"
+      ],
+      "defeated_boss_ids": [
+        "boss.foreman_engine",
+        "boss.choir_regent",
+        "boss.red_cardinal"
+      ],
+      "evolution": "MERCY_RAIL_PURSUED",
+      "evolution_ids": [],
+      "failure_cause": "",
+      "gift_ids": [
+        "gift.honest_scale",
+        "gift.black_ledger"
+      ],
+      "gift_metrics": {
+        "brass_fuse_triggers": 0,
+        "choir_filter_applications": 0,
+        "loose_spring_triggers": 0
+      },
+      "memory_ids": [
+        "memory.first_shift",
+        "memory.borrowed_bell",
+        "memory.borrowed_shell"
+      ],
+      "optional_repairs": 0,
+      "repairs": [],
+      "replay_cue": "Repeat the pilgrimage through a different chain of sites and compare what this build preserves.",
+      "road_flags": [
+        "road.brass.warning_restored",
+        "road.brass.passed_waycart",
+        "road.foundry.bridge_cooled",
+        "road.foundry.repaired"
+      ],
+      "road_history": [
+        {
+          "choice_id": "choice.brass.splice",
+          "flag": "road.brass.warning_restored",
+          "kind": "encounter",
+          "node_id": "road.brass.warning_wire",
+          "result": "The wire learns one honest note.",
+          "route_id": "route.brass_choir",
+          "scrap_delta": -2,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.brass.pass",
+          "flag": "road.brass.passed_waycart",
+          "kind": "merchant",
+          "node_id": "road.brass.ada_waycart",
+          "result": "Ada-9 salutes with a wrench.",
+          "route_id": "route.brass_choir",
+          "scrap_delta": 0,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.foundry.cool",
+          "flag": "road.foundry.bridge_cooled",
+          "kind": "encounter",
+          "node_id": "road.foundry.slag_bridge",
+          "result": "Steam writes a brief white road across the slag.",
+          "route_id": "route.red_foundry",
+          "scrap_delta": -3,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.foundry.repair",
+          "flag": "road.foundry.repaired",
+          "kind": "service",
+          "node_id": "road.foundry.red13_cart",
+          "result": "Red-13 welds by ear until the chassis rings true.",
+          "route_id": "route.red_foundry",
+          "scrap_delta": -4,
+          "structure_delta": 22.0
+        }
+      ],
+      "road_totals": {
+        "route_cost": 14,
+        "scrap_delta": -23,
+        "service_cost": 9,
+        "structure_delta": 22.0
+      },
+      "route_history": [
+        "route.brass_choir",
+        "route.red_foundry"
+      ],
+      "route_id": "route.brass_choir",
+      "route_ids": [
+        "route.brass_choir",
+        "route.red_foundry"
+      ],
+      "run_id": "test-104729-1-frame.pilgrim",
+      "scrap_by_segment": {
+        "site.brass_choir_relay:wave_1": 23,
+        "site.brass_choir_relay:wave_2": 13,
+        "site.brass_choir_relay:wave_3": 14,
+        "site.brass_choir_relay:wave_4": 7,
+        "site.collapsed_workshop:wave_1": 30,
+        "site.collapsed_workshop:wave_2": 20,
+        "site.collapsed_workshop:wave_3": 18,
+        "site.collapsed_workshop:wave_4": 19,
+        "site.collapsed_workshop:wave_5": 23,
+        "site.collapsed_workshop:wave_6": 22,
+        "site.collapsed_workshop:wave_7": 20,
+        "site.collapsed_workshop:wave_8": 10,
+        "site.red_foundry:wave_1": 22,
+        "site.red_foundry:wave_2": 13
+      },
+      "scrap_sources": {
+        "foreman_travel": 8,
+        "optional_site_work": 18,
+        "pickups": 18,
+        "route_salvage": 7,
+        "starting": 12,
+        "uncollected_pickups": 83,
+        "wave": 108
+      },
+      "site_id": "site.red_foundry",
+      "terminal_route_id": "route.red_foundry",
+      "top_weapon": "weapon.nailer_small_mercies",
+      "top_weapon_damage": 18499.2000000001,
+      "won": true,
+      "worst_damage_segment": "site.brass_choir_relay:wave_2",
+      "worst_damage_wave": 2,
+      "worst_wave_damage": 24.0
+    },
+    "route": "route.red_foundry",
+    "route_history": [
+      "route.brass_choir",
+      "route.red_foundry"
+    ],
+    "scrap_sources": {
+      "foreman_travel": 8,
+      "optional_site_work": 18,
+      "pickups": 18,
+      "route_salvage": 7,
+      "starting": 12,
+      "uncollected_pickups": 83,
+      "wave": 108
+    },
+    "seconds": 763.716666666667,
+    "seed": 104729,
+    "shops": 12,
+    "transactions": [
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": 0,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 0,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 2,
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": 0,
+        "wave": 5
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 0,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 1,
+        "wave": 6
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 0,
+        "wave": 6
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": 0,
+        "wave": 7
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 8
+      },
+      {
+        "action": "choose_route",
+        "cost": 8,
+        "site_id": "site.collapsed_workshop",
+        "tick": 30475,
+        "value": "route.brass_choir",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.brass.warning_wire",
+        "scrap_delta": -2,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30475,
+        "value": "choice.brass.splice",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.brass.ada_waycart",
+        "scrap_delta": 0,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30475,
+        "value": "choice.brass.pass",
+        "wave": 8
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.brass_choir_relay",
+        "tick": 33475,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.brass_choir_relay",
+        "tick": 33475,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36475,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36475,
+        "value": 1,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36475,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36475,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36475,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.brass_choir_relay",
+        "tick": 39475,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.brass_choir_relay",
+        "tick": 39475,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "choose_route",
+        "cost": 6,
+        "site_id": "site.brass_choir_relay",
+        "tick": 40191,
+        "value": "route.red_foundry",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.foundry.slag_bridge",
+        "scrap_delta": -3,
+        "site_id": "site.brass_choir_relay",
+        "structure_delta": 0.0,
+        "tick": 40191,
+        "value": "choice.foundry.cool",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.foundry.red13_cart",
+        "scrap_delta": -4,
+        "site_id": "site.brass_choir_relay",
+        "structure_delta": 22.0,
+        "tick": 40191,
+        "value": "choice.foundry.repair",
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.red_foundry",
+        "tick": 42591,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.red_foundry",
+        "tick": 42591,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.red_foundry",
+        "tick": 44991,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.red_foundry",
+        "tick": 44991,
+        "value": null,
+        "wave": 3
+      }
+    ],
+    "wave": 3,
+    "weapon_damage": {
+      "weapon.bell_last_shift": 3760.79999999999,
+      "weapon.foundry_censer": 1958.88000000001,
+      "weapon.hymn_coil": 10990.0799999998,
+      "weapon.nailer_small_mercies": 18499.2000000001,
+      "weapon.penance_winch": 7184.0
+    },
+    "weapon_kills": {
+      "weapon.bell_last_shift": 68,
+      "weapon.foundry_censer": 19,
+      "weapon.hymn_coil": 117,
+      "weapon.nailer_small_mercies": 220,
+      "weapon.penance_winch": 32
+    },
+    "weapon_ranks": [
+      {
+        "evolved": "",
+        "id": "weapon.penance_winch",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.bell_last_shift",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.hymn_coil",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.foundry_censer",
+        "rank": 2
+      }
+    ]
+  },
+  {
+    "backup_absorbed": 0.0,
+    "chapter_complete": true,
+    "damage_by_wave": {},
+    "damage_taken": {},
+    "doctrine": 2,
+    "evolution_policy": false,
+    "frame_id": "frame.pilgrim",
+    "gifts": [
+      "gift.honest_scale",
+      "gift.black_ledger"
+    ],
+    "hp": 100.0,
+    "kills": 466,
+    "mode": "optional",
+    "objective": [
+      {
+        "complete": true,
+        "id": "vent.cinder",
+        "progress": 120.0
+      },
+      {
+        "complete": true,
+        "id": "vent.press",
+        "progress": 120.0
+      },
+      {
+        "complete": true,
+        "id": "vent.quench",
+        "progress": 120.0
+      }
+    ],
+    "outcome": "won",
+    "policy": "mourner",
+    "progress": 0.0,
+    "reason": "The furnaces cool unevenly. The Red Foundry records mercy as an unauthorized material.",
+    "relay": 126.0,
+    "relay_damage_sources": {},
+    "repair_metrics": {
+      "dead_shop_visits": 0,
+      "first_contact_tick": 96,
+      "had_threat": true,
+      "longest_threat_gap": 173,
+      "repairs_interrupted": 0,
+      "repairs_started": 0,
+      "threat_gap_started": 44148,
+      "useful_repairs": 0,
+      "wasted_repairs": 0
+    },
+    "repairs_completed": 0,
+    "result_summary": {
+      "assignment_id": "assignment.red_foundry",
+      "assignment_ids": [
+        "assignment.rootworks",
+        "assignment.red_foundry"
+      ],
+      "blessing_fulfilled": false,
+      "boss_id": "boss.red_cardinal",
+      "completed_site_ids": [
+        "site.collapsed_workshop",
+        "site.rootworks_pump",
+        "site.red_foundry"
+      ],
+      "defeated_boss_ids": [
+        "boss.foreman_engine",
+        "boss.factory_heart",
+        "boss.red_cardinal"
+      ],
+      "evolution": "MERCY_RAIL_READY",
+      "evolution_ids": [],
+      "failure_cause": "",
+      "gift_ids": [
+        "gift.honest_scale",
+        "gift.black_ledger"
+      ],
+      "gift_metrics": {
+        "brass_fuse_triggers": 0,
+        "choir_filter_applications": 0,
+        "loose_spring_triggers": 0
+      },
+      "memory_ids": [
+        "memory.first_shift",
+        "memory.borrowed_arm",
+        "memory.borrowed_shell"
+      ],
+      "optional_repairs": 0,
+      "repairs": [],
+      "replay_cue": "Repeat the pilgrimage through a different chain of sites and compare what this build preserves.",
+      "road_flags": [
+        "road.rootworks.culvert_braced",
+        "road.rootworks.valve_sold",
+        "road.foundry.bridge_cooled",
+        "road.foundry.passed_cart"
+      ],
+      "road_history": [
+        {
+          "choice_id": "choice.rootworks.brace",
+          "flag": "road.rootworks.culvert_braced",
+          "kind": "encounter",
+          "node_id": "road.rootworks.flooded_culvert",
+          "result": "The old brace takes weight again.",
+          "route_id": "route.rootworks",
+          "scrap_delta": -3,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.rootworks.sell_valve",
+          "flag": "road.rootworks.valve_sold",
+          "kind": "service",
+          "node_id": "road.rootworks.morrow_cart",
+          "result": "The cart keeps the valve; the Saint keeps moving.",
+          "route_id": "route.rootworks",
+          "scrap_delta": 4,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.foundry.cool",
+          "flag": "road.foundry.bridge_cooled",
+          "kind": "encounter",
+          "node_id": "road.foundry.slag_bridge",
+          "result": "Steam writes a brief white road across the slag.",
+          "route_id": "route.red_foundry",
+          "scrap_delta": -3,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.foundry.pass",
+          "flag": "road.foundry.passed_cart",
+          "kind": "service",
+          "node_id": "road.foundry.red13_cart",
+          "result": "Red-13 points toward the only stack without smoke.",
+          "route_id": "route.red_foundry",
+          "scrap_delta": 0,
+          "structure_delta": 0.0
+        }
+      ],
+      "road_totals": {
+        "route_cost": 12,
+        "scrap_delta": -14,
+        "service_cost": 6,
+        "structure_delta": 0.0
+      },
+      "route_history": [
+        "route.rootworks",
+        "route.red_foundry"
+      ],
+      "route_id": "route.rootworks",
+      "route_ids": [
+        "route.rootworks",
+        "route.red_foundry"
+      ],
+      "run_id": "test-104729-2-frame.pilgrim",
+      "scrap_by_segment": {
+        "site.collapsed_workshop:wave_1": 30,
+        "site.collapsed_workshop:wave_2": 18,
+        "site.collapsed_workshop:wave_3": 19,
+        "site.collapsed_workshop:wave_4": 20,
+        "site.collapsed_workshop:wave_5": 19,
+        "site.collapsed_workshop:wave_6": 19,
+        "site.collapsed_workshop:wave_7": 20,
+        "site.collapsed_workshop:wave_8": 8,
+        "site.red_foundry:wave_1": 22,
+        "site.red_foundry:wave_2": 12,
+        "site.rootworks_pump:wave_1": 18,
+        "site.rootworks_pump:wave_2": 14,
+        "site.rootworks_pump:wave_3": 16,
+        "site.rootworks_pump:wave_4": 7
+      },
+      "scrap_sources": {
+        "foreman_travel": 8,
+        "optional_site_work": 12,
+        "route_salvage": 7,
+        "starting": 12,
+        "uncollected_pickups": 95,
+        "wave": 108
+      },
+      "site_id": "site.red_foundry",
+      "terminal_route_id": "route.red_foundry",
+      "top_weapon": "weapon.candle_nailer",
+      "top_weapon_damage": 40590.72,
+      "won": true,
+      "worst_damage_segment": "",
+      "worst_damage_wave": 0,
+      "worst_wave_damage": 0.0
+    },
+    "route": "route.red_foundry",
+    "route_history": [
+      "route.rootworks",
+      "route.red_foundry"
+    ],
+    "scrap_sources": {
+      "foreman_travel": 8,
+      "optional_site_work": 12,
+      "route_salvage": 7,
+      "starting": 12,
+      "uncollected_pickups": 95,
+      "wave": 108
+    },
+    "seconds": 745.366666666667,
+    "seed": 104729,
+    "shops": 12,
+    "transactions": [
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": 0,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 0,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 2,
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 0,
+        "wave": 4
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": 0,
+        "wave": 5
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 0,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 2,
+        "wave": 6
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": 0,
+        "wave": 7
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": 1,
+        "wave": 7
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 8
+      },
+      {
+        "action": "choose_route",
+        "cost": 6,
+        "site_id": "site.collapsed_workshop",
+        "tick": 30108,
+        "value": "route.rootworks",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.rootworks.flooded_culvert",
+        "scrap_delta": -3,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30108,
+        "value": "choice.rootworks.brace",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.rootworks.morrow_cart",
+        "scrap_delta": 4,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30108,
+        "value": "choice.rootworks.sell_valve",
+        "wave": 8
+      },
+      {
+        "action": "buy",
+        "site_id": "site.rootworks_pump",
+        "tick": 33108,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.rootworks_pump",
+        "tick": 33108,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.rootworks_pump",
+        "tick": 33108,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.rootworks_pump",
+        "tick": 36108,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.rootworks_pump",
+        "tick": 36108,
+        "value": 2,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.rootworks_pump",
+        "tick": 36108,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.rootworks_pump",
+        "tick": 36108,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "buy",
+        "site_id": "site.rootworks_pump",
+        "tick": 39108,
+        "value": 2,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.rootworks_pump",
+        "tick": 39108,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.rootworks_pump",
+        "tick": 39108,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "choose_route",
+        "cost": 6,
+        "site_id": "site.rootworks_pump",
+        "tick": 39456,
+        "value": "route.red_foundry",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.foundry.slag_bridge",
+        "scrap_delta": -3,
+        "site_id": "site.rootworks_pump",
+        "structure_delta": 0.0,
+        "tick": 39456,
+        "value": "choice.foundry.cool",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.foundry.red13_cart",
+        "scrap_delta": 0,
+        "site_id": "site.rootworks_pump",
+        "structure_delta": 0.0,
+        "tick": 39456,
+        "value": "choice.foundry.pass",
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.red_foundry",
+        "tick": 41856,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.red_foundry",
+        "tick": 41856,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.red_foundry",
+        "tick": 41856,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.red_foundry",
+        "tick": 44256,
+        "value": 3,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.red_foundry",
+        "tick": 44256,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.red_foundry",
+        "tick": 44256,
+        "value": null,
+        "wave": 3
+      }
+    ],
+    "wave": 3,
+    "weapon_damage": {
+      "weapon.candle_nailer": 40590.72,
+      "weapon.foundry_censer": 526.68,
+      "weapon.hymn_coil": 1941.76000000001,
+      "weapon.nailer_small_mercies": 6337.91999999998,
+      "weapon.procession_gear": 293.76
+    },
+    "weapon_kills": {
+      "weapon.candle_nailer": 399,
+      "weapon.hymn_coil": 14,
+      "weapon.nailer_small_mercies": 53
+    },
+    "weapon_ranks": [
+      {
+        "evolved": "",
+        "id": "weapon.hymn_coil",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.foundry_censer",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.nailer_small_mercies",
+        "rank": 3
+      },
+      {
+        "evolved": "",
+        "id": "weapon.procession_gear",
+        "rank": 2
+      }
+    ]
+  },
+  {
+    "backup_absorbed": 0.0,
+    "chapter_complete": true,
+    "damage_by_wave": {},
+    "damage_taken": {},
+    "doctrine": 0,
+    "evolution_policy": false,
+    "frame_id": "frame.pilgrim",
+    "gifts": [
+      "gift.black_ledger",
+      "gift.honest_scale"
+    ],
+    "hp": 100.0,
+    "kills": 476,
+    "mode": "optional",
+    "objective": [
+      {
+        "complete": true,
+        "id": "anchor.list",
+        "progress": 135.0
+      },
+      {
+        "complete": true,
+        "id": "anchor.name",
+        "progress": 135.0
+      }
+    ],
+    "outcome": "won",
+    "policy": "repair_explorer",
+    "progress": 0.0,
+    "reason": "The Null Assembly cannot name what left through its gate. The Saint keeps moving anyway.",
+    "relay": 126.0,
+    "relay_damage_sources": {},
+    "repair_metrics": {
+      "dead_shop_visits": 0,
+      "first_contact_tick": 96,
+      "had_threat": true,
+      "longest_threat_gap": 174,
+      "repairs_interrupted": 0,
+      "repairs_started": 1,
+      "threat_gap_started": 44326,
+      "useful_repairs": 1,
+      "wasted_repairs": 0
+    },
+    "repairs_completed": 1,
+    "result_summary": {
+      "assignment_id": "assignment.null_assembly",
+      "assignment_ids": [
+        "assignment.rootworks",
+        "assignment.null_assembly"
+      ],
+      "blessing_fulfilled": true,
+      "boss_id": "boss.null_auditor",
+      "completed_site_ids": [
+        "site.collapsed_workshop",
+        "site.rootworks_pump",
+        "site.null_assembly"
+      ],
+      "defeated_boss_ids": [
+        "boss.foreman_engine",
+        "boss.factory_heart",
+        "boss.null_auditor"
+      ],
+      "evolution": "CANDLE_UNRETURNED_READY",
+      "evolution_ids": [],
+      "failure_cause": "",
+      "gift_ids": [
+        "gift.black_ledger",
+        "gift.honest_scale"
+      ],
+      "gift_metrics": {
+        "brass_fuse_triggers": 0,
+        "choir_filter_applications": 0,
+        "loose_spring_triggers": 0
+      },
+      "memory_ids": [
+        "memory.first_shift",
+        "memory.borrowed_arm",
+        "memory.unwritten_instruction"
+      ],
+      "optional_repairs": 1,
+      "repairs": [
+        {
+          "id": "repair.salvage",
+          "reward": "+8 Scrap"
+        }
+      ],
+      "replay_cue": "Repeat the pilgrimage through a different chain of sites and compare what this build preserves.",
+      "road_flags": [
+        "road.rootworks.culvert_braced",
+        "road.rootworks.valve_sold",
+        "road.null.variance_filed",
+        "road.null.repaired"
+      ],
+      "road_history": [
+        {
+          "choice_id": "choice.rootworks.brace",
+          "flag": "road.rootworks.culvert_braced",
+          "kind": "encounter",
+          "node_id": "road.rootworks.flooded_culvert",
+          "result": "The old brace takes weight again.",
+          "route_id": "route.rootworks",
+          "scrap_delta": -3,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.rootworks.sell_valve",
+          "flag": "road.rootworks.valve_sold",
+          "kind": "service",
+          "node_id": "road.rootworks.morrow_cart",
+          "result": "The cart keeps the valve; the Saint keeps moving.",
+          "route_id": "route.rootworks",
+          "scrap_delta": 4,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.null.variance",
+          "flag": "road.null.variance_filed",
+          "kind": "encounter",
+          "node_id": "road.null.inventory_arch",
+          "result": "The arch stamps ERROR, then opens anyway.",
+          "route_id": "route.null_assembly",
+          "scrap_delta": -2,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.null.repair",
+          "flag": "road.null.repaired",
+          "kind": "service",
+          "node_id": "road.null.nameless_bench",
+          "result": "The tools return themselves to an order no record names.",
+          "route_id": "route.null_assembly",
+          "scrap_delta": -4,
+          "structure_delta": 0.0
+        }
+      ],
+      "road_totals": {
+        "route_cost": 11,
+        "scrap_delta": -16,
+        "service_cost": 9,
+        "structure_delta": 0.0
+      },
+      "route_history": [
+        "route.rootworks",
+        "route.null_assembly"
+      ],
+      "route_id": "route.rootworks",
+      "route_ids": [
+        "route.rootworks",
+        "route.null_assembly"
+      ],
+      "run_id": "test-104729-0-frame.pilgrim",
+      "scrap_by_segment": {
+        "site.collapsed_workshop:wave_1": 41,
+        "site.collapsed_workshop:wave_2": 19,
+        "site.collapsed_workshop:wave_3": 18,
+        "site.collapsed_workshop:wave_4": 20,
+        "site.collapsed_workshop:wave_5": 20,
+        "site.collapsed_workshop:wave_6": 19,
+        "site.collapsed_workshop:wave_7": 20,
+        "site.collapsed_workshop:wave_8": 8,
+        "site.null_assembly:wave_1": 19,
+        "site.null_assembly:wave_2": 12,
+        "site.rootworks_pump:wave_1": 17,
+        "site.rootworks_pump:wave_2": 12,
+        "site.rootworks_pump:wave_3": 14,
+        "site.rootworks_pump:wave_4": 7
+      },
+      "scrap_sources": {
+        "foreman_travel": 8,
+        "optional_repair": 8,
+        "optional_site_work": 9,
+        "route_salvage": 7,
+        "starting": 12,
+        "uncollected_pickups": 94,
+        "wave": 108
+      },
+      "site_id": "site.null_assembly",
+      "terminal_route_id": "route.null_assembly",
+      "top_weapon": "weapon.candle_nailer",
+      "top_weapon_damage": 43540.6000000004,
+      "won": true,
+      "worst_damage_segment": "",
+      "worst_damage_wave": 0,
+      "worst_wave_damage": 0.0
+    },
+    "route": "route.null_assembly",
+    "route_history": [
+      "route.rootworks",
+      "route.null_assembly"
+    ],
+    "scrap_sources": {
+      "foreman_travel": 8,
+      "optional_repair": 8,
+      "optional_site_work": 9,
+      "route_salvage": 7,
+      "starting": 12,
+      "uncollected_pickups": 94,
+      "wave": 108
+    },
+    "seconds": 756.283333333333,
+    "seed": 104729,
+    "shops": 12,
+    "transactions": [
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 1,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": 3,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": 0,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 0,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 2,
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": 0,
+        "wave": 5
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 0,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 1,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 2,
+        "wave": 6
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": 0,
+        "wave": 7
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 8
+      },
+      {
+        "action": "choose_route",
+        "cost": 6,
+        "site_id": "site.collapsed_workshop",
+        "tick": 30504,
+        "value": "route.rootworks",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.rootworks.flooded_culvert",
+        "scrap_delta": -3,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30504,
+        "value": "choice.rootworks.brace",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.rootworks.morrow_cart",
+        "scrap_delta": 4,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30504,
+        "value": "choice.rootworks.sell_valve",
+        "wave": 8
+      },
+      {
+        "action": "buy",
+        "site_id": "site.rootworks_pump",
+        "tick": 33504,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.rootworks_pump",
+        "tick": 33504,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.rootworks_pump",
+        "tick": 33504,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.rootworks_pump",
+        "tick": 36504,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.rootworks_pump",
+        "tick": 36504,
+        "value": 1,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.rootworks_pump",
+        "tick": 36504,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.rootworks_pump",
+        "tick": 36504,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.rootworks_pump",
+        "tick": 39504,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.rootworks_pump",
+        "tick": 39504,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "choose_route",
+        "cost": 5,
+        "site_id": "site.rootworks_pump",
+        "tick": 39940,
+        "value": "route.null_assembly",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.null.inventory_arch",
+        "scrap_delta": -2,
+        "site_id": "site.rootworks_pump",
+        "structure_delta": 0.0,
+        "tick": 39940,
+        "value": "choice.null.variance",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.null.nameless_bench",
+        "scrap_delta": -4,
+        "site_id": "site.rootworks_pump",
+        "structure_delta": 0.0,
+        "tick": 39940,
+        "value": "choice.null.repair",
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.null_assembly",
+        "tick": 42340,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.null_assembly",
+        "tick": 42340,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.null_assembly",
+        "tick": 42340,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.null_assembly",
+        "tick": 44740,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.null_assembly",
+        "tick": 44740,
+        "value": null,
+        "wave": 3
+      }
+    ],
+    "wave": 3,
+    "weapon_damage": {
+      "weapon.candle_nailer": 43540.6000000004,
+      "weapon.foundry_censer": 620.2,
+      "weapon.nailer_small_mercies": 6755.20000000002,
+      "weapon.procession_gear": 516.8,
+      "weapon.welded_halo": 41.6
+    },
+    "weapon_kills": {
+      "weapon.candle_nailer": 347,
+      "weapon.nailer_small_mercies": 128,
+      "weapon.procession_gear": 1
+    },
+    "weapon_ranks": [
+      {
+        "evolved": "",
+        "id": "weapon.welded_halo",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.foundry_censer",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.nailer_small_mercies",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.candle_nailer",
+        "rank": 3
+      }
+    ]
+  },
+  {
+    "backup_absorbed": 0.0,
+    "chapter_complete": true,
+    "damage_by_wave": {
+      "site.brass_choir_relay:wave_2": 24.0,
+      "site.brass_choir_relay:wave_3": 24.0,
+      "site.pale_archive:wave_1": 16.0,
+      "site.pale_archive:wave_2": 8.0
+    },
+    "damage_taken": {
+      "enemy.cinder_spitter": 72.0
+    },
+    "doctrine": 0,
+    "evolution_policy": true,
+    "frame_id": "frame.pilgrim",
+    "gifts": [
+      "gift.brass_fuse",
+      "gift.black_ledger"
+    ],
+    "hp": 100.0,
+    "kills": 467,
+    "mode": "optional",
+    "objective": [
+      {
+        "complete": true,
+        "id": "record.origin",
+        "progress": 105.0
+      },
+      {
+        "complete": true,
+        "id": "record.purpose",
+        "progress": 105.0
+      },
+      {
+        "complete": true,
+        "id": "record.name",
+        "progress": 105.0
+      }
+    ],
+    "outcome": "won",
+    "policy": "evolution",
+    "progress": 0.0,
+    "reason": "The Archive keeps your blank line. You leave with every borrowed purpose still attached.",
+    "relay": 126.0,
+    "relay_damage_sources": {},
+    "repair_metrics": {
+      "dead_shop_visits": 0,
+      "first_contact_tick": 96,
+      "had_threat": true,
+      "longest_threat_gap": 177,
+      "repairs_interrupted": 0,
+      "repairs_started": 0,
+      "threat_gap_started": 45195,
+      "useful_repairs": 0,
+      "wasted_repairs": 0
+    },
+    "repairs_completed": 0,
+    "result_summary": {
+      "assignment_id": "assignment.pale_archive",
+      "assignment_ids": [
+        "assignment.brass_choir",
+        "assignment.pale_archive"
+      ],
+      "blessing_fulfilled": false,
+      "boss_id": "boss.archivist_prime",
+      "completed_site_ids": [
+        "site.collapsed_workshop",
+        "site.brass_choir_relay",
+        "site.pale_archive"
+      ],
+      "defeated_boss_ids": [
+        "boss.foreman_engine",
+        "boss.choir_regent",
+        "boss.archivist_prime"
+      ],
+      "evolution": "MERCY_RAIL_PURSUED",
+      "evolution_ids": [],
+      "failure_cause": "",
+      "gift_ids": [
+        "gift.brass_fuse",
+        "gift.black_ledger"
+      ],
+      "gift_metrics": {
+        "brass_fuse_triggers": 2,
+        "choir_filter_applications": 0,
+        "loose_spring_triggers": 0
+      },
+      "memory_ids": [
+        "memory.first_shift",
+        "memory.borrowed_bell",
+        "memory.borrowed_lens"
+      ],
+      "optional_repairs": 0,
+      "repairs": [],
+      "replay_cue": "Repeat the pilgrimage through a different chain of sites and compare what this build preserves.",
+      "road_flags": [
+        "road.brass.warning_restored",
+        "road.brass.repaired",
+        "road.archive.record_corrected",
+        "road.archive.repaired"
+      ],
+      "road_history": [
+        {
+          "choice_id": "choice.brass.splice",
+          "flag": "road.brass.warning_restored",
+          "kind": "encounter",
+          "node_id": "road.brass.warning_wire",
+          "result": "The wire learns one honest note.",
+          "route_id": "route.brass_choir",
+          "scrap_delta": -2,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.brass.repair",
+          "flag": "road.brass.repaired",
+          "kind": "merchant",
+          "node_id": "road.brass.ada_waycart",
+          "result": "Ada-9 tightens every bolt that still believes in threads.",
+          "route_id": "route.brass_choir",
+          "scrap_delta": -4,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.archive.correct",
+          "flag": "road.archive.record_corrected",
+          "kind": "encounter",
+          "node_id": "road.archive.misfiled_gate",
+          "result": "The reader files one living machine under itself.",
+          "route_id": "route.pale_archive",
+          "scrap_delta": -2,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.archive.repair",
+          "flag": "road.archive.repaired",
+          "kind": "merchant",
+          "node_id": "road.archive.margin_clerk",
+          "result": "The clerk stitches the chassis and cites no authority.",
+          "route_id": "route.pale_archive",
+          "scrap_delta": -4,
+          "structure_delta": 0.0
+        }
+      ],
+      "road_totals": {
+        "route_cost": 15,
+        "scrap_delta": -27,
+        "service_cost": 12,
+        "structure_delta": 0.0
+      },
+      "route_history": [
+        "route.brass_choir",
+        "route.pale_archive"
+      ],
+      "route_id": "route.brass_choir",
+      "route_ids": [
+        "route.brass_choir",
+        "route.pale_archive"
+      ],
+      "run_id": "test-104730-0-frame.pilgrim",
+      "scrap_by_segment": {
+        "site.brass_choir_relay:wave_1": 23,
+        "site.brass_choir_relay:wave_2": 14,
+        "site.brass_choir_relay:wave_3": 13,
+        "site.brass_choir_relay:wave_4": 7,
+        "site.collapsed_workshop:wave_1": 31,
+        "site.collapsed_workshop:wave_2": 20,
+        "site.collapsed_workshop:wave_3": 18,
+        "site.collapsed_workshop:wave_4": 21,
+        "site.collapsed_workshop:wave_5": 25,
+        "site.collapsed_workshop:wave_6": 19,
+        "site.collapsed_workshop:wave_7": 20,
+        "site.collapsed_workshop:wave_8": 8,
+        "site.pale_archive:wave_1": 21,
+        "site.pale_archive:wave_2": 13
+      },
+      "scrap_sources": {
+        "foreman_travel": 8,
+        "optional_site_work": 18,
+        "pickups": 4,
+        "route_salvage": 7,
+        "starting": 12,
+        "uncollected_pickups": 96,
+        "wave": 108
+      },
+      "site_id": "site.pale_archive",
+      "terminal_route_id": "route.pale_archive",
+      "top_weapon": "weapon.candle_nailer",
+      "top_weapon_damage": 26512.9600000002,
+      "won": true,
+      "worst_damage_segment": "site.brass_choir_relay:wave_2",
+      "worst_damage_wave": 2,
+      "worst_wave_damage": 24.0
+    },
+    "route": "route.pale_archive",
+    "route_history": [
+      "route.brass_choir",
+      "route.pale_archive"
+    ],
+    "scrap_sources": {
+      "foreman_travel": 8,
+      "optional_site_work": 18,
+      "pickups": 4,
+      "route_salvage": 7,
+      "starting": 12,
+      "uncollected_pickups": 96,
+      "wave": 108
+    },
+    "seconds": 766.066666666667,
+    "seed": 104730,
+    "shops": 12,
+    "transactions": [
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": 0,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 0,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 2,
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": 0,
+        "wave": 5
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": 0,
+        "wave": 5
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 0,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 1,
+        "wave": 6
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": 0,
+        "wave": 7
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 8
+      },
+      {
+        "action": "choose_route",
+        "cost": 8,
+        "site_id": "site.collapsed_workshop",
+        "tick": 30906,
+        "value": "route.brass_choir",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.brass.warning_wire",
+        "scrap_delta": -2,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30906,
+        "value": "choice.brass.splice",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.brass.ada_waycart",
+        "scrap_delta": -4,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30906,
+        "value": "choice.brass.repair",
+        "wave": 8
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.brass_choir_relay",
+        "tick": 33906,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.brass_choir_relay",
+        "tick": 33906,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36906,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36906,
+        "value": 2,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36906,
+        "value": 3,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36906,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36906,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.brass_choir_relay",
+        "tick": 39906,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.brass_choir_relay",
+        "tick": 39906,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "choose_route",
+        "cost": 7,
+        "site_id": "site.brass_choir_relay",
+        "tick": 40484,
+        "value": "route.pale_archive",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.archive.misfiled_gate",
+        "scrap_delta": -2,
+        "site_id": "site.brass_choir_relay",
+        "structure_delta": 0.0,
+        "tick": 40484,
+        "value": "choice.archive.correct",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.archive.margin_clerk",
+        "scrap_delta": -4,
+        "site_id": "site.brass_choir_relay",
+        "structure_delta": 0.0,
+        "tick": 40484,
+        "value": "choice.archive.repair",
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.pale_archive",
+        "tick": 42884,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.pale_archive",
+        "tick": 42884,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.pale_archive",
+        "tick": 45284,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.pale_archive",
+        "tick": 45284,
+        "value": null,
+        "wave": 3
+      }
+    ],
+    "wave": 3,
+    "weapon_damage": {
+      "weapon.bell_last_shift": 1983.36,
+      "weapon.candle_nailer": 26512.9600000002,
+      "weapon.foundry_censer": 1196.72,
+      "weapon.nailer_small_mercies": 16854.4000000001,
+      "weapon.welded_halo": 491.92
+    },
+    "weapon_kills": {
+      "weapon.bell_last_shift": 20,
+      "weapon.candle_nailer": 201,
+      "weapon.foundry_censer": 7,
+      "weapon.nailer_small_mercies": 236,
+      "weapon.welded_halo": 3
+    },
+    "weapon_ranks": [
+      {
+        "evolved": "",
+        "id": "weapon.bell_last_shift",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.foundry_censer",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.candle_nailer",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.welded_halo",
+        "rank": 2
+      }
+    ]
+  },
+  {
+    "backup_absorbed": 0.0,
+    "chapter_complete": true,
+    "damage_by_wave": {
+      "site.brass_choir_relay:wave_2": 16.0,
+      "site.brass_choir_relay:wave_3": 32.0,
+      "site.collapsed_workshop:wave_1": 4.0,
+      "site.collapsed_workshop:wave_8": 15.0
+    },
+    "damage_taken": {
+      "enemy.cinder_spitter": 56.0,
+      "enemy.rivet_hound": 7.0,
+      "enemy.scrap_mite": 4.0
+    },
+    "doctrine": 1,
+    "evolution_policy": false,
+    "frame_id": "frame.pilgrim",
+    "gifts": [
+      "gift.black_ledger",
+      "gift.loose_spring"
+    ],
+    "hp": 80.0,
+    "kills": 434,
+    "mode": "optional",
+    "objective": [
+      {
+        "complete": true,
+        "id": "vent.cinder",
+        "progress": 120.0
+      },
+      {
+        "complete": true,
+        "id": "vent.press",
+        "progress": 120.0
+      },
+      {
+        "complete": true,
+        "id": "vent.quench",
+        "progress": 120.0
+      }
+    ],
+    "outcome": "won",
+    "policy": "survival",
+    "progress": 0.0,
+    "reason": "The furnaces cool unevenly. The Red Foundry records mercy as an unauthorized material.",
+    "relay": 126.0,
+    "relay_damage_sources": {},
+    "repair_metrics": {
+      "dead_shop_visits": 0,
+      "first_contact_tick": 96,
+      "had_threat": true,
+      "longest_threat_gap": 220,
+      "repairs_interrupted": 8,
+      "repairs_started": 8,
+      "threat_gap_started": 44901,
+      "useful_repairs": 0,
+      "wasted_repairs": 0
+    },
+    "repairs_completed": 0,
+    "result_summary": {
+      "assignment_id": "assignment.red_foundry",
+      "assignment_ids": [
+        "assignment.brass_choir",
+        "assignment.red_foundry"
+      ],
+      "blessing_fulfilled": false,
+      "boss_id": "boss.red_cardinal",
+      "completed_site_ids": [
+        "site.collapsed_workshop",
+        "site.brass_choir_relay",
+        "site.red_foundry"
+      ],
+      "defeated_boss_ids": [
+        "boss.foreman_engine",
+        "boss.choir_regent",
+        "boss.red_cardinal"
+      ],
+      "evolution": "MERCY_RAIL_PURSUED",
+      "evolution_ids": [],
+      "failure_cause": "",
+      "gift_ids": [
+        "gift.black_ledger",
+        "gift.loose_spring"
+      ],
+      "gift_metrics": {
+        "brass_fuse_triggers": 0,
+        "choir_filter_applications": 0,
+        "loose_spring_triggers": 6
+      },
+      "memory_ids": [
+        "memory.first_shift",
+        "memory.borrowed_bell",
+        "memory.borrowed_shell"
+      ],
+      "optional_repairs": 0,
+      "repairs": [],
+      "replay_cue": "Repeat the pilgrimage through a different chain of sites and compare what this build preserves.",
+      "road_flags": [
+        "road.brass.warning_restored",
+        "road.brass.passed_waycart",
+        "road.foundry.bridge_cooled",
+        "road.foundry.repaired"
+      ],
+      "road_history": [
+        {
+          "choice_id": "choice.brass.splice",
+          "flag": "road.brass.warning_restored",
+          "kind": "encounter",
+          "node_id": "road.brass.warning_wire",
+          "result": "The wire learns one honest note.",
+          "route_id": "route.brass_choir",
+          "scrap_delta": -2,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.brass.pass",
+          "flag": "road.brass.passed_waycart",
+          "kind": "merchant",
+          "node_id": "road.brass.ada_waycart",
+          "result": "Ada-9 salutes with a wrench.",
+          "route_id": "route.brass_choir",
+          "scrap_delta": 0,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.foundry.cool",
+          "flag": "road.foundry.bridge_cooled",
+          "kind": "encounter",
+          "node_id": "road.foundry.slag_bridge",
+          "result": "Steam writes a brief white road across the slag.",
+          "route_id": "route.red_foundry",
+          "scrap_delta": -3,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.foundry.repair",
+          "flag": "road.foundry.repaired",
+          "kind": "service",
+          "node_id": "road.foundry.red13_cart",
+          "result": "Red-13 welds by ear until the chassis rings true.",
+          "route_id": "route.red_foundry",
+          "scrap_delta": -4,
+          "structure_delta": 22.0
+        }
+      ],
+      "road_totals": {
+        "route_cost": 14,
+        "scrap_delta": -23,
+        "service_cost": 9,
+        "structure_delta": 22.0
+      },
+      "route_history": [
+        "route.brass_choir",
+        "route.red_foundry"
+      ],
+      "route_id": "route.brass_choir",
+      "route_ids": [
+        "route.brass_choir",
+        "route.red_foundry"
+      ],
+      "run_id": "test-104730-1-frame.pilgrim",
+      "scrap_by_segment": {
+        "site.brass_choir_relay:wave_1": 22,
+        "site.brass_choir_relay:wave_2": 14,
+        "site.brass_choir_relay:wave_3": 13,
+        "site.brass_choir_relay:wave_4": 7,
+        "site.collapsed_workshop:wave_1": 33,
+        "site.collapsed_workshop:wave_2": 20,
+        "site.collapsed_workshop:wave_3": 18,
+        "site.collapsed_workshop:wave_4": 21,
+        "site.collapsed_workshop:wave_5": 24,
+        "site.collapsed_workshop:wave_6": 18,
+        "site.collapsed_workshop:wave_7": 19,
+        "site.collapsed_workshop:wave_8": 9,
+        "site.red_foundry:wave_1": 21,
+        "site.red_foundry:wave_2": 13
+      },
+      "scrap_sources": {
+        "foreman_travel": 8,
+        "optional_site_work": 18,
+        "pickups": 17,
+        "route_salvage": 7,
+        "starting": 12,
+        "uncollected_pickups": 82,
+        "wave": 108
+      },
+      "site_id": "site.red_foundry",
+      "terminal_route_id": "route.red_foundry",
+      "top_weapon": "weapon.nailer_small_mercies",
+      "top_weapon_damage": 23209.5999999997,
+      "won": true,
+      "worst_damage_segment": "site.brass_choir_relay:wave_3",
+      "worst_damage_wave": 3,
+      "worst_wave_damage": 32.0
+    },
+    "route": "route.red_foundry",
+    "route_history": [
+      "route.brass_choir",
+      "route.red_foundry"
+    ],
+    "scrap_sources": {
+      "foreman_travel": 8,
+      "optional_site_work": 18,
+      "pickups": 17,
+      "route_salvage": 7,
+      "starting": 12,
+      "uncollected_pickups": 82,
+      "wave": 108
+    },
+    "seconds": 766.933333333333,
+    "seed": 104730,
+    "shops": 12,
+    "transactions": [
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 1,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": 0,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 0,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 2,
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": 0,
+        "wave": 5
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": 1,
+        "wave": 5
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 0,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 2,
+        "wave": 6
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": 0,
+        "wave": 7
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": 1,
+        "wave": 7
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 8
+      },
+      {
+        "action": "choose_route",
+        "cost": 8,
+        "site_id": "site.collapsed_workshop",
+        "tick": 30355,
+        "value": "route.brass_choir",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.brass.warning_wire",
+        "scrap_delta": -2,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30355,
+        "value": "choice.brass.splice",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.brass.ada_waycart",
+        "scrap_delta": 0,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30355,
+        "value": "choice.brass.pass",
+        "wave": 8
+      },
+      {
+        "action": "buy",
+        "site_id": "site.brass_choir_relay",
+        "tick": 33355,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.brass_choir_relay",
+        "tick": 33355,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.brass_choir_relay",
+        "tick": 33355,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36355,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36355,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.brass_choir_relay",
+        "tick": 36355,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.brass_choir_relay",
+        "tick": 39355,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.brass_choir_relay",
+        "tick": 39355,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "choose_route",
+        "cost": 6,
+        "site_id": "site.brass_choir_relay",
+        "tick": 40192,
+        "value": "route.red_foundry",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.foundry.slag_bridge",
+        "scrap_delta": -3,
+        "site_id": "site.brass_choir_relay",
+        "structure_delta": 0.0,
+        "tick": 40192,
+        "value": "choice.foundry.cool",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.foundry.red13_cart",
+        "scrap_delta": -4,
+        "site_id": "site.brass_choir_relay",
+        "structure_delta": 22.0,
+        "tick": 40192,
+        "value": "choice.foundry.repair",
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.red_foundry",
+        "tick": 42592,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.red_foundry",
+        "tick": 42592,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.red_foundry",
+        "tick": 44992,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.red_foundry",
+        "tick": 44992,
+        "value": null,
+        "wave": 3
+      }
+    ],
+    "wave": 3,
+    "weapon_damage": {
+      "weapon.bell_last_shift": 5054.39999999999,
+      "weapon.cable_contrition": 6740.0,
+      "weapon.nailer_small_mercies": 23209.5999999997,
+      "weapon.penance_winch": 3648.0,
+      "weapon.procession_gear": 2941.0
+    },
+    "weapon_kills": {
+      "weapon.bell_last_shift": 81,
+      "weapon.cable_contrition": 75,
+      "weapon.nailer_small_mercies": 245,
+      "weapon.penance_winch": 11,
+      "weapon.procession_gear": 22
+    },
+    "weapon_ranks": [
+      {
+        "evolved": "",
+        "id": "weapon.penance_winch",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.bell_last_shift",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.nailer_small_mercies",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.procession_gear",
+        "rank": 2
+      }
+    ]
+  },
+  {
+    "backup_absorbed": 0.0,
+    "chapter_complete": true,
+    "damage_by_wave": {
+      "site.collapsed_workshop:wave_8": 12.0
+    },
+    "damage_taken": {
+      "enemy.forklift_brute": 12.0
+    },
+    "doctrine": 2,
+    "evolution_policy": false,
+    "frame_id": "frame.pilgrim",
+    "gifts": [
+      "gift.loose_spring",
+      "gift.brass_fuse"
+    ],
+    "hp": 100.0,
+    "kills": 478,
+    "mode": "optional",
+    "objective": [
+      {
+        "complete": true,
+        "id": "vent.cinder",
+        "progress": 120.0
+      },
+      {
+        "complete": true,
+        "id": "vent.press",
+        "progress": 120.0
+      },
+      {
+        "complete": true,
+        "id": "vent.quench",
+        "progress": 120.0
+      }
+    ],
+    "outcome": "won",
+    "policy": "mourner",
+    "progress": 0.0,
+    "reason": "The furnaces cool unevenly. The Red Foundry records mercy as an unauthorized material.",
+    "relay": 126.0,
+    "relay_damage_sources": {},
+    "repair_metrics": {
+      "dead_shop_visits": 0,
+      "first_contact_tick": 96,
+      "had_threat": true,
+      "longest_threat_gap": 163,
+      "repairs_interrupted": 0,
+      "repairs_started": 0,
+      "threat_gap_started": 45193,
+      "useful_repairs": 0,
+      "wasted_repairs": 0
+    },
+    "repairs_completed": 0,
+    "result_summary": {
+      "assignment_id": "assignment.red_foundry",
+      "assignment_ids": [
+        "assignment.rootworks",
+        "assignment.red_foundry"
+      ],
+      "blessing_fulfilled": false,
+      "boss_id": "boss.red_cardinal",
+      "completed_site_ids": [
+        "site.collapsed_workshop",
+        "site.rootworks_pump",
+        "site.red_foundry"
+      ],
+      "defeated_boss_ids": [
+        "boss.foreman_engine",
+        "boss.factory_heart",
+        "boss.red_cardinal"
+      ],
+      "evolution": "MERCY_RAIL_PURSUED",
+      "evolution_ids": [],
+      "failure_cause": "",
+      "gift_ids": [
+        "gift.loose_spring",
+        "gift.brass_fuse"
+      ],
+      "gift_metrics": {
+        "brass_fuse_triggers": 2,
+        "choir_filter_applications": 0,
+        "loose_spring_triggers": 4
+      },
+      "memory_ids": [
+        "memory.first_shift",
+        "memory.borrowed_arm",
+        "memory.borrowed_shell"
+      ],
+      "optional_repairs": 0,
+      "repairs": [],
+      "replay_cue": "Repeat the pilgrimage through a different chain of sites and compare what this build preserves.",
+      "road_flags": [
+        "road.rootworks.culvert_braced",
+        "road.rootworks.valve_sold",
+        "road.foundry.bridge_cooled",
+        "road.foundry.repaired"
+      ],
+      "road_history": [
+        {
+          "choice_id": "choice.rootworks.brace",
+          "flag": "road.rootworks.culvert_braced",
+          "kind": "encounter",
+          "node_id": "road.rootworks.flooded_culvert",
+          "result": "The old brace takes weight again.",
+          "route_id": "route.rootworks",
+          "scrap_delta": -3,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.rootworks.sell_valve",
+          "flag": "road.rootworks.valve_sold",
+          "kind": "service",
+          "node_id": "road.rootworks.morrow_cart",
+          "result": "The cart keeps the valve; the Saint keeps moving.",
+          "route_id": "route.rootworks",
+          "scrap_delta": 4,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.foundry.cool",
+          "flag": "road.foundry.bridge_cooled",
+          "kind": "encounter",
+          "node_id": "road.foundry.slag_bridge",
+          "result": "Steam writes a brief white road across the slag.",
+          "route_id": "route.red_foundry",
+          "scrap_delta": -3,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.foundry.repair",
+          "flag": "road.foundry.repaired",
+          "kind": "service",
+          "node_id": "road.foundry.red13_cart",
+          "result": "Red-13 welds by ear until the chassis rings true.",
+          "route_id": "route.red_foundry",
+          "scrap_delta": -4,
+          "structure_delta": 0.0
+        }
+      ],
+      "road_totals": {
+        "route_cost": 12,
+        "scrap_delta": -18,
+        "service_cost": 10,
+        "structure_delta": 0.0
+      },
+      "route_history": [
+        "route.rootworks",
+        "route.red_foundry"
+      ],
+      "route_id": "route.rootworks",
+      "route_ids": [
+        "route.rootworks",
+        "route.red_foundry"
+      ],
+      "run_id": "test-104730-2-frame.pilgrim",
+      "scrap_by_segment": {
+        "site.collapsed_workshop:wave_1": 29,
+        "site.collapsed_workshop:wave_2": 18,
+        "site.collapsed_workshop:wave_3": 18,
+        "site.collapsed_workshop:wave_4": 20,
+        "site.collapsed_workshop:wave_5": 19,
+        "site.collapsed_workshop:wave_6": 19,
+        "site.collapsed_workshop:wave_7": 20,
+        "site.collapsed_workshop:wave_8": 8,
+        "site.red_foundry:wave_1": 22,
+        "site.red_foundry:wave_2": 12,
+        "site.red_foundry:wave_3": 1,
+        "site.rootworks_pump:wave_1": 18,
+        "site.rootworks_pump:wave_2": 13,
+        "site.rootworks_pump:wave_3": 15,
+        "site.rootworks_pump:wave_4": 7
+      },
+      "scrap_sources": {
+        "foreman_travel": 8,
+        "optional_site_work": 12,
+        "pickups": 1,
+        "route_salvage": 7,
+        "starting": 12,
+        "uncollected_pickups": 91,
+        "wave": 108
+      },
+      "site_id": "site.red_foundry",
+      "terminal_route_id": "route.red_foundry",
+      "top_weapon": "weapon.candle_nailer",
+      "top_weapon_damage": 37871.6800000006,
+      "won": true,
+      "worst_damage_segment": "site.collapsed_workshop:wave_8",
+      "worst_damage_wave": 8,
+      "worst_wave_damage": 12.0
+    },
+    "route": "route.red_foundry",
+    "route_history": [
+      "route.rootworks",
+      "route.red_foundry"
+    ],
+    "scrap_sources": {
+      "foreman_travel": 8,
+      "optional_site_work": 12,
+      "pickups": 1,
+      "route_salvage": 7,
+      "starting": 12,
+      "uncollected_pickups": 91,
+      "wave": 108
+    },
+    "seconds": 765.0,
+    "seed": 104730,
+    "shops": 12,
+    "transactions": [
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": 0,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 0,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 2,
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": 0,
+        "wave": 5
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 0,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 3,
+        "wave": 6
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 1,
+        "wave": 6
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": 0,
+        "wave": 7
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 8
+      },
+      {
+        "action": "choose_route",
+        "cost": 6,
+        "site_id": "site.collapsed_workshop",
+        "tick": 31054,
+        "value": "route.rootworks",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.rootworks.flooded_culvert",
+        "scrap_delta": -3,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 31054,
+        "value": "choice.rootworks.brace",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.rootworks.morrow_cart",
+        "scrap_delta": 4,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 31054,
+        "value": "choice.rootworks.sell_valve",
+        "wave": 8
+      },
+      {
+        "action": "buy",
+        "site_id": "site.rootworks_pump",
+        "tick": 34054,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.rootworks_pump",
+        "tick": 34054,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.rootworks_pump",
+        "tick": 34054,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.rootworks_pump",
+        "tick": 37054,
+        "value": 2,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.rootworks_pump",
+        "tick": 37054,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.rootworks_pump",
+        "tick": 37054,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.rootworks_pump",
+        "tick": 37054,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.rootworks_pump",
+        "tick": 40054,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.rootworks_pump",
+        "tick": 40054,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "choose_route",
+        "cost": 6,
+        "site_id": "site.rootworks_pump",
+        "tick": 40520,
+        "value": "route.red_foundry",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.foundry.slag_bridge",
+        "scrap_delta": -3,
+        "site_id": "site.rootworks_pump",
+        "structure_delta": 0.0,
+        "tick": 40520,
+        "value": "choice.foundry.cool",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.foundry.red13_cart",
+        "scrap_delta": -4,
+        "site_id": "site.rootworks_pump",
+        "structure_delta": 0.0,
+        "tick": 40520,
+        "value": "choice.foundry.repair",
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.red_foundry",
+        "tick": 42920,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.red_foundry",
+        "tick": 42920,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.red_foundry",
+        "tick": 45320,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.red_foundry",
+        "tick": 45320,
+        "value": null,
+        "wave": 3
+      }
+    ],
+    "wave": 3,
+    "weapon_damage": {
+      "weapon.bell_last_shift": 1363.2,
+      "weapon.candle_nailer": 37871.6800000006,
+      "weapon.nailer_small_mercies": 8082.56000000002,
+      "weapon.procession_gear": 1115.2,
+      "weapon.welded_halo": 353.6
+    },
+    "weapon_kills": {
+      "weapon.bell_last_shift": 3,
+      "weapon.candle_nailer": 385,
+      "weapon.nailer_small_mercies": 87,
+      "weapon.procession_gear": 2,
+      "weapon.welded_halo": 1
+    },
+    "weapon_ranks": [
+      {
+        "evolved": "",
+        "id": "weapon.nailer_small_mercies",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.procession_gear",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.bell_last_shift",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.candle_nailer",
+        "rank": 2
+      }
+    ]
+  },
+  {
+    "backup_absorbed": 0.0,
+    "chapter_complete": true,
+    "damage_by_wave": {},
+    "damage_taken": {},
+    "doctrine": 0,
+    "evolution_policy": false,
+    "frame_id": "frame.pilgrim",
+    "gifts": [
+      "gift.black_ledger",
+      "gift.honest_scale"
+    ],
+    "hp": 100.0,
+    "kills": 481,
+    "mode": "optional",
+    "objective": [
+      {
+        "complete": true,
+        "id": "anchor.list",
+        "progress": 135.0
+      },
+      {
+        "complete": true,
+        "id": "anchor.name",
+        "progress": 135.0
+      }
+    ],
+    "outcome": "won",
+    "policy": "repair_explorer",
+    "progress": 0.0,
+    "reason": "The Null Assembly cannot name what left through its gate. The Saint keeps moving anyway.",
+    "relay": 126.0,
+    "relay_damage_sources": {},
+    "repair_metrics": {
+      "dead_shop_visits": 0,
+      "first_contact_tick": 96,
+      "had_threat": true,
+      "longest_threat_gap": 170,
+      "repairs_interrupted": 0,
+      "repairs_started": 1,
+      "threat_gap_started": 44773,
+      "useful_repairs": 1,
+      "wasted_repairs": 0
+    },
+    "repairs_completed": 1,
+    "result_summary": {
+      "assignment_id": "assignment.null_assembly",
+      "assignment_ids": [
+        "assignment.rootworks",
+        "assignment.null_assembly"
+      ],
+      "blessing_fulfilled": true,
+      "boss_id": "boss.null_auditor",
+      "completed_site_ids": [
+        "site.collapsed_workshop",
+        "site.rootworks_pump",
+        "site.null_assembly"
+      ],
+      "defeated_boss_ids": [
+        "boss.foreman_engine",
+        "boss.factory_heart",
+        "boss.null_auditor"
+      ],
+      "evolution": "MERCY_RAIL_PURSUED",
+      "evolution_ids": [],
+      "failure_cause": "",
+      "gift_ids": [
+        "gift.black_ledger",
+        "gift.honest_scale"
+      ],
+      "gift_metrics": {
+        "brass_fuse_triggers": 0,
+        "choir_filter_applications": 0,
+        "loose_spring_triggers": 0
+      },
+      "memory_ids": [
+        "memory.first_shift",
+        "memory.borrowed_arm",
+        "memory.unwritten_instruction"
+      ],
+      "optional_repairs": 1,
+      "repairs": [
+        {
+          "id": "repair.salvage",
+          "reward": "+8 Scrap"
+        }
+      ],
+      "replay_cue": "Repeat the pilgrimage through a different chain of sites and compare what this build preserves.",
+      "road_flags": [
+        "road.rootworks.culvert_braced",
+        "road.rootworks.repaired",
+        "road.null.variance_filed",
+        "road.null.repaired"
+      ],
+      "road_history": [
+        {
+          "choice_id": "choice.rootworks.brace",
+          "flag": "road.rootworks.culvert_braced",
+          "kind": "encounter",
+          "node_id": "road.rootworks.flooded_culvert",
+          "result": "The old brace takes weight again.",
+          "route_id": "route.rootworks",
+          "scrap_delta": -3,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.rootworks.repair",
+          "flag": "road.rootworks.repaired",
+          "kind": "service",
+          "node_id": "road.rootworks.morrow_cart",
+          "result": "Morrow seals the chassis with a strip of old boiler prayer.",
+          "route_id": "route.rootworks",
+          "scrap_delta": -4,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.null.variance",
+          "flag": "road.null.variance_filed",
+          "kind": "encounter",
+          "node_id": "road.null.inventory_arch",
+          "result": "The arch stamps ERROR, then opens anyway.",
+          "route_id": "route.null_assembly",
+          "scrap_delta": -2,
+          "structure_delta": 0.0
+        },
+        {
+          "choice_id": "choice.null.repair",
+          "flag": "road.null.repaired",
+          "kind": "service",
+          "node_id": "road.null.nameless_bench",
+          "result": "The tools return themselves to an order no record names.",
+          "route_id": "route.null_assembly",
+          "scrap_delta": -4,
+          "structure_delta": 0.0
+        }
+      ],
+      "road_totals": {
+        "route_cost": 11,
+        "scrap_delta": -24,
+        "service_cost": 13,
+        "structure_delta": 0.0
+      },
+      "route_history": [
+        "route.rootworks",
+        "route.null_assembly"
+      ],
+      "route_id": "route.rootworks",
+      "route_ids": [
+        "route.rootworks",
+        "route.null_assembly"
+      ],
+      "run_id": "test-104730-0-frame.pilgrim",
+      "scrap_by_segment": {
+        "site.collapsed_workshop:wave_1": 37,
+        "site.collapsed_workshop:wave_2": 18,
+        "site.collapsed_workshop:wave_3": 18,
+        "site.collapsed_workshop:wave_4": 20,
+        "site.collapsed_workshop:wave_5": 20,
+        "site.collapsed_workshop:wave_6": 19,
+        "site.collapsed_workshop:wave_7": 20,
+        "site.collapsed_workshop:wave_8": 8,
+        "site.null_assembly:wave_1": 18,
+        "site.null_assembly:wave_2": 13,
+        "site.rootworks_pump:wave_1": 18,
+        "site.rootworks_pump:wave_2": 13,
+        "site.rootworks_pump:wave_3": 15,
+        "site.rootworks_pump:wave_4": 7
+      },
+      "scrap_sources": {
+        "foreman_travel": 8,
+        "optional_repair": 8,
+        "optional_site_work": 9,
+        "route_salvage": 7,
+        "starting": 12,
+        "uncollected_pickups": 92,
+        "wave": 108
+      },
+      "site_id": "site.null_assembly",
+      "terminal_route_id": "route.null_assembly",
+      "top_weapon": "weapon.candle_nailer",
+      "top_weapon_damage": 20503.0,
+      "won": true,
+      "worst_damage_segment": "",
+      "worst_damage_wave": 0,
+      "worst_wave_damage": 0.0
+    },
+    "route": "route.null_assembly",
+    "route_history": [
+      "route.rootworks",
+      "route.null_assembly"
+    ],
+    "scrap_sources": {
+      "foreman_travel": 8,
+      "optional_repair": 8,
+      "optional_site_work": 9,
+      "route_salvage": 7,
+      "starting": 12,
+      "uncollected_pickups": 92,
+      "wave": 108
+    },
+    "seconds": 760.683333333333,
+    "seed": 104730,
+    "shops": 12,
+    "transactions": [
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": 3,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 4200,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 8400,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": 0,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 12600,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 0,
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": 2,
+        "wave": 4
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 16800,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": 0,
+        "wave": 5
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 5
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 21000,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 0,
+        "wave": 6
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": 2,
+        "wave": 6
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 6
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 25200,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "buy",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": 0,
+        "wave": 7
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 7
+      },
+      {
+        "action": "continue",
+        "site_id": "site.collapsed_workshop",
+        "tick": 29400,
+        "value": null,
+        "wave": 8
+      },
+      {
+        "action": "choose_route",
+        "cost": 6,
+        "site_id": "site.collapsed_workshop",
+        "tick": 30474,
+        "value": "route.rootworks",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.rootworks.flooded_culvert",
+        "scrap_delta": -3,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30474,
+        "value": "choice.rootworks.brace",
+        "wave": 8
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.rootworks.morrow_cart",
+        "scrap_delta": -4,
+        "site_id": "site.collapsed_workshop",
+        "structure_delta": 0.0,
+        "tick": 30474,
+        "value": "choice.rootworks.repair",
+        "wave": 8
+      },
+      {
+        "action": "buy",
+        "site_id": "site.rootworks_pump",
+        "tick": 33474,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.rootworks_pump",
+        "tick": 33474,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.rootworks_pump",
+        "tick": 33474,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.rootworks_pump",
+        "tick": 36474,
+        "value": 0,
+        "wave": 2
+      },
+      {
+        "action": "buy",
+        "site_id": "site.rootworks_pump",
+        "tick": 36474,
+        "value": 2,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.rootworks_pump",
+        "tick": 36474,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.rootworks_pump",
+        "tick": 36474,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.rootworks_pump",
+        "tick": 39474,
+        "value": null,
+        "wave": 3
+      },
+      {
+        "action": "continue",
+        "site_id": "site.rootworks_pump",
+        "tick": 39474,
+        "value": null,
+        "wave": 4
+      },
+      {
+        "action": "choose_route",
+        "cost": 5,
+        "site_id": "site.rootworks_pump",
+        "tick": 40075,
+        "value": "route.null_assembly",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.null.inventory_arch",
+        "scrap_delta": -2,
+        "site_id": "site.rootworks_pump",
+        "structure_delta": 0.0,
+        "tick": 40075,
+        "value": "choice.null.variance",
+        "wave": 4
+      },
+      {
+        "action": "choose_road_option",
+        "node_id": "road.null.nameless_bench",
+        "scrap_delta": -4,
+        "site_id": "site.rootworks_pump",
+        "structure_delta": 0.0,
+        "tick": 40075,
+        "value": "choice.null.repair",
+        "wave": 4
+      },
+      {
+        "action": "buy",
+        "site_id": "site.null_assembly",
+        "tick": 42475,
+        "value": 0,
+        "wave": 1
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.null_assembly",
+        "tick": 42475,
+        "value": null,
+        "wave": 1
+      },
+      {
+        "action": "continue",
+        "site_id": "site.null_assembly",
+        "tick": 42475,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "reroll",
+        "site_id": "site.null_assembly",
+        "tick": 44875,
+        "value": null,
+        "wave": 2
+      },
+      {
+        "action": "continue",
+        "site_id": "site.null_assembly",
+        "tick": 44875,
+        "value": null,
+        "wave": 3
+      }
+    ],
+    "wave": 3,
+    "weapon_damage": {
+      "weapon.altar_mortar": 4332.00000000001,
+      "weapon.candle_nailer": 20503.0,
+      "weapon.hymn_coil": 14561.5999999997,
+      "weapon.nailer_small_mercies": 6444.80000000002,
+      "weapon.welded_halo": 291.2
+    },
+    "weapon_kills": {
+      "weapon.altar_mortar": 53,
+      "weapon.candle_nailer": 181,
+      "weapon.hymn_coil": 151,
+      "weapon.nailer_small_mercies": 96
+    },
+    "weapon_ranks": [
+      {
+        "evolved": "",
+        "id": "weapon.nailer_small_mercies",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.hymn_coil",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.altar_mortar",
+        "rank": 2
+      },
+      {
+        "evolved": "",
+        "id": "weapon.welded_halo",
+        "rank": 2
+      }
+    ]
+  }
+]

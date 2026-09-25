@@ -1,0 +1,222 @@
+[
+  {
+    "boss_entry_ticks_by_site": {
+      "site.brass_choir_relay": 9001,
+      "site.collapsed_workshop": 29401,
+      "site.pale_archive": 4801
+    },
+    "combat_seconds_by_site": {
+      "site.brass_choir_relay": 158.05,
+      "site.collapsed_workshop": 501.78,
+      "site.pale_archive": 94.98
+    },
+    "combat_ticks_by_site": {
+      "site.brass_choir_relay": 9483,
+      "site.collapsed_workshop": 30107,
+      "site.pale_archive": 5699
+    },
+    "evolutions": [],
+    "human_boss_readability": "NOT_MEASURED",
+    "human_confusion": "NOT_MEASURED",
+    "id": "BRASS_TO_PALE",
+    "optional_work_completed": 0,
+    "outcome": "won",
+    "passed": true,
+    "remaining_structure": 69.0,
+    "road_decisions": 4,
+    "route_history": [
+      "route.brass_choir",
+      "route.pale_archive"
+    ],
+    "shop_count_by_site": {
+      "site.brass_choir_relay": 3,
+      "site.collapsed_workshop": 7,
+      "site.pale_archive": 2
+    },
+    "simulation_speed": "1x fixed tick",
+    "weapons": [
+      {
+        "id": "weapon.nailer_small_mercies",
+        "rank": 3
+      },
+      {
+        "id": "weapon.bell_last_shift",
+        "rank": 3
+      },
+      {
+        "id": "weapon.foundry_censer",
+        "rank": 3
+      },
+      {
+        "id": "weapon.penance_winch",
+        "rank": 3
+      }
+    ],
+    "zero_scrap_continuations": 4
+  },
+  {
+    "boss_entry_ticks_by_site": {
+      "site.brass_choir_relay": 9001,
+      "site.collapsed_workshop": 29401,
+      "site.red_foundry": 4801
+    },
+    "combat_seconds_by_site": {
+      "site.brass_choir_relay": 158.05,
+      "site.collapsed_workshop": 501.78,
+      "site.red_foundry": 99.62
+    },
+    "combat_ticks_by_site": {
+      "site.brass_choir_relay": 9483,
+      "site.collapsed_workshop": 30107,
+      "site.red_foundry": 5977
+    },
+    "evolutions": [],
+    "human_boss_readability": "NOT_MEASURED",
+    "human_confusion": "NOT_MEASURED",
+    "id": "BRASS_TO_RED",
+    "optional_work_completed": 0,
+    "outcome": "won",
+    "passed": true,
+    "remaining_structure": 24.0,
+    "road_decisions": 4,
+    "route_history": [
+      "route.brass_choir",
+      "route.red_foundry"
+    ],
+    "shop_count_by_site": {
+      "site.brass_choir_relay": 3,
+      "site.collapsed_workshop": 7,
+      "site.red_foundry": 2
+    },
+    "simulation_speed": "1x fixed tick",
+    "weapons": [
+      {
+        "id": "weapon.nailer_small_mercies",
+        "rank": 3
+      },
+      {
+        "id": "weapon.bell_last_shift",
+        "rank": 3
+      },
+      {
+        "id": "weapon.foundry_censer",
+        "rank": 3
+      },
+      {
+        "id": "weapon.penance_winch",
+        "rank": 3
+      }
+    ],
+    "zero_scrap_continuations": 4
+  },
+  {
+    "boss_entry_ticks_by_site": {
+      "site.collapsed_workshop": 29401,
+      "site.red_foundry": 4801,
+      "site.rootworks_pump": 9001
+    },
+    "combat_seconds_by_site": {
+      "site.collapsed_workshop": 501.78,
+      "site.red_foundry": 90.42,
+      "site.rootworks_pump": 157.63
+    },
+    "combat_ticks_by_site": {
+      "site.collapsed_workshop": 30107,
+      "site.red_foundry": 5425,
+      "site.rootworks_pump": 9458
+    },
+    "evolutions": [],
+    "human_boss_readability": "NOT_MEASURED",
+    "human_confusion": "NOT_MEASURED",
+    "id": "ROOTWORKS_TO_RED",
+    "optional_work_completed": 0,
+    "outcome": "won",
+    "passed": true,
+    "remaining_structure": 32.0,
+    "road_decisions": 4,
+    "route_history": [
+      "route.rootworks",
+      "route.red_foundry"
+    ],
+    "shop_count_by_site": {
+      "site.collapsed_workshop": 7,
+      "site.red_foundry": 2,
+      "site.rootworks_pump": 3
+    },
+    "simulation_speed": "1x fixed tick",
+    "weapons": [
+      {
+        "id": "weapon.nailer_small_mercies",
+        "rank": 3
+      },
+      {
+        "id": "weapon.bell_last_shift",
+        "rank": 3
+      },
+      {
+        "id": "weapon.foundry_censer",
+        "rank": 3
+      },
+      {
+        "id": "weapon.penance_winch",
+        "rank": 3
+      }
+    ],
+    "zero_scrap_continuations": 4
+  },
+  {
+    "boss_entry_ticks_by_site": {
+      "site.collapsed_workshop": 29401,
+      "site.null_assembly": 4801,
+      "site.rootworks_pump": 9001
+    },
+    "combat_seconds_by_site": {
+      "site.collapsed_workshop": 501.78,
+      "site.null_assembly": 90.27,
+      "site.rootworks_pump": 157.63
+    },
+    "combat_ticks_by_site": {
+      "site.collapsed_workshop": 30107,
+      "site.null_assembly": 5416,
+      "site.rootworks_pump": 9458
+    },
+    "evolutions": [],
+    "human_boss_readability": "NOT_MEASURED",
+    "human_confusion": "NOT_MEASURED",
+    "id": "ROOTWORKS_TO_NULL",
+    "optional_work_completed": 0,
+    "outcome": "won",
+    "passed": true,
+    "remaining_structure": 80.0,
+    "road_decisions": 4,
+    "route_history": [
+      "route.rootworks",
+      "route.null_assembly"
+    ],
+    "shop_count_by_site": {
+      "site.collapsed_workshop": 7,
+      "site.null_assembly": 2,
+      "site.rootworks_pump": 3
+    },
+    "simulation_speed": "1x fixed tick",
+    "weapons": [
+      {
+        "id": "weapon.nailer_small_mercies",
+        "rank": 3
+      },
+      {
+        "id": "weapon.bell_last_shift",
+        "rank": 3
+      },
+      {
+        "id": "weapon.foundry_censer",
+        "rank": 3
+      },
+      {
+        "id": "weapon.penance_winch",
+        "rank": 3
+      }
+    ],
+    "zero_scrap_continuations": 4
+  }
+]

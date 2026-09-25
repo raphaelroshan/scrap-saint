@@ -1,0 +1,218 @@
+{
+  "base_commit": "4371267c83a3dca630081a1735b3af31966026e1",
+  "source_worktree": true,
+  "source_hashes": {
+    "game/actor_art.gd": "1334e73661c28b61bb48eec4348d3efa63c90319488d4331596b58ae98c783ce",
+    "game/arena.gd": "c805bbb93c984937d4a3d2eb134c1c4656917bd223c9dabbab7ff4b5359ffd27",
+    "game/arena_art.gd": "59281389929aaffac3cd8cee327bba0e7158ee189634b516aafb5edf6be22c9d",
+    "game/main.gd": "519afd8c1ce23e3884062607ebeb638c6e07e54dcfc35c7d0f734a8a8235490d",
+    "game/menu_panels.gd": "5aed6d402bd3c9f7977ce9574cf15578c1d1f7bd0b20629050b33f8c1cb4b84d",
+    "game/profile.gd": "36d097c3d6fa4585876747ed2d71a70721b73d4cbd20bce9e6d9b1f6adfb423a",
+    "game/save_store.gd": "cfc545879a0e3e6a7e29edaf2a37c5c59fa8ef7e6ee6f46378edf927a79cf087",
+    "game/settings.gd": "39257d6d8fbc6ab1e40bc0ff1e888489b476b9041c5ef1945a1cad1abf4f7b0a",
+    "game/simulation.gd": "d803f5d2667e774cec75cc7f1fba0752b677e8795512631b030b4b1e7206c107",
+    "game/sound.gd": "4dd6c70f362ba31367ecfbde1295333c69b0d5b567fe816f56bca79bb1afd9db",
+    "content/arenas/brass_choir_relay.json": "505b6ecb0f51f288fc3a4e56e53061116a6bab862c8d61d3b3896b22ddcfebc0",
+    "content/arenas/collapsed_workshop.json": "700a63f2e4e9c617ac10da6b99fd9b44989a051d59fbab7cc0fd0443527a3e52",
+    "content/arenas/null_assembly.json": "11ff4a279b18d810ac9f5ed057cb2362b822e65a9bc3838f1903de0c0bd7e4a5",
+    "content/arenas/pale_archive.json": "37dd4206a0155aaad87d96386605a694b97f69fd64a99f3150f8468698d33782",
+    "content/arenas/red_foundry.json": "d89842f3a40232f77a868fc963160441ddd421b3a671dcf45d54f702ca2150b7",
+    "content/arenas/rootworks_pump.json": "d1e48a7a7fedacf5fc349b4790bf272db717b7b405c1c954da4b0e8c688e1ce9",
+    "content/blessings/first_slice.json": "883dfb498b6ec3e77adbace25e5edad59d67a6455015794f260c629e6a8a5b0b",
+    "content/bosses/first_slice.json": "d33bc229b3b67c07f1599f56bd3e19fcd94d5af3729fdb9300afddbc5a50762b",
+    "content/chapter/first_chapter.json": "42cfc40096e3063a004dbb7726dab5dbb10e1fdbba90763e536e17b2156267c1",
+    "content/enemies/first_slice.json": "8b31ff7a34be93d53dde7f0773b736cf75448284f11ddfc703e83e85802a67a6",
+    "content/frames/first_chapter.json": "d7973edfe1de70d160971efac0d9b04d5d7b2ce446c8532463c82803f21275bf",
+    "content/items/first_slice.json": "f5e1f035d98430bb3484f009554922fded995e041099ab7fbfb6c7341acb8944",
+    "content/lore/first_shift.json": "ed378beea3327c14e9df2f132313f86db91cd0b4e97163c84db3c329665b6351",
+    "content/lore/road_echoes.json": "fb011392cd089c5ee3344317d1f0f6291c466cd38ea3e8d1af8c4ab5b41cfad2",
+    "content/progression/first_chapter.json": "62f6c7eddad0782d35db07401c9a236e25bc74509661acc64976b5acf7b59689",
+    "content/slices/first_shift.json": "7df5cfbb115baec424ced06b6c62503ad5ed13f928d3731899bcc1d07070d551",
+    "content/ui/field_manual.json": "f47ec9a0671ebd1a3b4ee1c363130b002ae0b82cc55b7ee591ece3af0f7dd603",
+    "project.godot": "486848f5ea19a40820f3294ccf86ee739f82b7c6608442dbed67daf7e5a7490a",
+    "export_presets.cfg": "be9d6438e57d2f2dbffb3b8010d70a46c2c260a1e2595a04c886c1baf2b45040"
+  },
+  "godot": "4.5.1.stable.official.f62fdbde1",
+  "renderer": "Compatibility / OpenGL 3.3 / NVIDIA RTX 4060 / 616.92",
+  "date": "2026-09-25",
+  "seed": 147,
+  "capture_methods": {
+    "repair": "Configured native fixtures, real simulation repair updates, render hash assertions",
+    "package": "Exported Windows binary/PCK, external QA policy, normal economy, real non-combat lifecycle callbacks and Results button"
+  },
+  "viewport_note": "1280x800 captures are pixel-exact. Requested 1920x1080 window has a 1728x1080 game-content raster; these dimensions are not conflated.",
+  "iteration_note": "Full iteration began before final hazard-placement and footer corrections. All suites reran after hazard placement; relevant flow/save checks reran after the final footer/Gift fix. Final package and selected captures use final runtime; policies use unchanged simulation/data.",
+  "images": [
+    {
+      "file": "REPAIR_IDLE.png",
+      "source": "artifacts/repair-readability/1280x800/SALVAGE_IDLE_NORMAL_FULL.png",
+      "sha256": "42121936dca3c01d9ca183a05bc7fe7f705d6e87e026ac0c6fbd95a652986560",
+      "raster_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "REPAIR_ACTIVE.png",
+      "source": "artifacts/repair-readability/1280x800/SALVAGE_ACTIVE_NORMAL_FULL.png",
+      "sha256": "2137701fd166000734feba241ca4f0b471452836ecb2d1af73f0efd03cf98465",
+      "raster_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "REPAIR_DEPARTED_LARGE.png",
+      "source": "artifacts/repair-readability/1280x800/SALVAGE_DEPARTED_LARGE_FULL.png",
+      "sha256": "1ce0f2cdc14667574ea0a5ab77c47a1a4324a6cc236b93c7418b6d5c20402367",
+      "raster_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "PUMP_DEFERRED.png",
+      "source": "artifacts/repair-readability/1280x800/PUMP_DEFERRED_NORMAL_FULL.png",
+      "sha256": "2ec39114323d2f0a2334a533485dd66e61e18133da0ace7a599a215c05a67b9f",
+      "raster_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "PUMP_RESTORED.png",
+      "source": "artifacts/repair-readability/1280x800/PUMP_RESTORED_NORMAL_FULL.png",
+      "sha256": "9eb928896d6374a3b05266847e2ca1cf30a8ea26012d329594c703533565c4db",
+      "raster_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "BELL_FOREMAN_LARGE.png",
+      "source": "artifacts/repair-readability/1280x800/BELL_FOREMAN_LARGE_FULL.png",
+      "sha256": "a289fa696979f0cc70854a97e8d6bec5fe437fdc3c1f9216eaeb2717fb777612",
+      "raster_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "BELL_FOREMAN_LARGER_WINDOW.png",
+      "source": "artifacts/repair-readability/1920x1080/BELL_FOREMAN_LARGE_FULL.png",
+      "sha256": "03c03a6f63c505007a212638b356127dc096cd3c9eea6dd677a6a7b1bdc28408",
+      "raster_size": [
+        1728,
+        1080
+      ]
+    },
+    {
+      "file": "BELL_FOREMAN_REDUCED.png",
+      "source": "artifacts/repair-readability/1280x800/BELL_FOREMAN_NORMAL_REDUCED.png",
+      "sha256": "864828ed4abae824fc2e7910668075be85e80233ee9d81a8e2ead575ecee9cd1",
+      "raster_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "EXPORTED_ARRIVAL.png",
+      "source": "artifacts\\package-natural\\EXPORTED_ARRIVAL.png",
+      "sha256": "84f66a9724ebf27530976c529b9e6bac42d1f2bc6681fef5c0e0a19b762f4c7a",
+      "raster_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "EXPORTED_RESTART.png",
+      "source": "artifacts\\package-natural\\EXPORTED_RESTART.png",
+      "sha256": "5ddc38edc4a520c819f108f144de8ca98188c57d1bb19c693024c44b840c3f1a",
+      "raster_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "EXPORTED_ROUTE.png",
+      "source": "artifacts\\package-natural\\EXPORTED_ROUTE.png",
+      "sha256": "a122df6e19b06a61b5ebf3169544919e880a7c51917a1b5bbd9110b280f6731f",
+      "raster_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "EXPORTED_SHOP.png",
+      "source": "artifacts\\package-natural\\EXPORTED_SHOP.png",
+      "sha256": "36aa6605de26f67b12d15eb702cf5705e797e625fc7d2f885a8121cb0f2b3088",
+      "raster_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "EXPORTED_SITE_CLEAR.png",
+      "source": "artifacts\\package-natural\\EXPORTED_SITE_CLEAR.png",
+      "sha256": "f5c2934a9ba2881a57073c11de5cb38bfb1697d668b9a8f047cde031fe38bffa",
+      "raster_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "EXPORTED_TITLE.png",
+      "source": "artifacts\\package-natural\\EXPORTED_TITLE.png",
+      "sha256": "b15adf94d285538a5df5d41bc8a83bbf6f9591585915ebabe74428935fa1121f",
+      "raster_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "EXPORTED_TRAVEL.png",
+      "source": "artifacts\\package-natural\\EXPORTED_TRAVEL.png",
+      "sha256": "958a777eb76607c34d9c838b3d9ab46663475407eaa7cd5d24dd1b01841926b2",
+      "raster_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "EXPORTED_TWO_GIFT_SHOP.png",
+      "source": "artifacts\\package-natural\\EXPORTED_TWO_GIFT_SHOP.png",
+      "sha256": "557394b4cca679c63071b509080d5b55777ec6aaeec5f1d1ae03509c4cb47652",
+      "raster_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "NATURAL_REPAIR_DECISION.png",
+      "source": "artifacts\\package-natural\\NATURAL_REPAIR_DECISION.png",
+      "sha256": "08f0bead0ac92a0b16ba5c0cc383a2164f6fbd9e4930ab3616f5a0a6bf493c24",
+      "raster_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "NATURAL_REPAIR_REWARD.png",
+      "source": "artifacts\\package-natural\\NATURAL_REPAIR_REWARD.png",
+      "sha256": "87ba163a927ba81429ee55d4b95bea7e4df254cd3fe0d75de60f07727314a8b2",
+      "raster_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "file": "NATURAL_RESULTS.png",
+      "source": "artifacts\\package-natural\\NATURAL_RESULTS.png",
+      "sha256": "690a9779e129b5cf3c6737c19dec8988b44660338fde335ca12bb1b46c869a64",
+      "raster_size": [
+        1280,
+        800
+      ]
+    }
+  ]
+}

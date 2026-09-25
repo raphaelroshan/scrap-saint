@@ -6,6 +6,7 @@ python3 scripts/validate_content.py
 python3 -m unittest tests/test_slice_manifest.py
 mkdir -p artifacts/agent-iteration
 "$GODOT_BIN" --headless --path . --script res://tests/test_main_menu.gd | tee artifacts/agent-iteration/main-menu.log
+"$GODOT_BIN" --headless --path . --script res://tests/test_menu_panels.gd | tee artifacts/agent-iteration/menu-panels.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_dev_speed.gd | tee artifacts/agent-iteration/dev-speed.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_frames_progression.gd | tee artifacts/agent-iteration/frames-progression.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_profile.gd | tee artifacts/agent-iteration/profile.log
@@ -34,6 +35,7 @@ mkdir -p artifacts/agent-iteration
 "$GODOT_BIN" --headless --path . --script res://tests/test_presentation_quality.gd | tee artifacts/agent-iteration/presentation-quality.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_gift_breadth.gd | tee artifacts/agent-iteration/gift-breadth.log
 "$GODOT_BIN" --headless --path . --script res://tests/test_actor_art.gd | tee artifacts/agent-iteration/actor-art.log
+"$GODOT_BIN" --headless --path . --script res://tests/test_repair_readability.gd | tee artifacts/agent-iteration/repair-readability.log
 "$GODOT_BIN" --headless --path . --script res://tests/run_playthroughs.gd -- --optional | tee artifacts/agent-iteration/optional-playthroughs.log
 "$GODOT_BIN" --headless --path . --script res://tests/run_assembly_playthroughs.gd | tee artifacts/agent-iteration/assembly-playthroughs.log
 "$GODOT_BIN" --headless --path . --script res://tests/run_evolution_playthroughs.gd | tee artifacts/agent-iteration/evolution-playthroughs.log

@@ -8,4 +8,4 @@ At each resumption execute Prompt 0: read the current [production state](product
 
 Every response uses these six sections: Intent; Plan; Changed files; Verification with exact commands and results; Risks; Exactly one next small task. Runtime completion requires runtime evidence, not only passing tests. Update planning, memory, asset provenance, changelog and QA equivalents each iteration; an explicit “no asset changes” entry is sufficient for documentation work. Commit and push validated work without force-pushing shared history.
 
-The current Prompt 0 delivery is [the ownership audit](task_packets/prompt0_ownership_audit.md). Its one implementation successor is [Workshop repair readability](task_packets/workshop_repair_readability.md).
+The current Prompt 0 delivery is [the ownership audit](task_packets/prompt0_ownership_audit.md). The repair and end-to-end delivery packets are now implemented; current status and the paused handoff are in [production state](production_state.md).

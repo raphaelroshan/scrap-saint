@@ -1,0 +1,66 @@
+[
+  {
+    "causal_exercised": true,
+    "causal_metric": 1,
+    "chapter_complete": true,
+    "gift": "gift.honest_scale",
+    "hp": 100.0,
+    "id": "HONEST_SCALE_SHOP",
+    "kills": 473,
+    "outcome": "won",
+    "passed": true,
+    "route_history": [
+      "route.brass_choir",
+      "route.pale_archive"
+    ],
+    "seconds": 760.37
+  },
+  {
+    "causal_exercised": true,
+    "causal_metric": 9,
+    "chapter_complete": true,
+    "gift": "gift.loose_spring",
+    "hp": 100.0,
+    "id": "LOOSE_SPRING_REPAIR",
+    "kills": 469,
+    "outcome": "won",
+    "passed": true,
+    "route_history": [
+      "route.brass_choir",
+      "route.red_foundry"
+    ],
+    "seconds": 773.73
+  },
+  {
+    "causal_exercised": true,
+    "causal_metric": 122,
+    "chapter_complete": true,
+    "gift": "gift.choir_filter",
+    "hp": 91.0,
+    "id": "CHOIR_FILTER_QUIET",
+    "kills": 459,
+    "outcome": "won",
+    "passed": true,
+    "route_history": [
+      "route.brass_choir",
+      "route.pale_archive"
+    ],
+    "seconds": 761.95
+  },
+  {
+    "causal_exercised": true,
+    "causal_metric": 14,
+    "chapter_complete": true,
+    "gift": "gift.brass_fuse",
+    "hp": 100.0,
+    "id": "BRASS_FUSE_CONTROL",
+    "kills": 400,
+    "outcome": "won",
+    "passed": true,
+    "route_history": [
+      "route.rootworks",
+      "route.null_assembly"
+    ],
+    "seconds": 769.98
+  }
+]

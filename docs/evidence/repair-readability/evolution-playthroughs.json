@@ -1,0 +1,222 @@
+[
+  {
+    "chapter_complete": true,
+    "damage": {
+      "weapon.altar_mortar": 9826.8,
+      "weapon.bell_last_shift": 1641.6,
+      "weapon.cable_contrition": 1846.0,
+      "weapon.hymn_coil": 6546.55999999986,
+      "weapon.nailer_small_mercies": 48510.0
+    },
+    "hp": 71.0,
+    "id": "MERCY_RAIL_LINE",
+    "kills": 451,
+    "outcome": "won",
+    "recipe": "evolution.mercy_rail",
+    "route": "route.pale_archive",
+    "route_history": [
+      "route.brass_choir",
+      "route.pale_archive"
+    ],
+    "seconds": 758.483333333333,
+    "transition_failed": false
+  },
+  {
+    "chapter_complete": true,
+    "damage": {
+      "weapon.altar_mortar": 9180.8,
+      "weapon.bell_last_shift": 5291.0,
+      "weapon.foundry_censer": 588.0,
+      "weapon.hymn_coil": 15946.8799999995,
+      "weapon.nailer_small_mercies": 14269.4400000001
+    },
+    "hp": 93.0,
+    "id": "GREAT_TOLL_FIELD",
+    "kills": 450,
+    "outcome": "won",
+    "recipe": "evolution.great_toll",
+    "route": "route.red_foundry",
+    "route_history": [
+      "route.rootworks",
+      "route.red_foundry"
+    ],
+    "seconds": 749.316666666667,
+    "transition_failed": false
+  },
+  {
+    "chapter_complete": true,
+    "damage": {
+      "weapon.bell_last_shift": 1921.44,
+      "weapon.cable_contrition": 748.8,
+      "weapon.foundry_censer": 510.4,
+      "weapon.hymn_coil": 19254.7839999989,
+      "weapon.nailer_small_mercies": 17699.2000000001
+    },
+    "hp": 80.0,
+    "id": "ASHEN_MOURN_ZONE",
+    "kills": 435,
+    "outcome": "won",
+    "recipe": "evolution.ashen_benediction",
+    "route": "route.red_foundry",
+    "route_history": [
+      "route.brass_choir",
+      "route.red_foundry"
+    ],
+    "seconds": 755.416666666667,
+    "transition_failed": false
+  },
+  {
+    "chapter_complete": true,
+    "damage": {
+      "weapon.bell_last_shift": 2246.4,
+      "weapon.candle_nailer": 21819.6000000001,
+      "weapon.hymn_coil": 11052.7999999996,
+      "weapon.penance_winch": 10771.2,
+      "weapon.procession_gear": 965.600000000001
+    },
+    "hp": 85.0,
+    "id": "LONG_HAND_CORRIDOR",
+    "kills": 458,
+    "outcome": "won",
+    "recipe": "evolution.long_hand",
+    "route": "route.red_foundry",
+    "route_history": [
+      "route.rootworks",
+      "route.red_foundry"
+    ],
+    "seconds": 758.433333333333,
+    "transition_failed": false
+  },
+  {
+    "chapter_complete": true,
+    "damage": {
+      "weapon.bell_last_shift": 6285.59999999996,
+      "weapon.cable_contrition": 3814.4,
+      "weapon.nailer_small_mercies": 21106.5599999999,
+      "weapon.procession_gear": 4060.27999999999,
+      "weapon.welded_halo": 2134.0
+    },
+    "hp": 100.0,
+    "id": "HALO_REPAIR_CIRCUIT",
+    "kills": 389,
+    "outcome": "won",
+    "recipe": "evolution.halo_of_repairs",
+    "route": "route.null_assembly",
+    "route_history": [
+      "route.rootworks",
+      "route.null_assembly"
+    ],
+    "seconds": 765.283333333333,
+    "transition_failed": false
+  },
+  {
+    "chapter_complete": true,
+    "damage": {
+      "weapon.altar_mortar": 12897.2,
+      "weapon.bell_last_shift": 1339.2,
+      "weapon.candle_nailer": 25271.4000000002,
+      "weapon.foundry_censer": 1120.0,
+      "weapon.hymn_coil": 6745.59999999989
+    },
+    "hp": 88.0,
+    "id": "UNRETURNED_EXECUTION",
+    "kills": 457,
+    "outcome": "won",
+    "recipe": "evolution.candle_unreturned",
+    "route": "route.pale_archive",
+    "route_history": [
+      "route.brass_choir",
+      "route.pale_archive"
+    ],
+    "seconds": 763.316666666667,
+    "transition_failed": false
+  },
+  {
+    "chapter_complete": true,
+    "damage": {
+      "weapon.altar_mortar": 16552.7999999999,
+      "weapon.cable_contrition": 1692.0,
+      "weapon.foundry_censer": 1219.4,
+      "weapon.hymn_coil": 19712.0,
+      "weapon.nailer_small_mercies": 5708.80000000001
+    },
+    "hp": 64.0,
+    "id": "QUIET_SUPPORT_LANE",
+    "kills": 447,
+    "outcome": "won",
+    "recipe": "evolution.quiet_sermon",
+    "route": "route.red_foundry",
+    "route_history": [
+      "route.brass_choir",
+      "route.red_foundry"
+    ],
+    "seconds": 757.683333333333,
+    "transition_failed": false
+  },
+  {
+    "chapter_complete": true,
+    "damage": {
+      "weapon.altar_mortar": 29638.4000000002,
+      "weapon.bell_last_shift": 7288.79999999995,
+      "weapon.foundry_censer": 4703.99999999996,
+      "weapon.procession_gear": 4756.59999999998,
+      "weapon.welded_halo": 1445.6
+    },
+    "hp": 100.0,
+    "id": "WORKSHOP_BENEDICTION",
+    "kills": 416,
+    "outcome": "won",
+    "recipe": "evolution.workshop_benediction",
+    "route": "route.null_assembly",
+    "route_history": [
+      "route.rootworks",
+      "route.null_assembly"
+    ],
+    "seconds": 796.933333333333,
+    "transition_failed": false
+  },
+  {
+    "chapter_complete": true,
+    "damage": {
+      "weapon.candle_nailer": 13641.5999999999,
+      "weapon.hymn_coil": 5648.31999999993,
+      "weapon.nailer_small_mercies": 15724.8000000002,
+      "weapon.penance_winch": 7896.0,
+      "weapon.procession_gear": 858.0
+    },
+    "hp": 80.0,
+    "id": "MAINTENANCE_PARADE",
+    "kills": 458,
+    "outcome": "won",
+    "recipe": "evolution.maintenance_parade",
+    "route": "route.pale_archive",
+    "route_history": [
+      "route.brass_choir",
+      "route.pale_archive"
+    ],
+    "seconds": 749.233333333333,
+    "transition_failed": false
+  },
+  {
+    "chapter_complete": true,
+    "damage": {
+      "weapon.altar_mortar": 11582.4,
+      "weapon.cable_contrition": 2551.99999999999,
+      "weapon.candle_nailer": 16083.3999999999,
+      "weapon.hymn_coil": 12759.9999999996,
+      "weapon.penance_winch": 4320.0
+    },
+    "hp": 86.0,
+    "id": "CONTRITION_LATTICE",
+    "kills": 470,
+    "outcome": "won",
+    "recipe": "evolution.contrition_lattice",
+    "route": "route.red_foundry",
+    "route_history": [
+      "route.rootworks",
+      "route.red_foundry"
+    ],
+    "seconds": 750.3,
+    "transition_failed": false
+  }
+]

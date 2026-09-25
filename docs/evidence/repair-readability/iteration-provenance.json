@@ -1,0 +1,58 @@
+{
+  "dirty": true,
+  "limitation": "No human playtest or rendered minimum-hardware benchmark",
+  "timestamp_utc": "2026-09-25T11:44:29.4569518Z",
+  "viewport": [
+    1280,
+    800
+  ],
+  "base_commit": "4371267c83a3dca630081a1735b3af31966026e1",
+  "source_hashes": [
+    {
+      "sha256": "1334E73661C28B61BB48EEC4348D3EFA63C90319488D4331596B58AE98C783CE",
+      "path": "actor_art.gd"
+    },
+    {
+      "sha256": "59281389929AAFFAC3CD8CEE327BBA0E7158EE189634B516AAFB5EDF6BE22C9D",
+      "path": "arena_art.gd"
+    },
+    {
+      "sha256": "C805BBB93C984937D4A3D2EB134C1C4656917BD223C9DABBAB7FF4B5359FFD27",
+      "path": "arena.gd"
+    },
+    {
+      "sha256": "149433EC5DC357BAD3B956DDD596C48EC3493EBD9960247F2057C6A676F3F3D5",
+      "path": "main.gd"
+    },
+    {
+      "sha256": "5AED6D402BD3C9F7977CE9574CF15578C1D1F7BD0B20629050B33F8C1CB4B84D",
+      "path": "menu_panels.gd"
+    },
+    {
+      "sha256": "36D097C3D6FA4585876747ED2D71A70721B73D4CBD20BCE9E6D9B1F6ADFB423A",
+      "path": "profile.gd"
+    },
+    {
+      "sha256": "CFC545879A0E3E6A7E29EDAF2A37C5C59FA8EF7E6EE6F46378EDF927A79CF087",
+      "path": "save_store.gd"
+    },
+    {
+      "sha256": "39257D6D8FBC6AB1E40BC0FF1E888489B476B9041C5EF1945A1CAD1ABF4F7B0A",
+      "path": "settings.gd"
+    },
+    {
+      "sha256": "D803F5D2667E774CEC75CC7F1FBA0752B677E8795512631B030B4B1E7206C107",
+      "path": "simulation.gd"
+    },
+    {
+      "sha256": "4DD6C70F362BA31367ECFBDE1295333C69B0D5B567FE816F56BCA79BB1AFD9DB",
+      "path": "sound.gd"
+    }
+  ],
+  "godot": "4.5.1.stable.official.f62fdbde1",
+  "next_task": "Run uncoached human 1x sessions across all four paths and tune only observed pacing, arrival-comprehension and boss-readability failures",
+  "capture_type": "rendered simulation fixtures; includes pilgrimage maps, destination arrivals, unified site-clear summaries, explicit setup budgets, Results, weapon ranks, Evolutions, Gifts, destination bosses, and manifested relics",
+  "build": "0.6.0-preview",
+  "scaling": "canvas_items",
+  "seed": 147
+}
